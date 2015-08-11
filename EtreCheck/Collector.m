@@ -85,6 +85,7 @@
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] italicFont],
+        NSForegroundColorAttributeName : [[Utilities shared] blue],
         NSLinkAttributeName : url
       }];
     
