@@ -6,6 +6,7 @@
 
 #import "ConfigFileCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import "Model.h"
 
 // Collect changes to config files like /etc/sysctl.conf and /etc/hosts.
 @implementation ConfigFileCollector
@@ -33,6 +34,11 @@
   NSArray * configFiles = [self existingConfigFiles];
   
   bool haveChanges = [configFiles count] > 0;
+
+  NSArray * modifiedFiles = [self modifiedConfigFiles];
+
+  if([modifiedFiles count] > 0)
+    haveChanges = YES;
     
   // See if /etc/hosts has any changes or is corrupt.
   bool corrupt = NO;
@@ -47,7 +53,18 @@
     {
     [self.result appendAttributedString: [self buildTitle]];
     
-    // Print changes to configFiles.
+    // Print modified configFiles.
+    for(NSString * modifiedFile in modifiedFiles)
+      [self.result
+        appendString:
+          [NSString stringWithFormat:
+            NSLocalizedString(@"    %@ - Modified\n", NULL), modifiedFile]
+        attributes:
+          [NSDictionary
+            dictionaryWithObjectsAndKeys:
+              [NSColor redColor], NSForegroundColorAttributeName, nil]];
+
+    // Print existing configFiles.
     for(NSString * configFile in configFiles)
       [self.result
         appendString:
@@ -61,6 +78,49 @@
     }
     
   dispatch_semaphore_signal(self.complete);
+  }
+
+// Find modified configuration files.
+- (NSArray *) modifiedConfigFiles
+  {
+  NSMutableArray * files = [NSMutableArray array];
+  
+  NSFileManager * fileManager = [NSFileManager defaultManager];
+  
+  NSDictionary * attributes =
+    [fileManager attributesOfItemAtPath: @"/etc/sudoers" error: NULL];
+  
+  // See if /etc/sudoers has been modified.
+  if(attributes)
+    {
+    int version = [[Model model] majorOSVersion];
+    
+    unsigned long long expectedSize = attributes.fileSize;
+    
+    switch(version)
+      {
+      case kSnowLeopard:
+        expectedSize = 1242;
+        break;
+      case kLion:
+        expectedSize = 1275;
+        break;
+      case kMountainLion:
+        expectedSize = 1275;
+        break;
+      case kMavericks:
+        expectedSize = 1275;
+        break;
+      case kYosemite:
+        expectedSize = 1275;
+        break;
+      }
+    
+    if(attributes.fileSize != expectedSize)
+      [files addObject: @"/etc/sudoers"];
+    }
+  
+  return files;
   }
 
 // Find existing configuration files.
