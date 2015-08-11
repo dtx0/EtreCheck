@@ -125,6 +125,8 @@
     event.details = [result copy];
       
     [[[Model model] diagnosticEvents] setObject: event forKey: name];
+    
+    [event release];
 
     return YES;
     }

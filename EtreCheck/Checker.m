@@ -267,8 +267,6 @@
     [[NSNotificationCenter defaultCenter]
       postNotificationName: kFoundApplication object: icon];
 
-    [icon release];
-    
     struct timespec tm;
     
     tm.tv_sec = 0;
@@ -302,7 +300,7 @@
   if([obtained_from isEqualToString: @"apple"])
     return nil;
       
-  return [[NSImage alloc] initWithContentsOfFile: iconPath];
+  return [[[NSImage alloc] initWithContentsOfFile: iconPath] autorelease];
   }
 
 // Check stage 3.

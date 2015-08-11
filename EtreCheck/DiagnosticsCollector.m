@@ -150,6 +150,8 @@
       }
       
     [[[Model model] diagnosticEvents] setObject: event forKey: @"selftest"];
+    
+    [event release];
     }
   }
 
@@ -296,6 +298,8 @@
       event.details = [[Model model] logEntriesAround: date];
     
     [[[Model model] diagnosticEvents] setObject: event forKey: event.name];
+    
+    [event release];
     }
   }
 

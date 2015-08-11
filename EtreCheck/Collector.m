@@ -68,11 +68,7 @@
   NSMutableAttributedString * string = [NSMutableAttributedString new];
     
   NSString * url =
-    [NSString
-      stringWithFormat:
-        @"http://www.etresoft.com/etrecheck_story#%@", self.name];
-  
-  url = [NSString stringWithFormat: @"etrecheck://help/%@", self.name];
+    [NSString stringWithFormat: @"etrecheck://help/%@", self.name];
 
   [string
     appendString: NSLocalizedString(self.title, NULL)

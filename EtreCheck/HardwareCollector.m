@@ -46,6 +46,8 @@
 // Destructor.
 - (void) dealloc
   {
+  self.EnglishMarketingName = nil;
+  self.marketingName = nil;
   self.machineIcon = nil;
   self.properties = nil;
   
@@ -500,7 +502,6 @@
 - (void) printMemoryBanks: (NSArray *) banks
   {
   NSString * lastBankID = nil;
-  NSString * lastBankInfo = nil;
   int bankCount = 0;
   
   for(NSDictionary * bank in banks)
@@ -517,9 +518,11 @@
     if([size isEqualToString: @"(empty)"])
       size = @"empty";
       
+    NSString * empty = NSLocalizedString(@"Empty", NULL);
+    
     if([size isEqualToString: @"empty"])
       {
-      size = NSLocalizedString(@"Empty", NULL);
+      size = empty;
       type = @"";
       speed = @"";
       status = @"";
@@ -530,10 +533,10 @@
         stringWithFormat:
           @"            %@ %@ %@ %@\n", size, type, speed, status];
       
-    bool sameID = [lastBankID isEqualToString: currentBankID];
-    bool sameInfo = [lastBankInfo isEqualToString: currentBankInfo];
+    bool isRAMSlotID = [lastBankID hasPrefix: @"        RAM slot"];
+    bool isEmpty = [size isEqualToString: empty];
     
-    if(sameID && sameInfo && (bank != [banks lastObject]))
+    if(isRAMSlotID && isEmpty && (bank != [banks lastObject]))
       ++bankCount;
     else
       {
@@ -549,7 +552,6 @@
       [self.result appendString: currentBankInfo];
       
       lastBankID = currentBankID;
-      lastBankInfo = currentBankInfo;
       }
     }
   }

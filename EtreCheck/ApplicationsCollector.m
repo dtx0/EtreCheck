@@ -226,9 +226,6 @@
   NSAttributedString * supportLink =
     [[[NSAttributedString alloc] initWithString: @""] autorelease];
 
-  NSAttributedString * detailsLink =
-    [[[NSAttributedString alloc] initWithString: @""] autorelease];
-
   NSString * bundleID = [application objectForKey: @"CFBundleIdentifier"];
 
   if(bundleID)
@@ -257,7 +254,7 @@
   [output appendAttributedString: supportLink];
   [output appendString: @" "];
   
-  detailsLink = [[Model model] getDetailsURLFor: name];
+  NSAttributedString * detailsLink = [[Model model] getDetailsURLFor: name];
   
   if(detailsLink)
     {

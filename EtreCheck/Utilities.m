@@ -533,15 +533,18 @@
     
     result =
       [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
-    
-    [task release];
-    [outputPipe release];
     }
   @catch(NSException * exception)
     {
     }
   @catch(...)
     {
+    }
+  @finally
+    {
+    [task release];
+    [outputPipe release];
+    [inputPipe release];
     }
     
   return result;

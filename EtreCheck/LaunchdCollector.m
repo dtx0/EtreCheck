@@ -120,7 +120,7 @@
     NSString * label = [job objectForKey: @"Label"];
     
     if(label)
-      [self.launchdStatus setObject: job forKey: label];
+      [self.launchdStatus setObject: [job copy] forKey: label];
     }
     
   CFRelease(jobs);

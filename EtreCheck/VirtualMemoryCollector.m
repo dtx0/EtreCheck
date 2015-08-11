@@ -139,48 +139,21 @@
 // Format used memory.
 - (NSString *) formatUsedVM: (NSDictionary *) vminfo
   {
-  double wired =
-    [[vminfo objectForKey: NSLocalizedString(@"Wired RAM", NULL)]
-      doubleValue];
   double cached =
     [[vminfo objectForKey: NSLocalizedString(@"File Cache", NULL)]
-      doubleValue];
-  double compressed =
-    [[vminfo objectForKey: NSLocalizedString(@"Compressed", NULL)]
       doubleValue];
  
   NSMutableString * extra = [NSMutableString string];
   
-  if(wired || cached)
+  if(cached > 0)
     {
     [extra appendString: @"("];
     
-    if(NO && wired)
-      {
-      [extra
-        appendFormat:
-          @"%@ Wired",
-          [formatter stringFromByteCount: (unsigned long long)wired]];
-        
-      if(cached || compressed)
-        [extra appendString: @" - "];
-      }
-      
-    if(cached)
-      [extra
-        appendFormat:
-          @"%@ Cached",
-          [formatter stringFromByteCount: (unsigned long long)cached]];
-      
-    if(NO && compressed)
-      [extra appendString: @" - "];
-      
-    if(NO && compressed)
-      [extra
-        appendFormat:
-          @"%@ Compressed",
-          [formatter stringFromByteCount: (unsigned long long)compressed]];
-
+    [extra
+      appendFormat:
+        @"%@ Cached",
+        [formatter stringFromByteCount: (unsigned long long)cached]];
+    
     [extra appendString: @")"];
     }
     
