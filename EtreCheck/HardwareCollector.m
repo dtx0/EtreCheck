@@ -589,7 +589,7 @@
     specificModel = @"MacBookPro";
     target = 9;
     }
-  if([model hasPrefix: @"MacBook"])
+  else if([model hasPrefix: @"MacBook"])
     {
     specificModel = @"MacBook";
     target = 8;
