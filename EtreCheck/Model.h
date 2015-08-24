@@ -30,6 +30,7 @@
 @interface Model : NSObject
   {
   int myMajorOSVersion;
+  int myMinorOSVersion;
   NSMutableDictionary * myVolumes;
   NSMutableDictionary * myCoreStorageVolumes;
   NSMutableDictionary * myDiskErrors;
@@ -51,6 +52,7 @@
 
 // Keep track of the OS version.
 @property (assign) int majorOSVersion;
+@property (assign) int minorOSVersion;
 
 // Keep track of system volumes.
 @property (retain) NSMutableDictionary * volumes;

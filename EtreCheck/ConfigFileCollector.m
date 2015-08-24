@@ -56,9 +56,7 @@
     // Print modified configFiles.
     for(NSString * modifiedFile in modifiedFiles)
       [self.result
-        appendString:
-          [NSString stringWithFormat:
-            NSLocalizedString(@"    %@ - Modified\n", NULL), modifiedFile]
+        appendString: modifiedFile
         attributes:
           [NSDictionary
             dictionaryWithObjectsAndKeys:
@@ -69,7 +67,9 @@
       [self.result
         appendString:
           [NSString stringWithFormat:
-            NSLocalizedString(@"    %@ - Exists\n", NULL), configFile]];
+            NSLocalizedString(
+              @"    %@ - File exists but not expected\n", NULL),
+            configFile]];
       
     // Print changes to /etc/hosts.
     [self printHostsStatus: corrupt count: hostsCount];
@@ -94,7 +94,6 @@
   if(attributes)
     {
     int version = [[Model model] majorOSVersion];
-    
     unsigned long long expectedSize = attributes.fileSize;
     
     switch(version)
@@ -117,7 +116,16 @@
       }
     
     if(attributes.fileSize != expectedSize)
-      [files addObject: @"/etc/sudoers"];
+      [files
+        addObject:
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(
+                @"%@, File size %llu but expected %llu",
+                NULL),
+              @"/etc/sudoers",
+              attributes.fileSize,
+              expectedSize]];
     }
   
   return files;

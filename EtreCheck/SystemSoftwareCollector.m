@@ -123,6 +123,19 @@
     if(found)
       [[Model model]
         setMajorOSVersion: majorVersion];
+      
+    NSString * minorVersion = nil;
+    
+    found = [scanner scanUpToString: @")" intoString: & minorVersion];
+    
+    if(found)
+      {
+      unichar ch;
+      
+      [minorVersion getCharacters: & ch range: NSMakeRange(0, 1)];
+      
+      [[Model model] setMinorOSVersion: ch - 'A'];
+      }
     }
   }
 

@@ -13,6 +13,7 @@
 @implementation Model
 
 @synthesize majorOSVersion = myMajorOSVersion;
+@synthesize minorOSVersion = myMinorOSVersion;
 @synthesize volumes = myVolumes;
 @synthesize coreStorageVolumes = myCoreStorageVolumes;
 @synthesize diskErrors = myDiskErrors;
