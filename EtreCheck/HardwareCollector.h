@@ -11,7 +11,6 @@
   {
   NSDictionary * myProperties;
   NSImage * myMachineIcon;
-  NSDictionary * myMachineImageLookup;
   NSString * myMarketingName;
   NSString * myEnglishMarketingName;
   }

@@ -69,9 +69,6 @@
         readPropertyList:
           NSLocalizedString(@"oldmachineattributes", NULL)];
     
-  // Load a manual machine image lookup table.
-  [self loadMachineImageLookupTable];
-  
   // This is as good a place as any to collect this.
   NSString * computerName = (NSString *)SCDynamicStoreCopyComputerName(NULL, NULL);
 
@@ -82,31 +79,6 @@
   
   [computerName release];
   [hostName release];
-  }
-
-// Load a manual machine image lookup table in case there isn't a system-
-// provided one available.
-- (void) loadMachineImageLookupTable
-  {
-  myMachineImageLookup =
-    @{
-      @"MacBookPro7,1" :  @"com.apple.macbookpro-13-unibody.icns",
-      @"MacBookPro8,2" :  @"com.apple.macbookpro-15-unibody.icns",
-      @"MacBookPro8,3" :  @"com.apple.macbookpro-17-unibody.icns",
-      @"iMac13,1" :       @"com.apple.imac-unibody-21-no-optical.icns",
-      @"iMac13,2" :       @"com.apple.imac-unibody-27-no-optical.icns",
-      @"MacBookPro10,2" : @"com.apple.macbookpro-13-retina-display.icns",
-      @"MacBookPro11,2" : @"com.apple.macbookpro-15-retina-display.icns",
-      @"Macmini1,1" :     @"com.apple.macmini.icns",
-      @"Macmini4,1" :     @"com.apple.macmini-unibody.icns",
-      @"Macmini5,1" :     @"com.apple.macmini-unibody-no-optical.icns",
-      @"MacBook5,2" :     @"com.apple.macbook-unibody-plastic.icns",
-      @"MacBook8,1" :     @"com.apple.macbookair-13-unibody.icns",
-      @"MacPro2,1" :      @"com.apple.macpro.icns",
-      @"MacPro6,1" :      @"com.apple.macpro-cylinder.icns",
-      @"MacBookAir3,1" :  @"com.apple.macbookair-11-unibody.icns",
-      @"MacBookAir3,2" :  @"com.apple.macbookair-13-unibody.icns"
-    };
   }
 
 // Perform the collection.
@@ -405,7 +377,8 @@
   // Don't give up.
   if(!iconPath)
     {
-    NSString * fileName = [myMachineImageLookup objectForKey: code];
+    NSString * fileName =
+      NSLocalizedStringFromTable(code, @"machineIcons", NULL);
     
     if(fileName)
       {
