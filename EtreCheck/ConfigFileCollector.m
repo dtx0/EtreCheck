@@ -121,7 +121,7 @@
           [NSString
             stringWithFormat:
               NSLocalizedString(
-                @"%@, File size %llu but expected %llu",
+                @"    %@, File size %llu but expected %llu\n",
                 NULL),
               @"/etc/sudoers",
               attributes.fileSize,
