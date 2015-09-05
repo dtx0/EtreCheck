@@ -122,7 +122,7 @@
 " - Corrupt!" = " - Corrompu !";
 " - Count: %d" = " - Nombre : %d";
 "    %@ - File exists but not expected\n" = "    %@ - Fichier existant, mais non prévu\n";
-"%@, File size %llu but expected %llu" = "%@, Taille du fichier %llu mais %llu prévu"
+"    %@, File size %llu but expected %llu\n" = "    %@, Taille du fichier %llu mais %llu prévu\n";
 "[redacted]" = "[expurgé]";
 "com.facebook.videochat.[redacted].plist" = "com.facebook.videochat.[expurgé].plist";
 "Oracle recommends %@" = "Oracle recommande %@";
