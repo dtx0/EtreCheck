@@ -516,7 +516,7 @@
     return
       [NSString
         stringWithFormat:
-          NSLocalizedString(@" - %@", NULL),
+          NSLocalizedString(@" - %@ Drive failure!", NULL),
           TTTLocalizedPluralString(errorCount, @"error", NULL)];
 
   return NSLocalizedString(@"", NULL);
