@@ -74,6 +74,8 @@
 
   [self parseOSVersion: version];
   
+  NSString * marketingName = [self marketingName: version];
+  
   int days = 0;
   int hours = 0;
 
@@ -86,7 +88,7 @@
           [NSString
             stringWithFormat:
               NSLocalizedString(@"    %@ - Uptime: %@%@\n", NULL),
-              version,
+              marketingName,
               @"",
               uptime]];
     
@@ -101,9 +103,82 @@
       [NSString
         stringWithFormat:
           NSLocalizedString(@"    %@ - Uptime: %@%@\n", NULL),
-          version,
+          marketingName,
           dayString,
           hourString]];
+  }
+
+// Query Apple for the marketing name.
+- (NSString *) marketingName: (NSString *) version
+  {
+  NSString * language = NSLocalizedString(@"en", NULL);
+  
+  NSURL * url =
+    [NSURL
+      URLWithString:
+        [NSString
+          stringWithFormat:
+            @"http://support-sp.apple.com/sp/product?edid=10.%d&lang=%@",
+            [[Model model] majorOSVersion] - 4,
+            language]];
+  
+  NSString * marketingName = [Utilities askAppleForMarketingName: url];
+  
+  if([marketingName length] && ([[Model model] majorOSVersion] >= kLion))
+    {
+    marketingName =
+      [marketingName
+        stringByAppendingString: [version substringFromIndex: 4]];
+    }
+  //else
+    return [self fallbackMarketingName: version];
+    
+  return marketingName;
+  }
+
+// Get a fallback marketing name.
+- (NSString *) fallbackMarketingName: (NSString *) version
+  {
+  NSString * fallbackMarketingName = version;
+  
+  NSString * name = nil;
+  
+  switch([[Model model] majorOSVersion])
+    {
+    case kSnowLeopard:
+      name = @"Snow Leopard";
+      break;
+      
+    case kLion:
+      name = @"Lion";
+      break;
+      
+    case kMountainLion:
+      name = @"Mountain Lion";
+      break;
+      
+    case kMavericks:
+      name = @"Mavericks";
+      break;
+      
+    case kYosemite:
+      name = @"Yosemite";
+      break;
+      
+    case kElCapitan:
+      name = @"El Capitan";
+      break;
+      
+    default:
+      return version;
+    }
+    
+  fallbackMarketingName =
+    [NSString
+      stringWithFormat:
+        @"OS X %@%@", name, [version substringFromIndex: 4]];
+  
+  return fallbackMarketingName;
   }
 
 // Parse the OS version.

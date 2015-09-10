@@ -96,4 +96,16 @@
 // Scan a string from top output.
 + (double) scanTopMemory: (NSScanner *) scanner;
 
+// Try to get the marketing name directly from Apple.
++ (NSString *) askAppleForMarketingName: (NSString *) serialCode
+  language: (NSString *) language type: (NSString *) type;
+
+// Try to get the marketing name directly from Apple.
++ (NSString *) askAppleForMarketingName: (NSURL *) url;
+
+// Construct an Apple support query URL.
++ (NSString *) AppleSupportSPQueryURL: (NSString *) serialCode
+  language: (NSString *) language
+  type: (NSString *) type;
+
 @end
