@@ -717,7 +717,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   NSData * rtfData =
     [self.log
       RTFFromRange: NSMakeRange(0, [self.log length])
-      documentAttributes: nil];
+      documentAttributes: @{}];
   
   NSRange range =
     NSMakeRange(0, [[self.logView textStorage] length]);

@@ -94,7 +94,7 @@
   NSData * rtfData =
     [self.details
       RTFFromRange: NSMakeRange(0, [self.details length])
-      documentAttributes: nil];
+      documentAttributes: @{}];
 
   NSRange range = NSMakeRange(0, [[self.textView textStorage] length]);
   
