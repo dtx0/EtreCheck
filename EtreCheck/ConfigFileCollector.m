@@ -113,6 +113,9 @@
       case kYosemite:
         expectedSize = 1275;
         break;
+      case kElCapitan:
+        expectedSize = 2299;
+        break;
       }
     
     if(attributes.fileSize != expectedSize)
