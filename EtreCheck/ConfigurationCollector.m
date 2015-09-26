@@ -7,9 +7,16 @@
 #import "ConfigurationCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
+#import "Utilities.h"
+
+#define kRootlessPrefix @"System Integrity Protection status:"
 
 // Collect changes to config files like /etc/sysctl.conf and /etc/hosts.
 @implementation ConfigurationCollector
+
+@synthesize configFiles = myConfigFiles;
+@synthesize modifiedFiles = myModifiedFiles;
+@synthesize modifications = myModifications;
 
 // Constructor.
 - (id) init
@@ -25,21 +32,36 @@
   return self;
   }
 
+// Destructor.
+- (void) dealloc
+  {
+  self.configFiles = nil;
+  self.modifiedFiles = nil;
+  self.modifications = nil;
+  
+  [super dealloc];
+  }
+
 // Perform the collection.
 - (void) collect
   {
   [self
     updateStatus: NSLocalizedString(@"Checking configuration files", NULL)];
 
-  NSArray * configFiles = [self existingConfigFiles];
+  [self checkExistingConfigFiles];
   
-  bool haveChanges = [configFiles count] > 0;
+  bool haveChanges = [self.configFiles count] > 0;
 
-  NSArray * modifiedFiles = [self modifiedConfigFiles];
+  [self checkModifiedConfigFiles];
 
-  if([modifiedFiles count] > 0)
+  if([self.modifiedFiles count] > 0)
     haveChanges = YES;
     
+  [self checkOtherModifications];
+  
+  if([self.modifications count] > 0)
+    haveChanges = YES;
+  
   // See if /etc/hosts has any changes or is corrupt.
   bool corrupt = NO;
   
@@ -53,26 +75,14 @@
     {
     [self.result appendAttributedString: [self buildTitle]];
     
-    // Print modified configFiles.
-    for(NSString * modifiedFile in modifiedFiles)
-      [self.result
-        appendString: modifiedFile
-        attributes:
-          [NSDictionary
-            dictionaryWithObjectsAndKeys:
-              [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    [self printModifiedFiles];
 
-    // Print existing configFiles.
-    for(NSString * configFile in configFiles)
-      [self.result
-        appendString:
-          [NSString stringWithFormat:
-            NSLocalizedString(
-              @"    %@ - File exists but not expected\n", NULL),
-            configFile]];
+    [self printUnexpectedFiles];
       
     // Print changes to /etc/hosts.
     [self printHostsStatus: corrupt count: hostsCount];
+    
+    [self printOtherModifications];
       
     [self.result appendCR];
     }
@@ -81,7 +91,7 @@
   }
 
 // Find modified configuration files.
-- (NSArray *) modifiedConfigFiles
+- (void) checkModifiedConfigFiles
   {
   NSMutableArray * files = [NSMutableArray array];
   
@@ -131,11 +141,11 @@
               expectedSize]];
     }
   
-  return files;
+  self.modifiedFiles = [files copy];
   }
 
 // Find existing configuration files.
-- (NSArray *) existingConfigFiles
+- (void) checkExistingConfigFiles
   {
   NSMutableArray * files = [NSMutableArray array];
   
@@ -149,7 +159,72 @@
   if([fileManager fileExistsAtPath: @"/etc/launchd.conf"])
     [files addObject: @"/etc/launchd.conf"];
     
-  return files;
+  self.configFiles = [files copy];
+  }
+
+// Check for other modifications.
+- (void) checkOtherModifications
+  {
+  NSMutableArray * otherModificiations = [NSMutableArray array];
+  
+  NSString * status = [self checkRootlessStatus];
+  
+  if(![status isEqualToString: @"disnabled"])
+    [otherModificiations
+      addObject:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(
+              @"System Integrity Protection status: %@", NULL),
+            status]];
+  
+  self.modifications = [otherModificiations copy];
+  }
+
+// Check System Integrity Protection.
+- (NSString *) checkRootlessStatus
+  {
+  bool csrutilExists =
+    [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/csrutil"];
+    
+  if(!csrutilExists)
+    return NSLocalizedString(@"/usr/bin/crutil missing", NULL);
+    
+  // Now consolidate destination information.
+  NSArray * args =
+    @[
+      @"status",
+    ];
+  
+  NSData * result =
+    [Utilities execute: @"/usr/bin/csrutil" arguments: args];
+
+  if(result)
+    {
+    NSString * status =
+      [[NSString alloc]
+        initWithData: result encoding: NSUTF8StringEncoding];
+    
+    NSString * result = status;
+    
+    NSScanner * scanner = [NSScanner scannerWithString: status];
+    
+    if([scanner scanString: kRootlessPrefix intoString: NULL])
+      [scanner scanUpToString: @"." intoString: & result];
+      
+    if(![result length])
+      result =
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"/usr/bin/csrutil returned \"%@\"", NULL),
+            status];
+    
+    [status release];
+    
+    return result;
+    }
+    
+  return NSLocalizedString(@"missing", NULL);
   }
 
 // Collect the number of changes to /etc/hosts and its status.
@@ -232,6 +307,43 @@
     return nil;
     
   return name;
+  }
+
+// Print modified files.
+- (void) printModifiedFiles
+  {
+  // Print modified configFiles.
+  for(NSString * modifiedFile in self.modifiedFiles)
+    [self.result
+      appendString: modifiedFile
+      attributes:
+        [NSDictionary
+          dictionaryWithObjectsAndKeys:
+            [NSColor redColor], NSForegroundColorAttributeName, nil]];
+  }
+
+// Print unexpected files.
+- (void) printUnexpectedFiles
+  {
+  // Print existing configFiles.
+  for(NSString * configFile in self.configFiles)
+    [self.result
+      appendString:
+        [NSString stringWithFormat:
+          NSLocalizedString(
+            @"    %@ - File exists but not expected\n", NULL),
+          configFile]];
+  }
+
+// Print other modifications.
+- (void) printOtherModifications
+  {
+  // Print existing configFiles.
+  for(NSString * modification in self.modifications)
+    [self.result
+      appendString:
+        [NSString stringWithFormat:
+          NSLocalizedString(@"    %@\n", NULL), modification]];
   }
 
 // Print the status of the hosts file.
