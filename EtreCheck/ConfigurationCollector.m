@@ -169,7 +169,7 @@
   
   NSString * status = [self checkRootlessStatus];
   
-  if(![status isEqualToString: @"disnabled"])
+  if(![status isEqualToString: @"enabled"])
     [otherModificiations
       addObject:
         [NSString
