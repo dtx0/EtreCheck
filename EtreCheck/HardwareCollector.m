@@ -325,7 +325,7 @@
       NSDictionary * modelInfo = [self.properties objectForKey: code];
       
       // Load the machine image.
-      self.machineIcon = [self findMachineIcon: code];
+      self.machineIcon = [self findCurrentMachineIcon];
       
       // Get machine name.
       NSString * machineName = [self lookupMachineName: modelInfo];
@@ -363,6 +363,16 @@
     machineName = [localizedModelInfo objectForKey: @"description"];
     
   return machineName;
+  }
+
+// Find a machine icon.
+- (NSImage *) findCurrentMachineIcon
+  {
+  NSImage * icon = [NSImage imageNamed: NSImageNameComputer];
+  
+  [icon setSize: NSMakeSize(1024, 1024)];
+
+  return icon;
   }
 
 // Find a machine icon.
