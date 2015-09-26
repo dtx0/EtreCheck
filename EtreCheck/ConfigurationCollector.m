@@ -167,17 +167,20 @@
   {
   NSMutableArray * otherModificiations = [NSMutableArray array];
   
-  NSString * status = [self checkRootlessStatus];
+  if([[Model model] majorOSVersion] >= kElCapitan)
+    {
+    NSString * status = [self checkRootlessStatus];
   
-  if(![status isEqualToString: @"enabled"])
-    [otherModificiations
-      addObject:
-        [NSString
-          stringWithFormat:
-            NSLocalizedString(
-              @"System Integrity Protection status: %@", NULL),
-            status]];
-  
+    if(![status isEqualToString: @"enabled"])
+      [otherModificiations
+        addObject:
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(
+                @"System Integrity Protection status: %@", NULL),
+              status]];
+    }
+    
   self.modifications = [otherModificiations copy];
   }
 
