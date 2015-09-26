@@ -7,6 +7,6 @@
 #import "Collector.h"
 
 // Collect changes to config files like /etc/sysctl.conf and /etc/hosts.
-@interface ConfigFileCollector : Collector
+@interface ConfigurationCollector : Collector
 
 @end

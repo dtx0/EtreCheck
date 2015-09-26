@@ -8,7 +8,7 @@
 #import "ApplicationsCollector.h"
 #import "AudioPlugInsCollector.h"
 #import "CPUUsageCollector.h"
-#import "ConfigFileCollector.h"
+#import "ConfigurationCollector.h"
 #import "CoreStorageCollector.h"
 #import "DiskCollector.h"
 #import "FirewireCollector.h"
@@ -313,7 +313,7 @@
   [collectors addObject: [[USBCollector new] autorelease]];
   [collectors addObject: [[FirewireCollector new] autorelease]];
   [collectors addObject: [[ThunderboltCollector new] autorelease]];
-  [collectors addObject: [[ConfigFileCollector new] autorelease]];
+  [collectors addObject: [[ConfigurationCollector new] autorelease]];
   [collectors addObject: [[GatekeeperCollector new] autorelease]];
   [collectors addObject: [[StartupItemsCollector new] autorelease]];
   [collectors addObject: [[SystemLaunchAgentsCollector new] autorelease]];

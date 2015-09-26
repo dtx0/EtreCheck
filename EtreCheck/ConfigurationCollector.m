@@ -4,12 +4,12 @@
  ** Copyright (c) 2014. All rights reserved.
  **********************************************************************/
 
-#import "ConfigFileCollector.h"
+#import "ConfigurationCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 
 // Collect changes to config files like /etc/sysctl.conf and /etc/hosts.
-@implementation ConfigFileCollector
+@implementation ConfigurationCollector
 
 // Constructor.
 - (id) init
