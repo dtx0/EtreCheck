@@ -23,6 +23,7 @@
 @synthesize machineIcon = myMachineIcon;
 @synthesize processes = myProcesses;
 @synthesize model = myModel;
+@synthesize serialCode = mySerialCode;
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize adwareFiles = myAdwareFiles;
 @synthesize adwareExtensions = myAdwareExtensions;

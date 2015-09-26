@@ -670,4 +670,76 @@
   return memValue;
   }
 
+// Try to get the marketing name directly from Apple.
++ (NSString *) askAppleForMarketingName: (NSString *) serialCode
+  language: (NSString *) language type: (NSString *) type
+  {
+  NSString * marketingName = @"";
+  
+  if([serialCode length])
+    {
+    NSURL * url =
+      [NSURL
+        URLWithString:
+          [Utilities
+            AppleSupportSPQueryURL: serialCode
+            language: language
+            type: type]];
+    
+    marketingName = [Utilities askAppleForMarketingName: url];
+    }
+    
+  return marketingName;
+  }
+
+// Try to get the marketing name directly from Apple.
++ (NSString *) askAppleForMarketingName: (NSURL *) url
+  {
+  NSString * marketingName = @"";
+  
+  if(url)
+    {
+    NSError * error = nil;
+    
+    NSXMLDocument * document =
+      [[NSXMLDocument alloc]
+        initWithContentsOfURL: url options: 0 error: & error];
+    
+    if(document)
+      {
+      NSArray * nodes =
+        [document nodesForXPath: @"root/configCode" error: & error];
+
+      if(nodes && [nodes count])
+        {
+        NSXMLNode * configCodeNode = [nodes objectAtIndex: 0];
+        
+        // Apple has non-breaking spaces in the results, especially in
+        // French but sometimes in English too.
+        NSString * nbsp = @"\u00A0";
+        
+        marketingName =
+          [[configCodeNode stringValue]
+            stringByReplacingOccurrencesOfString: nbsp withString: @" "];
+        }
+      
+      [document release];
+      }
+    }
+    
+  return marketingName;
+  }
+
+// Construct an Apple support query URL.
++ (NSString *) AppleSupportSPQueryURL: (NSString *) serialCode
+  language: (NSString *) language
+  type: (NSString *) type
+  {
+  return
+    [NSString
+      stringWithFormat:
+        @"http://support-sp.apple.com/sp/%@&cc=%@&lang=%@",
+        type, serialCode, language];
+  }
+
 @end

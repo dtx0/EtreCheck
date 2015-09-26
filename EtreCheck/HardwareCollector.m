@@ -145,8 +145,10 @@
   [[Model model]
     setPhysicalRAM: [self parseMemory: memory]];
 
+  [[Model model] setSerialCode: [serial substringFromIndex: 8]];
+
   // Print the human readable machine name, if I can find one.
-  [self printHumanReadableMacName: serial code: model];
+  [self printHumanReadableMacName: model];
     
   [self.result
     appendString:
@@ -183,23 +185,11 @@
   }
 
 // Extract a "marketing name" for a machine from a serial number.
-- (void) printHumanReadableMacName: (NSString *) serial
-  code: (NSString *) code
+- (void) printHumanReadableMacName: (NSString *) code
   {
   // Try to get the marketing name from Apple.
-  [self askAppleForMarketingName: serial];
+  [self askAppleForMarketingName];
   
-  NSString * verified = @"";
-  
-  NSString * technicalSpecificationsURL = nil;
-  
-  if([self.EnglishMarketingName length])
-    {
-    verified = NSLocalizedString(@"(Verified)", NULL);
-  
-    technicalSpecificationsURL = [self getTechnicalSpecificationsURL];
-    }
-    
   // Get information on my own.
   NSDictionary * machineProperties = [self lookupMachineProperties: code];
   
@@ -215,104 +205,80 @@
   [self.result
     appendString:
       [NSString
-        stringWithFormat: @"    %@ ", self.marketingName]];
+        stringWithFormat: @"    %@ \n", self.marketingName]];
       
-  if(technicalSpecificationsURL)
-    [self.result
-      appendAttributedString:
-        [Utilities
-          buildURL: technicalSpecificationsURL
-          title: NSLocalizedString(@"(Technical Specifications)", NULL)]];
-  else
-    [self.result appendString: verified];
-      
-  [self.result appendString: @"\n"];
-  }
+  NSString * language = NSLocalizedString(@"en", NULL);
 
-// Get a technical specifications URL, falling back to English,
-// if necessary.
-- (NSString *) getTechnicalSpecificationsURL
-  {
-  NSString * url =
-    NSLocalizedStringFromTable(
-      self.marketingName, @"TechnicalSpecifications", NULL);
-    
-  if([url isEqualToString: self.marketingName])
-    url =
-      NSLocalizedStringFromTableInBundle(
-        self.EnglishMarketingName,
-        @"TechnicalSpecifications",
-        [[Utilities shared] EnglishBundle],
-        NULL);
-    
-  if([url isEqualToString: self.marketingName])
-    return nil;
-    
-  return url;
+  [self.result
+    appendAttributedString:
+      [Utilities
+        buildURL:
+          [self technicalSpecificationsURL: language]
+        title:
+          NSLocalizedString(
+            @"    [Click for Technical Specifications]\n", NULL)]];
+
+  [self.result
+    appendAttributedString:
+      [Utilities
+        buildURL:
+          [self userGuideURL: language]
+        title:
+          NSLocalizedString(
+            @"    [Click for User Guide]\n", NULL)]];
   }
 
 // Try to get the marketing name directly from Apple.
-- (void) askAppleForMarketingName: (NSString *) serial
+- (void) askAppleForMarketingName
   {
   NSString * language = NSLocalizedString(@"en", NULL);
   
-  self.marketingName =
-    [self askAppleForMarketingName: serial language: language];
+  self.marketingName = [self askAppleForMarketingName: language];
   
   if([language isEqualToString: @"en"])
     self.EnglishMarketingName = self.marketingName;
   else
-    self.EnglishMarketingName =
-      [self askAppleForMarketingName: serial language: @"en"];
+    self.EnglishMarketingName = [self askAppleForMarketingName: @"en"];
   }
 
 // Try to get the marketing name directly from Apple.
-- (NSString *) askAppleForMarketingName: (NSString *) serial
-  language: (NSString *) language
+- (NSString *) askAppleForMarketingName: (NSString *) language
   {
-  NSString * marketingName = @"";
-  
-  if(serial)
-    {
-    NSString * code = [serial substringFromIndex: 8];
+  return
+    [Utilities
+      askAppleForMarketingName: [[Model model] serialCode]
+      language: language
+      type: @"product?"];
+  }
 
-    NSURL * url =
-      [NSURL
-        URLWithString:
-          [NSString
-            stringWithFormat:
-              @"http://support-sp.apple.com/sp/product?cc=%@&lang=%@",
-              code, language]];
-    
-    NSError * error = nil;
-    
-    NSXMLDocument * document =
-      [[NSXMLDocument alloc]
-        initWithContentsOfURL: url options: 0 error: & error];
-    
-    if(document)
-      {
-      NSArray * nodes =
-        [document nodesForXPath: @"root/configCode" error: & error];
+// Construct a technical specifications URL.
+- (NSString *) technicalSpecificationsURL: (NSString *) language
+  {
+  return
+    [Utilities
+      AppleSupportSPQueryURL: [[Model model] serialCode]
+      language: language
+      type: @"index?page=cpuspec"];
+  }
 
-      if(nodes && [nodes count])
-        {
-        NSXMLNode * configCodeNode = [nodes objectAtIndex: 0];
-        
-        // Apple has non-breaking spaces in the results, especially in
-        // French but sometimes in English too.
-        NSString * nbsp = @"\u00A0";
-        
-        marketingName =
-          [[configCodeNode stringValue]
-            stringByReplacingOccurrencesOfString: nbsp withString: @" "];
-        }
-      
-      [document release];
-      }
-    }
-    
-  return marketingName;
+// Construct a user guide URL.
+- (NSString *) userGuideURL: (NSString *) language
+  {
+  return
+    [Utilities
+      AppleSupportSPQueryURL: [[Model model] serialCode]
+      language: language
+      type: @"index?page=cpuuserguides"];
+  }
+
+// Construct a memory upgrade URL.
+- (NSString *) memoryUpgradeURL: (NSString *) language
+  {
+  return
+    [Utilities
+      AppleSupportSPQueryURL: [[Model model] serialCode]
+      language: language
+      type: @"index?page=cpumemory"];
   }
 
 // Try to get information about the machine from system resources.
@@ -387,16 +353,10 @@
   // Don't give up.
   if(!iconPath)
     {
-    NSString * fileName =
-      NSLocalizedStringFromTable(code, @"machineIcons", NULL);
+    iconPath = NSLocalizedStringFromTable(code, @"machineIcons", NULL);
     
-    if(fileName)
+    if(iconPath)
       {
-      NSString * resourcePath =
-        @"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources";
-        
-      iconPath = [resourcePath stringByAppendingPathComponent: fileName];
-      
       if(![[NSFileManager defaultManager] fileExistsAtPath: iconPath])
         iconPath = nil;
       }
@@ -413,17 +373,20 @@
   {
   NSDictionary * details = [self collectMemoryDetails];
   
-  NSString * upgradeable = @"";
+  bool upgradeable = NO;
+  NSString * upgradeableString = @"";
   
   if(details)
     {
     NSString * isUpgradeable =
       [details objectForKey: @"is_memory_upgradeable"];
     
+    upgradeable = [isUpgradeable boolValue];
+    
     // Snow Leopoard doesn't seem to report this.
     if(isUpgradeable)
-      upgradeable =
-        [isUpgradeable boolValue]
+      upgradeableString =
+        upgradeable
           ? NSLocalizedString(@"Upgradeable", NULL)
           : NSLocalizedString(@"Not upgradeable", NULL);
     }
@@ -432,7 +395,8 @@
     {
     [self.result
       appendString:
-        [NSString stringWithFormat: @"    %@ RAM %@\n", memory, upgradeable]
+        [NSString
+          stringWithFormat: @"    %@ RAM %@\n", memory, upgradeableString]
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -442,7 +406,18 @@
     [self.result
       appendString:
         [NSString
-          stringWithFormat: @"    %@ RAM %@\n", memory, upgradeable]];
+          stringWithFormat: @"    %@ RAM %@\n", memory, upgradeableString]];
+
+  NSString * language = NSLocalizedString(@"en", NULL);
+
+  if(upgradeable)
+    [self.result
+      appendAttributedString:
+        [Utilities
+          buildURL: [self memoryUpgradeURL: language]
+          title:
+            NSLocalizedString(
+              @"    [Click for upgrade instructions]\n", NULL)]];
 
   if(details)
     {

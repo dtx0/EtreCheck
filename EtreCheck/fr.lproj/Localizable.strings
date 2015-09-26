@@ -209,7 +209,10 @@
 "Poor" = "Remplacer maintenant";
 "(Technical Specifications)" = "(Caractéristiques techniques)";
 "Empty" = "Vide";
-"Click to remove" = "Cliquer pour enlever";
+"[Click to remove]" = "[Cliquer pour enlever]";
 "More adware files" = "Plus de fichiers adwares";
 "The following internal tasks failed to complete:" = "Les tâches internes ci-dessous ont faillis d’atteindre leur fin.";
 " - %@ Drive failure!" = " - %@ Échec du disque !";
+"    [Click for Technical Specifications]\n" = "    [Cliquer pour les Caractéristiques techniques]\n";
+"    [Click for User Guide]\n" = "    [Cliquer pour le Guide de l’utilisateur]\n";
+"    [Click for upgrade instructions]\n" = "    [Cliquer pour l’ajout de RAM]\n";

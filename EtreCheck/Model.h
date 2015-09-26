@@ -40,6 +40,7 @@
   NSImage * myMachineIcon;
   NSDictionary * myProcesses;
   NSString * myModel;
+  NSString * mySerialCode;
   NSMutableDictionary * myDiagnosticEvents;
   NSMutableDictionary * myAdwareFiles;
   NSArray * myAdwareExtensions;
@@ -80,6 +81,9 @@
 
 // The model code.
 @property (retain) NSString * model;
+
+// The serial number code for Apple lookups.
+@property (retain) NSString * serialCode;
 
 // Diagnostic events.
 @property (retain) NSMutableDictionary * diagnosticEvents;
