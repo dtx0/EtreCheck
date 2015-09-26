@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15A282c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -728,6 +728,7 @@
                     <button verticalHuggingPriority="750" id="lrR-aP-PG2">
                         <rect key="frame" x="381" y="13" width="167" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="push" title="Démarrer EtreCheck" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qTb-gt-ctA">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -749,6 +750,7 @@ DQ
                                 <textView importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="yAn-LB-NTZ">
                                     <rect key="frame" x="0.0" y="0.0" width="520" height="162"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <animations/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="520" height="162"/>
                                     <size key="maxSize" width="522" height="10000000"/>
@@ -764,20 +766,25 @@ DQ
                                     </connections>
                                 </textView>
                             </subviews>
+                            <animations/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
+                        <animations/>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="GrK-Oj-Ps8">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="UON-ue-3Ml">
                             <rect key="frame" x="487" y="1" width="16" height="117"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
                     </scrollView>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Wus-O6-YnG">
                         <rect key="frame" x="18" y="216" width="526" height="42"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="S'il vous plaît décrire votre problème." id="trd-Nq-EeU">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -787,6 +794,7 @@ DQ
                     <button id="pUo-Nx-msa">
                         <rect key="frame" x="18" y="22" width="275" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <animations/>
                         <buttonCell key="cell" type="check" title="Ne plus afficher cette boîte de dialogue" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PkC-2F-H9b">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -796,6 +804,7 @@ DQ
                         </connections>
                     </button>
                 </subviews>
+                <animations/>
             </view>
             <point key="canvasLocation" x="174" y="512"/>
         </window>
@@ -817,6 +826,7 @@ DQ
                                 <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" spellingCorrection="YES" id="jBT-e2-hx3">
                                     <rect key="frame" x="0.0" y="0.0" width="478" height="268"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <animations/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="478" height="268"/>
                                     <size key="maxSize" width="492" height="10000000"/>
@@ -832,18 +842,23 @@ DQ
                                     </connections>
                                 </textView>
                             </subviews>
+                            <animations/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
+                        <animations/>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="nKD-7l-Qff">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="zZL-lq-vZd">
                             <rect key="frame" x="463" y="1" width="16" height="268"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <animations/>
                         </scroller>
                     </scrollView>
                 </subviews>
+                <animations/>
             </view>
         </window>
         <window title="EtreCheck" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="HCb-1A-LX1">
@@ -854,6 +869,7 @@ DQ
             <view key="contentView" wantsLayer="YES" id="LrJ-81-PLR">
                 <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <animations/>
             </view>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="HgC-29-4Qk"/>
@@ -864,6 +880,7 @@ DQ
                 <button verticalHuggingPriority="750" id="CKR-xH-pGh">
                     <rect key="frame" x="78" y="5" width="84" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Fermer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pVH-bm-jyQ">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -875,13 +892,14 @@ DQ
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="F91-PC-1AG">
                     <rect key="frame" x="18" y="234" width="205" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="23D-4X-bPg">
                         <font key="font" metaFont="systemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" id="Ypx-es-oh5">
+                <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="Ypx-es-oh5">
                     <rect key="frame" x="20" y="48" width="201" height="178"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Rts-b0-4Ym">
@@ -891,6 +909,7 @@ DQ
                             <textView editable="NO" drawsBackground="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" id="9XL-Yg-zMZ">
                                 <rect key="frame" x="0.0" y="0.0" width="201" height="178"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="minSize" width="201" height="178"/>
                                 <size key="maxSize" width="463" height="10000000"/>
@@ -899,25 +918,30 @@ DQ
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
+                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="jyj-x4-74i">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="pNT-ib-3JD">
                         <rect key="frame" x="223" y="1" width="16" height="133"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                 </scrollView>
             </subviews>
+            <animations/>
             <point key="canvasLocation" x="-244.5" y="234.5"/>
         </customView>
         <customView id="OLH-d1-2gB" userLabel="Detail View">
             <rect key="frame" x="0.0" y="0.0" width="241" height="261"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" id="FSR-WK-imk">
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="FSR-WK-imk">
                     <rect key="frame" x="1" y="45" width="240" height="181"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="zTw-Y8-0ZG">
@@ -927,6 +951,7 @@ DQ
                             <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" spellingCorrection="YES" id="Kyh-rp-y9r">
                                 <rect key="frame" x="0.0" y="0.0" width="238" height="179"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="minSize" width="238" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
@@ -935,20 +960,25 @@ DQ
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
+                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="b7V-c6-cV6">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="V4m-Ik-6XS">
                         <rect key="frame" x="224" y="1" width="15" height="133"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                 </scrollView>
                 <button verticalHuggingPriority="750" id="1xu-wk-6Yf">
                     <rect key="frame" x="78" y="5" width="84" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Fermer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ofe-M7-2VM">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -960,6 +990,7 @@ DQ
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cEs-ua-dbR">
                     <rect key="frame" x="18" y="234" width="205" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="ORi-4z-LxQ">
                         <font key="font" metaFont="systemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -967,13 +998,14 @@ DQ
                     </textFieldCell>
                 </textField>
             </subviews>
+            <animations/>
             <point key="canvasLocation" x="-200.5" y="-23.5"/>
         </customView>
         <customView id="17p-xo-e23" userLabel="Adware View">
-            <rect key="frame" x="-6" y="0.0" width="321" height="261"/>
+            <rect key="frame" x="0.0" y="0.0" width="321" height="261"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" id="0P0-rE-o5p">
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="0P0-rE-o5p">
                     <rect key="frame" x="20" y="45" width="281" height="181"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" id="QWU-Lp-htZ">
@@ -983,6 +1015,7 @@ DQ
                             <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="xXx-OK-dY4">
                                 <rect key="frame" x="0.0" y="0.0" width="279" height="179"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="minSize" width="279" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
@@ -991,20 +1024,25 @@ DQ
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
+                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="fy1-VB-WY9">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="fpZ-3z-cAp">
                         <rect key="frame" x="224" y="1" width="15" height="133"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                 </scrollView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="0OW-gg-1fA">
                     <rect key="frame" x="18" y="234" width="285" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="k4r-Ui-C45">
                         <font key="font" metaFont="systemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1014,6 +1052,7 @@ DQ
                 <button verticalHuggingPriority="750" id="FS0-vD-dMp">
                     <rect key="frame" x="13" y="7" width="203" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Télécharger MalwareBytes" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="scM-2i-olp">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1025,6 +1064,7 @@ DQ
                 <button verticalHuggingPriority="750" id="LBf-0y-YHh">
                     <rect key="frame" x="223" y="7" width="84" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Fermer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hPz-7R-Qi4">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1034,6 +1074,7 @@ DQ
                     </connections>
                 </button>
             </subviews>
+            <animations/>
             <point key="canvasLocation" x="-160.5" y="92.5"/>
         </customView>
         <customView wantsLayer="YES" id="cs1-k8-fgW" userLabel="Animation View">
@@ -1043,10 +1084,12 @@ DQ
                 <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" style="bar" id="tDb-Al-O2y">
                     <rect key="frame" x="20" y="19" width="491" height="20"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <animations/>
                 </progressIndicator>
                 <button verticalHuggingPriority="750" id="mIX-Fq-FhE">
                     <rect key="frame" x="513" y="11" width="82" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Annuler" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eNg-Ev-1vb">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1061,10 +1104,12 @@ Gw
                 <customView id="kxf-sE-hK4" userLabel="Machine" customClass="SlideshowView">
                     <rect key="frame" x="44" y="92" width="143" height="143"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                    <animations/>
                 </customView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Uie-H3-jyY">
                     <rect key="frame" x="18" y="53" width="574" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="(en)Label" id="BsZ-8w-6MC">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1077,37 +1122,45 @@ Gw
                 <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="Udp-hz-whF">
                     <rect key="frame" x="297" y="52" width="16" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                 </progressIndicator>
                 <customView wantsLayer="YES" id="24p-7h-cH3" userLabel="Apps" customClass="SlideshowView">
                     <rect key="frame" x="263" y="131" width="86" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                 </customView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" alphaValue="0.70000000000000007" id="PHl-IL-fhi" userLabel="Mask">
                     <rect key="frame" x="203" y="80" width="230" height="147"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="MagnifyingGlassShade" id="h2p-bx-vsM"/>
                 </imageView>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="unu-XY-TZC" userLabel="Magnifying Glass">
                     <rect key="frame" x="203" y="80" width="230" height="147"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="MagnifyingGlass" id="U0y-89-Dyg"/>
                 </imageView>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="PBo-4n-aK2" userLabel="Demon">
                     <rect key="frame" x="453" y="131" width="64" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Demon" id="dk0-Hu-pih"/>
                 </imageView>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="X6k-bh-0bO" userLabel="Agent">
                     <rect key="frame" x="453" y="131" width="64" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Agent" id="ah4-O9-s19"/>
                 </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="YNi-t0-nyG" userLabel="Finder">
                     <rect key="frame" x="441" y="117" width="88" height="95"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="I43-rE-5l3"/>
                 </imageView>
             </subviews>
+            <animations/>
         </customView>
         <customView wantsLayer="YES" id="Rah-Ot-abL" userLabel="Report View">
             <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
@@ -1116,6 +1169,7 @@ Gw
                 <button verticalHuggingPriority="750" id="QVn-0L-cY0">
                     <rect key="frame" x="41" y="11" width="287" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="Copiez tout le rapport au presse-papiers" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZFx-vl-2mp">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1127,6 +1181,7 @@ Gw
                 <button verticalHuggingPriority="750" id="Ug4-cp-4Rv">
                     <rect key="frame" x="371" y="11" width="198" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <buttonCell key="cell" type="push" title="À propos de ces résultats" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a4e-yt-Dsj">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1145,6 +1200,7 @@ Gw
                             <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" id="rRU-vM-wce">
                                 <rect key="frame" x="0.0" y="0.0" width="566" height="181"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="minSize" width="566" height="181"/>
                                 <size key="maxSize" width="1097" height="10000000"/>
@@ -1160,18 +1216,23 @@ Gw
                                 </connections>
                             </textView>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
+                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="tCa-LM-4UN">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="ecj-hG-za1">
                         <rect key="frame" x="-100" y="-100" width="16" height="180"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </scroller>
                 </scrollView>
             </subviews>
+            <animations/>
         </customView>
     </objects>
     <resources>
