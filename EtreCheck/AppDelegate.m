@@ -127,6 +127,39 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     });
   }
 
+// Dim the display on deactivate.
+- (void) applicationDidResignActive: (NSNotification *) notification
+  {
+  CIFilter * grayscale = [CIFilter filterWithName: @"CIColorMonochrome"];
+  [grayscale setDefaults];
+  [grayscale
+    setValue: [CIColor colorWithRed: 0.3 green: 0.3 blue: 0.3 alpha: 1.0]
+    forKey: @"inputColor"];
+    
+  CIFilter * gamma = [CIFilter filterWithName:@"CIGammaAdjust"];
+  [gamma setDefaults];
+  [gamma setValue: [NSNumber numberWithDouble: 0.3] forKey: @"inputPower"];
+    
+  [self.animationView setContentFilters: @[grayscale, gamma]];
+  [self.reportView setContentFilters: @[grayscale, gamma]];
+
+  grayscale = [CIFilter filterWithName: @"CIColorMonochrome"];
+  [grayscale setDefaults];
+  [grayscale
+    setValue: [CIColor colorWithRed: 0.6 green: 0.6 blue: 0.6 alpha: 1.0]
+    forKey: @"inputColor"];
+    
+  [self.magnifyingGlassShade setContentFilters: @[grayscale]];
+  }
+
+// Un-dim the display on activate.
+- (void) applicationDidBecomeActive: (NSNotification *) notification
+  {
+  [self.animationView setContentFilters: @[]];
+  [self.reportView setContentFilters: @[]];
+  [self.magnifyingGlassShade setContentFilters: @[]];
+  }
+
 // Handle an "etrecheck:" URL.
 - (void) handleGetURLEvent: (NSAppleEventDescriptor *) event
   withReplyEvent: (NSAppleEventDescriptor *) reply
