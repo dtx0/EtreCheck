@@ -12,23 +12,6 @@
 #import "NSDictionary+Etresoft.h"
 #import "TTTLocalizedPluralString.h"
 
-#define kStatus @"status"
-#define kHidden @"hidden"
-#define kApple @"apple"
-#define kFilename @"filename"
-#define kExecutable @"executable"
-#define kSupportURL @"supporturl"
-#define kDetailsURL @"detailsurl"
-#define kPlist @"plist"
-
-#define kStatusUnknown @"unknown"
-#define kStatusNotLoaded @"notloaded"
-#define kStatusLoaded @"loaded"
-#define kStatusRunning @"running"
-#define kStatusFailed @"failed"
-#define kStatusInvalid @"invalid"
-#define kStatusKilled @"killed"
-
 @implementation LaunchdCollector
 
 // These need to be shared by all launchd collector objects.
@@ -119,8 +102,15 @@
     {
     NSString * label = [job objectForKey: @"Label"];
     
+    NSMutableDictionary * jobData =
+      [NSMutableDictionary dictionaryWithDictionary: job];
+    
+    jobData[kPrinted] = @NO;
+    jobData[kSignatureVerified] = @NO;
+    jobData[kHidden] = @NO;
+    
     if(label)
-      [self.launchdStatus setObject: [job copy] forKey: label];
+      [self.launchdStatus setObject: jobData forKey: label];
     }
     
   CFRelease(jobs);
@@ -249,7 +239,7 @@
     return NO;
     
   // Get the status.
-  NSDictionary * status = [self collectLaunchdItemStatus: path];
+  NSMutableDictionary * status = [self collectLaunchdItemStatus: path];
     
   // Apple file get special treatment.
   if([[status objectForKey: kApple] boolValue])
@@ -264,7 +254,7 @@
     else if([[status objectForKey: kStatus] isEqualToString: kStatusKilled])
       {
       }
-    else
+    else if([status[kSignatureVerified] boolValue])
       return NO;
     }
 
@@ -276,12 +266,14 @@
     appendAttributedString: [self formatExtraContent: status for: path]];
   
   [output appendString: @"\n"];
+    
+  status[kPrinted] = @YES;
   
   return YES;
   }
 
 // Collect the status of a launchd item.
-- (NSDictionary *) collectLaunchdItemStatus: (NSString *) path
+- (NSMutableDictionary *) collectLaunchdItemStatus: (NSString *) path
   {
   // I need this.
   NSString * file = [path lastPathComponent];
@@ -290,8 +282,10 @@
   NSDictionary * plist = [NSDictionary readPropertyList: path];
 
   // Get the status.
-  NSString * jobStatus = [self collectJobStatus: plist];
+  NSMutableDictionary * status = [self collectJobStatus: plist];
     
+  NSString * jobStatus = status[kStatus];
+  
   // Get the executable.
   NSArray * executable = [self collectLaunchdItemExecutable: plist];
   
@@ -300,7 +294,8 @@
   //if(![self isValidExecutable: executable])
   //  jobStatus = kStatusInvalid;
     
-  NSString * name = [[executable firstObject] lastPathComponent];
+  NSString * program = [executable firstObject];
+  NSString * name = [program lastPathComponent];
   
   NSAttributedString * detailsURL = nil;
   
@@ -308,31 +303,28 @@
     if([[Model model] hasLogEntries: name])
       detailsURL = [[Model model] getDetailsURLFor: name];
   
+  bool isApple = [self isAppleFile: file];
+  
+  status[kApple] = [NSNumber numberWithBool: isApple];
+  status[kFilename] = [Utilities sanitizeFilename: file];
+  status[kExecutable] = executable;
+  status[kSupportURL] = [self getSupportURL: nil bundleID: path];
+  
   if(detailsURL)
-    return
-      @{
-        kApple : [NSNumber numberWithBool: [self isAppleFile: file]],
-        kFilename : [Utilities sanitizeFilename: file],
-        kHidden : [NSNumber numberWithBool: [file hasPrefix: @"."]],
-        kStatus : jobStatus,
-        kExecutable : executable,
-        kSupportURL : [self getSupportURL: nil bundleID: path],
-        kDetailsURL : detailsURL
-      };
+    status[kDetailsURL] = detailsURL;
+    
+  if([file hasPrefix: @"."])
+    status[kHidden] = @YES;
+    
+  if(isApple)
+    status[kSignatureVerified] =
+      [NSNumber numberWithBool: [Utilities verifyAppleExecutable: program]];
 
-  return
-    @{
-      kApple : [NSNumber numberWithBool: [self isAppleFile: file]],
-      kFilename : [Utilities sanitizeFilename: file],
-      kHidden : [NSNumber numberWithBool: [file hasPrefix: @"."]],
-      kStatus : jobStatus,
-      kExecutable : executable,
-      kSupportURL : [self getSupportURL: nil bundleID: path]
-    };
+  return status;
   }
 
 // Get the job status.
-- (NSString *) collectJobStatus: (NSDictionary *) plist
+- (NSMutableDictionary *) collectJobStatus: (NSDictionary *) plist
   {
   NSString * jobStatus = kStatusUnknown;
 
@@ -342,8 +334,12 @@
       
     if(label)
       {
-      NSDictionary * status = [self.launchdStatus objectForKey: label];
+      NSMutableDictionary * status =
+        [self.launchdStatus objectForKey: label];
     
+      if(status == nil)
+        status = [NSMutableDictionary new];
+        
       NSNumber * pid = [status objectForKey: @"PID"];
       NSNumber * lastExitStatus = [status objectForKey: @"LastExitStatus"];
 
@@ -363,10 +359,14 @@
         jobStatus = kStatusLoaded;
       else
         jobStatus = kStatusNotLoaded;
+        
+      [status setObject: jobStatus forKey: kStatus];
+      
+      return status;
       }
     }
     
-  return jobStatus;
+  return nil;
   }
 
 // Should I ignore failures?
@@ -550,7 +550,25 @@
       
     return [extra autorelease];
     }
+  else if([status[kApple] boolValue])
+    {
+    if(![status[kSignatureVerified] boolValue])
+      {
+      NSMutableAttributedString * extra =
+        [[NSMutableAttributedString alloc] init];
 
+      [extra
+        appendString: NSLocalizedString(@"Invalid signture!", NULL)
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+      
+      return [extra autorelease];
+      }
+    }
+    
   return [self formatSupportLink: status];
   }
 

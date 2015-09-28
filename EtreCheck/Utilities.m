@@ -742,4 +742,38 @@
         type, serialCode, language];
   }
 
+// Verify the signature of an Apple executable.
++ (bool) verifyAppleExecutable: (NSString *) path
+  {
+  NSArray * args =
+    @[
+      @"-vv",
+      @"-R=anchor apple",
+      path
+    ];
+  
+  NSString * output = nil;
+  
+  [Utilities execute: @"/usr/bin/codesign" arguments: args error: & output];
+  
+  bool result = NO;
+  
+  if([output length])
+    {
+    NSString * expectedOutput =
+      [NSString
+        stringWithFormat:
+          @"%@: valid on disk\n"
+          "%@: satisfies its Designated Requirement\n"
+          "%@: explicit requirement satisfied\n",
+          path,
+          path,
+          path];
+      
+    result = [output isEqualToString: expectedOutput];
+    }
+    
+  return result;
+  }
+
 @end

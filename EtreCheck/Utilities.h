@@ -108,4 +108,7 @@
   language: (NSString *) language
   type: (NSString *) type;
 
+// Verify the signature of an Apple executable.
++ (bool) verifyAppleExecutable: (NSString *) path;
+
 @end
