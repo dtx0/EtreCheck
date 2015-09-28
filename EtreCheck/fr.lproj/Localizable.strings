@@ -216,3 +216,7 @@
 "    [Click for Technical Specifications]\n" = "    [Cliquer pour les Caractéristiques techniques]\n";
 "    [Click for User Guide]\n" = "    [Cliquer pour le Guide de l’utilisateur]\n";
 "    [Click for upgrade instructions]\n" = "    [Cliquer pour l’ajout de RAM]\n";
+" - Invalid signature!" = " - Signature invalide !";
+" - No signature!" = "Aucune signature !";
+" - %@: Executable not found!" = " - %@ : Logiciel non-trouvé";
+

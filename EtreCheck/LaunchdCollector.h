@@ -8,12 +8,15 @@
 #import "Collector.h"
 
 #define kStatus @"status"
+#define kPID @"PID"
 #define kHidden @"hidden"
 #define kPrinted @"printed"
-#define kSignatureVerified @"signatureverified"
+#define kIgnored @"ignored"
+#define kSignature @"signature"
 #define kApple @"apple"
 #define kFilename @"filename"
 #define kExecutable @"executable"
+#define kCommand @"command"
 #define kSupportURL @"supporturl"
 #define kDetailsURL @"detailsurl"
 #define kPlist @"plist"
@@ -44,6 +47,24 @@
 
 // Format a status string.
 - (NSAttributedString *) formatPropertyListStatus: (NSDictionary *) status;
+
+// Get the job status.
+- (NSMutableDictionary *) collectJobStatus: (NSDictionary *) plist;
+
+// Collect the executable of the launchd item.
+- (NSArray *) collectLaunchdItemExecutable: (NSDictionary *) plist;
+
+// Is this an Apple file that I expect to see?
+- (bool) isAppleFile: (NSString *) file;
+
+// Should I ignore these invalid signatures?
+- (bool) ignoreInvalidSignatures: (NSString *) file;
+
+// Format a codesign response.
+- (NSString *) formatAppleSignature: (NSDictionary *) status;
+
+// Create a support link for a plist dictionary.
+- (NSAttributedString *) formatSupportLink: (NSDictionary *) status;
 
 // Release memory.
 + (void) cleanup;

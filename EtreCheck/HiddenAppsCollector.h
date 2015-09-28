@@ -7,5 +7,10 @@
 #import "LaunchdCollector.h"
 
 @interface HiddenAppsCollector : LaunchdCollector
+  {
+  NSDictionary * myProcesses;
+  }
+
+@property (retain) NSDictionary * processes;
 
 @end

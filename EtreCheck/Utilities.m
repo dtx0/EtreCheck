@@ -743,20 +743,24 @@
   }
 
 // Verify the signature of an Apple executable.
-+ (bool) verifyAppleExecutable: (NSString *) path
++ (NSString *) checkAppleExecutable: (NSString *) path
   {
+  NSString * noStrict =
+    ([[Model model] majorOSVersion] >= kElCapitan)
+      ? @""
+      : @"--no-strict";
+  
   NSArray * args =
     @[
       @"-vv",
       @"-R=anchor apple",
+      noStrict,
       path
     ];
   
   NSString * output = nil;
   
   [Utilities execute: @"/usr/bin/codesign" arguments: args error: & output];
-  
-  bool result = NO;
   
   if([output length])
     {
@@ -770,10 +774,25 @@
           path,
           path];
       
-    result = [output isEqualToString: expectedOutput];
+    if([output isEqualToString: expectedOutput])
+      return kSignatureValid;
+      
+    expectedOutput =
+      [NSString
+        stringWithFormat: @"%@: code object is not signed at all\n", path];
+
+    if([output isEqualToString: expectedOutput])
+      return kNotSigned;
+
+    expectedOutput =
+      [NSString
+        stringWithFormat: @"%@: No such file or directory\n", path];
+
+    if([output isEqualToString: expectedOutput])
+      return kExecutableMissing;
     }
     
-  return result;
+  return kSignatureNotValid;
   }
 
 @end

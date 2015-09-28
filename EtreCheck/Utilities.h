@@ -13,6 +13,11 @@
 #define kCollectionStatus @"collectionstatus"
 #define kShowDemonAgent @"showdemonagent"
 
+#define kNotSigned @"notsigned"
+#define kSignatureValid @"signaturevalid"
+#define kSignatureNotValid @"signataurenotvalid"
+#define kExecutableMissing @"executablemissing"
+
 // Assorted utilities.
 @interface Utilities : NSObject
   {
@@ -108,7 +113,7 @@
   language: (NSString *) language
   type: (NSString *) type;
 
-// Verify the signature of an Apple executable.
-+ (bool) verifyAppleExecutable: (NSString *) path;
+// Check the signature of an Apple executable.
++ (NSString *) checkAppleExecutable: (NSString *) path;
 
 @end

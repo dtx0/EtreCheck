@@ -106,7 +106,6 @@
       [NSMutableDictionary dictionaryWithDictionary: job];
     
     jobData[kPrinted] = @NO;
-    jobData[kSignatureVerified] = @NO;
     jobData[kHidden] = @NO;
     
     if(label)
@@ -241,6 +240,9 @@
   // Get the status.
   NSMutableDictionary * status = [self collectLaunchdItemStatus: path];
     
+  if(!status)
+    return NO;
+    
   // Apple file get special treatment.
   if([[status objectForKey: kApple] boolValue])
     {
@@ -249,13 +251,31 @@
       {
       // Should I ignore this failure?
       if([self ignoreFailuresOnFile: file])
+        {
+        status[kIgnored] = @YES;
+
         return NO;
+        }
       }
+      
     else if([[status objectForKey: kStatus] isEqualToString: kStatusKilled])
       {
       }
-    else if([status[kSignatureVerified] boolValue])
+      
+    else if([status[kSignature] isEqualToString: kSignatureValid])
+      {
+      status[kIgnored] = @YES;
+      
       return NO;
+      }
+      
+    // Should I ignore this failure?
+    else if([self ignoreInvalidSignatures: file])
+      {
+      status[kIgnored] = @YES;
+
+      return NO;
+      }
     }
 
   [output appendAttributedString: [self formatPropertyListStatus: status]];
@@ -287,15 +307,15 @@
   NSString * jobStatus = status[kStatus];
   
   // Get the executable.
-  NSArray * executable = [self collectLaunchdItemExecutable: plist];
+  NSArray * command = [self collectLaunchdItemExecutable: plist];
   
   // See if the executable is valid.
   // Don't bother with this.
   //if(![self isValidExecutable: executable])
   //  jobStatus = kStatusInvalid;
     
-  NSString * program = [executable firstObject];
-  NSString * name = [program lastPathComponent];
+  NSString * executable = [command firstObject];
+  NSString * name = [executable lastPathComponent];
   
   NSAttributedString * detailsURL = nil;
   
@@ -307,6 +327,7 @@
   
   status[kApple] = [NSNumber numberWithBool: isApple];
   status[kFilename] = [Utilities sanitizeFilename: file];
+  status[kCommand] = command;
   status[kExecutable] = executable;
   status[kSupportURL] = [self getSupportURL: nil bundleID: path];
   
@@ -317,8 +338,7 @@
     status[kHidden] = @YES;
     
   if(isApple)
-    status[kSignatureVerified] =
-      [NSNumber numberWithBool: [Utilities verifyAppleExecutable: program]];
+    status[kSignature] = [Utilities checkAppleExecutable: executable];
 
   return status;
   }
@@ -407,6 +427,72 @@
   return NO;
   }
 
+// Should I ignore these invalid signatures?
+- (bool) ignoreInvalidSignatures: (NSString *) file
+  {
+  switch([[Model model] majorOSVersion])
+    {
+    case kSnowLeopard:
+      break;
+    case kLion:
+      break;
+    case kMountainLion:
+      break;
+    case kMavericks:
+      break;
+    case kYosemite:
+      if([file isEqualToString: @"com.apple.Dock.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.Spotlight.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.systemprofiler.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.efax.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.emlog.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.gkreport.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.locate.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.ManagedClient.enroll.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.ManagedClient.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.ManagedClient.startup.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.postgres.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.apache.httpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.cups.cupsd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.apache.httpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.net-snmp.snmpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"ssh.plist"])
+        return YES;
+        
+      else if([file hasPrefix: @"com.apple.mail"])
+        return YES;
+      else if([file hasPrefix: @"com.apple.Safari"])
+        return YES;
+
+      break;
+    case kElCapitan:
+      break;
+    }
+    
+  return NO;
+  }
+
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) file
   {
@@ -417,6 +503,31 @@
     return YES;
     
   return NO;
+  }
+
+// Format a codesign response.
+- (NSString *) formatAppleSignature: (NSDictionary *) status
+  {
+  NSString * message = @"";
+  
+  NSString * signature = status[kSignature];
+  
+  NSString * path = status[kExecutable];
+  
+  if(![signature isEqualToString: kSignatureValid])
+    {
+    message = NSLocalizedString(@" - Invalid signature!", NULL);
+  
+    if([signature isEqualToString: kNotSigned])
+      message = NSLocalizedString(@" - No signature!", NULL);
+    else if([signature isEqualToString: kExecutableMissing])
+      message =
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@" - %@: Executable not found!", NULL), path];
+    }
+    
+  return message;
   }
 
 // Collect the executable of the launchd item.
@@ -552,13 +663,15 @@
     }
   else if([status[kApple] boolValue])
     {
-    if(![status[kSignatureVerified] boolValue])
+    if(![status[kSignature] isEqualToString: kSignatureValid])
       {
       NSMutableAttributedString * extra =
         [[NSMutableAttributedString alloc] init];
 
+      NSString * message = [self formatAppleSignature: status];
+        
       [extra
-        appendString: NSLocalizedString(@"Invalid signture!", NULL)
+        appendString: message
         attributes:
           @{
             NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -572,6 +685,7 @@
   return [self formatSupportLink: status];
   }
 
+// Create a support link for a plist dictionary.
 - (NSAttributedString *) formatSupportLink: (NSDictionary *) status
   {
   NSMutableAttributedString * extra =
