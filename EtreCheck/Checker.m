@@ -221,33 +221,49 @@
   
   // Start the application animation.
   
-  KernelExtensionCollector * kernelExtensionCollector =
-    [[KernelExtensionCollector new] autorelease];
+  Collector * lastCollector = [[DiagnosticsCollector new] autorelease];
     
   // This searches through applications, and takes some time, so it is
   // somewhat related to applications.
-  [collectors addObject: kernelExtensionCollector];
+  [collectors addObject: [[KernelExtensionCollector new] autorelease]];
+  [collectors addObject: [[VideoCollector new] autorelease]];
+  [collectors addObject: [[USBCollector new] autorelease]];
+  [collectors addObject: [[FirewireCollector new] autorelease]];
+  [collectors addObject: [[ThunderboltCollector new] autorelease]];
+  [collectors addObject: [[ConfigurationCollector new] autorelease]];
+  [collectors addObject: [[GatekeeperCollector new] autorelease]];
+  [collectors addObject: [[InternetPlugInsCollector new] autorelease]];
+  [collectors addObject: [[UserInternetPlugInsCollector new] autorelease]];
+  [collectors addObject: [[AudioPlugInsCollector new] autorelease]];
+  [collectors addObject: [[UserAudioPlugInsCollector new] autorelease]];
+  [collectors addObject: [[ITunesPlugInsCollector new] autorelease]];
+  [collectors addObject: [[UserITunesPlugInsCollector new] autorelease]];
+  [collectors addObject: [[PreferencePanesCollector new] autorelease]];
+  [collectors addObject: [[FontsCollector new] autorelease]];
+  [collectors addObject: [[TimeMachineCollector new] autorelease]];
+  [collectors addObject: [[CPUUsageCollector new] autorelease]];
+  [collectors addObject: [[MemoryUsageCollector new] autorelease]];
+  [collectors addObject: [[VirtualMemoryCollector new] autorelease]];
+  [collectors addObject: lastCollector];
   
   // Start the machine animation.
-  [self runApplicationsAnimation: kernelExtensionCollector];
+  [self runApplicationsAnimation: lastCollector];
   
   [self performCollections: collectors progress: progress];
   }
 
 // Run the applications animation.
-- (void) runApplicationsAnimation:
-  (KernelExtensionCollector *) kernelExtensionCollector
+- (void) runApplicationsAnimation: (Collector *) lastCollector
   {
   dispatch_async(
     queue,
     ^{
-      [self performApplicationsAnimation: kernelExtensionCollector];
+      [self performApplicationsAnimation: lastCollector];
     });
   }
 
 // Perform applications animation.
-- (void) performApplicationsAnimation:
-  (KernelExtensionCollector *) kernelExtensionCollector
+- (void) performApplicationsAnimation: (Collector *) lastCollector
   {
   NSDictionary * applications =
     [[Model model] applications];
@@ -278,7 +294,7 @@
     // Wait to see if the collection finishes. If it does, exit
     // early.
     if(count++ > 10)
-      if(kernelExtensionCollector.done)
+      if(lastCollector.done)
         break;
     }
 
@@ -310,12 +326,6 @@
   NSMutableArray * collectors = [NSMutableArray array];
   
   // Run the rest of the collectors.
-  [collectors addObject: [[VideoCollector new] autorelease]];
-  [collectors addObject: [[USBCollector new] autorelease]];
-  [collectors addObject: [[FirewireCollector new] autorelease]];
-  [collectors addObject: [[ThunderboltCollector new] autorelease]];
-  [collectors addObject: [[ConfigurationCollector new] autorelease]];
-  [collectors addObject: [[GatekeeperCollector new] autorelease]];
   [collectors addObject: [[StartupItemsCollector new] autorelease]];
   [collectors addObject: [[SystemLaunchAgentsCollector new] autorelease]];
   [collectors addObject: [[SystemLaunchDaemonsCollector new] autorelease]];
@@ -324,19 +334,6 @@
   [collectors addObject: [[UserLaunchAgentsCollector new] autorelease]];
   [collectors addObject: [[LoginItemsCollector new] autorelease]];
   [collectors addObject: [[HiddenAppsCollector new] autorelease]];
-  [collectors addObject: [[InternetPlugInsCollector new] autorelease]];
-  [collectors addObject: [[UserInternetPlugInsCollector new] autorelease]];
-  [collectors addObject: [[AudioPlugInsCollector new] autorelease]];
-  [collectors addObject: [[UserAudioPlugInsCollector new] autorelease]];
-  [collectors addObject: [[ITunesPlugInsCollector new] autorelease]];
-  [collectors addObject: [[UserITunesPlugInsCollector new] autorelease]];
-  [collectors addObject: [[PreferencePanesCollector new] autorelease]];
-  [collectors addObject: [[FontsCollector new] autorelease]];
-  [collectors addObject: [[TimeMachineCollector new] autorelease]];
-  [collectors addObject: [[CPUUsageCollector new] autorelease]];
-  [collectors addObject: [[MemoryUsageCollector new] autorelease]];
-  [collectors addObject: [[VirtualMemoryCollector new] autorelease]];
-  [collectors addObject: [[DiagnosticsCollector new] autorelease]];
   
   // Start the agents and daemons animation.
   dispatch_semaphore_t semaphore = [self runAgentsAndDaemonsAnimation];
