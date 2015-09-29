@@ -8,6 +8,7 @@
 #import "Utilities.h"
 #import "LaunchdCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import "Model.h"
 
 @implementation HiddenAppsCollector
 
@@ -146,13 +147,19 @@
 - (void) updateStatus: (NSMutableDictionary *) status
   forBundle: (NSString *) bundleID
   {
-  NSString * executable =
-    [self getExecutableForBundle: bundleID status: status];
-    
   bool isApple = [self isAppleFile: bundleID];
   
   status[kApple] = [NSNumber numberWithBool: isApple];
 
+  if(isApple && ([[Model model] majorOSVersion] < kYosemite))
+    {
+    status[kIgnored] = @YES;
+    return;
+    }
+    
+  NSString * executable =
+    [self getExecutableForBundle: bundleID status: status];
+    
   if(isApple && executable)
     {
     status[kSignature] = [Utilities checkAppleExecutable: executable];
@@ -209,6 +216,9 @@
 // Is the bundle an App Store item?
 - (bool) isSandboxApp: (NSString *) bundleID
   {
+  if([[Model model] majorOSVersion] < kYosemite)
+    return NO;
+    
   unsigned int UID = getuid();
 
   NSString * serviceName =

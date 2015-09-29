@@ -439,6 +439,32 @@
     case kMountainLion:
       break;
     case kMavericks:
+      if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.efax.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.emlog.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.gkreport.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.locate.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.postgres.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.apache.httpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.cups.cupsd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.apache.httpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.net-snmp.snmpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"ssh.plist"])
+        return YES;
       break;
     case kYosemite:
       if([file isEqualToString: @"com.apple.Dock.plist"])
@@ -502,6 +528,28 @@
   if([self.appleLaunchd containsObject: file])
     return YES;
     
+  if([[Model model] majorOSVersion] < kYosemite)
+    {
+    if([file hasPrefix: @"0x7f"])
+      if([file rangeOfString: @".anonymous."].location != NSNotFound)
+        return YES;
+    if([file hasSuffix: @"].com.apple.AppleSpell"])
+      return YES;
+    }
+    
+  if([[Model model] majorOSVersion] < kLion)
+    {
+    if([file hasPrefix: @"[0x0"])
+      if([file rangeOfString: @".com.apple."].location != NSNotFound)
+        return YES;
+    if([file hasPrefix: @"0x10"])
+      if([file rangeOfString: @".anonymous."].location != NSNotFound)
+        return YES;
+    if([file hasPrefix: @"0x10"])
+      if([file rangeOfString: @".mach_init."].location != NSNotFound)
+        return YES;
+    }
+
   return NO;
   }
 

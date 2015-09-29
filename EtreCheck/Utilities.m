@@ -761,10 +761,15 @@
   if(result)
     return result;
     
-  NSString * noStrict =
-    ([[Model model] majorOSVersion] >= kElCapitan)
-      ? @""
-      : @"--no-strict";
+  NSString * noStrict = @"";
+  
+  switch([[Model model] majorOSVersion])
+    {
+    case kMavericks:
+    case kYosemite:
+      noStrict = @"--no-strict";
+      break;
+    }
   
   NSArray * args =
     @[

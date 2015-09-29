@@ -130,6 +130,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Dim the display on deactivate.
 - (void) applicationDidResignActive: (NSNotification *) notification
   {
+  NSNumber * curScreenNum =
+    [self.window.screen.deviceDescription objectForKey: @"NSScreenNumber"];
+
+  if(!CGDisplayUsesOpenGLAcceleration(curScreenNum.unsignedIntValue))
+    return;
+    
   CIFilter * grayscale = [CIFilter filterWithName: @"CIColorMonochrome"];
   [grayscale setDefaults];
   [grayscale
@@ -166,6 +172,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Un-dim the display on activate.
 - (void) applicationWillBecomeActive: (NSNotification *) notification
   {
+  NSNumber * curScreenNum =
+    [self.window.screen.deviceDescription objectForKey: @"NSScreenNumber"];
+
+  if(!CGDisplayUsesOpenGLAcceleration(curScreenNum.unsignedIntValue))
+    return;
+
   dispatch_async(
     dispatch_get_main_queue(),
     ^{

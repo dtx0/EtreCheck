@@ -278,7 +278,7 @@
     [Utilities
       AppleSupportSPQueryURL: [[Model model] serialCode]
       language: language
-      type: @"index?page=cpumemory"];
+      type: @"index?page=cpumemory"]; 
   }
 
 // Try to get information about the machine from system resources.
