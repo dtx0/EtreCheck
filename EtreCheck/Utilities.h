@@ -38,6 +38,7 @@
   
   NSBundle * myEnglishBundle;
   
+  BOOL myCheckSignatures;
   NSMutableDictionary * mySignatureCache;
   }
 
@@ -59,6 +60,7 @@
 
 @property (readonly) NSBundle * EnglishBundle;
 
+@property (assign) BOOL checkSignatures;
 @property (readonly) NSMutableDictionary * signatureCache;
 
 // Return the singeton of shared utilities.
