@@ -159,6 +159,7 @@
   [self.appleLaunchd addObject: @"edu.mit.Kerberos.CCacheServer.plist"];
   [self.appleLaunchd addObject: @"edu.mit.Kerberos.KerberosAgent.plist"];
   [self.appleLaunchd addObject: @"org.x.startx.plist"];
+  [self.appleLaunchd addObject: @"org.samba.winbindd.plist"];
   }
 
 // Format a list of files.
@@ -415,6 +416,12 @@
   else if([file isEqualToString: @"com.apple.mrt.uiagent.plist"])
     return YES;
 
+  // Mountain Lion
+  else if([file isEqualToString: @"com.apple.accountsd.plist"])
+    return YES;
+  else if([file isEqualToString: @"com.apple.wdhelper.plist"])
+    return YES;
+
   // Snow Leopard
   else if([file isEqualToString: @"com.apple.suhelperd.plist"])
     return YES;
@@ -433,10 +440,124 @@
   switch([[Model model] majorOSVersion])
     {
     case kSnowLeopard:
+      if([file isEqualToString: @"com.apple.pcastuploader.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.RemoteDesktop.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.x.startx.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.AppleFileServer.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.efax.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.locate.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.NotificationServer.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-daily.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-monthly.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-weekly.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.smb.sharepoints.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.systemkeychain.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.amavis.amavisd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.amavis.amavisd_cleanup.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.cups.cupsd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.samba.winbindd.plist"])
+        return YES;
+      else if([file isEqualToString: @"ssh.plist"])
+        return YES;
       break;
     case kLion:
+      if([file isEqualToString: @"com.apple.AirPortBaseStationAgent.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.pcastuploader.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.screensharing.MessagesAgent.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.xgridd.keepalive.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.x.startx.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.AppleFileServer.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.collabd.podcast-cache-updater.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.efax.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.efilogin-helper.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.emlog.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.locate.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.NotificationServer.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.pcastlibraryd.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-daily.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-monthly.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-weekly.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.amavis.amavisd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.amavis.amavisd_cleanup.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.cups.cupsd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"ssh.plist"])
+        return YES;
       break;
     case kMountainLion:
+      if([file isEqualToString: @"com.apple.AirPortBaseStationAgent.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.efax.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.emlog.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.gkreport.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.locate.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-daily.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-monthly.plist"])
+        return YES;
+      else if([file isEqualToString: @"com.apple.periodic-weekly.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.cups.cupsd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
+        return YES;
+      else if([file isEqualToString: @"org.postgresql.postgres_alt.plist"])
+        return YES;
+      else if([file isEqualToString: @"ssh.plist"])
+        return YES;
       break;
     case kMavericks:
       if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
@@ -493,8 +614,6 @@
         return YES;
       else if([file isEqualToString: @"com.apple.postgres.plist"])
         return YES;
-      else if([file isEqualToString: @"org.apache.httpd.plist"])
-        return YES;
       else if([file isEqualToString: @"org.cups.cupsd.plist"])
         return YES;
       else if([file isEqualToString: @"org.apache.httpd.plist"])
@@ -530,22 +649,17 @@
     
   if([[Model model] majorOSVersion] < kYosemite)
     {
-    if([file hasPrefix: @"0x7f"])
+    if([file hasPrefix: @"0x"])
       if([file rangeOfString: @".anonymous."].location != NSNotFound)
         return YES;
-    if([file hasSuffix: @"].com.apple.AppleSpell"])
-      return YES;
+    if([file hasPrefix: @"[0x"])
+      if([file rangeOfString: @".com.apple."].location != NSNotFound)
+        return YES;
     }
     
   if([[Model model] majorOSVersion] < kLion)
     {
-    if([file hasPrefix: @"[0x0"])
-      if([file rangeOfString: @".com.apple."].location != NSNotFound)
-        return YES;
-    if([file hasPrefix: @"0x10"])
-      if([file rangeOfString: @".anonymous."].location != NSNotFound)
-        return YES;
-    if([file hasPrefix: @"0x10"])
+    if([file hasPrefix: @"0x1"])
       if([file rangeOfString: @".mach_init."].location != NSNotFound)
         return YES;
     }

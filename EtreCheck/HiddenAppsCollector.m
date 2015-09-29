@@ -171,7 +171,7 @@
     if([self ignoreInvalidSignatures: bundleID])
       status[kIgnored] = @YES;
     }
-  else if([self isSandboxApp: bundleID])
+  else if([self isApp: bundleID])
     status[kIgnored] = @YES;
   }
 
@@ -214,10 +214,10 @@
   }
 
 // Is the bundle an App Store item?
-- (bool) isSandboxApp: (NSString *) bundleID
+- (bool) isApp: (NSString *) bundleID
   {
   if([[Model model] majorOSVersion] < kYosemite)
-    return NO;
+    return [self isEtreCheck: bundleID];
     
   unsigned int UID = getuid();
 
@@ -243,6 +243,44 @@
           [NSCharacterSet whitespaceAndNewlineCharacterSet]];
       
     if([trimmedLine isEqualToString: @"app = 1"])
+      return YES;
+    }
+    
+  return NO;
+  }
+
+// Is the bundle EtreCheck itself?
+- (bool) isEtreCheck: (NSString *) bundleID
+  {
+  if([[Model model] majorOSVersion] >= kYosemite)
+    return NO;
+    
+  NSArray * args =
+    @[
+      @"list",
+      bundleID
+    ];
+  
+  NSData * data =
+    [Utilities execute: @"/bin/launchctl" arguments: args];
+  
+  NSArray * lines = [Utilities formatLines: data];
+
+  NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+
+  int processID = [processInfo processIdentifier];
+
+  NSString * PIDLine =
+    [NSString stringWithFormat: @"\"PID\" = %d;", processID];
+    
+  for(NSString * line in lines)
+    {
+    NSString * trimmedLine =
+      [line
+        stringByTrimmingCharactersInSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      
+    if([trimmedLine isEqualToString: PIDLine])
       return YES;
     }
     

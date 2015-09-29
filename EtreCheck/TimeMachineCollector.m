@@ -73,7 +73,7 @@
     {
     [self.result
       appendString:
-        NSLocalizedString(@"timemachineneedslion", NULL)
+        NSLocalizedString(@"timemachineneedsmountainlion", NULL)
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:

@@ -74,7 +74,7 @@
 
   [self parseOSVersion: version];
   
-  NSString * marketingName = [self marketingName: version];
+  NSString * marketingName = [self fallbackMarketingName: version];
   
   int days = 0;
   int hours = 0;
@@ -130,7 +130,7 @@
       [marketingName
         stringByAppendingString: [version substringFromIndex: 4]];
     }
-  //else
+  else
     return [self fallbackMarketingName: version];
     
   return marketingName;
@@ -142,15 +142,18 @@
   NSString * fallbackMarketingName = version;
   
   NSString * name = nil;
+  int offset = 5;
   
   switch([[Model model] majorOSVersion])
     {
     case kSnowLeopard:
       name = @"Snow Leopard";
+      offset = 9;
       break;
       
     case kLion:
       name = @"Lion";
+      offset = 9;
       break;
       
     case kMountainLion:
@@ -176,7 +179,7 @@
   fallbackMarketingName =
     [NSString
       stringWithFormat:
-        @"OS X %@%@", name, [version substringFromIndex: 4]];
+        @"OS X %@ %@", name, [version substringFromIndex: offset]];
   
   return fallbackMarketingName;
   }

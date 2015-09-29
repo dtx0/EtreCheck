@@ -761,28 +761,26 @@
   if(result)
     return result;
     
-  NSString * noStrict = @"";
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"-vv"];
+  [args addObject: @"-R=anchor apple"];
   
   switch([[Model model] majorOSVersion])
     {
     case kMavericks:
     case kYosemite:
-      noStrict = @"--no-strict";
+      [args addObject: @"--no-strict"];
       break;
     }
-  
-  NSArray * args =
-    @[
-      @"-vv",
-      @"-R=anchor apple",
-      noStrict,
-      path
-    ];
-  
+    
+  [args addObject: path];
+
   NSString * output = nil;
   
   [Utilities execute: @"/usr/bin/codesign" arguments: args error: & output];
   
+  //NSLog(@"/usr/bin/codesign %@\n%@", args, output);
   result = [Utilities parseSignature: output forPath: path];
       
   [[[Utilities shared] signatureCache] setObject: result forKey: path];
@@ -816,9 +814,9 @@
       expectedOutput =
         [NSString
           stringWithFormat:
-            @"%@: code object is not signed at all\n", path];
+            @"%@: code object is not signed", path];
 
-      if([output isEqualToString: expectedOutput])
+      if([output hasPrefix: expectedOutput])
         result = kNotSigned;
       
       else
