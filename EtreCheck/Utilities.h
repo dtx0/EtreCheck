@@ -37,6 +37,8 @@
   NSImage * myFinderIcon;
   
   NSBundle * myEnglishBundle;
+  
+  NSMutableDictionary * mySignatureCache;
   }
 
 // Make some handy shared values available to all collectors.
@@ -56,6 +58,8 @@
 @property (readonly) NSImage * FinderIcon;
 
 @property (readonly) NSBundle * EnglishBundle;
+
+@property (readonly) NSMutableDictionary * signatureCache;
 
 // Return the singeton of shared utilities.
 + (Utilities *) shared;

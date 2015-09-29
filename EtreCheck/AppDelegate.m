@@ -133,31 +133,51 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   CIFilter * grayscale = [CIFilter filterWithName: @"CIColorMonochrome"];
   [grayscale setDefaults];
   [grayscale
-    setValue: [CIColor colorWithRed: 0.3 green: 0.3 blue: 0.3 alpha: 1.0]
+    setValue:
+      [CIColor colorWithRed: 0.3f green: 0.3f blue: 0.3f alpha: 1.0f]
     forKey: @"inputColor"];
     
   CIFilter * gamma = [CIFilter filterWithName:@"CIGammaAdjust"];
   [gamma setDefaults];
   [gamma setValue: [NSNumber numberWithDouble: 0.3] forKey: @"inputPower"];
     
-  [self.animationView setContentFilters: @[grayscale, gamma]];
-  [self.reportView setContentFilters: @[grayscale, gamma]];
+  dispatch_async(
+    dispatch_get_main_queue(),
+    ^{
+      [self.reportView setContentFilters: @[grayscale, gamma]];
+      
+      if(self.animationView)
+        {
+        [self.animationView setContentFilters: @[grayscale, gamma]];
 
-  grayscale = [CIFilter filterWithName: @"CIColorMonochrome"];
-  [grayscale setDefaults];
-  [grayscale
-    setValue: [CIColor colorWithRed: 0.6 green: 0.6 blue: 0.6 alpha: 1.0]
-    forKey: @"inputColor"];
-    
-  [self.magnifyingGlassShade setContentFilters: @[grayscale]];
+        CIFilter * grayscale =
+          [CIFilter filterWithName: @"CIColorMonochrome"];
+        [grayscale setDefaults];
+        [grayscale
+          setValue:
+            [CIColor colorWithRed: 0.6f green: 0.6f blue: 0.6f alpha: 1.0f]
+          forKey: @"inputColor"];
+          
+        [self.magnifyingGlassShade setContentFilters: @[grayscale]];
+        }
+    });
   }
 
 // Un-dim the display on activate.
-- (void) applicationDidBecomeActive: (NSNotification *) notification
+- (void) applicationWillBecomeActive: (NSNotification *) notification
   {
-  [self.animationView setContentFilters: @[]];
-  [self.reportView setContentFilters: @[]];
-  [self.magnifyingGlassShade setContentFilters: @[]];
+  dispatch_async(
+    dispatch_get_main_queue(),
+    ^{
+      [self.reportView setContentFilters: @[]];
+
+      if(self.animationView)
+        {
+        [self.animationView setContentFilters: @[]];
+        [self.magnifyingGlassShade setContentFilters: @[]];
+        [self.progress setNeedsDisplay: YES];
+        }
+    });
   }
 
 // Handle an "etrecheck:" URL.
@@ -308,7 +328,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   self.progressTimer =
     [NSTimer
-      scheduledTimerWithTimeInterval: .2
+      scheduledTimerWithTimeInterval: .3
       target: self
       selector: @selector(fireProgressTimer:)
       userInfo: nil
@@ -694,7 +714,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (void) animateDemon: (NSRect) demonEndFrame
   {
   dispatch_after(
-    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)),
+    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)),
     dispatch_get_main_queue(),
     ^{
       [NSAnimationContext beginGrouping];
@@ -711,7 +731,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (void) animateDemon: (NSRect) demonStartFrame agent: (NSRect) agentEndFrame
   {
   dispatch_after(
-    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(7 * NSEC_PER_SEC)),
+    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)),
     dispatch_get_main_queue(),
     ^{
       [NSAnimationContext beginGrouping];
@@ -729,7 +749,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (void) animateAgent: (NSRect) agentStartFrame
   {
   dispatch_after(
-    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(11 * NSEC_PER_SEC)),
+    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(21 * NSEC_PER_SEC)),
     dispatch_get_main_queue(),
     ^{
       [NSAnimationContext beginGrouping];
@@ -772,6 +792,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.window.contentView addSubview: self.reportView];
   
   [[self.animationView animator] removeFromSuperview];
+  
+  self.animationView = nil;
   
   [NSAnimationContext endGrouping];
   

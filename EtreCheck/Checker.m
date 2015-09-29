@@ -65,7 +65,7 @@
     object: NSLocalizedString(@"Checking hardware", NULL)];
 
   // Run stage 1.
-  [self checkStage1: 34.0];
+  [self checkStage1: 10.0];
     
   dispatch_barrier_sync(
     queue,
@@ -77,7 +77,7 @@
     });
   
   // Now do stage 2.
-  [self checkStage2: 64.0];
+  [self checkStage2: 50.0];
   
   dispatch_barrier_sync(
     queue,
@@ -110,6 +110,11 @@
   [collectors addObject: [[LogCollector new] autorelease]];
   [collectors addObject: [[DiskCollector new] autorelease]];
   [collectors addObject: [[ApplicationsCollector new] autorelease]];
+  [collectors addObject: [[VideoCollector new] autorelease]];
+  [collectors addObject: [[USBCollector new] autorelease]];
+  [collectors addObject: [[FirewireCollector new] autorelease]];
+  [collectors addObject: [[ThunderboltCollector new] autorelease]];
+  [collectors addObject: [[TimeMachineCollector new] autorelease]];
   
   // In order to find adware in Safari extensions, the Adware collector has
   // to be created first, but then the Safari extension collection has to
@@ -226,10 +231,6 @@
   // This searches through applications, and takes some time, so it is
   // somewhat related to applications.
   [collectors addObject: [[KernelExtensionCollector new] autorelease]];
-  [collectors addObject: [[VideoCollector new] autorelease]];
-  [collectors addObject: [[USBCollector new] autorelease]];
-  [collectors addObject: [[FirewireCollector new] autorelease]];
-  [collectors addObject: [[ThunderboltCollector new] autorelease]];
   [collectors addObject: [[ConfigurationCollector new] autorelease]];
   [collectors addObject: [[GatekeeperCollector new] autorelease]];
   [collectors addObject: [[InternetPlugInsCollector new] autorelease]];
@@ -240,7 +241,6 @@
   [collectors addObject: [[UserITunesPlugInsCollector new] autorelease]];
   [collectors addObject: [[PreferencePanesCollector new] autorelease]];
   [collectors addObject: [[FontsCollector new] autorelease]];
-  [collectors addObject: [[TimeMachineCollector new] autorelease]];
   [collectors addObject: [[CPUUsageCollector new] autorelease]];
   [collectors addObject: [[MemoryUsageCollector new] autorelease]];
   [collectors addObject: [[VirtualMemoryCollector new] autorelease]];
@@ -358,7 +358,7 @@
         postNotificationName: kShowDemonAgent
         object: nil];
       
-      sleep(20);
+      sleep(40);
       
       dispatch_semaphore_signal(semaphore);
     });

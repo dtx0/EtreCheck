@@ -28,6 +28,7 @@
 @synthesize FinderIcon = myFinderIcon;
 
 @synthesize EnglishBundle = myEnglishBundle;
+@synthesize signatureCache = mySignatureCache;
 
 // Return the singeton of shared values.
 + (Utilities *) shared
@@ -56,6 +57,8 @@
     [self loadColours];
     [self loadIcons];
     [self loadEnglishStrings];
+    
+    mySignatureCache = [NSMutableDictionary new];
     }
     
   return self;
@@ -64,6 +67,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [mySignatureCache release];
   [myEnglishBundle release];
   
   [myBoldFont release];
@@ -745,6 +749,12 @@
 // Verify the signature of an Apple executable.
 + (NSString *) checkAppleExecutable: (NSString *) path
   {
+  NSString * result =
+    [[[Utilities shared] signatureCache] objectForKey: path];
+  
+  if(result)
+    return result;
+    
   NSString * noStrict =
     ([[Model model] majorOSVersion] >= kElCapitan)
       ? @""
@@ -762,6 +772,19 @@
   
   [Utilities execute: @"/usr/bin/codesign" arguments: args error: & output];
   
+  result = [Utilities parseSignature: output forPath: path];
+      
+  [[[Utilities shared] signatureCache] setObject: result forKey: path];
+  
+  return result;
+  }
+
+// Parse a signature.
++ (NSString *) parseSignature: (NSString *) output
+  forPath: (NSString *) path
+  {
+  NSString * result = kSignatureNotValid;
+  
   if([output length])
     {
     NSString * expectedOutput =
@@ -775,24 +798,31 @@
           path];
       
     if([output isEqualToString: expectedOutput])
-      return kSignatureValid;
+      result = kSignatureValid;
       
-    expectedOutput =
-      [NSString
-        stringWithFormat: @"%@: code object is not signed at all\n", path];
+    else
+      {
+      expectedOutput =
+        [NSString
+          stringWithFormat:
+            @"%@: code object is not signed at all\n", path];
 
-    if([output isEqualToString: expectedOutput])
-      return kNotSigned;
+      if([output isEqualToString: expectedOutput])
+        result = kNotSigned;
+      
+      else
+        {
+        expectedOutput =
+          [NSString
+            stringWithFormat: @"%@: No such file or directory\n", path];
 
-    expectedOutput =
-      [NSString
-        stringWithFormat: @"%@: No such file or directory\n", path];
-
-    if([output isEqualToString: expectedOutput])
-      return kExecutableMissing;
+        if([output isEqualToString: expectedOutput])
+          result = kExecutableMissing;
+        }
+      }
     }
     
-  return kSignatureNotValid;
+  return result;
   }
 
 @end

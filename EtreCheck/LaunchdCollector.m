@@ -337,7 +337,7 @@
   if([file hasPrefix: @"."])
     status[kHidden] = @YES;
     
-  if(isApple)
+  if(isApple && !status[kSignature])
     status[kSignature] = [Utilities checkAppleExecutable: executable];
 
   return status;
