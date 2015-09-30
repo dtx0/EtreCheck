@@ -12,7 +12,11 @@
 @class AdwareManager;
 
 @interface AppDelegate : NSObject
-  <NSApplicationDelegate, NSUserNotificationCenterDelegate>
+  <NSApplicationDelegate,
+  NSUserNotificationCenterDelegate,
+  NSToolbarDelegate,
+  NSSharingServiceDelegate,
+  NSSharingServicePickerDelegate>
   {
   NSWindow * window;
   NSWindow * myLogWindow;
@@ -22,8 +26,6 @@
   NSProgressIndicator * mySpinner;
   NSTextView * myStatusView;
   NSTextView * logView;
-  NSButton * toClipboard;
-  NSButton * moreInfo;
   NSAttributedString * myDisplayStatus;
   NSMutableAttributedString * log;
   double myNextProgressIncrement;
@@ -38,6 +40,12 @@
   NSString * myCollectionStatus;
   NSAttributedString * myUserMessage;
   NSWindow * myUserMessagePanel;
+  
+  NSView * myShareToolbarItemView;
+  NSButton * myShareButton;
+  NSView * myHelpToolbarItemView;
+  NSButton * myHelpButton;
+  NSToolbar * myToolbar;
 
   NSMutableDictionary * launchdStatus;
   NSMutableSet * appleLaunchd;
@@ -45,6 +53,8 @@
   DetailManager * myDetailManager;
   HelpManager * myHelpManager;
   AdwareManager * myAdwareManager;
+  
+  BOOL myReportAvailable;
   }
   
 @property (retain) IBOutlet NSWindow * window;
@@ -55,8 +65,6 @@
 @property (retain) IBOutlet NSProgressIndicator * spinner;
 @property (retain) IBOutlet NSTextView * statusView;
 @property (retain) IBOutlet NSTextView * logView;
-@property (retain) IBOutlet NSButton * toClipboard;
-@property (retain) IBOutlet NSButton * moreInfo;
 @property (retain) NSAttributedString * displayStatus;
 @property (retain) NSMutableAttributedString * log;
 @property (assign) double nextProgressIncrement;
@@ -71,9 +79,15 @@
 @property (retain) NSString * collectionStatus;
 @property (retain) NSAttributedString * userMessage;
 @property (retain) IBOutlet NSWindow * userMessgePanel;
+@property (retain) IBOutlet NSView * shareToolbarItemView;
+@property (retain) IBOutlet NSButton * shareButton;
+@property (retain) IBOutlet NSView * helpToolbarItemView;
+@property (retain) IBOutlet NSButton * helpButton;
+@property (retain) IBOutlet NSToolbar * toolbar;
 @property (retain) IBOutlet DetailManager * detailManager;
 @property (retain) IBOutlet HelpManager * helpManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
+@property (assign) BOOL reportAvailable;
 
 // Start the report.
 - (IBAction) start: (id) sender;
@@ -104,5 +118,8 @@
 
 // Save the EtreCheck report.
 - (IBAction) saveReport: (id) sender;
+
+// Share the EtreCheck report.
+- (IBAction) shareReport: (id) sender;
 
 @end

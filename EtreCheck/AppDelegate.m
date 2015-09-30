@@ -23,6 +23,10 @@
 #import "DetailManager.h"
 #import "HelpManager.h"
 
+// Toolbar items.
+#define kShareToolbarItemID @"sharetoolbaritem"
+#define kHelpToolbarItemID @"helptoolbaritem"
+
 NSComparisonResult compareViews(id view1, id view2, void * context);
 
 @interface AppDelegate ()
@@ -39,8 +43,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize spinner = mySpinner;
 @synthesize statusView = myStatusView;
 @synthesize logView;
-@synthesize toClipboard;
-@synthesize moreInfo;
 @synthesize displayStatus = myDisplayStatus;
 @synthesize log;
 @synthesize nextProgressIncrement = myNextProgressIncrement;
@@ -57,9 +59,15 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize animationView = myAnimationView;
 @synthesize userMessage = myUserMessage;
 @synthesize userMessgePanel = myUserMessagePanel;
+@synthesize shareToolbarItemView = myShareToolbarItemView;
+@synthesize shareButton = myShareButton;
+@synthesize helpToolbarItemView = myHelpToolbarItemView;
+@synthesize helpButton = myHelpButton;
+@synthesize toolbar = myToolbar;
 @synthesize detailManager = myDetailManager;
 @synthesize helpManager = myHelpManager;
 @synthesize adwareManager = myAdwareManager;
+@synthesize reportAvailable = myReportAvailable;
 
 // Destructor.
 - (void) dealloc
@@ -125,6 +133,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     ^{
       [self collectUserMessage];
     });
+    
+  [self.shareButton sendActionOn: NSLeftMouseDownMask];
   }
 
 // Dim the display on deactivate.
@@ -150,6 +160,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
+      [self.shareButton setContentFilters: @[grayscale, gamma]];
+      [self.helpButton setContentFilters: @[grayscale, gamma]];
       [self.reportView setContentFilters: @[grayscale, gamma]];
       
       if(self.animationView)
@@ -181,6 +193,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
+      [self.shareButton setContentFilters: @[]];
+      [self.helpButton setContentFilters: @[]];
       [self.reportView setContentFilters: @[]];
 
       if(self.animationView)
@@ -797,28 +811,11 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [self.logView setFrame: contentFrame];
   
-  [NSAnimationContext beginGrouping];
-  
-  [[NSAnimationContext currentContext] setDuration: 1.0];
-  
-  [self.window.contentView addSubview: self.reportView];
-  
-  [[self.animationView animator] removeFromSuperview];
-  
-  self.animationView = nil;
-  
-  [NSAnimationContext endGrouping];
-  
-  dispatch_after(
-    dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)),
-    dispatch_get_main_queue(),
-    ^{
-      [self resizeReportView];
-    });
+  [self transitionToReportView];
   }
 
-// Resize the report view.
-- (void) resizeReportView
+// Transition to the report view.
+- (void) transitionToReportView
   {
   [[NSNotificationCenter defaultCenter]
     addObserver: self
@@ -839,8 +836,25 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     frame.size.height = 512;
     }
     
-  [window setFrame: frame display: YES animate: YES];
+  double duration = [window animationResizeTime: frame];
   
+  [NSAnimationContext beginGrouping];
+  
+  self.toolbar.visible = YES;
+  self.reportAvailable = YES;
+  
+  [[NSAnimationContext currentContext] setDuration: duration];
+  
+  [self.window.contentView addSubview: self.reportView];
+  
+  [[self.animationView animator] removeFromSuperview];
+  
+  self.animationView = nil;
+  
+  [NSAnimationContext endGrouping];
+
+  [window setFrame: frame display: YES animate: YES];
+
   [[self.logView enclosingScrollView] setHasVerticalScroller: YES];
   [self.window setShowsResizeIndicator: YES];
   [self.window
@@ -1003,6 +1017,198 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     if(rtfData)
       [rtfData writeToURL: [savePanel URL] atomically: YES];
     }
+  }
+
+#pragma mark - NSToolbarDelegate conformance
+
+- (void) toolbarWillAddItem: (NSNotification *) notification
+  {
+  NSToolbarItem * addedItem =
+    [[notification userInfo] objectForKey: @"item"];
+    
+  if([[addedItem itemIdentifier] isEqual: NSToolbarPrintItemIdentifier])
+    {
+    [addedItem setToolTip: NSLocalizedString(@"Print Report", NULL)];
+    [addedItem setTarget: self.logView];
+    [addedItem setAction: @selector(print:)];
+    }
+  }
+
+- (NSToolbarItem *) toolbar: (NSToolbar *) toolbar
+  itemForItemIdentifier: (NSString *) itemIdentifier
+  willBeInsertedIntoToolbar: (BOOL) flag
+  {
+  if([itemIdentifier isEqualToString: kShareToolbarItemID])
+    {
+    // Create the NSToolbarItem and setup its attributes.
+    NSToolbarItem * item =
+      [[[NSToolbarItem alloc]
+        initWithItemIdentifier: itemIdentifier] autorelease];
+    
+    [item setLabel: NSLocalizedString(@"Share Report", nil)];
+    [item setPaletteLabel: NSLocalizedString(@"Share Report", nil)];
+    [item setTarget: self];
+    [item setAction: nil];
+    [item setView: self.shareToolbarItemView];
+    
+    return item;
+    }
+  else if([itemIdentifier isEqualToString: kHelpToolbarItemID])
+    {
+    // Create the NSToolbarItem and setup its attributes.
+    NSToolbarItem * item =
+      [[[NSToolbarItem alloc]
+        initWithItemIdentifier: itemIdentifier] autorelease];
+    
+    [item setLabel: NSLocalizedString(@"Help", nil)];
+    [item setPaletteLabel: NSLocalizedString(@"Help", nil)];
+    [item setTarget: self];
+    [item setAction: nil];
+    [item setView: self.helpToolbarItemView];
+    
+    return item;
+    }
+    
+  return nil;
+  }
+
+- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
+  {
+  return
+    @[
+      kShareToolbarItemID,
+      kHelpToolbarItemID,
+      NSToolbarFlexibleSpaceItemIdentifier,
+      NSToolbarPrintItemIdentifier
+    ];
+    
+  // Since the toolbar is defined from Interface Builder, an additional
+  // separator and customize toolbar items will be automatically added to
+  // the "default" list of items.
+  }
+
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
+  {
+  return
+    @[
+      kShareToolbarItemID,
+      kHelpToolbarItemID,
+      NSToolbarFlexibleSpaceItemIdentifier,
+      NSToolbarPrintItemIdentifier
+    ];
+
+  // Since the toolbar is defined from Interface Builder, an additional
+  // separator and customize toolbar items will be automatically added to
+  // the "allowed" list of items.
+  }
+
+#pragma mark - Sharing
+
+// Share the EtreCheck report.
+- (IBAction) shareReport: (id) sender
+  {
+  NSSharingServicePicker * sharingServicePicker =
+    [[NSSharingServicePicker alloc]
+      initWithItems:
+        [NSArray arrayWithObjects: self.log, nil]];
+    
+  sharingServicePicker.delegate = self;
+  
+  [sharingServicePicker
+    showRelativeToRect: NSZeroRect
+    ofView: sender
+    preferredEdge: NSMinYEdge];
+    
+  [sharingServicePicker release];
+  }
+
+#pragma mark - NSSharingServicePickerDelegate conformance
+
+- (id <NSSharingServiceDelegate>)
+  sharingServicePicker: (NSSharingServicePicker *) sharingServicePicker
+  delegateForSharingService: (NSSharingService *) sharingService
+  {
+  return self;
+  }
+
+- (void) sharingServicePicker:
+  (NSSharingServicePicker *) sharingServicePicker
+  didChooseSharingService: (NSSharingService *) service
+  {
+  [service setDelegate: self];
+  }
+
+- (NSArray *)
+  sharingServicePicker: (NSSharingServicePicker *) sharingServicePicker
+  sharingServicesForItems: (NSArray *) items
+  proposedSharingServices: (NSArray *) proposedServices
+  {
+   NSMutableArray * sharingServices = [NSMutableArray array];
+   
+   NSSharingService * customService =
+     [[[NSSharingService alloc]
+       initWithTitle: NSLocalizedString(@"Copy to clipboard", NULL)
+       image: [NSImage imageNamed: @"Copy"]
+       alternateImage: nil
+       handler:
+         ^{
+          [self doCustomServiceWithItems: items];
+          }] autorelease];
+    
+  [sharingServices addObject: customService];
+  [sharingServices
+    addObject:
+      [NSSharingService
+        sharingServiceNamed: NSSharingServiceNameComposeEmail]];
+  [sharingServices
+    addObject:
+      [NSSharingService
+        sharingServiceNamed: NSSharingServiceNameComposeMessage]];
+  
+  return sharingServices;
+  }
+
+- (void) doCustomServiceWithItems: (NSArray *) items
+  {
+  [self copyToClipboard: self];
+  }
+
+#pragma mark - NSSharingServiceDelegate conformance
+
+// Define the window that gets dimmed out during sharing.
+- (NSWindow *) sharingService: (NSSharingService *) sharingService
+  sourceWindowForShareItems: (NSArray *)items
+  sharingContentScope: (NSSharingContentScope *) sharingContentScope
+  {
+  return self.window;
+  }
+
+- (NSRect) sharingService: (NSSharingService *) sharingService
+  sourceFrameOnScreenForShareItem: (id<NSPasteboardWriting>) item
+  {
+  NSRect frame = [self.logView bounds];
+  
+  frame = [self.logView convertRect: frame toView: nil];
+  
+  return [[self.logView window] convertRectToScreen: frame];
+  
+  return frame;
+  }
+
+- (NSImage *) sharingService: (NSSharingService *) sharingService
+  transitionImageForShareItem: (id <NSPasteboardWriting>) item
+  contentRect: (NSRect *) contentRect
+  {
+  NSRect rect = [self.logView bounds];
+  
+  NSBitmapImageRep * imageRep =
+    [self.logView bitmapImageRepForCachingDisplayInRect: rect];
+  [self.logView cacheDisplayInRect: rect toBitmapImageRep: imageRep];
+
+  NSImage * image = [[NSImage alloc] initWithSize: rect.size];
+  [image addRepresentation: imageRep];
+   
+  return [image autorelease];
   }
 
 @end

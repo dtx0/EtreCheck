@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15A282c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
@@ -21,18 +21,21 @@
                 <outlet property="demonImage" destination="PBo-4n-aK2" id="x01-Zs-ecw"/>
                 <outlet property="detailManager" destination="HkP-LF-BHj" id="x7W-US-ZUk"/>
                 <outlet property="finderIcon" destination="YNi-t0-nyG" id="VwO-Jj-e1b"/>
+                <outlet property="helpButton" destination="QqD-yR-Yhe" id="mau-V8-0A9"/>
                 <outlet property="helpManager" destination="E5E-Xh-gnk" id="pWX-nh-4D1"/>
+                <outlet property="helpToolbarItemView" destination="heD-2F-2VV" id="YAP-dU-Ymc"/>
                 <outlet property="logView" destination="rRU-vM-wce" id="5SF-dE-SRO"/>
                 <outlet property="logWindow" destination="LC3-aK-O61" id="D9A-nq-J3f"/>
                 <outlet property="machineIcon" destination="kxf-sE-hK4" id="g5f-Le-vgx"/>
                 <outlet property="magnifyingGlass" destination="unu-XY-TZC" id="kJW-mf-RrR"/>
                 <outlet property="magnifyingGlassShade" destination="PHl-IL-fhi" id="gvG-x5-Tvd"/>
-                <outlet property="moreInfo" destination="Ug4-cp-4Rv" id="RZz-kd-M0p"/>
                 <outlet property="progress" destination="tDb-Al-O2y" id="p6y-69-Ka0"/>
                 <outlet property="reportView" destination="Rah-Ot-abL" id="9Oc-0g-Xed"/>
+                <outlet property="shareButton" destination="g85-q5-HAV" id="pjW-5p-QhD"/>
+                <outlet property="shareToolbarItemView" destination="h3a-5W-2if" id="SFH-XI-xZg"/>
                 <outlet property="spinner" destination="Udp-hz-whF" id="9PX-SM-esE"/>
                 <outlet property="statusView" destination="jBT-e2-hx3" id="h1T-1x-iC9"/>
-                <outlet property="toClipboard" destination="QVn-0L-cY0" id="Kaj-jz-eCy"/>
+                <outlet property="toolbar" destination="em7-XY-ghW" id="kS5-WD-SLt"/>
                 <outlet property="userMessgePanel" destination="hni-3i-hk1" id="Cm2-9U-d4F"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
             </connections>
@@ -162,6 +165,7 @@
                             <menuItem title="Enregistrer…" keyEquivalent="s" id="pxx-59-PXV">
                                 <connections>
                                     <action selector="saveReport:" target="Voe-Tx-rLC" id="utn-Fk-5JP"/>
+                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="JAJ-6o-qMi"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aJh-i4-bef"/>
@@ -169,11 +173,13 @@
                                 <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                 <connections>
                                     <action selector="runPageLayout:" target="-1" id="Din-rz-gC5"/>
+                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="jy2-nU-FbC"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Imprimer…" keyEquivalent="p" id="aTl-1u-JFS">
                                 <connections>
                                     <action selector="print:" target="-1" id="qaZ-4w-aoO"/>
+                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="XiZ-pU-t3G"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -206,7 +212,8 @@
                             </menuItem>
                             <menuItem title="Copiez tout le rapport au presse-papiers" keyEquivalent="r" id="Q89-SN-OIs">
                                 <connections>
-                                    <action selector="copy:" target="-1" id="o71-vU-YGi"/>
+                                    <action selector="copyToClipboard:" target="-1" id="xD7-IH-CRX"/>
+                                    <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="Fhn-RU-sMh"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Coller" keyEquivalent="v" id="gVA-U4-sdL">
@@ -871,6 +878,26 @@ DQ
                 <autoresizingMask key="autoresizingMask"/>
                 <animations/>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="68F47B6C-369C-4D9F-860C-8663D57525B2" autosavesConfiguration="NO" prefersToBeShown="NO" displayMode="iconAndLabel" sizeMode="regular" id="em7-XY-ghW">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="hU6-dI-z16"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="ugp-b4-7Cf"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="u2x-MG-hML">
+                        <connections>
+                            <action selector="print:" target="-1" id="zM6-dW-g0d"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="eLW-1P-Gw6"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="dFn-HN-h6u"/>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="dFn-HN-h6u"/>
+                    <toolbarItem reference="u2x-MG-hML"/>
+                </defaultToolbarItems>
+                <connections>
+                    <outlet property="delegate" destination="Voe-Tx-rLC" id="l8b-lR-GMb"/>
+                </connections>
+            </toolbar>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="HgC-29-4Qk"/>
         <customView id="MBn-u2-n9n" userLabel="Help View">
@@ -1166,46 +1193,22 @@ Gw
             <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" id="QVn-0L-cY0">
-                    <rect key="frame" x="41" y="11" width="287" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <animations/>
-                    <buttonCell key="cell" type="push" title="Copiez tout le rapport au presse-papiers" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZFx-vl-2mp">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="copyToClipboard:" target="Voe-Tx-rLC" id="xNB-95-oHw"/>
-                    </connections>
-                </button>
-                <button verticalHuggingPriority="750" id="Ug4-cp-4Rv">
-                    <rect key="frame" x="371" y="11" width="198" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <animations/>
-                    <buttonCell key="cell" type="push" title="À propos de ces résultats" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a4e-yt-Dsj">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="moreInfo:" target="Voe-Tx-rLC" id="UmM-qu-EJz"/>
-                    </connections>
-                </button>
                 <scrollView borderType="groove" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="hwZ-jL-7ud">
-                    <rect key="frame" x="20" y="59" width="570" height="185"/>
+                    <rect key="frame" x="0.0" y="-1" width="612" height="266"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <clipView key="contentView" copiesOnScroll="NO" id="b89-E1-VpO">
-                        <rect key="frame" x="0.0" y="0.0" width="570" height="180"/>
+                        <rect key="frame" x="2" y="2" width="608" height="262"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" id="rRU-vM-wce">
-                                <rect key="frame" x="0.0" y="0.0" width="566" height="181"/>
+                                <rect key="frame" x="0.0" y="0.0" width="608" height="262"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="566" height="181"/>
+                                <size key="minSize" width="608" height="262"/>
                                 <size key="maxSize" width="1097" height="10000000"/>
                                 <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="566" height="181"/>
+                                <size key="minSize" width="608" height="262"/>
                                 <size key="maxSize" width="1097" height="10000000"/>
                                 <connections>
                                     <binding destination="Voe-Tx-rLC" name="attributedString" keyPath="self.log" id="QYo-py-yBz">
@@ -1234,11 +1237,49 @@ Gw
             </subviews>
             <animations/>
         </customView>
+        <customView id="h3a-5W-2if" userLabel="Share ToolbarItem View">
+            <rect key="frame" x="0.0" y="0.0" width="47" height="37"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button id="g85-q5-HAV">
+                    <rect key="frame" x="4" y="2" width="39" height="33"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSShareTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="QP3-19-cio">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="shareReport:" target="Voe-Tx-rLC" id="yw7-eE-t4J"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="206.5" y="642.5"/>
+        </customView>
+        <customView id="heD-2F-2VV" userLabel="Help ToolbarItem View">
+            <rect key="frame" x="0.0" y="0.0" width="47" height="37"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button id="QqD-yR-Yhe">
+                    <rect key="frame" x="4" y="2" width="39" height="33"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSInfo" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="6bK-lt-5si">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="moreInfo:" target="Voe-Tx-rLC" id="jWv-rc-fNx"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="206.5" y="642.5"/>
+        </customView>
     </objects>
     <resources>
         <image name="Agent" width="118" height="125"/>
         <image name="Demon" width="110" height="125"/>
         <image name="MagnifyingGlass" width="800" height="400"/>
         <image name="MagnifyingGlassShade" width="800" height="400"/>
+        <image name="NSInfo" width="32" height="32"/>
+        <image name="NSShareTemplate" width="11" height="16"/>
     </resources>
 </document>
