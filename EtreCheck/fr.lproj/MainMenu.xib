@@ -1263,7 +1263,6 @@ Gw
                     </buttonCell>
                     <connections>
                         <action selector="shareReport:" target="Voe-Tx-rLC" id="yw7-eE-t4J"/>
-                        <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="3UN-Ec-jEk"/>
                     </connections>
                 </button>
             </subviews>
@@ -1282,7 +1281,6 @@ Gw
                     </buttonCell>
                     <connections>
                         <action selector="moreInfo:" target="Voe-Tx-rLC" id="jWv-rc-fNx"/>
-                        <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="ZxO-mh-voU"/>
                     </connections>
                 </button>
             </subviews>
@@ -1301,7 +1299,6 @@ Gw
                     </buttonCell>
                     <connections>
                         <action selector="copyToClipboard:" target="Voe-Tx-rLC" id="8yK-9g-W8w"/>
-                        <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.reportAvailable" id="ObV-1K-cfd"/>
                     </connections>
                 </button>
             </subviews>

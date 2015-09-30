@@ -22,6 +22,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "DetailManager.h"
 #import "HelpManager.h"
+#import "EtreCheckToolbarItem.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -1054,8 +1055,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if([itemIdentifier isEqualToString: kShareToolbarItemID])
     {
     // Create the NSToolbarItem and setup its attributes.
-    NSToolbarItem * item =
-      [[[NSToolbarItem alloc]
+    EtreCheckToolbarItem * item =
+      [[[EtreCheckToolbarItem alloc]
         initWithItemIdentifier: itemIdentifier] autorelease];
     
     if([NSSharingServicePicker class])
@@ -1063,12 +1064,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [item setLabel: NSLocalizedString(@"Share Report", nil)];
       [item setPaletteLabel: NSLocalizedString(@"Share Report", nil)];
       [item setView: self.shareToolbarItemView];
+      item.control = self.shareButton;
       }
     else
       {
       [item setLabel: NSLocalizedString(@"Copy to clipboard", nil)];
       [item setPaletteLabel: NSLocalizedString(@"Copy to clipboard", nil)];
       [item setView: self.clipboardCopyToolbarItemView];
+      item.control = self.clipboardCopyButton;
       }
       
     [item setTarget: self];
@@ -1079,8 +1082,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   else if([itemIdentifier isEqualToString: kHelpToolbarItemID])
     {
     // Create the NSToolbarItem and setup its attributes.
-    NSToolbarItem * item =
-      [[[NSToolbarItem alloc]
+    EtreCheckToolbarItem * item =
+      [[[EtreCheckToolbarItem alloc]
         initWithItemIdentifier: itemIdentifier] autorelease];
     
     [item setLabel: NSLocalizedString(@"Help", nil)];
@@ -1088,6 +1091,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [item setTarget: self];
     [item setAction: nil];
     [item setView: self.helpToolbarItemView];
+    item.control = self.helpButton;
     
     return item;
     }
@@ -1128,8 +1132,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Validate toolbar items.
 - (BOOL) validateToolbarItem: (NSToolbarItem *) theItem
   {
-  // This will only handle the print item. Other buttons must be done
-  // manually with bindings.
   return self.reportAvailable;
   }
 

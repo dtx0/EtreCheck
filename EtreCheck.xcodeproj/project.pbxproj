@@ -33,6 +33,7 @@
 		A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A546BFB91A5348880032C354 /* linkhelp.rtf */; };
 		A54B87351A1D4F1900F25213 /* HelpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87341A1D4F1900F25213 /* HelpManager.m */; };
 		A54B87381A1D4FED00F25213 /* DetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87371A1D4FED00F25213 /* DetailManager.m */; };
+		A550C54F1BBC39E000CA75EA /* EtreCheckToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */; settings = {ASSET_TAGS = (); }; };
 		A552A31D1818BDAE00829BA3 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A552A3161818BC7F00829BA3 /* CoreServices.framework */; };
 		A55BC16E15BF987D00D42EF1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A55BC16D15BF987D00D42EF1 /* Cocoa.framework */; };
 		A55BC17815BF987D00D42EF1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A55BC17615BF987D00D42EF1 /* InfoPlist.strings */; };
@@ -134,6 +135,8 @@
 		A54B87361A1D4FED00F25213 /* DetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailManager.h; sourceTree = "<group>"; };
 		A54B87371A1D4FED00F25213 /* DetailManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailManager.m; sourceTree = "<group>"; };
 		A54DA5711A3117E100F09B19 /* adware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = adware.plist; sourceTree = "<group>"; };
+		A550C54D1BBC39E000CA75EA /* EtreCheckToolbarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckToolbarItem.h; sourceTree = "<group>"; };
+		A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckToolbarItem.m; sourceTree = "<group>"; };
 		A552A3161818BC7F00829BA3 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		A552A3181818BD1F00829BA3 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
 		A552A31B1818BD8300829BA3 /* CarbonCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarbonCore.framework; path = ../../../../System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework; sourceTree = "<group>"; };
@@ -420,6 +423,8 @@
 				A5257D3619AB53FF003084C8 /* Model.m */,
 				A5257D3B19AC0AA3003084C8 /* Utilities.h */,
 				A5257D3C19AC0AA3003084C8 /* Utilities.m */,
+				A550C54D1BBC39E000CA75EA /* EtreCheckToolbarItem.h */,
+				A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */,
 				A5257D4119AC10FB003084C8 /* Collectors */,
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
@@ -582,6 +587,7 @@
 				A54B87351A1D4F1900F25213 /* HelpManager.m in Sources */,
 				A5FC120919A5509700E81E9C /* TimeMachineCollector.m in Sources */,
 				A50C9DC219A36F3D00BA6A25 /* KernelExtensionCollector.m in Sources */,
+				A550C54F1BBC39E000CA75EA /* EtreCheckToolbarItem.m in Sources */,
 				A5C292DD19A02A8800464E86 /* LaunchdCollector.m in Sources */,
 				A5C1492519B88192002890F1 /* SlideshowView.m in Sources */,
 				A57516AF1A14D9E700F374FB /* DiagnosticsCollector.m in Sources */,
