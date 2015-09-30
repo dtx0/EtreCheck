@@ -1025,6 +1025,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   }
 
+// Print the report. This needs to be a selector for AppDelegate so that
+// the delegate can disable the toolbar item via validateToolbarItem.
+- (IBAction) printReport: (id) sender
+  {
+  [self.logView print: sender];
+  }
+
 #pragma mark - NSToolbarDelegate conformance
 
 - (void) toolbarWillAddItem: (NSNotification *) notification
@@ -1035,8 +1042,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if([[addedItem itemIdentifier] isEqual: NSToolbarPrintItemIdentifier])
     {
     [addedItem setToolTip: NSLocalizedString(@"Print Report", NULL)];
-    [addedItem setTarget: self.logView];
-    [addedItem setAction: @selector(print:)];
+    [addedItem setTarget: self];
+    [addedItem setAction: @selector(printReport:)];
     }
   }
 
@@ -1051,7 +1058,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [[[NSToolbarItem alloc]
         initWithItemIdentifier: itemIdentifier] autorelease];
     
-    if([[Model model] majorOSVersion] >= kLion)
+    if([NSSharingServicePicker class])
       {
       [item setLabel: NSLocalizedString(@"Share Report", nil)];
       [item setPaletteLabel: NSLocalizedString(@"Share Report", nil)];
