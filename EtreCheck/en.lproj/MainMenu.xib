@@ -560,7 +560,7 @@
                         </textFieldCell>
                     </textField>
                     <button id="pUo-Nx-msa">
-                        <rect key="frame" x="18" y="153" width="193" height="18"/>
+                        <rect key="frame" x="18" y="153" width="236" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <animations/>
                         <buttonCell key="cell" type="check" title="Ignore known Apple failures" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PkC-2F-H9b">
@@ -597,7 +597,7 @@
                         </connections>
                     </button>
                     <button id="enr-yW-RJE">
-                        <rect key="frame" x="18" y="230" width="286" height="18"/>
+                        <rect key="frame" x="18" y="230" width="311" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Check the digital signatures of Apple tasks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="FOg-3F-b26">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

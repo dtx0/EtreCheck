@@ -764,7 +764,7 @@
                         </textFieldCell>
                     </textField>
                     <button id="Zg0-Xg-6zQ">
-                        <rect key="frame" x="18" y="169" width="237" height="18"/>
+                        <rect key="frame" x="18" y="169" width="281" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Ignorez les échecs d’Apple connus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="OQp-kt-jig">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -786,7 +786,7 @@
                         </textFieldCell>
                     </textField>
                     <button id="wCw-W7-rvU">
-                        <rect key="frame" x="18" y="111" width="201" height="18"/>
+                        <rect key="frame" x="18" y="111" width="224" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Masquer les tâches d’Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="5QO-pR-5iN">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -798,7 +798,7 @@
                         </connections>
                     </button>
                     <button id="GkG-G8-pzG">
-                        <rect key="frame" x="18" y="241" width="355" height="18"/>
+                        <rect key="frame" x="18" y="241" width="375" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Vérifiez les signatures numériques des tâches d’Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="paW-ex-wWP">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
