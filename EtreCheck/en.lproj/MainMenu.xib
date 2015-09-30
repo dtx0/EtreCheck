@@ -525,6 +525,8 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="109" y="132" width="548" height="342"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
+            <value key="minSize" type="size" width="548" height="342"/>
+            <value key="maxSize" type="size" width="548" height="342"/>
             <view key="contentView" id="ztf-cY-AUf">
                 <rect key="frame" x="0.0" y="0.0" width="548" height="342"/>
                 <autoresizingMask key="autoresizingMask"/>
