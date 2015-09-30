@@ -525,8 +525,6 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <rect key="contentRect" x="109" y="132" width="548" height="342"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
-            <value key="minSize" type="size" width="548" height="342"/>
-            <value key="maxSize" type="size" width="548" height="342"/>
             <view key="contentView" id="ztf-cY-AUf">
                 <rect key="frame" x="0.0" y="0.0" width="548" height="342"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -1042,10 +1040,10 @@ Gw
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button id="q8u-Lb-y4P">
-                    <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                    <rect key="frame" x="0.0" y="1" width="32" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Copy" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JKQ-vc-907">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
@@ -1063,7 +1061,7 @@ Gw
                     <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSInfo" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XJu-Hs-Mf1">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
