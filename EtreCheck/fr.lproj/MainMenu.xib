@@ -726,46 +726,45 @@
         </menu>
         <window title="Fenêtre" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="hni-3i-hk1" userLabel="Window - User Message">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="109" y="132" width="562" height="362"/>
+            <rect key="contentRect" x="109" y="132" width="532" height="353"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
             <view key="contentView" id="ztf-cY-AUf">
-                <rect key="frame" x="0.0" y="0.0" width="562" height="362"/>
+                <rect key="frame" x="0.0" y="0.0" width="532" height="353"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="sbV-OG-Rm6">
-                        <rect key="frame" x="18" y="250" width="526" height="92"/>
+                        <rect key="frame" x="18" y="265" width="496" height="68"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="gMC-Q7-4rl">
                             <font key="font" metaFont="system"/>
-                            <string key="title">EtreCheck recueille beaucoup d'informations sur l'état de votre Mac et les affiche dans un seul rapport, facile à lire. EtreCheck identifie les problèmes évidents en rouge. Si vous avez un problème et EtreCheck ne l’affiche pas, s'il vous plaît contacter directement l’assistance Apple ou un centre de services agréé Apple.</string>
+                            <string key="title">EtreCheck recueille beaucoup d’informations sur l’état de votre Mac et les affiche dans un seul rapport, facile à lire. EtreCheck identifie les problèmes évidents en rouge. Si vous avez un problème et EtreCheck ne l’affiche pas, s’il vous plaît contacter directement l’assistance Apple ou un centre de services agréé Apple.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Wrc-Z5-6yg">
-                        <rect key="frame" x="36" y="174" width="508" height="85"/>
+                        <rect key="frame" x="36" y="193" width="478" height="42"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="b1T-Op-c4K">
-                            <font key="font" metaFont="system"/>
-                            <string key="title">Vérifiez les signatures numériques de toutes les tâches d'Apple. Cela permettra d'assurer que votre système d'exploitation n'a pas été modifié. Il veillera également à ce que les tâches qui prétendent être d'Apple soient vraiment d'Apple. Cette option peut prendre plusieurs minutes supplémentaires pour l’exécuter.</string>
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="title">Cela permettra d’assurer que votre système d’exploitation n’a pas été modifié. Il veillera également à ce que les tâches qui prétendent être d’Apple soient vraiment d’Apple. Cette option peut prendre plusieurs minutes supplémentaires pour l’exécuter.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="WWv-iI-Clx">
-                        <rect key="frame" x="36" y="115" width="508" height="51"/>
+                        <rect key="frame" x="36" y="135" width="478" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="pqt-Ne-b5k">
-                            <font key="font" metaFont="system"/>
-                            <string key="title">Ignorez tous les échecs d'Apple connus. Certaines tâches d'Apple sont connues pour signaler les échecs inoffensifs. Cette option permet de masquer ces défaillances.</string>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Certaines tâches d’Apple sont connues pour signaler les échecs inoffensifs. Cette option permet de masquer ces défaillances." id="pqt-Ne-b5k">
+                            <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <button id="Zg0-Xg-6zQ">
-                        <rect key="frame" x="18" y="148" width="201" height="18"/>
+                        <rect key="frame" x="18" y="169" width="268" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="OQp-kt-jig">
+                        <buttonCell key="cell" type="check" title="Ignorez tous les échecs d’Apple connus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="OQp-kt-jig">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -775,19 +774,19 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="qTi-Dd-YA9">
-                        <rect key="frame" x="36" y="56" width="480" height="51"/>
+                        <rect key="frame" x="36" y="61" width="478" height="42"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="YEF-4K-Bz0">
-                            <font key="font" metaFont="system"/>
-                            <string key="title">Masquer les tâches Apple. Il y a beaucoup de tâches en cours d'exécution d'Apple sur votre Mac. EtreCheck cache ces tâches d'Apple à moins qu'il ne trouve un problème. Désactivez cette option pour voir chacun d'eux.</string>
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="title">Il y a beaucoup de tâches d’Apple en cours d’exécution sur votre Mac. EtreCheck cache ces tâches d’Apple à moins qu'il ne trouve un problème. Désactivez cette option pour voir chacun d'eux.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <button id="wCw-W7-rvU">
-                        <rect key="frame" x="18" y="89" width="201" height="18"/>
+                        <rect key="frame" x="18" y="111" width="201" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="5QO-pR-5iN">
+                        <buttonCell key="cell" type="check" title="Masquer les tâches d’Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="5QO-pR-5iN">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -797,9 +796,9 @@
                         </connections>
                     </button>
                     <button id="GkG-G8-pzG">
-                        <rect key="frame" x="18" y="241" width="72" height="18"/>
+                        <rect key="frame" x="18" y="241" width="412" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="paW-ex-wWP">
+                        <buttonCell key="cell" type="check" title="Vérifiez les signatures numériques de toutes les tâches d’Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="paW-ex-wWP">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -809,7 +808,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="8R5-uS-YWy">
-                        <rect key="frame" x="383" y="13" width="165" height="32"/>
+                        <rect key="frame" x="353" y="13" width="165" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Démarrer EtreCheck" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hRj-cJ-kLk">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -825,7 +824,7 @@ DQ
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="174" y="1267"/>
+            <point key="canvasLocation" x="159" y="1262.5"/>
         </window>
         <window title="Journal" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="LC3-aK-O61" userLabel="Window - Log">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
