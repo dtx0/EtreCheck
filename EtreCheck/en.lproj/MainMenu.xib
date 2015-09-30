@@ -523,14 +523,14 @@
         </window>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="hni-3i-hk1" userLabel="Window - User Message">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="109" y="132" width="531" height="337"/>
+            <rect key="contentRect" x="109" y="132" width="548" height="342"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
             <view key="contentView" id="ztf-cY-AUf">
-                <rect key="frame" x="0.0" y="0.0" width="531" height="337"/>
+                <rect key="frame" x="0.0" y="0.0" width="548" height="342"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="CYc-qI-gT3">
-                        <rect key="frame" x="18" y="249" width="495" height="68"/>
+                        <rect key="frame" x="18" y="254" width="512" height="68"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="8c5-qk-jzN">
@@ -541,7 +541,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="39u-5k-VWj">
-                        <rect key="frame" x="36" y="177" width="477" height="42"/>
+                        <rect key="frame" x="36" y="182" width="494" height="42"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="lkt-yb-9vC">
                             <font key="font" metaFont="smallSystem"/>
@@ -551,7 +551,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Yli-l1-67K">
-                        <rect key="frame" x="36" y="119" width="477" height="28"/>
+                        <rect key="frame" x="36" y="119" width="483" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Some Apple tasks are known to report harmless failures. This option will hide those failures." id="UkT-g4-6i3">
                             <font key="font" metaFont="smallSystem"/>
@@ -574,7 +574,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="eHr-QE-4Ep">
-                        <rect key="frame" x="36" y="61" width="477" height="28"/>
+                        <rect key="frame" x="36" y="61" width="494" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="f4t-6b-Dil">
                             <font key="font" metaFont="smallSystem"/>
@@ -597,7 +597,7 @@
                         </connections>
                     </button>
                     <button id="enr-yW-RJE">
-                        <rect key="frame" x="18" y="225" width="286" height="18"/>
+                        <rect key="frame" x="18" y="230" width="286" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Check the digital signatures of Apple tasks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="FOg-3F-b26">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -609,7 +609,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="lrR-aP-PG2">
-                        <rect key="frame" x="380" y="13" width="137" height="32"/>
+                        <rect key="frame" x="397" y="13" width="137" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <animations/>
                         <buttonCell key="cell" type="push" title="Start EtreCheck" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qTb-gt-ctA">
@@ -629,7 +629,7 @@ DQ
             <connections>
                 <outlet property="initialFirstResponder" destination="CYc-qI-gT3" id="OoA-vb-jaA"/>
             </connections>
-            <point key="canvasLocation" x="346.5" y="-9.5"/>
+            <point key="canvasLocation" x="341" y="-7"/>
         </window>
         <window title="EtreCheck" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="HCb-1A-LX1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>

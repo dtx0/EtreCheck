@@ -728,14 +728,14 @@
         </menu>
         <window title="Fenêtre" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="hni-3i-hk1" userLabel="Window - User Message">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="109" y="132" width="532" height="353"/>
+            <rect key="contentRect" x="109" y="132" width="559" height="353"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
             <view key="contentView" id="ztf-cY-AUf">
-                <rect key="frame" x="0.0" y="0.0" width="532" height="353"/>
+                <rect key="frame" x="0.0" y="0.0" width="559" height="353"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="sbV-OG-Rm6">
-                        <rect key="frame" x="18" y="265" width="496" height="68"/>
+                        <rect key="frame" x="18" y="265" width="523" height="68"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="gMC-Q7-4rl">
                             <font key="font" metaFont="system"/>
@@ -745,7 +745,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Wrc-Z5-6yg">
-                        <rect key="frame" x="36" y="193" width="478" height="42"/>
+                        <rect key="frame" x="36" y="193" width="505" height="42"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="b1T-Op-c4K">
                             <font key="font" metaFont="smallSystem"/>
@@ -755,7 +755,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="WWv-iI-Clx">
-                        <rect key="frame" x="36" y="135" width="478" height="28"/>
+                        <rect key="frame" x="36" y="135" width="505" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Certaines tâches d’Apple sont connues pour signaler les échecs inoffensifs. Cette option permet de masquer ces défaillances." id="pqt-Ne-b5k">
                             <font key="font" metaFont="smallSystem"/>
@@ -776,7 +776,7 @@
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="qTi-Dd-YA9">
-                        <rect key="frame" x="36" y="61" width="478" height="42"/>
+                        <rect key="frame" x="36" y="61" width="505" height="42"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="YEF-4K-Bz0">
                             <font key="font" metaFont="smallSystem"/>
@@ -810,7 +810,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="8R5-uS-YWy">
-                        <rect key="frame" x="353" y="13" width="165" height="32"/>
+                        <rect key="frame" x="380" y="13" width="165" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Démarrer EtreCheck" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hRj-cJ-kLk">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -826,7 +826,7 @@ DQ
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="159" y="1262.5"/>
+            <point key="canvasLocation" x="172.5" y="1262.5"/>
         </window>
         <window title="Journal" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="LC3-aK-O61" userLabel="Window - Log">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
