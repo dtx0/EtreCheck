@@ -104,7 +104,11 @@
   bool titlePrinted = NO;
   bool unprintedItems = NO;
   
-  for(NSString * bundleID in self.launchdStatus)
+  NSArray * sortedBundleIDs =
+    [[self.launchdStatus allKeys]
+      sortedArrayUsingSelector: @selector(compare:)];
+
+  for(NSString * bundleID in sortedBundleIDs)
     {
     NSMutableDictionary * status =
       [self collectJobStatus: self.launchdStatus[bundleID]];

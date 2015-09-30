@@ -209,7 +209,10 @@
   
   bool haveOutput = NO;
   
-  for(NSString * path in paths)
+  NSArray * sortedPaths =
+    [paths sortedArrayUsingSelector: @selector(compare:)];
+  
+  for(NSString * path in sortedPaths)
     if([self formatPropertyListFile: path output: formattedOutput])
       haveOutput = YES;
   
