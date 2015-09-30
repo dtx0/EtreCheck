@@ -31,6 +31,9 @@
 @synthesize hostName = myHostName;
 @synthesize adwareFound = myAdwareFound;
 @synthesize terminatedTasks = myTerminatedTasks;
+@synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
+@synthesize checkAppleSignatures = myCheckAppleSignatures;
+@synthesize hideAppleTasks = myHideAppleTasks;
 
 // Return the singeton of shared values.
 + (Model *) model
@@ -62,6 +65,9 @@
     myAdwareFiles = [NSMutableDictionary new];
     myTerminatedTasks = [NSMutableArray new];
     mySeriousProblems = [NSMutableSet new];
+    myIgnoreKnownAppleFailures = YES;
+    myCheckAppleSignatures = YES;
+    myHideAppleTasks = YES;
     }
     
   return self;

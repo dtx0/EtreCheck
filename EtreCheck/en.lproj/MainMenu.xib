@@ -36,7 +36,7 @@
                 <outlet property="spinner" destination="Udp-hz-whF" id="9PX-SM-esE"/>
                 <outlet property="statusView" destination="jBT-e2-hx3" id="h1T-1x-iC9"/>
                 <outlet property="toolbar" destination="HAH-8D-CvP" id="Spo-sd-EYf"/>
-                <outlet property="userMessgePanel" destination="hni-3i-hk1" id="Cm2-9U-d4F"/>
+                <outlet property="userParametersPanel" destination="hni-3i-hk1" id="ihs-yy-nI9"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
             </connections>
         </customObject>
@@ -521,71 +521,93 @@
         </window>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="hni-3i-hk1" userLabel="Window - User Message">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="109" y="132" width="544" height="264"/>
+            <rect key="contentRect" x="109" y="132" width="544" height="324"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
             <view key="contentView" id="ztf-cY-AUf">
-                <rect key="frame" x="0.0" y="0.0" width="544" height="264"/>
+                <rect key="frame" x="0.0" y="0.0" width="544" height="324"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="CYc-qI-gT3">
-                        <rect key="frame" x="18" y="200" width="508" height="44"/>
+                        <rect key="frame" x="18" y="212" width="508" height="92"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <animations/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Please describe your problem." id="8c5-qk-jzN">
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="8c5-qk-jzN">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">EtreCheck will collect a variety of information about the current state of your Mac and display it in a single, easy-to-read report. EtreCheck will identify any obvious problems in red. If you have a problem that EtreCheck does not show, please contact Apple Support directly or an Authorized Apple Service provider.</string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="39u-5k-VWj">
+                        <rect key="frame" x="36" y="138" width="490" height="68"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="lkt-yb-9vC">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">Check the digital signatures of any Apple tasks. This will ensure that your operating system has not been altered. It will also ensure that any tasks that claim to be from Apple really are from Apple. This option may take several additional minutes to run. </string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Yli-l1-67K">
+                        <rect key="frame" x="36" y="90" width="490" height="42"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Ignore any known Apple failures. Some Apple tasks are known to report harmless failures. This option will hide those failures." id="UkT-g4-6i3">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
-                        <connections>
-                            <outlet property="nextKeyView" destination="yAn-LB-NTZ" id="O98-SP-mJ3"/>
-                        </connections>
                     </textField>
-                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="ge8-79-855">
-                        <rect key="frame" x="20" y="55" width="504" height="161"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <clipView key="contentView" id="7OZ-1o-9En">
-                            <rect key="frame" x="1" y="1" width="502" height="159"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <textView importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="yAn-LB-NTZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="502" height="159"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <animations/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="502" height="159"/>
-                                    <size key="maxSize" width="504" height="10000000"/>
-                                    <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="502" height="159"/>
-                                    <size key="maxSize" width="504" height="10000000"/>
-                                    <connections>
-                                        <binding destination="Voe-Tx-rLC" name="attributedString" keyPath="self.userMessage" id="3xh-8o-4KW">
-                                            <dictionary key="options">
-                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                            </dictionary>
-                                        </binding>
-                                    </connections>
-                                </textView>
-                            </subviews>
-                            <animations/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </clipView>
+                    <button id="pUo-Nx-msa">
+                        <rect key="frame" x="18" y="114" width="201" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <animations/>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="GrK-Oj-Ps8">
-                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
-                        </scroller>
-                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="UON-ue-3Ml">
-                            <rect key="frame" x="487" y="1" width="16" height="159"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
-                        </scroller>
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PkC-2F-H9b">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
                         <connections>
-                            <outlet property="nextKeyView" destination="pUo-Nx-msa" id="TYk-5O-fj0"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.ignoreKnownAppleFailures" id="60Y-XL-eDa"/>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.ignoreKnownAppleFailures" id="bQO-Du-aEi"/>
+                            <outlet property="nextKeyView" destination="lrR-aP-PG2" id="6Td-Ju-M0R"/>
                         </connections>
-                    </scrollView>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="eHr-QE-4Ep">
+                        <rect key="frame" x="36" y="41" width="481" height="51"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="f4t-6b-Dil">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">Hide Apple tasks. There are many Apple tasks running on your Mac. EtreCheck hides these Apple tasks unless it finds a problem. Turn this option off to see all of them.</string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button id="3BR-w6-cMi">
+                        <rect key="frame" x="18" y="74" width="201" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="z1i-Mj-CTI">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.hideAppleTasks" id="aW0-sa-Srs"/>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="YfQ-7Z-BVU"/>
+                            <outlet property="nextKeyView" destination="lrR-aP-PG2" id="jmo-Yt-m6t"/>
+                        </connections>
+                    </button>
+                    <button id="enr-yW-RJE">
+                        <rect key="frame" x="18" y="188" width="72" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="FOg-3F-b26">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.checkAppleSignatures" id="pe1-B2-rDD"/>
+                            <outlet property="nextKeyView" destination="lrR-aP-PG2" id="bNY-Fc-QOr"/>
+                        </connections>
+                    </button>
                     <button verticalHuggingPriority="750" id="lrR-aP-PG2">
-                        <rect key="frame" x="392" y="13" width="137" height="32"/>
+                        <rect key="frame" x="393" y="13" width="137" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <animations/>
                         <buttonCell key="cell" type="push" title="Start EtreCheck" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qTb-gt-ctA">
@@ -599,26 +621,13 @@ DQ
                             <action selector="start:" target="Voe-Tx-rLC" id="2ik-2d-dt0"/>
                         </connections>
                     </button>
-                    <button id="pUo-Nx-msa">
-                        <rect key="frame" x="18" y="22" width="201" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <animations/>
-                        <buttonCell key="cell" type="check" title="Don't show this dialog again" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PkC-2F-H9b">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="HgC-29-4Qk" name="value" keyPath="values.dontshowusermessage" id="VSt-Sg-kSQ"/>
-                            <outlet property="nextKeyView" destination="lrR-aP-PG2" id="6Td-Ju-M0R"/>
-                        </connections>
-                    </button>
                 </subviews>
                 <animations/>
             </view>
             <connections>
                 <outlet property="initialFirstResponder" destination="CYc-qI-gT3" id="OoA-vb-jaA"/>
             </connections>
-            <point key="canvasLocation" x="139" y="119"/>
+            <point key="canvasLocation" x="514" y="130"/>
         </window>
         <window title="EtreCheck" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="HCb-1A-LX1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>

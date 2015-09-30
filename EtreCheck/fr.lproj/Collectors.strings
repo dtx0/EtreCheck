@@ -34,8 +34,8 @@
 "useritunesplugins" = "Les plug-ins iTunes pour l’utilisateur :";
 "launchagents" = "Les agents de lancement :";
 "launchdaemons" = "Les daemons de lancements :";
-"systemlaunchagents" = "Les agents de lancement systèmes avec un problème :";
-"systemlaunchdaemons" = "Les daemons de lancement systèmes avec un problème :";
+"systemlaunchagents" = "Les agents de lancement systèmes :";
+"systemlaunchdaemons" = "Les daemons de lancement systèmes :";
 "userlaunchagents" = "Les agents de lancement pour l’utilisateur :";
 "adware" = "L’adware :";
 "hiddenapps" = "Les autres apps :";

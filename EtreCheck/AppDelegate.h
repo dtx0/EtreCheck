@@ -38,8 +38,7 @@
   NSImageView * myDemonImage;
   NSImageView * myAgentImage;
   NSString * myCollectionStatus;
-  NSAttributedString * myUserMessage;
-  NSWindow * myUserMessagePanel;
+  NSWindow * myUserParametersPanel;
   
   NSView * myShareToolbarItemView;
   NSButton * myShareButton;
@@ -77,8 +76,7 @@
 @property (retain) IBOutlet NSImageView * demonImage;
 @property (retain) IBOutlet NSImageView * agentImage;
 @property (retain) NSString * collectionStatus;
-@property (retain) NSAttributedString * userMessage;
-@property (retain) IBOutlet NSWindow * userMessgePanel;
+@property (retain) IBOutlet NSWindow * userParametersPanel;
 @property (retain) IBOutlet NSView * shareToolbarItemView;
 @property (retain) IBOutlet NSButton * shareButton;
 @property (retain) IBOutlet NSView * helpToolbarItemView;
@@ -88,6 +86,15 @@
 @property (retain) IBOutlet HelpManager * helpManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
 @property (assign) BOOL reportAvailable;
+
+// Ignore known Apple failures.
+@property (assign) bool ignoreKnownAppleFailures;
+
+// Check Apple signatures.
+@property (assign) bool checkAppleSignatures;
+
+// Hide Apple tasks.
+@property (assign) bool hideAppleTasks;
 
 // Start the report.
 - (IBAction) start: (id) sender;

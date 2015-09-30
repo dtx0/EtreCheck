@@ -49,6 +49,10 @@
   bool myAdwareFound;
   NSMutableArray * myTerminatedTasks;
   NSMutableSet * mySeriousProblems;
+  
+  bool myIgnoreKnownAppleFailures;
+  bool myCheckAppleSignatures;
+  bool myHideAppleTasks;
   }
 
 // Keep track of the OS version.
@@ -108,6 +112,15 @@
 
 // What serious problems were found?
 @property (retain) NSMutableSet * seriousProblems;
+
+// Ignore known Apple failures.
+@property (assign) bool ignoreKnownAppleFailures;
+
+// Check Apple signatures.
+@property (assign) bool checkAppleSignatures;
+
+// Hide Apple tasks.
+@property (assign) bool hideAppleTasks;
 
 // Return the singeton of shared values.
 + (Model *) model;

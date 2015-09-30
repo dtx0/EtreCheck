@@ -29,7 +29,6 @@
 
 @synthesize EnglishBundle = myEnglishBundle;
 
-@synthesize checkSignatures = myCheckSignatures;
 @synthesize signatureCache = mySignatureCache;
 
 // Return the singeton of shared values.
@@ -61,7 +60,6 @@
     [self loadEnglishStrings];
     
     mySignatureCache = [NSMutableDictionary new];
-    myCheckSignatures = YES;
     }
     
   return self;
@@ -752,7 +750,7 @@
 // Verify the signature of an Apple executable.
 + (NSString *) checkAppleExecutable: (NSString *) path
   {
-  if(![[Utilities shared] checkSignatures])
+  if(![[Model model] checkAppleSignatures])
     return kSignatureValid;
     
   NSString * result =

@@ -147,13 +147,16 @@
 - (void) updateStatus: (NSMutableDictionary *) status
   forBundle: (NSString *) bundleID
   {
+  NSNumber * ignore =
+    [NSNumber numberWithBool: [[Model model] hideAppleTasks]];
+  
   bool isApple = [self isAppleFile: bundleID];
   
   status[kApple] = [NSNumber numberWithBool: isApple];
 
   if(isApple && ([[Model model] majorOSVersion] < kYosemite))
     {
-    status[kIgnored] = @YES;
+    status[kIgnored] = ignore;
     return;
     }
     
@@ -165,14 +168,14 @@
     status[kSignature] = [Utilities checkAppleExecutable: executable];
     
     if([status[kSignature] isEqualToString: kSignatureValid])
-      status[kIgnored] = @YES;
+      status[kIgnored] = ignore;
       
     // Should I ignore this failure?
     if([self ignoreInvalidSignatures: bundleID])
-      status[kIgnored] = @YES;
+      status[kIgnored] = ignore;
     }
   else if([self isApp: bundleID])
-    status[kIgnored] = @YES;
+    status[kIgnored] = ignore;
   }
 
 // Get the executable for the app.

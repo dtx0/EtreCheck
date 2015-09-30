@@ -244,6 +244,9 @@
   if(!status)
     return NO;
     
+  bool hideAppleTasks = [[Model model] hideAppleTasks];
+  NSNumber * ignore = [NSNumber numberWithBool: hideAppleTasks];
+
   // Apple file get special treatment.
   if([[status objectForKey: kApple] boolValue])
     {
@@ -253,9 +256,10 @@
       // Should I ignore this failure?
       if([self ignoreFailuresOnFile: file])
         {
-        status[kIgnored] = @YES;
+        status[kIgnored] = ignore;
 
-        return NO;
+        if(hideAppleTasks)
+          return NO;
         }
       }
       
@@ -265,17 +269,19 @@
       
     else if([status[kSignature] isEqualToString: kSignatureValid])
       {
-      status[kIgnored] = @YES;
+      status[kIgnored] = ignore;
       
-      return NO;
+      if(hideAppleTasks)
+        return NO;
       }
       
     // Should I ignore this failure?
     else if([self ignoreInvalidSignatures: file])
       {
-      status[kIgnored] = @YES;
+      status[kIgnored] = ignore;
 
-      return NO;
+      if(hideAppleTasks)
+        return NO;
       }
     }
 
@@ -393,6 +399,9 @@
 // Should I ignore failures?
 - (bool) ignoreFailuresOnFile: (NSString *) file
   {
+  if(![[Model model] ignoreKnownAppleFailures])
+    return NO;
+    
   if([file isEqualToString: @"com.apple.mtrecorder.plist"])
     return YES;
   else if([file isEqualToString: @"com.apple.spirecorder.plist"])
@@ -437,6 +446,9 @@
 // Should I ignore these invalid signatures?
 - (bool) ignoreInvalidSignatures: (NSString *) file
   {
+  if(![[Model model] ignoreKnownAppleFailures])
+    return NO;
+    
   switch([[Model model] majorOSVersion])
     {
     case kSnowLeopard:

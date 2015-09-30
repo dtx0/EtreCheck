@@ -57,8 +57,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize collectionStatus = myCollectionStatus;
 @synthesize reportView = myReportView;
 @synthesize animationView = myAnimationView;
-@synthesize userMessage = myUserMessage;
-@synthesize userMessgePanel = myUserMessagePanel;
+@synthesize userParametersPanel = myUserParametersPanel;
 @synthesize shareToolbarItemView = myShareToolbarItemView;
 @synthesize shareButton = myShareButton;
 @synthesize helpToolbarItemView = myHelpToolbarItemView;
@@ -68,6 +67,40 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize helpManager = myHelpManager;
 @synthesize adwareManager = myAdwareManager;
 @synthesize reportAvailable = myReportAvailable;
+
+@dynamic ignoreKnownAppleFailures;
+@dynamic checkAppleSignatures;
+@dynamic hideAppleTasks;
+
+- (bool) ignoreKnownAppleFailures
+  {
+  return [[Model model] ignoreKnownAppleFailures];
+  }
+
+- (void) setIgnoreKnownAppleFailures: (bool) ignoreKnownAppleFailures
+  {
+  [[Model model] setIgnoreKnownAppleFailures: ignoreKnownAppleFailures];
+  }
+
+- (bool) checkAppleSignatures
+  {
+  return [[Model model] checkAppleSignatures];
+  }
+
+- (void) setCheckAppleSignatures: (bool) checkAppleSignatures
+  {
+  [[Model model] setCheckAppleSignatures: checkAppleSignatures];
+  }
+
+- (bool) hideAppleTasks
+  {
+  return [[Model model] hideAppleTasks];
+  }
+
+- (void) setHideAppleTasks: (bool) hideAppleTasks
+  {
+  [[Model model] setHideAppleTasks: hideAppleTasks];
+  }
 
 // Destructor.
 - (void) dealloc
@@ -131,7 +164,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)),
     dispatch_get_main_queue(),
     ^{
-      [self collectUserMessage];
+      [self collectUserParameters];
     });
     
   [self.shareButton sendActionOn: NSLeftMouseDownMask];
@@ -309,20 +342,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   }
 
 // Collect the user message.
-- (void) collectUserMessage
+- (void) collectUserParameters
   {
-  bool dontShowUserMessage =
-    [[NSUserDefaults standardUserDefaults]
-      boolForKey: @"dontshowusermessage"];
+  [[NSUserDefaults standardUserDefaults]
+    removeObjectForKey: @"dontshowusermessage"];
 
-  if(dontShowUserMessage)
-    {
-    [self start: self];
-    return;
-    }
-    
   [[NSApplication sharedApplication]
-    beginSheet: self.userMessgePanel
+    beginSheet: self.userParametersPanel
     modalForWindow: self.window
     modalDelegate: self
     didEndSelector: @selector(didEndSheet:returnCode:contextInfo:)
@@ -338,7 +364,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Start the report.
 - (IBAction) start: (id) sender
   {
-  [[NSApplication sharedApplication] endSheet: self.userMessgePanel];
+  [[NSApplication sharedApplication] endSheet: self.userParametersPanel];
   
   [self startProgressTimer];
   
@@ -380,7 +406,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Cancel the report.
 - (IBAction) cancel: (id) sender
   {
-  [[NSApplication sharedApplication] endSheet: self.userMessgePanel];
+  [[NSApplication sharedApplication] endSheet: self.userParametersPanel];
 
   [[NSApplication sharedApplication] terminate: sender];
   }
@@ -429,8 +455,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Print the EtreCheck header.
 - (void) printEtreCheckHeader
   {
-  [self printProblemDescription];
-  
   NSBundle * bundle = [NSBundle mainBundle];
   
   [self.log
@@ -466,26 +490,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self printLinkInstructions];
   
   [self printErrors];
-  }
-
-// Print the problem description.
-- (void) printProblemDescription
-  {
-  if([self.userMessage length])
-    {
-    [self.log
-      appendString: NSLocalizedString(@"Problem description:\n", NULL)
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
-      
-    [self.log
-      appendAttributedString:
-        [self.userMessage attributedStringByTrimmingWhitespace]];
-    
-    [self.log appendString: @"\n\n"];
-    }
   }
 
 // Print link instructions.
@@ -1210,6 +1214,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
    
   return [image autorelease];
   }
+
+#pragma mark - Control EtreCheck behaviour
 
 @end
 
