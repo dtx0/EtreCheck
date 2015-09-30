@@ -1118,6 +1118,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   // the "allowed" list of items.
   }
 
+// Validate toolbar items.
+- (BOOL) validateToolbarItem: (NSToolbarItem *) theItem
+  {
+  // This will only handle the print item. Other buttons must be done
+  // manually with bindings.
+  return self.reportAvailable;
+  }
+
 #pragma mark - Sharing
 
 // Share the EtreCheck report.
