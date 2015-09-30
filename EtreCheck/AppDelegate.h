@@ -46,6 +46,8 @@
   NSButton * myShareButton;
   NSView * myHelpToolbarItemView;
   NSButton * myHelpButton;
+  NSImage * myHelpButtonImage;
+  NSImage * myHelpButtonInactiveImage;
   NSToolbar * myToolbar;
 
   NSMutableDictionary * launchdStatus;
@@ -85,6 +87,8 @@
 @property (retain) IBOutlet NSButton * clipboardCopyButton;
 @property (retain) IBOutlet NSView * helpToolbarItemView;
 @property (retain) IBOutlet NSButton * helpButton;
+@property (retain) IBOutlet NSImage * helpButtonImage;
+@property (retain) IBOutlet NSImage * helpButtonInactiveImage;
 @property (retain) IBOutlet NSToolbar * toolbar;
 @property (retain) IBOutlet DetailManager * detailManager;
 @property (retain) IBOutlet HelpManager * helpManager;

@@ -6,15 +6,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class AppDelegate;
-
-@interface EtreCheckToolbarItem : NSToolbarItem
-  {
-  NSControl * myControl;
-  AppDelegate * myAppDelegate;
-  }
-
-@property (assign) IBOutlet NSControl * control;
-@property (assign) IBOutlet AppDelegate * appDelegate;
+@interface EtreCheckToolbar : NSToolbar
 
 @end

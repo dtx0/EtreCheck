@@ -891,7 +891,7 @@ DQ
                 <autoresizingMask key="autoresizingMask"/>
                 <animations/>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="68F47B6C-369C-4D9F-860C-8663D57525B2" autosavesConfiguration="NO" prefersToBeShown="NO" displayMode="iconAndLabel" sizeMode="regular" id="em7-XY-ghW">
+            <toolbar key="toolbar" implicitIdentifier="68F47B6C-369C-4D9F-860C-8663D57525B2" autosavesConfiguration="NO" prefersToBeShown="NO" displayMode="iconAndLabel" sizeMode="regular" id="em7-XY-ghW" customClass="EtreCheckToolbar">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="hU6-dI-z16"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="ugp-b4-7Cf"/>
@@ -1275,7 +1275,7 @@ Gw
                 <button id="QqD-yR-Yhe">
                     <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSInfo" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="6bK-lt-5si">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Help" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="6bK-lt-5si">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -1309,9 +1309,9 @@ Gw
         <image name="Agent" width="118" height="125"/>
         <image name="Copy" width="1024" height="1024"/>
         <image name="Demon" width="110" height="125"/>
+        <image name="Help" width="1024" height="1024"/>
         <image name="MagnifyingGlass" width="800" height="400"/>
         <image name="MagnifyingGlassShade" width="800" height="400"/>
-        <image name="NSInfo" width="32" height="32"/>
         <image name="NSShareTemplate" width="11" height="16"/>
     </resources>
 </document>

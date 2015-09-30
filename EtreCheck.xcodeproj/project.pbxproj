@@ -34,6 +34,7 @@
 		A54B87351A1D4F1900F25213 /* HelpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87341A1D4F1900F25213 /* HelpManager.m */; };
 		A54B87381A1D4FED00F25213 /* DetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87371A1D4FED00F25213 /* DetailManager.m */; };
 		A550C54F1BBC39E000CA75EA /* EtreCheckToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */; settings = {ASSET_TAGS = (); }; };
+		A550C55A1BBC75FD00CA75EA /* EtreCheckToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = A550C5591BBC75FD00CA75EA /* EtreCheckToolbar.m */; settings = {ASSET_TAGS = (); }; };
 		A552A31D1818BDAE00829BA3 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A552A3161818BC7F00829BA3 /* CoreServices.framework */; };
 		A55BC16E15BF987D00D42EF1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A55BC16D15BF987D00D42EF1 /* Cocoa.framework */; };
 		A55BC17815BF987D00D42EF1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A55BC17615BF987D00D42EF1 /* InfoPlist.strings */; };
@@ -137,6 +138,8 @@
 		A54DA5711A3117E100F09B19 /* adware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = adware.plist; sourceTree = "<group>"; };
 		A550C54D1BBC39E000CA75EA /* EtreCheckToolbarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckToolbarItem.h; sourceTree = "<group>"; };
 		A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckToolbarItem.m; sourceTree = "<group>"; };
+		A550C5581BBC75FD00CA75EA /* EtreCheckToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckToolbar.h; sourceTree = "<group>"; };
+		A550C5591BBC75FD00CA75EA /* EtreCheckToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckToolbar.m; sourceTree = "<group>"; };
 		A552A3161818BC7F00829BA3 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		A552A3181818BD1F00829BA3 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
 		A552A31B1818BD8300829BA3 /* CarbonCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarbonCore.framework; path = ../../../../System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework; sourceTree = "<group>"; };
@@ -425,6 +428,8 @@
 				A5257D3C19AC0AA3003084C8 /* Utilities.m */,
 				A550C54D1BBC39E000CA75EA /* EtreCheckToolbarItem.h */,
 				A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */,
+				A550C5581BBC75FD00CA75EA /* EtreCheckToolbar.h */,
+				A550C5591BBC75FD00CA75EA /* EtreCheckToolbar.m */,
 				A5257D4119AC10FB003084C8 /* Collectors */,
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
@@ -609,6 +614,7 @@
 				A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */,
 				A5FC11EE19A4BFDC00E81E9C /* AudioPlugInsCollector.m in Sources */,
 				A50C9DB019A2DFDB00BA6A25 /* DiskCollector.m in Sources */,
+				A550C55A1BBC75FD00CA75EA /* EtreCheckToolbar.m in Sources */,
 				A50C9DB919A2E6AB00BA6A25 /* ThunderboltCollector.m in Sources */,
 				A5C292E319A039AB00464E86 /* SystemLaunchAgentsCollector.m in Sources */,
 				A5D0877C19ECAD4E004F52C2 /* NSDictionary+Etresoft.m in Sources */,

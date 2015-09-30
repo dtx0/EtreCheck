@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2012. All rights reserved.
+ ** Copyright (c) 2015. All rights reserved.
  **********************************************************************/
 
 #import "EtreCheckToolbarItem.h"
@@ -10,13 +10,12 @@
 @implementation EtreCheckToolbarItem
 
 @synthesize control = myControl;
+@synthesize appDelegate = myAppDelegate;
 
 - (void) validate
   {
-  AppDelegate * appDelegate = (AppDelegate *)self.target;
-  
-  self.enabled = appDelegate.reportAvailable;
-  [self.control setEnabled: appDelegate.reportAvailable];
+  self.enabled = self.appDelegate.reportAvailable;
+  [self.control setEnabled: self.appDelegate.reportAvailable];
   }
 
 @end

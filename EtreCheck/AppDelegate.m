@@ -65,6 +65,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize shareButton = myShareButton;
 @synthesize helpToolbarItemView = myHelpToolbarItemView;
 @synthesize helpButton = myHelpButton;
+@synthesize helpButtonImage = myHelpButtonImage;
+@synthesize helpButtonInactiveImage = myHelpButtonInactiveImage;
 @synthesize toolbar = myToolbar;
 @synthesize detailManager = myDetailManager;
 @synthesize helpManager = myHelpManager;
@@ -171,6 +173,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     });
     
   [self.shareButton sendActionOn: NSLeftMouseDownMask];
+
+  self.progress.layerUsesCoreImageFilters = YES;
+  self.spinner.layerUsesCoreImageFilters = YES;
+  
+  self.helpButtonImage = [NSImage imageNamed: @"Help"];
+  self.helpButtonInactiveImage = [NSImage imageNamed: @"HelpInactive"];
   }
 
 // Dim the display on deactivate.
@@ -196,8 +204,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      [self.shareButton setContentFilters: @[grayscale, gamma]];
-      [self.helpButton setContentFilters: @[grayscale, gamma]];
+      self.helpButton.image = self.helpButtonInactiveImage;
       [self.reportView setContentFilters: @[grayscale, gamma]];
       
       if(self.animationView)
@@ -229,8 +236,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      [self.shareButton setContentFilters: @[]];
-      [self.helpButton setContentFilters: @[]];
+      self.helpButton.image = self.helpButtonImage;
       [self.reportView setContentFilters: @[]];
 
       if(self.animationView)
@@ -849,6 +855,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   self.toolbar.visible = YES;
   self.reportAvailable = YES;
+  [self.toolbar validateVisibleItems];
   
   [[NSAnimationContext currentContext] setDuration: duration];
   
@@ -1076,6 +1083,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       
     [item setTarget: self];
     [item setAction: nil];
+    item.appDelegate = self;
     
     return item;
     }
@@ -1092,6 +1100,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [item setAction: nil];
     [item setView: self.helpToolbarItemView];
     item.control = self.helpButton;
+    item.appDelegate = self;
     
     return item;
     }
