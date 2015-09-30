@@ -18,6 +18,8 @@
                 <outlet property="agentImage" destination="X6k-bh-0bO" id="029-YW-2tT"/>
                 <outlet property="animationView" destination="cs1-k8-fgW" id="UaA-Y7-kiB"/>
                 <outlet property="applicationIcon" destination="24p-7h-cH3" id="8z3-r1-Kkm"/>
+                <outlet property="clipboardCopyButton" destination="VXK-UK-iGc" id="0Cu-4e-3CV"/>
+                <outlet property="clipboardCopyToolbarItemView" destination="rsP-Zh-fiv" id="lNz-Ga-w52"/>
                 <outlet property="demonImage" destination="PBo-4n-aK2" id="x01-Zs-ecw"/>
                 <outlet property="detailManager" destination="HkP-LF-BHj" id="x7W-US-ZUk"/>
                 <outlet property="finderIcon" destination="YNi-t0-nyG" id="VwO-Jj-e1b"/>
@@ -762,9 +764,9 @@
                         </textFieldCell>
                     </textField>
                     <button id="Zg0-Xg-6zQ">
-                        <rect key="frame" x="18" y="169" width="268" height="18"/>
+                        <rect key="frame" x="18" y="169" width="237" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Ignorez tous les échecs d’Apple connus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="OQp-kt-jig">
+                        <buttonCell key="cell" type="check" title="Ignorez les échecs d’Apple connus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="OQp-kt-jig">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -796,9 +798,9 @@
                         </connections>
                     </button>
                     <button id="GkG-G8-pzG">
-                        <rect key="frame" x="18" y="241" width="412" height="18"/>
+                        <rect key="frame" x="18" y="241" width="355" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Vérifiez les signatures numériques de toutes les tâches d’Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="paW-ex-wWP">
+                        <buttonCell key="cell" type="check" title="Vérifiez les signatures numériques des tâches d’Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="paW-ex-wWP">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -1249,11 +1251,11 @@ Gw
             <animations/>
         </customView>
         <customView id="h3a-5W-2if" userLabel="Share ToolbarItem View">
-            <rect key="frame" x="0.0" y="0.0" width="47" height="37"/>
+            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button id="g85-q5-HAV">
-                    <rect key="frame" x="4" y="2" width="39" height="33"/>
+                    <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSShareTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="QP3-19-cio">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1264,14 +1266,14 @@ Gw
                     </connections>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="206.5" y="642.5"/>
+            <point key="canvasLocation" x="199" y="640"/>
         </customView>
         <customView id="heD-2F-2VV" userLabel="Help ToolbarItem View">
-            <rect key="frame" x="0.0" y="0.0" width="47" height="37"/>
+            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button id="QqD-yR-Yhe">
-                    <rect key="frame" x="4" y="2" width="39" height="33"/>
+                    <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSInfo" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="6bK-lt-5si">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1282,11 +1284,30 @@ Gw
                     </connections>
                 </button>
             </subviews>
-            <point key="canvasLocation" x="206.5" y="642.5"/>
+            <point key="canvasLocation" x="199" y="640"/>
+        </customView>
+        <customView id="rsP-Zh-fiv" userLabel="Copy ToolbarItem View">
+            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button id="VXK-UK-iGc">
+                    <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Copy" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="fxV-In-o1x">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="copyToClipboard:" target="Voe-Tx-rLC" id="8yK-9g-W8w"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="402" y="620"/>
         </customView>
     </objects>
     <resources>
         <image name="Agent" width="118" height="125"/>
+        <image name="Copy" width="1024" height="1024"/>
         <image name="Demon" width="110" height="125"/>
         <image name="MagnifyingGlass" width="800" height="400"/>
         <image name="MagnifyingGlassShade" width="800" height="400"/>

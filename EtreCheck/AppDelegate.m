@@ -58,6 +58,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize reportView = myReportView;
 @synthesize animationView = myAnimationView;
 @synthesize userParametersPanel = myUserParametersPanel;
+@synthesize clipboardCopyToolbarItemView = myClipboardCopyToolbarItemView;
+@synthesize clipboardCopyButton = myClipboardCopyButton;
 @synthesize shareToolbarItemView = myShareToolbarItemView;
 @synthesize shareButton = myShareButton;
 @synthesize helpToolbarItemView = myHelpToolbarItemView;
@@ -1049,11 +1051,21 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [[[NSToolbarItem alloc]
         initWithItemIdentifier: itemIdentifier] autorelease];
     
-    [item setLabel: NSLocalizedString(@"Share Report", nil)];
-    [item setPaletteLabel: NSLocalizedString(@"Share Report", nil)];
+    if([[Model model] majorOSVersion] >= kLion)
+      {
+      [item setLabel: NSLocalizedString(@"Share Report", nil)];
+      [item setPaletteLabel: NSLocalizedString(@"Share Report", nil)];
+      [item setView: self.shareToolbarItemView];
+      }
+    else
+      {
+      [item setLabel: NSLocalizedString(@"Copy to clipboard", nil)];
+      [item setPaletteLabel: NSLocalizedString(@"Copy to clipboard", nil)];
+      [item setView: self.clipboardCopyToolbarItemView];
+      }
+      
     [item setTarget: self];
     [item setAction: nil];
-    [item setView: self.shareToolbarItemView];
     
     return item;
     }

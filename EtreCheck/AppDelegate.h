@@ -40,6 +40,8 @@
   NSString * myCollectionStatus;
   NSWindow * myUserParametersPanel;
   
+  NSView * myClipboardCopyToolbarItemView;
+  NSButton * myClipboardCopyButton;
   NSView * myShareToolbarItemView;
   NSButton * myShareButton;
   NSView * myHelpToolbarItemView;
@@ -79,6 +81,8 @@
 @property (retain) IBOutlet NSWindow * userParametersPanel;
 @property (retain) IBOutlet NSView * shareToolbarItemView;
 @property (retain) IBOutlet NSButton * shareButton;
+@property (retain) IBOutlet NSView * clipboardCopyToolbarItemView;
+@property (retain) IBOutlet NSButton * clipboardCopyButton;
 @property (retain) IBOutlet NSView * helpToolbarItemView;
 @property (retain) IBOutlet NSButton * helpButton;
 @property (retain) IBOutlet NSToolbar * toolbar;
