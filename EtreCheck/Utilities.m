@@ -404,8 +404,11 @@
   NSString * program = [mutableParts firstObject];
   
   if(program)
+    {
+    [mutableParts removeObjectAtIndex: 0];
     [mutableParts insertObject: [Utilities cleanPath: program] atIndex: 0];
-  
+    }
+    
   return [mutableParts componentsJoinedByString: @" "];
   }
 

@@ -736,7 +736,16 @@
     NSArray * arguments = [plist objectForKey: @"ProgramArguments"];
     
     if([arguments respondsToSelector: @selector(isEqualToArray:)])
-      [executable addObjectsFromArray: arguments];
+      if(arguments.count > 0)
+        {
+        NSString * argument = arguments[0];
+        
+        if(![argument isEqualToString: [program lastPathComponent]])
+          [executable addObject: argument];
+          
+        for(int i = 1; i < arguments.count; ++i)
+          [executable addObject: arguments[i]];
+      }
     }
     
   return executable;
@@ -914,7 +923,7 @@
         stringWithFormat:
           @"\n        %@",
           [Utilities
-            formatExecutable: [status objectForKey: kExecutable]]]];
+            formatExecutable: [status objectForKey: kCommand]]]];
     
   return [extra autorelease];
   }

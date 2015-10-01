@@ -187,7 +187,7 @@
 - (NSString *) getExecutableForBundle: (NSString *) bundleID
   status: (NSMutableDictionary *) status
   {
-  NSArray * command = status[kExecutable];
+  NSArray * command = status[kCommand];
   
   if(!command)
     {
