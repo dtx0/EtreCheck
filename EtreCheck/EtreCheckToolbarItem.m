@@ -7,6 +7,7 @@
 #import "EtreCheckToolbarItem.h"
 #import "AppDelegate.h"
 
+// A toolbar item that uses a view and behaves properly.
 @implementation EtreCheckToolbarItem
 
 @synthesize control = myControl;

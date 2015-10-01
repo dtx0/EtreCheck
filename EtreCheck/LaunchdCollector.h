@@ -41,6 +41,8 @@
 @property (retain) NSMutableSet * appleLaunchd;
 @property (assign) bool showExecutable;
 @property (assign) NSUInteger pressureKilledCount;
+@property (retain) NSMutableSet * knownAppleFailures;
+@property (retain) NSMutableSet * knownAppleSignatureFailures;
 
 // Print a list of files.
 - (void) printPropertyListFiles: (NSArray *) paths;

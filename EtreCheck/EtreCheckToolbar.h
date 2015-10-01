@@ -6,6 +6,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+// A toolbar that validates properly.
 @interface EtreCheckToolbar : NSToolbar
 
 @end

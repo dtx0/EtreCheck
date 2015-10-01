@@ -6,6 +6,7 @@
 
 #import "DiagnosticEvent.h"
 
+// Try to extract events from log files and various types of system reports.
 @implementation DiagnosticEvent
 
 @synthesize type = myType;

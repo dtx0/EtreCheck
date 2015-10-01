@@ -6,6 +6,7 @@
 
 #import "LaunchdCollector.h"
 
+// Collect "other" files like modern login items.
 @interface HiddenAppsCollector : LaunchdCollector
   {
   NSDictionary * myProcesses;

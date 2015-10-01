@@ -10,6 +10,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 
+// Collect "other" files like modern login items.
 @implementation HiddenAppsCollector
 
 @synthesize processes = myProcesses;

@@ -8,6 +8,7 @@
 
 @class AppDelegate;
 
+// A toolbar item that uses a view and behaves properly.
 @interface EtreCheckToolbarItem : NSToolbarItem
   {
   NSControl * myControl;

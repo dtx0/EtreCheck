@@ -6,6 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
+// Some handy NSString functions for attributed strings.
 @interface NSAttributedString (Etresoft)
 
 - (NSAttributedString *) attributedStringByTrimmingCharactersInSet:

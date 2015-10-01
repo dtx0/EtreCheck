@@ -7,6 +7,7 @@
 
 #import "NSAttributedString+Etresoft.h"
 
+// Some handy NSString functions for attributed strings.
 @implementation NSAttributedString (Etresoft)
 
 - (NSAttributedString *) attributedStringByTrimmingCharactersInSet:

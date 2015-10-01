@@ -6,6 +6,7 @@
 
 #import "EtreCheckToolbar.h"
 
+// A toolbar that validates properly.
 @implementation EtreCheckToolbar
 
 - (void) validateVisibleItems

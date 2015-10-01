@@ -109,6 +109,7 @@
   }
 
 // Query Apple for the marketing name.
+// Don't even bother with this.
 - (NSString *) marketingName: (NSString *) version
   {
   NSString * language = NSLocalizedString(@"en", NULL);

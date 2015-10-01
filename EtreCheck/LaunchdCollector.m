@@ -19,6 +19,8 @@
 @dynamic appleLaunchd;
 @synthesize showExecutable = myShowExecutable;
 @synthesize pressureKilledCount = myPressureKilledCount;
+@dynamic knownAppleFailures;
+@dynamic knownAppleSignatureFailures;
 
 // Property accessors to route through a singleton.
 - (NSMutableDictionary *) launchdStatus
@@ -29,6 +31,16 @@
 - (NSMutableSet *) appleLaunchd
   {
   return [LaunchdCollector appleLaunchd];
+  }
+
+- (NSMutableSet *) knownAppleFailures
+  {
+  return [LaunchdCollector knownAppleFailures];
+  }
+
+- (NSMutableSet *) knownAppleSignatureFailures
+  {
+  return [LaunchdCollector knownAppleSignatureFailures];
   }
 
 // Singleton accessor for launchd status.
@@ -49,6 +61,38 @@
 
 // Singleton access for Apple launchd items.
 + (NSMutableSet *) appleLaunchd
+  {
+  static NSMutableSet * set = nil;
+  
+  static dispatch_once_t onceToken;
+
+  dispatch_once(
+    & onceToken,
+    ^{
+     set = [NSMutableSet new];
+    });
+    
+  return set;
+  }
+
+// Singleton access for Apple known filure items.
++ (NSMutableSet *) knownAppleFailures
+  {
+  static NSMutableSet * set = nil;
+  
+  static dispatch_once_t onceToken;
+
+  dispatch_once(
+    & onceToken,
+    ^{
+     set = [NSMutableSet new];
+    });
+    
+  return set;
+  }
+
+// Singleton access for Apple known signature failure items.
++ (NSMutableSet *) knownAppleSignatureFailures
   {
   static NSMutableSet * set = nil;
   
@@ -118,6 +162,14 @@
 // Setup launchd items that are expected because they ship with the OS.
 - (void) setupExpectedItems
   {
+  [self setupOtherAppleFiles];
+  [self setupKnownAppleFailures];
+  [self setupKnownAppleSignatureFailures];
+  }
+
+// Setup Apple files files with 3rd party labels.
+- (void) setupOtherAppleFiles
+  {
   [self.appleLaunchd addObject: @"org.openbsd.ssh-agent.plist"];
   [self.appleLaunchd addObject: @"bootps.plist"];
   [self.appleLaunchd addObject: @"com.danga.memcached.plist"];
@@ -160,6 +212,182 @@
   [self.appleLaunchd addObject: @"edu.mit.Kerberos.KerberosAgent.plist"];
   [self.appleLaunchd addObject: @"org.x.startx.plist"];
   [self.appleLaunchd addObject: @"org.samba.winbindd.plist"];
+  }
+
+// Setup known Apple failures.
+- (void) setupKnownAppleFailures
+  {
+  [self.knownAppleFailures addObject: @"com.apple.mtrecorder.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.spirecorder.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.MRTd.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.MRTa.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.logd.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.xprotectupdater.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.xprotectupdater.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.afpstat.plist"];
+  [self.knownAppleFailures
+    addObject: @"com.apple.KerberosHelper.LKDCHelper.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.emond.aslmanager.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.mrt.uiagent.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.accountsd.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.wdhelper.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.suhelperd.plist"];
+  [self.knownAppleFailures addObject: @"com.apple.Kerberos.renew.plist"];
+  [self.knownAppleFailures addObject: @"org.samba.winbindd.plist"];
+  }
+
+// Setup known Apple signature failures.
+- (void) setupKnownAppleSignatureFailures
+  {
+  // Common to all OS versions.
+  [self.knownAppleSignatureFailures
+    addObject: @"com.apple.configureLocalKDC.plist"];
+  [self.knownAppleSignatureFailures addObject: @"com.apple.efax.plist"];
+  [self.knownAppleSignatureFailures
+    addObject: @"com.apple.FileSyncAgent.sshd.plist"];
+  [self.knownAppleSignatureFailures addObject: @"com.apple.locate.plist"];
+  [self.knownAppleSignatureFailures addObject: @"org.cups.cupsd.plist"];
+  [self.knownAppleSignatureFailures addObject: @"org.ntp.ntpd.plist"];
+  [self.knownAppleSignatureFailures addObject: @"ssh.plist"];
+    
+  switch([[Model model] majorOSVersion])
+    {
+    case kSnowLeopard:
+      [self.knownAppleSignatureFailures
+        addObjectsFromArray: [self knownAppleSignatureFailures1006]];
+      break;
+    case kLion:
+      [self.knownAppleSignatureFailures
+        addObjectsFromArray: [self knownAppleSignatureFailures1007]];
+      break;
+    case kMountainLion:
+      [self.knownAppleSignatureFailures
+        addObjectsFromArray: [self knownAppleSignatureFailures1008]];
+      break;
+    case kMavericks:
+      [self.knownAppleSignatureFailures
+        addObjectsFromArray: [self knownAppleSignatureFailures1009]];
+      break;
+    case kYosemite:
+      [self.knownAppleSignatureFailures
+        addObjectsFromArray: [self knownAppleSignatureFailures1010]];
+      break;
+    case kElCapitan:
+      [self.knownAppleSignatureFailures
+        addObjectsFromArray: [self knownAppleSignatureFailures1011]];
+      break;
+    }
+  }
+
+// Setup known Apple signature failures.
+- (NSArray *) knownAppleSignatureFailures1006
+  {
+  NSMutableArray * failures = [NSMutableArray array];
+
+  [failures addObject: @"com.apple.pcastuploader.plist"];
+  [failures addObject: @"com.apple.RemoteDesktop.plist"];
+  [failures addObject: @"org.x.startx.plist"];
+  [failures addObject: @"com.apple.AppleFileServer.plist"];
+  [failures addObject: @"com.apple.NotificationServer.plist"];
+  [failures addObject: @"com.apple.periodic-daily.plist"];
+  [failures addObject: @"com.apple.periodic-monthly.plist"];
+  [failures addObject: @"com.apple.periodic-weekly.plist"];
+  [failures addObject: @"com.apple.smb.sharepoints.plist"];
+  [failures addObject: @"com.apple.systemkeychain.plist"];
+  [failures addObject: @"org.amavis.amavisd.plist"];
+  [failures addObject: @"org.amavis.amavisd_cleanup.plist"];
+  [failures addObject: @"org.samba.winbindd.plist"];
+
+  return failures;
+  }
+
+// Setup known Apple signature failures.
+- (NSArray *) knownAppleSignatureFailures1007
+  {
+  NSMutableArray * failures = [NSMutableArray array];
+
+  [failures addObject: @"com.apple.AirPortBaseStationAgent.plist"];
+  [failures addObject: @"com.apple.pcastuploader.plist"];
+  [failures addObject: @"com.apple.screensharing.MessagesAgent.plist"];
+  [failures addObject: @"com.apple.xgridd.keepalive.plist"];
+  [failures addObject: @"org.x.startx.plist"];
+  [failures addObject: @"com.apple.AppleFileServer.plist"];
+  [failures addObject: @"com.apple.collabd.podcast-cache-updater.plist"];
+  [failures addObject: @"com.apple.efilogin-helper.plist"];
+  [failures addObject: @"com.apple.emlog.plist"];
+  [failures addObject: @"com.apple.NotificationServer.plist"];
+  [failures addObject: @"com.apple.pcastlibraryd.plist"];
+  [failures addObject: @"com.apple.periodic-daily.plist"];
+  [failures addObject: @"com.apple.periodic-monthly.plist"];
+  [failures addObject: @"com.apple.periodic-weekly.plist"];
+  [failures addObject: @"org.amavis.amavisd.plist"];
+  [failures addObject: @"org.amavis.amavisd_cleanup.plist"];
+
+  return failures;
+  }
+
+// Setup known Apple signature failures.
+- (NSArray *) knownAppleSignatureFailures1008
+  {
+  NSMutableArray * failures = [NSMutableArray array];
+
+  [failures addObject: @"com.apple.AirPortBaseStationAgent.plist"];
+  [failures addObject: @"com.apple.emlog.plist"];
+  [failures addObject: @"com.apple.gkreport.plist"];
+  [failures addObject: @"com.apple.periodic-daily.plist"];
+  [failures addObject: @"com.apple.periodic-monthly.plist"];
+  [failures addObject: @"com.apple.periodic-weekly.plist"];
+  [failures addObject: @"org.postgresql.postgres_alt.plist"];
+
+  return failures;
+  }
+
+// Setup known Apple signature failures.
+- (NSArray *) knownAppleSignatureFailures1009
+  {
+  NSMutableArray * failures = [NSMutableArray array];
+
+  [failures addObject: @"com.apple.emlog.plist"];
+  [failures addObject: @"com.apple.gkreport.plist"];
+  [failures addObject: @"com.apple.postgres.plist"];
+  [failures addObject: @"org.apache.httpd.plist"];
+  [failures addObject: @"org.net-snmp.snmpd.plist"];
+
+  return failures;
+  }
+
+// Setup known Apple signature failures.
+- (NSArray *) knownAppleSignatureFailures1010
+  {
+  NSMutableArray * failures = [NSMutableArray array];
+
+  [failures addObject: @"com.apple.Dock.plist"];
+  [failures addObject: @"com.apple.Spotlight.plist"];
+  [failures addObject: @"com.apple.systemprofiler.plist"];
+  [failures addObject: @"com.apple.emlog.plist"];
+  [failures addObject: @"com.apple.gkreport.plist"];
+  [failures addObject: @"com.apple.ManagedClient.enroll.plist"];
+  [failures addObject: @"com.apple.ManagedClient.plist"];
+  [failures addObject: @"com.apple.ManagedClient.startup.plist"];
+  [failures addObject: @"com.apple.postgres.plist"];
+  [failures addObject: @"org.apache.httpd.plist"];
+  [failures addObject: @"org.net-snmp.snmpd.plist"];
+
+  return failures;
+  }
+
+// Setup known Apple signature failures.
+- (NSArray *) knownAppleSignatureFailures1011
+  {
+  NSMutableArray * failures = [NSMutableArray array];
+ 
+  [failures addObject: @"com.apple.emlog.plist"];
+  [failures addObject: @"com.apple.gkreport.plist"];
+  [failures addObject: @"org.apache.httpd.plist"];
+  [failures addObject: @"org.net-snmp.snmpd.plist"];
+  [failures addObject: @"org.postfix.newaliases.plist"];
+
+  return failures;
   }
 
 // Format a list of files.
@@ -405,45 +633,7 @@
   if(![[Model model] ignoreKnownAppleFailures])
     return NO;
     
-  if([file isEqualToString: @"com.apple.mtrecorder.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.spirecorder.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.MRTd.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.MRTa.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.logd.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.xprotectupdater.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.xprotectupdater.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.afpstat.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.KerberosHelper.LKDCHelper.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.emond.aslmanager.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.mrt.uiagent.plist"])
-    return YES;
-
-  // Mountain Lion
-  else if([file isEqualToString: @"com.apple.accountsd.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.wdhelper.plist"])
-    return YES;
-
-  // Snow Leopard
-  else if([file isEqualToString: @"com.apple.suhelperd.plist"])
-    return YES;
-  else if([file isEqualToString: @"com.apple.Kerberos.renew.plist"])
-    return YES;
-  
-  else if([file isEqualToString: @"org.samba.winbindd.plist"])
-    return YES;
-    
-  return NO;
+  return [self.knownAppleFailures containsObject: file];
   }
 
 // Should I ignore these invalid signatures?
@@ -455,202 +645,26 @@
   switch([[Model model] majorOSVersion])
     {
     case kSnowLeopard:
-      if([file isEqualToString: @"com.apple.pcastuploader.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.RemoteDesktop.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.x.startx.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.AppleFileServer.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.efax.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.locate.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.NotificationServer.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-daily.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-monthly.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-weekly.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.smb.sharepoints.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.systemkeychain.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.amavis.amavisd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.amavis.amavisd_cleanup.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.cups.cupsd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.samba.winbindd.plist"])
-        return YES;
-      else if([file isEqualToString: @"ssh.plist"])
-        return YES;
       break;
     case kLion:
-      if([file isEqualToString: @"com.apple.AirPortBaseStationAgent.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.pcastuploader.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.screensharing.MessagesAgent.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.xgridd.keepalive.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.x.startx.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.AppleFileServer.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.collabd.podcast-cache-updater.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.efax.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.efilogin-helper.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.emlog.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.locate.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.NotificationServer.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.pcastlibraryd.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-daily.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-monthly.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-weekly.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.amavis.amavisd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.amavis.amavisd_cleanup.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.cups.cupsd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"ssh.plist"])
-        return YES;
       break;
     case kMountainLion:
-      if([file isEqualToString: @"com.apple.AirPortBaseStationAgent.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.efax.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.emlog.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.gkreport.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.locate.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-daily.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-monthly.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.periodic-weekly.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.cups.cupsd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.postgresql.postgres_alt.plist"])
-        return YES;
-      else if([file isEqualToString: @"ssh.plist"])
-        return YES;
       break;
     case kMavericks:
-      if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.efax.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.emlog.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.gkreport.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.locate.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.postgres.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.apache.httpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.cups.cupsd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.apache.httpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.net-snmp.snmpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"ssh.plist"])
-        return YES;
       break;
     case kYosemite:
-      if([file isEqualToString: @"com.apple.Dock.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.Spotlight.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.systemprofiler.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.configureLocalKDC.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.efax.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.emlog.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.FileSyncAgent.sshd.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.gkreport.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.locate.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.ManagedClient.enroll.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.ManagedClient.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.ManagedClient.startup.plist"])
-        return YES;
-      else if([file isEqualToString: @"com.apple.postgres.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.cups.cupsd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.apache.httpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.net-snmp.snmpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"org.ntp.ntpd.plist"])
-        return YES;
-      else if([file isEqualToString: @"ssh.plist"])
-        return YES;
-        
-      else if([file hasPrefix: @"com.apple.mail"])
+      if([file hasPrefix: @"com.apple.mail"])
         return YES;
       else if([file hasPrefix: @"com.apple.Safari"])
         return YES;
-
+      else if([file hasPrefix: @"com.apple.ActivityMonitor"])
+        return YES;
       break;
     case kElCapitan:
       break;
     }
     
-  return NO;
+  return [self.knownAppleSignatureFailures containsObject: file];
   }
 
 // Is this an Apple file that I expect to see?

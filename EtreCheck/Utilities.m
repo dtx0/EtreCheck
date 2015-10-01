@@ -29,6 +29,7 @@
 
 @synthesize EnglishBundle = myEnglishBundle;
 
+// Signature checking is expensive.
 @synthesize signatureCache = mySignatureCache;
 
 // Return the singeton of shared values.
@@ -766,6 +767,7 @@
   
   switch([[Model model] majorOSVersion])
     {
+    // What a mess.
     case kMavericks:
     case kYosemite:
       [args addObject: @"--no-strict"];
@@ -814,6 +816,7 @@
           stringWithFormat:
             @"%@: code object is not signed", path];
 
+      // The wording has changed slightly on this.
       if([output hasPrefix: expectedOutput])
         result = kNotSigned;
       
