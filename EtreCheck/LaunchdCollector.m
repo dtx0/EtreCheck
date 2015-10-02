@@ -712,10 +712,19 @@
     if([signature isEqualToString: kNotSigned])
       message = NSLocalizedString(@" - No signature!", NULL);
     else if([signature isEqualToString: kExecutableMissing])
-      message =
-        [NSString
-          stringWithFormat:
-            NSLocalizedString(@" - %@: Executable not found!", NULL), path];
+      {
+      if([path length])
+        message =
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(@" - %@: Executable not found!", NULL),
+              path];
+      else
+        message =
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(@" - Executable not found!", NULL)];
+      }
     }
     
   return message;
@@ -724,14 +733,14 @@
 // Collect the executable of the launchd item.
 - (NSArray *) collectLaunchdItemExecutable: (NSDictionary *) plist
   {
-  NSMutableArray * executable = [NSMutableArray array];
+  NSMutableArray * command = [NSMutableArray array];
   
   if(plist)
     {
     NSString * program = [plist objectForKey: @"Program"];
     
     if(program)
-      [executable addObject: program];
+      [command addObject: program];
       
     NSArray * arguments = [plist objectForKey: @"ProgramArguments"];
     
@@ -741,14 +750,17 @@
         NSString * argument = arguments[0];
         
         if(![argument isEqualToString: [program lastPathComponent]])
-          [executable addObject: argument];
+          [command addObject: argument];
           
         for(int i = 1; i < arguments.count; ++i)
-          [executable addObject: arguments[i]];
+          [command addObject: arguments[i]];
       }
     }
     
-  return executable;
+  if(![command count])
+    [command addObject: @""];
+    
+  return command;
   }
 
 // Is the executable valid?

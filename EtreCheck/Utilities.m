@@ -754,6 +754,9 @@
 // Verify the signature of an Apple executable.
 + (NSString *) checkAppleExecutable: (NSString *) path
   {
+  if(![path length])
+    return kExecutableMissing;
+    
   if(![[Model model] checkAppleSignatures])
     return kSignatureValid;
     

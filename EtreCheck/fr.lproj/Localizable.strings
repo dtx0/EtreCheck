@@ -219,9 +219,11 @@
 " - Invalid signature!" = " - Signature invalide !";
 " - No signature!" = "Aucune signature !";
 " - %@: Executable not found!" = " - %@ : Logiciel non-trouvé";
+" - Executable not found!" = " - Logiciel non-trouvé";
 "Help" = "Aide";
 "Print Report" = "Imprimer le rapport";
 "Share Report" = "Partager le rapport";
 "Copy" = "Copier";
 "Copy to clipboard" = "Copier au presse-papiers";
 "Checking for hidden apps" = "Vérification des apps cachés";
+
