@@ -620,6 +620,7 @@
         jobStatus = kStatusNotLoaded;
         
       [status setObject: jobStatus forKey: kStatus];
+      [status setObject: label forKey: kBundleID];
       
       return status;
       }
@@ -669,35 +670,74 @@
   }
 
 // Is this an Apple file that I expect to see?
-- (bool) isAppleFile: (NSString *) file
+- (bool) isAppleFile: (NSString *) bundleID
   {
-  if([file hasPrefix: @"com.apple.xpc.launchd.oneshot.0x"])
-    return NO;
-    
-  if([file hasPrefix: @"com.apple."])
+  if([bundleID hasPrefix: @"com.apple."])
     return YES;
     
-  if([self.appleLaunchd containsObject: file])
+  if([self.appleLaunchd containsObject: bundleID])
     return YES;
     
   if([[Model model] majorOSVersion] < kYosemite)
     {
-    if([file hasPrefix: @"0x"])
-      if([file rangeOfString: @".anonymous."].location != NSNotFound)
+    if([bundleID hasPrefix: @"0x"])
+      {
+      if([bundleID rangeOfString: @".anonymous."].location != NSNotFound)
         return YES;
-    if([file hasPrefix: @"[0x"])
-      if([file rangeOfString: @".com.apple."].location != NSNotFound)
+      }
+    else if([bundleID hasPrefix: @"[0x"])
+      {
+      if([bundleID rangeOfString: @".com.apple."].location != NSNotFound)
         return YES;
+      }
     }
     
   if([[Model model] majorOSVersion] < kLion)
     {
-    if([file hasPrefix: @"0x1"])
-      if([file rangeOfString: @".mach_init."].location != NSNotFound)
+    if([bundleID hasPrefix: @"0x1"])
+      if([bundleID rangeOfString: @".mach_init."].location != NSNotFound)
         return YES;
     }
 
   return NO;
+  }
+
+// Update a funky new dynamic task.
+- (void) updateDynamicTask: (NSMutableDictionary *) status
+  {
+  if([[Model model] majorOSVersion] < kYosemite)
+    return;
+    
+  NSString * bundleID = [status objectForKey: kBundleID];
+  
+  unsigned int UID = getuid();
+
+  NSString * serviceName =
+    [NSString stringWithFormat: @"gui/%d/%@", UID, bundleID];
+  
+  NSArray * args =
+    @[
+      @"print",
+      serviceName
+    ];
+  
+  NSData * data =
+    [Utilities execute: @"/bin/launchctl" arguments: args];
+  
+  NSArray * lines = [Utilities formatLines: data];
+
+  for(NSString * line in lines)
+    {
+    NSString * trimmedLine =
+      [line
+        stringByTrimmingCharactersInSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      
+    if([trimmedLine isEqualToString: @"app = 1"])
+      status[kApp] = @YES;
+    else if([trimmedLine hasPrefix: @"bundle id = "])
+      status[kBundleID] = [trimmedLine substringFromIndex: 12];
+    }
   }
 
 // Format a codesign response.

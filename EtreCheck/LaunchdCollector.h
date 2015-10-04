@@ -17,6 +17,8 @@
 #define kFilename @"filename"
 #define kExecutable @"executable"
 #define kCommand @"command"
+#define kBundleID @"bundleid"
+#define kApp @"app"
 #define kSupportURL @"supporturl"
 #define kDetailsURL @"detailsurl"
 #define kPlist @"plist"
@@ -58,6 +60,9 @@
 
 // Collect the actual executable from a command.
 - (NSString *) collectLaunchdItemExecutable: (NSArray *) command;
+
+// Update a funky new dynamic task.
+- (void) updateDynamicTask: (NSMutableDictionary *) status;
 
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) file;

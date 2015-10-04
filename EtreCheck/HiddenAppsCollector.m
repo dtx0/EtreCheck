@@ -120,7 +120,7 @@
     if([status[kIgnored] boolValue])
       continue;
       
-    [self updateStatus: status forBundle: bundleID];
+    [self updateDynamicStatus: status];
     
     if([status[kIgnored] boolValue])
       continue;
@@ -149,9 +149,12 @@
   }
 
 // Get a status and expand with all the information I can find.
-- (void) updateStatus: (NSMutableDictionary *) status
-  forBundle: (NSString *) bundleID
+- (void) updateDynamicStatus: (NSMutableDictionary *) status
   {
+  [self updateDynamicTask: status];
+  
+  NSString * bundleID = status[kBundleID];
+  
   NSNumber * ignore =
     [NSNumber numberWithBool: [[Model model] hideAppleTasks]];
   
@@ -179,7 +182,7 @@
     if([self ignoreInvalidSignatures: bundleID])
       status[kIgnored] = ignore;
     }
-  else if([self isApp: bundleID])
+  else if([status[kApp] boolValue])
     status[kIgnored] = ignore;
   }
 
@@ -219,80 +222,6 @@
     }
     
   return executable;
-  }
-
-// Is the bundle an App Store item?
-- (bool) isApp: (NSString *) bundleID
-  {
-  if([[Model model] majorOSVersion] < kYosemite)
-    return [self isEtreCheck: bundleID];
-    
-  unsigned int UID = getuid();
-
-  NSString * serviceName =
-    [NSString stringWithFormat: @"gui/%d/%@", UID, bundleID];
-  
-  NSArray * args =
-    @[
-      @"print",
-      serviceName
-    ];
-  
-  NSData * data =
-    [Utilities execute: @"/bin/launchctl" arguments: args];
-  
-  NSArray * lines = [Utilities formatLines: data];
-
-  for(NSString * line in lines)
-    {
-    NSString * trimmedLine =
-      [line
-        stringByTrimmingCharactersInSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      
-    if([trimmedLine isEqualToString: @"app = 1"])
-      return YES;
-    }
-    
-  return NO;
-  }
-
-// Is the bundle EtreCheck itself?
-- (bool) isEtreCheck: (NSString *) bundleID
-  {
-  if([[Model model] majorOSVersion] >= kYosemite)
-    return NO;
-    
-  NSArray * args =
-    @[
-      @"list",
-      bundleID
-    ];
-  
-  NSData * data =
-    [Utilities execute: @"/bin/launchctl" arguments: args];
-  
-  NSArray * lines = [Utilities formatLines: data];
-
-  NSProcessInfo *processInfo = [NSProcessInfo processInfo];
-
-  int processID = [processInfo processIdentifier];
-
-  NSString * PIDLine =
-    [NSString stringWithFormat: @"\"PID\" = %d;", processID];
-    
-  for(NSString * line in lines)
-    {
-    NSString * trimmedLine =
-      [line
-        stringByTrimmingCharactersInSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      
-    if([trimmedLine isEqualToString: PIDLine])
-      return YES;
-    }
-    
-  return NO;
   }
 
 // Include any extra content that may be useful.
