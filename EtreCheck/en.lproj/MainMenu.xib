@@ -568,7 +568,6 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.ignoreKnownAppleFailures" id="60Y-XL-eDa"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="self.ignoreKnownAppleFailures" id="bQO-Du-aEi"/>
                             <outlet property="nextKeyView" destination="lrR-aP-PG2" id="6Td-Ju-M0R"/>
                         </connections>
@@ -592,7 +591,6 @@
                         </buttonCell>
                         <connections>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="YfQ-7Z-BVU"/>
-                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.hideAppleTasks" id="aW0-sa-Srs"/>
                             <outlet property="nextKeyView" destination="lrR-aP-PG2" id="jmo-Yt-m6t"/>
                         </connections>
                     </button>
