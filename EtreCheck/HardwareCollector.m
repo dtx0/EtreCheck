@@ -547,11 +547,6 @@
     specificModel = @"MacBookPro";
     target = 9;
     }
-  else if([model hasPrefix: @"MacBook"])
-    {
-    specificModel = @"MacBook";
-    target = 8;
-    }
   else if([model hasPrefix: @"iMac"])
     {
     specificModel = @"iMac";
@@ -566,6 +561,11 @@
     {
     specificModel = @"MacBookAir";
     target = 5;
+    }
+  else if([model hasPrefix: @"MacBook"])
+    {
+    specificModel = @"MacBook";
+    target = 8;
     }
   else if([model hasPrefix: @"Macmini"])
     {
