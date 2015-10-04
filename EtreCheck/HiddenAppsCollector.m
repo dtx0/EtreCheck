@@ -191,12 +191,12 @@
   
   if(!command)
     {
-    command = [self collectLaunchdItemExecutable: status];
+    command = [self collectLaunchdItemCommand: status];
     
     if(command)
       {
       status[kCommand] = command;
-      status[kExecutable] = command[0];
+      status[kExecutable] = [self collectLaunchdItemExecutable: command];
       }
     }
     

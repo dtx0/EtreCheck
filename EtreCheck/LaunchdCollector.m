@@ -386,6 +386,7 @@
   [failures addObject: @"org.apache.httpd.plist"];
   [failures addObject: @"org.net-snmp.snmpd.plist"];
   [failures addObject: @"org.postfix.newaliases.plist"];
+  [failures addObject: @"com.apple.airplaydiagnostics.server.mac.plist"];
 
   return failures;
   }
@@ -544,15 +545,15 @@
     
   NSString * jobStatus = status[kStatus];
   
-  // Get the executable.
-  NSArray * command = [self collectLaunchdItemExecutable: plist];
+  // Get the command.
+  NSArray * command = [self collectLaunchdItemCommand: plist];
   
   // See if the executable is valid.
   // Don't bother with this.
   //if(![self isValidExecutable: executable])
   //  jobStatus = kStatusInvalid;
     
-  NSString * executable = [command firstObject];
+  NSString * executable = [self collectLaunchdItemExecutable: command];
   NSString * name = [executable lastPathComponent];
   
   NSAttributedString * detailsURL = nil;
@@ -670,6 +671,9 @@
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) file
   {
+  if([file hasPrefix: @"com.apple.xpc.launchd.oneshot.0x"])
+    return NO;
+    
   if([file hasPrefix: @"com.apple."])
     return YES;
     
@@ -730,8 +734,8 @@
   return message;
   }
 
-// Collect the executable of the launchd item.
-- (NSArray *) collectLaunchdItemExecutable: (NSDictionary *) plist
+// Collect the command of the launchd item.
+- (NSArray *) collectLaunchdItemCommand: (NSDictionary *) plist
   {
   NSMutableArray * command = [NSMutableArray array];
   
@@ -761,6 +765,43 @@
     [command addObject: @""];
     
   return command;
+  }
+
+// Collect the actual executable from a command.
+- (NSString *) collectLaunchdItemExecutable: (NSArray *) command
+  {
+  NSString * executable = [command firstObject];
+  
+  BOOL sandboxExec = NO;
+  
+  if([executable isEqualToString: @"sandbox-exec"])
+    sandboxExec = YES;
+
+  if([executable isEqualToString: @"/usr/bin/sandbox-exec"])
+    sandboxExec = YES;
+    
+  if(sandboxExec)
+    {
+    NSUInteger argumentCount = command.count;
+    
+    for(NSUInteger i = 1; i < argumentCount; ++i)
+      {
+      NSString * argument = [command objectAtIndex: i];
+      
+      if([argument isEqualToString: @"-f"])
+        ++i;
+      else if([argument isEqualToString: @"-n"])
+        ++i;
+      else if([argument isEqualToString: @"-p"])
+        ++i;
+      else if([argument isEqualToString: @"-D"])
+        ++i;
+      else
+        executable = argument;
+      }
+    }
+    
+  return executable;
   }
 
 // Is the executable valid?

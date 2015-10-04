@@ -53,8 +53,11 @@
 // Get the job status.
 - (NSMutableDictionary *) collectJobStatus: (NSDictionary *) plist;
 
-// Collect the executable of the launchd item.
-- (NSArray *) collectLaunchdItemExecutable: (NSDictionary *) plist;
+// Collect the command of the launchd item.
+- (NSArray *) collectLaunchdItemCommand: (NSDictionary *) plist;
+
+// Collect the actual executable from a command.
+- (NSString *) collectLaunchdItemExecutable: (NSArray *) command;
 
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) file;
