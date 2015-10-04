@@ -182,8 +182,6 @@
     if([self ignoreInvalidSignatures: bundleID])
       status[kIgnored] = ignore;
     }
-  else if([status[kApp] boolValue])
-    status[kIgnored] = ignore;
   }
 
 // Get the executable for the app.
