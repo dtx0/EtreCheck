@@ -72,6 +72,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize helpManager = myHelpManager;
 @synthesize adwareManager = myAdwareManager;
 @synthesize reportAvailable = myReportAvailable;
+@synthesize reportStartTime = myReportStartTime;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic checkAppleSignatures;
@@ -375,6 +376,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   [[NSApplication sharedApplication] endSheet: self.userParametersPanel];
   
+  self.reportStartTime = [NSDate date];
+  
   [self startProgressTimer];
   
   dispatch_async(
@@ -482,6 +485,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
          [[Utilities shared] boldFont], NSFontAttributeName, nil]];
     
   [self.log
+    appendString:
+      [NSString
+        stringWithFormat:
+          NSLocalizedString(@"Runtime %@\n", NULL), [self elapsedTime]]
+    attributes:
+      [NSDictionary
+       dictionaryWithObjectsAndKeys:
+         [[Utilities shared] boldFont], NSFontAttributeName, nil]];
+
+  [self.log
     appendString: NSLocalizedString(@"downloadetrecheck", NULL)
     attributes:
       [NSDictionary
@@ -569,6 +582,20 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [dateFormatter release];
 
   return dateString;
+  }
+
+// Get the elapsed time as a string.
+- (NSString *) elapsedTime
+  {
+  NSDate * current = [NSDate date];
+  
+  NSTimeInterval interval =
+    [current timeIntervalSinceDate: self.reportStartTime];
+
+  NSUInteger minutes = (NSUInteger)interval / 60;
+  NSUInteger seconds = (NSUInteger)interval - (minutes * 60);
+  
+  return [NSString stringWithFormat: @"%ld:%02ld", minutes, seconds];
   }
 
 // Setup notification handlers.

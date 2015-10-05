@@ -58,6 +58,7 @@
   AdwareManager * myAdwareManager;
   
   BOOL myReportAvailable;
+  NSDate * myReportStartTime;
   }
   
 @property (retain) IBOutlet NSWindow * window;
@@ -94,6 +95,7 @@
 @property (retain) IBOutlet HelpManager * helpManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
 @property (assign) BOOL reportAvailable;
+@property (retain) NSDate * reportStartTime;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;

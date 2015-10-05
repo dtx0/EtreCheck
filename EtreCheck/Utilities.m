@@ -796,7 +796,7 @@
   NSMutableArray * args = [NSMutableArray array];
   
   [args addObject: @"-vv"];
-  [args addObject: @"-R=anchor apple"];
+  [args addObject: @"-R=anchor apple generic"];
   
   switch([[Model model] majorOSVersion])
     {
