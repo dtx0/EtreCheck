@@ -595,7 +595,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   NSUInteger minutes = (NSUInteger)interval / 60;
   NSUInteger seconds = (NSUInteger)interval - (minutes * 60);
   
-  return [NSString stringWithFormat: @"%ld:%02ld", minutes, seconds];
+  return
+    [NSString
+      stringWithFormat:
+        @"%ld:%02ld", (unsigned long)minutes, (unsigned long)seconds];
   }
 
 // Setup notification handlers.

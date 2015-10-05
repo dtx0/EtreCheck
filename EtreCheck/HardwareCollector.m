@@ -209,6 +209,8 @@
       
   NSString * language = NSLocalizedString(@"en", NULL);
 
+  [self.result appendString: @"    "];
+  
   [self.result
     appendAttributedString:
       [Utilities
@@ -216,7 +218,9 @@
           [self technicalSpecificationsURL: language]
         title:
           NSLocalizedString(
-            @"    [Click for Technical Specifications]\n", NULL)]];
+            @"[Click for Technical Specifications]\n", NULL)]];
+
+  [self.result appendString: @"    "];
 
   [self.result
     appendAttributedString:
@@ -225,7 +229,7 @@
           [self userGuideURL: language]
         title:
           NSLocalizedString(
-            @"    [Click for User Guide]\n", NULL)]];
+            @"[Click for User Guide]\n", NULL)]];
   }
 
 // Try to get the marketing name directly from Apple.
@@ -410,6 +414,8 @@
 
   NSString * language = NSLocalizedString(@"en", NULL);
 
+  [self.result appendString: @"    "];
+
   if(upgradeable)
     [self.result
       appendAttributedString:
@@ -417,7 +423,7 @@
           buildURL: [self memoryUpgradeURL: language]
           title:
             NSLocalizedString(
-              @"    [Click for upgrade instructions]\n", NULL)]];
+              @"[Click for upgrade instructions]\n", NULL)]];
 
   if(details)
     {

@@ -16,6 +16,8 @@
 @synthesize result = myResult;
 @synthesize complete = myComplete;
 @dynamic done;
+@synthesize progressStart = myProgressStart;
+@synthesize progressEnd = myProgressEnd;
 
 // Is this collector complete?
 - (bool) done
