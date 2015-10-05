@@ -441,10 +441,21 @@
   NSArray * sortedPaths =
     [paths sortedArrayUsingSelector: @selector(compare:)];
   
+  double progress = self.progressStart;
+  double increment = (self.progressEnd - self.progressStart) / paths.count;
+  
   for(NSString * path in sortedPaths)
+    {
+    [[NSNotificationCenter defaultCenter]
+      postNotificationName: kProgressUpdate
+      object: [NSNumber numberWithDouble: progress + increment]];      
+
     if([self formatPropertyListFile: path output: formattedOutput])
       haveOutput = YES;
-  
+      
+    progress += increment;
+    }
+    
   if(!haveOutput)
     return nil;
     

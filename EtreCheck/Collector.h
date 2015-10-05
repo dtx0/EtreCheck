@@ -15,6 +15,8 @@
   NSMutableAttributedString * myResult;
   NSNumberFormatter * myFormatter;
   dispatch_semaphore_t myComplete;
+  double myProgressStart;
+  double myProgressEnd;
   }
 
 // The name of this collector.
@@ -29,6 +31,12 @@
 // Allow people to know when a collection is complete.
 @property (assign) dispatch_semaphore_t complete;
 @property (readonly) bool done;
+
+@property (assign) double progressStart;
+@property (assign) double progressEnd;
+
+// Setup the progress.
+- (void) progressStart: (double) from end: (double) to;
 
 // Perform the collection.
 - (void) collect;

@@ -190,12 +190,24 @@
 // Execute an external program and return the results.
 + (NSData *) execute: (NSString *) program arguments: (NSArray *) args
   {
-  return [self execute: program arguments: args error: NULL];
+  return [self execute: program arguments: args options: nil error: NULL];
   }
 
 // Execute an external program and return the results.
 + (NSData *) execute: (NSString *) program
   arguments: (NSArray *) args error: (NSString **) error
+  {
+  return [self execute: program arguments: args options: nil error: error];
+  }
+
+// Execute an external program, with options, return the results, and
+// collect any errors.
+// Supported options:
+//  kExecutableTimeout - timeout for external programs.
++ (NSData *) execute: (NSString *) program
+  arguments: (NSArray *) args
+  options: (NSDictionary *) options
+  error: (NSString **) error
   {
   // Create pipes for handling communication.
   NSPipe * outputPipe = [NSPipe new];
@@ -222,9 +234,18 @@
     {
     [task launch];
     
+    int64_t timeout = 60 * 5 * NSEC_PER_SEC;
+    
+    NSNumber * timeoutValue = options[kExecutableTimeout];
+    
+    if(timeoutValue)
+      timeout = [timeoutValue unsignedLongLongValue] * NSEC_PER_SEC;
+      
+    //NSLog(@"Running %@ %@ with timeout %lld", program, args, timeout);
+    
     // Timeout after 5 minutes.
     dispatch_after(
-      dispatch_time(DISPATCH_TIME_NOW, (int64_t)(60 * 5 * NSEC_PER_SEC)),
+      dispatch_time(DISPATCH_TIME_NOW, timeout),
       dispatch_get_main_queue(),
       ^{
         if([task isRunning])
@@ -264,6 +285,12 @@
     
   return result;
   }
+
+/* TODO: I could log long-running tasks with this:
+
+  [[NSNotificationCenter defaultCenter]
+    postNotificationName: kStatusUpdate object: status];
+*/
 
 // Format text into an array of trimmed lines separated by newlines.
 + (NSArray *) formatLines: (NSData *) data
@@ -780,11 +807,21 @@
       break;
     }
     
+  NSMutableDictionary * options = [NSMutableDictionary dictionary];
+  
   [args addObject: path];
 
+  // Give Xcode a 10-minute timeout. 
+  if([[path lastPathComponent] isEqualToString: @"Xcode"])
+    options[kExecutableTimeout] = [NSNumber numberWithInt: 60 * 10];
+    
   NSString * output = nil;
   
-  [Utilities execute: @"/usr/bin/codesign" arguments: args error: & output];
+  [Utilities
+    execute: @"/usr/bin/codesign"
+    arguments: args
+    options: options
+    error: & output];
   
   //NSLog(@"/usr/bin/codesign %@\n%@", args, output);
   result = [Utilities parseSignature: output forPath: path];

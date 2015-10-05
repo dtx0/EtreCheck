@@ -48,6 +48,17 @@
   [super dealloc];
   }
 
+// Setup the progress.
+- (void) progressStart: (double) from end: (double) to
+  {
+  self.progressStart = from;
+  self.progressEnd = to;
+  
+  [[NSNotificationCenter defaultCenter]
+    postNotificationName: kProgressUpdate
+    object: [NSNumber numberWithDouble: self.progressEnd]];      
+  }
+
 // Perform the collection.
 - (void) collect
   {

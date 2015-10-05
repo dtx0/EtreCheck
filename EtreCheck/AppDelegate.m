@@ -642,7 +642,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      [self updateProgress: self.nextProgressIncrement];
+      //[self updateProgress: self.nextProgressIncrement];
       
       self.nextProgressIncrement = [[notification object] doubleValue];
     });

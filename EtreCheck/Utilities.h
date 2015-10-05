@@ -8,6 +8,8 @@
 
 #define kStatusUpdate @"statusupdate"
 #define kProgressUpdate @"progressupdate"
+#define kCurrentProgress @"currentprogress"
+#define kNextProgress @"nextprogress"
 #define kFoundApplication @"foundapplication"
 #define kShowMachineIcon @"showmachineicon"
 #define kCollectionStatus @"collectionstatus"
@@ -17,6 +19,8 @@
 #define kSignatureValid @"signaturevalid"
 #define kSignatureNotValid @"signataurenotvalid"
 #define kExecutableMissing @"executablemissing"
+
+#define kExecutableTimeout @"executabletimeout"
 
 // Assorted utilities.
 @interface Utilities : NSObject
@@ -70,6 +74,15 @@
 // Execute an external program, return the results, and collect any errors.
 + (NSData *) execute: (NSString *) program
   arguments: (NSArray *) args error: (NSString **) error;
+
+// Execute an external program, with options, return the results, and
+// collect any errors.
+// Supported options:
+//  kExecutableTimeout - timeout for external programs.
++ (NSData *) execute: (NSString *) program
+  arguments: (NSArray *) args
+  options: (NSDictionary *) options
+  error: (NSString **) error;
 
 // Format text into an array of trimmed lines separated by newlines.
 + (NSArray *) formatLines: (NSData *) data;
