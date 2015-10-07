@@ -267,6 +267,11 @@
   NSDate * oldestBackup = nil;
   NSDate * lastBackup = nil;
   
+  NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
+  [dateFormatter setDateStyle: NSDateFormatterShortStyle];
+  [dateFormatter setTimeStyle: NSDateFormatterShortStyle];
+  [dateFormatter setTimeZone: [NSTimeZone localTimeZone]];
+
   if([snapshots count])
     {
     snapshotCount =
@@ -290,10 +295,14 @@
   [destination setObject: snapshotCount forKey: kSnapshotcount];
   
   if(oldestBackup)
-    [destination setObject: oldestBackup forKey: kOldestBackup];
+    [destination
+      setObject: [dateFormatter stringFromDate: oldestBackup]
+      forKey: kOldestBackup];
     
   if(lastBackup)
-    [destination setObject: lastBackup forKey: kLastbackup];
+    [destination
+      setObject: [dateFormatter stringFromDate: lastBackup]
+      forKey: kLastbackup];
   }
 
 // Consolidate a single destination.
@@ -562,8 +571,17 @@
   [self.result
     appendString: NSLocalizedString(@"    Destinations:\n", NULL)];
 
+  bool first = YES;
+  
   for(NSString * destinationID in destinations)
+    {
+    if(!first)
+      [self.result appendString: @"\n"];
+      
     [self printDestination: [destinations objectForKey: destinationID]];
+    
+    first = NO;
+    }
   }
 
 // Print a Time Machine destination.

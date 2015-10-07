@@ -575,7 +575,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
   [dateFormatter setDateStyle: NSDateFormatterShortStyle];
   [dateFormatter setTimeStyle: NSDateFormatterShortStyle];
-  [dateFormatter setLocale: [NSLocale localeWithLocaleIdentifier: @"en"]];
   
   NSString * dateString = [dateFormatter stringFromDate: [NSDate date]];
   
