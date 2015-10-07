@@ -64,7 +64,7 @@
   NSData * result =
     [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
   
-  // result = [NSData dataWithContentsOfFile: @"/tmp/serialata.xml"];
+  // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPSerialATADataType.xml"];
   
   if(result)
     {

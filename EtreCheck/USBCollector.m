@@ -41,7 +41,7 @@
   NSData * result =
     [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
   
-  // result = [NSData dataWithContentsOfFile: @"/tmp/usb.xml"];
+  // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPUSBDataType.xml"];
   
   if(result)
     {
@@ -117,9 +117,10 @@
   if(devices)
     for(NSDictionary * device in devices)
       [self printUSBDevice: device indent: indent found: found];
-
-  // Print all volumes on the device.
-  [self printDiskVolumes: device];
+  
+  else
+    // Print all volumes on the device.
+    [self printDiskVolumes: device];
   }
 
 @end

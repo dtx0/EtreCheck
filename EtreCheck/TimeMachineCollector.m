@@ -102,7 +102,7 @@
   // settings =
   //   [defaults
   //     persistentDomainForName:
-  //       @"/tmp/com.apple.TimeMachine.plist"];
+  //       @"/tmp/etrecheck/com.apple.TimeMachine.plist"];
 
   [defaults release];
   
@@ -243,7 +243,7 @@
   
   NSData * result = [Utilities execute: @"/usr/bin/tmutil" arguments: args];
 
-  // result = [NSData dataWithContentsOfFile: @"/tmp/tm.xml"];
+  // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/tmutil.xml"];
   
   if(result)
     {
