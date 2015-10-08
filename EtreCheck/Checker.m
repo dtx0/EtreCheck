@@ -178,42 +178,32 @@
   {
   NSArray * machines =
     @[
-      @"MacBookPro7,1",
-      @"MacBookPro8,2",
-      @"MacBookPro8,3",
-      @"iMac13,1",
-      @"iMac13,2",
-      @"MacBookPro10,2",
-      @"MacBookPro11,2",
-      @"Macmini1,1",
-      @"Macmini4,1",
-      @"Macmini5,1",
-      @"MacBook5,2",
-      @"MacBook8,1",
-      @"MacPro2,1",
-      @"MacPro6,1",
-      @"MacBookAir3,1",
-      @"MacBookAir3,2" 
+      @"com.apple.macbookpro-13-unibody",
+      @"com.apple.macbookpro-15-unibody",
+      @"com.apple.macbookpro-17-unibody",
+      @"com.apple.imac-unibody-21-no-optical",
+      @"com.apple.imac-unibody-27-no-optical",
+      @"com.apple.macbookpro-13-retina-display",
+      @"com.apple.macbookpro-13-retina-display",
+      @"com.apple.macmini",
+      @"com.apple.macmini-unibody",
+      @"com.apple.macmini-unibody-no-optical",
+      @"com.apple.macbook-white",
+      @"com.apple.macbook-retina-silver",
+      @"com.apple.macpro",
+      @"com.apple.macpro-cylinder",
+      @"com.apple.macbookair-11-unibody",
+      @"com.apple.macbookair-13-unibody"
     ];
     
   NSMutableArray * machineIcons = [NSMutableArray array];
   
   for(NSString * code in machines)
     {
-    bool showIcon = NO;
-    
-    if([code hasPrefix: @"Mac"])
-      showIcon = YES;
-    else if([code hasPrefix: @"iMac"])
-      showIcon = YES;
-      
-    if(showIcon)
-      {
-      NSImage * machineIcon = [hardwareCollector findMachineIcon: code];
-    
-      if(machineIcon)
-        [machineIcons addObject: machineIcon];
-      }
+    NSImage * machineIcon = [hardwareCollector findMachineIcon: code];
+  
+    if(machineIcon)
+      [machineIcons addObject: machineIcon];
     }
     
   return machineIcons;

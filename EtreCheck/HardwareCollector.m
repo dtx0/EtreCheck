@@ -348,28 +348,11 @@
 // Find a machine icon.
 - (NSImage *) findMachineIcon: (NSString *) code
   {
-  NSDictionary * machineInformation = [self.properties objectForKey: code];
-      
-  // Load the machine image.
-  NSString * iconPath =
-    [machineInformation objectForKey: @"hardwareImageName"];
+  NSImage * icon = [[NSWorkspace sharedWorkspace] iconForFileType: code];
   
-  // Don't give up.
-  if(!iconPath)
-    {
-    iconPath = NSLocalizedStringFromTable(code, @"machineIcons", NULL);
-    
-    if(iconPath)
-      {
-      if(![[NSFileManager defaultManager] fileExistsAtPath: iconPath])
-        iconPath = nil;
-      }
-    }
-    
-  if(!iconPath)
-    return nil;
+  [icon setSize: NSMakeSize(1024, 1024)];
 
-  return [[[NSImage alloc] initWithContentsOfFile: iconPath] autorelease];
+  return icon;
   }
 
 // Print memory, flagging insufficient amounts.
