@@ -793,6 +793,11 @@
   if(result)
     return result;
     
+  // If I am hiding Apple tasks, then skip Xcode.
+  if([[Model model] hideAppleTasks])
+    if([[path lastPathComponent] isEqualToString: @"Xcode"])
+      return kSignatureSkipped;
+
   NSMutableArray * args = [NSMutableArray array];
   
   [args addObject: @"-vv"];
@@ -811,7 +816,7 @@
   
   [args addObject: path];
 
-  // Give Xcode a 10-minute timeout. 
+  // Give Xcode a 10-minute timeout.
   if([[path lastPathComponent] isEqualToString: @"Xcode"])
     options[kExecutableTimeout] = [NSNumber numberWithInt: 60 * 10];
     

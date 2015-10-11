@@ -11,6 +11,7 @@
   {
   NSDictionary * myProperties;
   NSImage * myMachineIcon;
+  NSImage * myGenericDocumentIcon;
   NSString * myMarketingName;
   NSString * myEnglishMarketingName;
   }
@@ -20,6 +21,9 @@
 
 // The machine icon.
 @property (retain) NSImage * machineIcon;
+
+// A generic document icon in case a machine image lookup fails.
+@property (retain) NSImage * genericDocument;
 
 // The Apple Marketing name.
 @property (retain) NSString * marketingName;

@@ -28,6 +28,7 @@
 		A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3C19AC0AA3003084C8 /* Utilities.m */; };
 		A5257D4019AC10E3003084C8 /* Checker.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3F19AC10E3003084C8 /* Checker.m */; };
 		A52986A81BB89C160040C63D /* HiddenAppsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A52986A71BB89C160040C63D /* HiddenAppsCollector.m */; settings = {ASSET_TAGS = (); }; };
+		A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */; settings = {ASSET_TAGS = (); }; };
 		A5409E9B186F271500B1727E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5409E9A186F271500B1727E /* SystemConfiguration.framework */; };
 		A540C6FE1873D5F800497BDE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A540C7001873D5F800497BDE /* Localizable.strings */; };
 		A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A546BFB91A5348880032C354 /* linkhelp.rtf */; };
@@ -125,6 +126,8 @@
 		A5257D3F19AC10E3003084C8 /* Checker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Checker.m; sourceTree = "<group>"; };
 		A52986A61BB89C160040C63D /* HiddenAppsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HiddenAppsCollector.h; sourceTree = "<group>"; };
 		A52986A71BB89C160040C63D /* HiddenAppsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HiddenAppsCollector.m; sourceTree = "<group>"; };
+		A52C62BD1BCAD4D100B8C364 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/machineIcons.strings; sourceTree = "<group>"; };
+		A52C62BF1BCAD4D900B8C364 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/machineIcons.strings; sourceTree = "<group>"; };
 		A5409E9A186F271500B1727E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		A540C6FF1873D5F800497BDE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A540C7011873D5FC00497BDE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -447,6 +450,7 @@
 				A5B6BD5A19D7AAF900C48C37 /* Media.xcassets */,
 				A55BC17515BF987D00D42EF1 /* EtreCheck-Info.plist */,
 				A54DA5711A3117E100F09B19 /* adware.plist */,
+				A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */,
 				A5E9E2C91A2669A600309185 /* Collectors.strings */,
 				A5E9E2C21A2522A600309185 /* Help.strings */,
 				A55BC17615BF987D00D42EF1 /* InfoPlist.strings */,
@@ -535,6 +539,7 @@
 				A5B6BD5B19D7AAF900C48C37 /* Media.xcassets in Resources */,
 				A540C6FE1873D5F800497BDE /* Localizable.strings in Resources */,
 				A5E9E2C71A2669A600309185 /* Collectors.strings in Resources */,
+				A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */,
 				A55BC17815BF987D00D42EF1 /* InfoPlist.strings in Resources */,
 				A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */,
 				A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */,
@@ -639,6 +644,15 @@
 				A51BD14C1A7D7784000AAABA /* fr */,
 			);
 			name = adwarehelp.rtf;
+			sourceTree = "<group>";
+		};
+		A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A52C62BD1BCAD4D100B8C364 /* en */,
+				A52C62BF1BCAD4D900B8C364 /* fr */,
+			);
+			name = machineIcons.strings;
 			sourceTree = "<group>";
 		};
 		A540C7001873D5F800497BDE /* Localizable.strings */ = {

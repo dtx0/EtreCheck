@@ -677,6 +677,9 @@
       break;
     }
     
+  if([file hasPrefix: @"com.apple.dt.Xcode"])
+    return YES;
+    
   return [self.knownAppleSignatureFailures containsObject: file];
   }
 

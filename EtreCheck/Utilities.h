@@ -19,6 +19,7 @@
 #define kSignatureValid @"signaturevalid"
 #define kSignatureNotValid @"signataurenotvalid"
 #define kExecutableMissing @"executablemissing"
+#define kSignatureSkipped @"signatureskipped"
 
 #define kExecutableTimeout @"executabletimeout"
 
