@@ -874,8 +874,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   if(frame.size.height < 512)
     {
-    frame.origin.y -= (512 - frame.size.height)/2;
-    frame.size.height = 512;
+    frame.size.height += 256;
+    frame.origin.y -= 200;
     }
     
   double duration = [window animationResizeTime: frame];
