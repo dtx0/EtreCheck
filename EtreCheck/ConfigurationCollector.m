@@ -129,7 +129,7 @@
       }
     
     // All the beta testers have an El Capitan file.
-    if(![[Model model] ignoreKnownAppleFailures])
+    if([[Model model] ignoreKnownAppleFailures])
       if((version == kYosemite) && (attributes.fileSize == 2299))
         expectedSize = 2299;
 
