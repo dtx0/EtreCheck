@@ -970,6 +970,11 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       error: & error];
 
   [pasteboard setData: rtfData forType: NSPasteboardTypeRTF];
+  
+  /* Poison pill
+  
+  [self.logView
+    writePDFInsideRect: self.logView.bounds toPasteboard: pasteboard]; */
   }
   
 // Show a custom about panel.
