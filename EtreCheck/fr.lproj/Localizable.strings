@@ -226,4 +226,6 @@
 "Copy" = "Copier";
 "Copy to clipboard" = "Copier au presse-papiers";
 "Checking for hidden apps" = "Vérification des apps cachés";
-
+"Check Apple signatures: Disabled\n" = "Vérifiez les signatures numériques des tâches d’Apple: Désactivé\n";
+"Ignore known Apple failures: Disabled\n" = "Ignorez les échecs d’Apple connus : Désactivé\n";
+"Hide Apple tasks: Disabled\n" = "Masquer les tâches d’Apple : Désactivé\n";

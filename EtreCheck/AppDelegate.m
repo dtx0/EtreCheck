@@ -510,7 +510,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.log appendString: @"\n\n"];
   
   [self printLinkInstructions];
-  
+  [self printOptions];
   [self printErrors];
   }
 
@@ -533,6 +533,57 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
               pathForResource: @"adwarehelp" ofType: @"rtf"]]];
 
   [self.log appendString: @"\n"];
+  }
+
+// Print option settings.
+- (void) printOptions
+  {
+  bool options = NO;
+  
+  if(![[Model model] checkAppleSignatures])
+    {
+    [self.log
+      appendString:
+        NSLocalizedString(
+          @"Check Apple signatures: Disabled\n", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+      
+    options = YES;
+    }
+
+  if(![[Model model] ignoreKnownAppleFailures])
+    {
+    [self.log
+      appendString:
+        NSLocalizedString(
+          @"Ignore known Apple failures: Disabled\n", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+      
+    options = YES;
+    }
+
+  if(![[Model model] hideAppleTasks])
+    {
+    [self.log
+      appendString:
+        NSLocalizedString(
+          @"Hide Apple tasks: Disabled\n", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+      
+    options = YES;
+    }
+
+  if(options)
+    [self.log appendString: @"\n"];
   }
 
 // Print errors during EtreCheck itself.
