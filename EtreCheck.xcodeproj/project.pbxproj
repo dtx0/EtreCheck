@@ -34,6 +34,7 @@
 		A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A546BFB91A5348880032C354 /* linkhelp.rtf */; };
 		A54B87351A1D4F1900F25213 /* HelpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87341A1D4F1900F25213 /* HelpManager.m */; };
 		A54B87381A1D4FED00F25213 /* DetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87371A1D4FED00F25213 /* DetailManager.m */; };
+		A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A54DF6561BD70A3C00753E87 /* TOU.rtf */; settings = {ASSET_TAGS = (); }; };
 		A550C54F1BBC39E000CA75EA /* EtreCheckToolbarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */; settings = {ASSET_TAGS = (); }; };
 		A550C55A1BBC75FD00CA75EA /* EtreCheckToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = A550C5591BBC75FD00CA75EA /* EtreCheckToolbar.m */; settings = {ASSET_TAGS = (); }; };
 		A552A31D1818BDAE00829BA3 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A552A3161818BC7F00829BA3 /* CoreServices.framework */; };
@@ -138,6 +139,8 @@
 		A54B87361A1D4FED00F25213 /* DetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailManager.h; sourceTree = "<group>"; };
 		A54B87371A1D4FED00F25213 /* DetailManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailManager.m; sourceTree = "<group>"; };
 		A54DA5711A3117E100F09B19 /* adware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = adware.plist; sourceTree = "<group>"; };
+		A54DF6571BD70A3C00753E87 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/TOU.rtf; sourceTree = "<group>"; };
+		A54DF6581BD70A3C00753E87 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/TOU.rtf; sourceTree = "<group>"; };
 		A550C54D1BBC39E000CA75EA /* EtreCheckToolbarItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckToolbarItem.h; sourceTree = "<group>"; };
 		A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckToolbarItem.m; sourceTree = "<group>"; };
 		A550C5581BBC75FD00CA75EA /* EtreCheckToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckToolbar.h; sourceTree = "<group>"; };
@@ -457,6 +460,7 @@
 				A540C7001873D5F800497BDE /* Localizable.strings */,
 				A55BC17915BF987D00D42EF1 /* main.m */,
 				A55BC17B15BF987D00D42EF1 /* EtreCheck-Prefix.pch */,
+				A54DF6561BD70A3C00753E87 /* TOU.rtf */,
 				A55BC17C15BF987D00D42EF1 /* Credits.rtf */,
 				A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */,
 				A546BFB91A5348880032C354 /* linkhelp.rtf */,
@@ -544,6 +548,7 @@
 				A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */,
 				A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */,
 				A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */,
+				A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */,
 				A5E9E2C01A2522A600309185 /* Help.strings in Resources */,
 				A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */,
 			);
@@ -671,6 +676,15 @@
 				A546BFBA1A5348890032C354 /* fr */,
 			);
 			name = linkhelp.rtf;
+			sourceTree = "<group>";
+		};
+		A54DF6561BD70A3C00753E87 /* TOU.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A54DF6571BD70A3C00753E87 /* en */,
+				A54DF6581BD70A3C00753E87 /* fr */,
+			);
+			name = TOU.rtf;
 			sourceTree = "<group>";
 		};
 		A55BC17615BF987D00D42EF1 /* InfoPlist.strings */ = {

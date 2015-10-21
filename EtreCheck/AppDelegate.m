@@ -73,6 +73,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize adwareManager = myAdwareManager;
 @synthesize reportAvailable = myReportAvailable;
 @synthesize reportStartTime = myReportStartTime;
+@synthesize TOUPanel = myTOUPanel;
+@synthesize TOUView = myTOUView;
+@synthesize acceptTOUButton = myAcceptTOUButton;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic checkAppleSignatures;
@@ -365,6 +368,60 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     contextInfo: nil];
   }
   
+// Show Terms of Use agreement.
+- (IBAction) showTOUAgreementCopy: (id) sender
+  {
+  self.acceptTOUButton.target = self;
+  self.acceptTOUButton.action = @selector(copy:);
+  
+  [self showTOUAgreement: sender];
+  }
+
+// Show Terms of Use agreement.
+- (IBAction) showTOUAgreementCopyAll: (id) sender
+  {
+  self.acceptTOUButton.target = self;
+  self.acceptTOUButton.action = @selector(copyToClipboard:);
+  
+  [self showTOUAgreement: sender];
+  }
+
+// Show Terms of Use agreement.
+- (void) showTOUAgreement: (id) sender
+  {
+  [self.TOUView
+    setLinkTextAttributes:
+      @{
+        NSUnderlineStyleAttributeName: @(NSUnderlineStyleNone),
+        NSCursorAttributeName : [NSCursor pointingHandCursor]
+      }];
+
+  NSData * rtfData =
+    [NSData
+      dataWithContentsOfFile:
+        [[NSBundle mainBundle]
+          pathForResource: @"TOU" ofType: @"rtf"]];
+  
+  NSRange range =
+    NSMakeRange(0, [[self.TOUView textStorage] length]);
+
+  [self.TOUView
+    replaceCharactersInRange: range withRTF: rtfData];
+
+  [[NSApplication sharedApplication]
+    beginSheet: self.TOUPanel
+    modalForWindow: self.window
+    modalDelegate: self
+    didEndSelector: @selector(didEndSheet:returnCode:contextInfo:)
+    contextInfo: nil];
+  }
+
+// Decline the Terms of Use.
+- (IBAction) declineTOS: (id) sender
+  {
+  [[NSApplication sharedApplication] endSheet: self.TOUPanel];
+  }
+
 - (void) didEndSheet: (NSWindow *) sheet
   returnCode: (NSInteger) returnCode contextInfo: (void *) contextInfo
   {
@@ -1002,8 +1059,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   }
 
 // Copy the report to the clipboard.
+- (IBAction) copy: (id) sender
+  {
+  [[NSApplication sharedApplication] endSheet: self.TOUPanel];
+  
+  [self.logView copy: sender];
+  }
+
+// Copy the report to the clipboard.
 - (IBAction) copyToClipboard: (id) sender
   {
+  [[NSApplication sharedApplication] endSheet: self.TOUPanel];
+
   NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
  
   [pasteboard clearContents];
@@ -1297,7 +1364,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
 - (void) doCustomServiceWithItems: (NSArray *) items
   {
-  [self copyToClipboard: self];
+  [self showTOUAgreementCopyAll: self];
   }
 
 #pragma mark - NSSharingServiceDelegate conformance

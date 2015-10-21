@@ -59,6 +59,10 @@
   
   BOOL myReportAvailable;
   NSDate * myReportStartTime;
+  
+  NSWindow * myTOUPanel;
+  NSTextView * myTOUView;
+  NSButton * myAcceptTOUButton;
   }
   
 @property (retain) IBOutlet NSWindow * window;
@@ -96,6 +100,9 @@
 @property (retain) IBOutlet AdwareManager * adwareManager;
 @property (assign) BOOL reportAvailable;
 @property (retain) NSDate * reportStartTime;
+@property (retain) IBOutlet NSWindow * TOUPanel;
+@property (retain) IBOutlet NSTextView * TOUView;
+@property (retain) IBOutlet NSButton * acceptTOUButton;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
@@ -138,5 +145,14 @@
 
 // Share the EtreCheck report.
 - (IBAction) shareReport: (id) sender;
+
+// Show Terms of Use agreement for a standard copy.
+- (IBAction) showTOUAgreementCopy: (id) sender;
+
+// Show Terms of Use agreement for a copy report.
+- (IBAction) showTOUAgreementCopyAll: (id) sender;
+
+// Decline the Terms of Use.
+- (IBAction) declineTOS: (id) sender;
 
 @end

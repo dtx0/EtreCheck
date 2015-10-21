@@ -855,7 +855,10 @@
       }
     }
     
-  return executable;
+  if([[NSFileManager defaultManager] isExecutableFileAtPath: executable])
+    return executable;
+    
+  return nil;
   }
 
 // Is the executable valid?

@@ -188,6 +188,7 @@
 - (NSString *) getExecutableForBundle: (NSString *) bundleID
   status: (NSMutableDictionary *) status
   {
+  NSString * executable = nil;
   NSArray * command = status[kCommand];
   
   if(!command)
@@ -196,24 +197,29 @@
     
     if(command)
       {
-      status[kCommand] = command;
-      status[kExecutable] = [self collectLaunchdItemExecutable: command];
+      executable = [self collectLaunchdItemExecutable: command];
+
+      if([executable length])
+        {
+        status[kCommand] = command;
+        status[kExecutable] = executable;
+        }
       }
     }
     
-  NSString * executable = status[kExecutable];
+  executable = status[kExecutable];
   
   // Next try NSWorkspace.
-  if(!executable)
+  if(![executable length])
     executable =
       [[NSWorkspace sharedWorkspace]
         absolutePathForAppBundleWithIdentifier: bundleID];
     
   // Now try ps.
-  if(!executable)
+  if(![executable length])
     executable = self.processes[status[kPID]];
     
-  if(executable && !command)
+  if([executable length] && ![command count])
     {
     status[kExecutable] = executable;
     status[kCommand] = @[ executable ];
