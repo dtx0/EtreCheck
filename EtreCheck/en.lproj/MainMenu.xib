@@ -1131,7 +1131,7 @@ Gw
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <action selector="copyToClipboard:" target="Voe-Tx-rLC" id="aKy-I1-MEL"/>
+                        <action selector="showTOUAgreementCopyAll:" target="Voe-Tx-rLC" id="vrZ-FS-gj9"/>
                     </connections>
                 </button>
             </subviews>

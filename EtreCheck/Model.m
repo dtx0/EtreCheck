@@ -92,6 +92,9 @@
 // Return true if there are log entries for a process.
 - (bool) hasLogEntries: (NSString *) name
   {
+  if(!name)
+    return NO;
+  
   __block bool matching = NO;
   __block NSMutableString * result = [NSMutableString string];
   

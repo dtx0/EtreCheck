@@ -1052,7 +1052,7 @@ Gw
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <action selector="copyToClipboard:" target="Voe-Tx-rLC" id="8yK-9g-W8w"/>
+                        <action selector="showTOUAgreementCopyAll:" target="Voe-Tx-rLC" id="oca-qz-1e4"/>
                     </connections>
                 </button>
             </subviews>
