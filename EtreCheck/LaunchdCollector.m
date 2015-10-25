@@ -387,6 +387,7 @@
   [failures addObject: @"org.net-snmp.snmpd.plist"];
   [failures addObject: @"org.postfix.newaliases.plist"];
   [failures addObject: @"com.apple.airplaydiagnostics.server.mac.plist"];
+  [failures addObject: @"com.apple.photostream-agent"];
 
   return failures;
   }
@@ -855,10 +856,7 @@
       }
     }
     
-  if([[NSFileManager defaultManager] isExecutableFileAtPath: executable])
-    return executable;
-    
-  return nil;
+  return executable;
   }
 
 // Is the executable valid?
