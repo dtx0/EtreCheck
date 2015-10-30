@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -21,6 +21,7 @@
                 <outlet property="agentImage" destination="X6k-bh-0bO" id="029-YW-2tT"/>
                 <outlet property="animationView" destination="cs1-k8-fgW" id="UaA-Y7-kiB"/>
                 <outlet property="applicationIcon" destination="24p-7h-cH3" id="8z3-r1-Kkm"/>
+                <outlet property="cancelButton" destination="mIX-Fq-FhE" id="s9D-m6-no7"/>
                 <outlet property="clipboardCopyButton" destination="q8u-Lb-y4P" id="hKX-6h-uJY"/>
                 <outlet property="clipboardCopyToolbarItemView" destination="kwV-c6-t98" id="jf2-ry-FLb"/>
                 <outlet property="demonImage" destination="PBo-4n-aK2" id="x01-Zs-ecw"/>
@@ -970,7 +971,7 @@ DQ
                     <rect key="frame" x="513" y="11" width="82" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eNg-Ev-1vb">
+                    <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eNg-Ev-1vb">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -1168,14 +1169,14 @@ Gw
                     <rect key="frame" x="4" y="3" width="110" height="26"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <animations/>
-                    <popUpButtonCell key="cell" type="push" title="Normal" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1TX-vd-5Wc" id="sez-xt-NsB">
+                    <popUpButtonCell key="cell" type="push" title="Very large" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1TX-vd-5Wc" id="sez-xt-NsB">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
                         <menu key="menu" id="Kns-x6-qxd">
                             <items>
-                                <menuItem title="Normal" state="on" id="AKT-79-lFu"/>
+                                <menuItem title="Normal" id="AKT-79-lFu"/>
                                 <menuItem title="Larger" id="MtC-0b-Unt"/>
-                                <menuItem title="Very large" id="1TX-vd-5Wc"/>
+                                <menuItem title="Very large" state="on" id="1TX-vd-5Wc"/>
                             </items>
                         </menu>
                     </popUpButtonCell>

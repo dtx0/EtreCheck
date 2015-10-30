@@ -47,6 +47,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize logWindow = myLogWindow;
 @synthesize progress = myProgress;
 @synthesize spinner = mySpinner;
+@synthesize cancelButton = myCancelButton;
 @synthesize statusView = myStatusView;
 @synthesize logView;
 @synthesize displayStatus = myDisplayStatus;
@@ -458,6 +459,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Start the report.
 - (IBAction) start: (id) sender
   {
+  self.cancelButton.enabled = YES;
+  
   [[NSApplication sharedApplication] endSheet: self.userParametersPanel];
   
   self.reportStartTime = [NSDate date];
@@ -1263,9 +1266,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   NSSize size = NSMakeSize((CGFloat)scale, (CGFloat)scale);
 
-  [self.logView scaleUnitSquareToSize: size];
-  [self.logView setNeedsDisplay: YES];
-
   NSRect frame = [self.window frame];
 
   CGFloat newWidth = frame.size.width * (CGFloat)scale;
@@ -1274,7 +1274,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   frame.origin.x += horizontalOffset;
   frame.size.width = newWidth;
 
-  [self.window setFrame: frame display: YES animate: YES];
+  double duration = [window animationResizeTime: frame];
+  
+  [window setFrame: frame display: YES animate: YES];
+
+  [self.logView scaleUnitSquareToSize: size];
+  [self.logView setNeedsDisplay: YES];
   }
 
 #pragma mark - NSToolbarDelegate conformance
@@ -1364,6 +1369,19 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
 - (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
   {
+  BOOL isMavericksOrLater =
+    [[NSProcessInfo processInfo]
+      respondsToSelector: @selector(operatingSystemVersion)];
+  
+  if(!isMavericksOrLater)
+    return
+      @[
+        kShareToolbarItemID,
+        kHelpToolbarItemID,
+        NSToolbarFlexibleSpaceItemIdentifier,
+        NSToolbarPrintItemIdentifier
+      ];
+
   return
     @[
       kShareToolbarItemID,
@@ -1380,6 +1398,19 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
   {
+  BOOL isMavericksOrLater =
+    [[NSProcessInfo processInfo]
+      respondsToSelector: @selector(operatingSystemVersion)];
+  
+  if(!isMavericksOrLater)
+    return
+      @[
+        kShareToolbarItemID,
+        kHelpToolbarItemID,
+        NSToolbarFlexibleSpaceItemIdentifier,
+        NSToolbarPrintItemIdentifier
+      ];
+
   return
     @[
       kShareToolbarItemID,
