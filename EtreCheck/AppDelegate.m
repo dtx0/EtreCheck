@@ -1261,15 +1261,15 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       break;
     }
     
-  NSSize size = NSMakeSize(scale, scale);
+  NSSize size = NSMakeSize((CGFloat)scale, (CGFloat)scale);
 
   [self.logView scaleUnitSquareToSize: size];
   [self.logView setNeedsDisplay: YES];
 
   NSRect frame = [self.window frame];
 
-  CGFloat newWidth = frame.size.width * scale;
-  CGFloat horizontalOffset = (frame.size.width - newWidth)/2.0;
+  CGFloat newWidth = frame.size.width * (CGFloat)scale;
+  CGFloat horizontalOffset = (frame.size.width - newWidth)/(CGFloat)2.0;
 
   frame.origin.x += horizontalOffset;
   frame.size.width = newWidth;

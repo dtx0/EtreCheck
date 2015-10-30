@@ -815,6 +815,8 @@
     {
     // What a mess.
     case kMavericks:
+      if([[Model model] minorOSVersion] < 5)
+        break;
     case kYosemite:
       [args addObject: @"--no-strict"];
       break;

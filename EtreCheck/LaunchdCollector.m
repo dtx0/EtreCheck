@@ -678,9 +678,14 @@
       break;
     }
     
+  // Xcode is too big to even check unless you have an SSD.
   if([file hasPrefix: @"com.apple.dt.Xcode"])
     return YES;
     
+  // No point in checking what always fails.
+  if([file hasPrefix: @"com.apple.photostream-agent"])
+    return YES;
+
   return [self.knownAppleSignatureFailures containsObject: file];
   }
 
