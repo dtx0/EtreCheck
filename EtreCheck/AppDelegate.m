@@ -27,6 +27,11 @@
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
 #define kHelpToolbarItemID @"helptoolbaritem"
+#define kTextSizeToolbarItemID @"textsizetoolbaritem"
+
+#define kTextSizeNormal 0
+#define kTextSizeLarger 1
+#define kTextSizeVeryLarge 2
 
 NSComparisonResult compareViews(id view1, id view2, void * context);
 
@@ -67,6 +72,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize helpButton = myHelpButton;
 @synthesize helpButtonImage = myHelpButtonImage;
 @synthesize helpButtonInactiveImage = myHelpButtonInactiveImage;
+@synthesize textSizeToolbarItemView = myTextSizeToolbarItemView;
+@synthesize textSizeButton = myTextSizeButton;
+@synthesize textSize = myTextSize;
 @synthesize toolbar = myToolbar;
 @synthesize detailManager = myDetailManager;
 @synthesize helpManager = myHelpManager;
@@ -109,6 +117,25 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (void) setHideAppleTasks: (bool) hideAppleTasks
   {
   [[Model model] setHideAppleTasks: hideAppleTasks];
+  }
+
+- (NSUInteger) textSize
+  {
+  return myTextSize;
+  }
+
+- (void) setTextSize: (NSUInteger) textSize
+  {
+  if(textSize != myTextSize)
+    {
+    [self willChangeValueForKey: @"textSize"];
+    
+    [self changeTextSizeFrom: myTextSize to: textSize];
+    
+    myTextSize = textSize;
+    
+    [self didChangeValueForKey: @"textSize"];
+    }
   }
 
 // Destructor.
@@ -1192,6 +1219,64 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.logView print: sender];
   }
 
+// Set text size to normal.
+- (void) changeTextSizeFrom: (NSUInteger) from to: (NSUInteger) to
+  {
+  double scale = 1.0;
+  
+  switch(from)
+    {
+    case kTextSizeNormal:
+      switch(to)
+        {
+        case kTextSizeLarger:
+          scale = 1.5;
+          break;
+        case kTextSizeVeryLarge:
+          scale = 2.0;
+          break;
+        }
+      break;
+    case kTextSizeLarger:
+      switch(to)
+        {
+        case kTextSizeNormal:
+          scale = 1.0/1.5;
+          break;
+        case kTextSizeVeryLarge:
+          scale = 2.0/1.5;
+          break;
+        }
+      break;
+    case kTextSizeVeryLarge:
+      switch(to)
+        {
+        case kTextSizeNormal:
+          scale = 0.5;
+          break;
+        case kTextSizeLarger:
+          scale = 1.5/2.0;
+          break;
+        }
+      break;
+    }
+    
+  NSSize size = NSMakeSize(scale, scale);
+
+  [self.logView scaleUnitSquareToSize: size];
+  [self.logView setNeedsDisplay: YES];
+
+  NSRect frame = [self.window frame];
+
+  CGFloat newWidth = frame.size.width * scale;
+  CGFloat horizontalOffset = (frame.size.width - newWidth)/2.0;
+
+  frame.origin.x += horizontalOffset;
+  frame.size.width = newWidth;
+
+  [self.window setFrame: frame display: YES animate: YES];
+  }
+
 #pragma mark - NSToolbarDelegate conformance
 
 - (void) toolbarWillAddItem: (NSNotification *) notification
@@ -1256,6 +1341,23 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
     return item;
     }
+  else if([itemIdentifier isEqualToString: kTextSizeToolbarItemID])
+    {
+    // Create the NSToolbarItem and setup its attributes.
+    EtreCheckToolbarItem * item =
+      [[[EtreCheckToolbarItem alloc]
+        initWithItemIdentifier: itemIdentifier] autorelease];
+    
+    [item setLabel: NSLocalizedString(@"Text Size", nil)];
+    [item setPaletteLabel: NSLocalizedString(@"Text Size", nil)];
+    [item setTarget: self];
+    [item setAction: nil];
+    [item setView: self.textSizeToolbarItemView];
+    item.control = self.textSizeButton;
+    item.appDelegate = self;
+    
+    return item;
+    }
     
   return nil;
   }
@@ -1266,6 +1368,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     @[
       kShareToolbarItemID,
       kHelpToolbarItemID,
+      kTextSizeToolbarItemID,
       NSToolbarFlexibleSpaceItemIdentifier,
       NSToolbarPrintItemIdentifier
     ];
@@ -1281,6 +1384,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     @[
       kShareToolbarItemID,
       kHelpToolbarItemID,
+      kTextSizeToolbarItemID,
       NSToolbarFlexibleSpaceItemIdentifier,
       NSToolbarPrintItemIdentifier
     ];

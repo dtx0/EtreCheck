@@ -15,6 +15,9 @@
 @synthesize boldFont = myBoldFont;
 @synthesize italicFont = myItalicFont;
 @synthesize boldItalicFont = myBoldItalicFont;
+@synthesize normalFont = myNormalFont;
+@synthesize largerFont = myLargerFont;
+@synthesize veryLargeFont = myVeryLargeFont;
 
 @synthesize green = myGreen;
 @synthesize blue = myBlue;
@@ -72,6 +75,9 @@
   [mySignatureCache release];
   [myEnglishBundle release];
   
+  [myVeryLargeFont release];
+  [myLargerFont release];
+  [myNormalFont release];
   [myBoldFont release];
   [myItalicFont release];
   [myBoldItalicFont release];
@@ -93,16 +99,18 @@
 // Load fonts.
 - (void) loadFonts
   {
-  NSFont * labelFont = [NSFont labelFontOfSize: 12.0];
+  myNormalFont = [[NSFont labelFontOfSize: 12.0] retain];
+  myLargerFont = [[NSFont labelFontOfSize: 14.0] retain];
+  myVeryLargeFont = [[NSFont labelFontOfSize: 18.0] retain];
   
   myBoldFont =
     [[NSFontManager sharedFontManager]
-      convertFont: labelFont
+      convertFont: myNormalFont
       toHaveTrait: NSBoldFontMask];
     
   myItalicFont =
     [[NSFontManager sharedFontManager]
-      convertFont: labelFont
+      convertFont: myNormalFont
       toHaveTrait: NSItalicFontMask];
 
   myBoldItalicFont =

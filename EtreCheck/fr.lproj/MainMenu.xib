@@ -40,6 +40,8 @@
                 <outlet property="shareToolbarItemView" destination="h3a-5W-2if" id="SFH-XI-xZg"/>
                 <outlet property="spinner" destination="Udp-hz-whF" id="9PX-SM-esE"/>
                 <outlet property="statusView" destination="jBT-e2-hx3" id="h1T-1x-iC9"/>
+                <outlet property="textSizeButton" destination="jsW-vt-mGu" id="LkE-WY-385"/>
+                <outlet property="textSizeToolbarItemView" destination="YS5-4a-2MZ" id="5d7-vU-BSR"/>
                 <outlet property="toolbar" destination="em7-XY-ghW" id="kS5-WD-SLt"/>
                 <outlet property="userParametersPanel" destination="hni-3i-hk1" id="Vl0-GH-zNy"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
@@ -475,17 +477,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="559" height="353"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="sbV-OG-Rm6">
-                        <rect key="frame" x="18" y="265" width="523" height="68"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <animations/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="gMC-Q7-4rl">
-                            <font key="font" metaFont="system"/>
-                            <string key="title">EtreCheck recueille beaucoup d’informations sur l’état de votre Mac et les affiche dans un seul rapport, facile à lire. EtreCheck identifie les problèmes évidents en rouge. Si vous avez un problème et EtreCheck ne l’affiche pas, s’il vous plaît contacter directement l’assistance Apple ou un centre de services agréé Apple.</string>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Wrc-Z5-6yg">
                         <rect key="frame" x="36" y="193" width="505" height="42"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -572,6 +563,17 @@ DQ
                             <action selector="start:" target="Voe-Tx-rLC" id="ro9-30-3Nc"/>
                         </connections>
                     </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="sbV-OG-Rm6">
+                        <rect key="frame" x="18" y="265" width="523" height="68"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <animations/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="gMC-Q7-4rl">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">EtreCheck recueille beaucoup d’informations sur l’état de votre Mac et les affiche dans un seul rapport, facile à lire. EtreCheck identifie les problèmes évidents en rouge. Si vous avez un problème et EtreCheck ne l’affiche pas, s’il vous plaît contacter directement l’assistance Apple ou un centre de services agréé Apple.</string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <animations/>
             </view>
@@ -1095,10 +1097,10 @@ Gw
                                     <animations/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="592" height="409"/>
-                                    <size key="maxSize" width="592" height="10000000"/>
+                                    <size key="maxSize" width="594" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <size key="minSize" width="592" height="409"/>
-                                    <size key="maxSize" width="592" height="10000000"/>
+                                    <size key="maxSize" width="594" height="10000000"/>
                                 </textView>
                             </subviews>
                             <animations/>
@@ -1133,6 +1135,35 @@ DQ
             </view>
             <point key="canvasLocation" x="363" y="57.5"/>
         </window>
+        <customView id="YS5-4a-2MZ" userLabel="Text Size ToolbarItem View">
+            <rect key="frame" x="0.0" y="0.0" width="122" height="32"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" id="jsW-vt-mGu">
+                    <rect key="frame" x="5" y="3" width="113" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="rX3-WH-9N3">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="menu"/>
+                        <menu key="menu" id="6xG-pk-Fom">
+                            <items>
+                                <menuItem title="Normal" state="on" id="5Do-Uy-0ZX">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Plus grand" id="qY4-WF-DXm"/>
+                                <menuItem title="Maximal" id="ks0-nS-6ZI"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="self.textSize" id="36i-uI-Ada"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <animations/>
+            <point key="canvasLocation" x="64" y="702"/>
+        </customView>
     </objects>
     <resources>
         <image name="Agent" width="118" height="125"/>

@@ -40,6 +40,8 @@
                 <outlet property="shareToolbarItemView" destination="Wry-qn-NGq" id="k9F-9h-KBJ"/>
                 <outlet property="spinner" destination="Udp-hz-whF" id="9PX-SM-esE"/>
                 <outlet property="statusView" destination="jBT-e2-hx3" id="h1T-1x-iC9"/>
+                <outlet property="textSizeButton" destination="Q7d-pz-eK5" id="D5j-0D-76z"/>
+                <outlet property="textSizeToolbarItemView" destination="JdO-Ik-I8L" id="zv3-iV-4oP"/>
                 <outlet property="toolbar" destination="HAH-8D-CvP" id="Spo-sd-EYf"/>
                 <outlet property="userParametersPanel" destination="hni-3i-hk1" id="ihs-yy-nI9"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
@@ -673,10 +675,10 @@ Gw
                                     <animations/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="563" height="357"/>
-                                    <size key="maxSize" width="563" height="10000000"/>
+                                    <size key="maxSize" width="565" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <size key="minSize" width="563" height="357"/>
-                                    <size key="maxSize" width="563" height="10000000"/>
+                                    <size key="maxSize" width="565" height="10000000"/>
                                 </textView>
                             </subviews>
                             <animations/>
@@ -1157,6 +1159,33 @@ Gw
             </subviews>
             <animations/>
             <point key="canvasLocation" x="199" y="640"/>
+        </customView>
+        <customView id="JdO-Ik-I8L" userLabel="Text Size ToolbarItem View">
+            <rect key="frame" x="0.0" y="0.0" width="116" height="32"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" id="Q7d-pz-eK5">
+                    <rect key="frame" x="4" y="3" width="110" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <animations/>
+                    <popUpButtonCell key="cell" type="push" title="Normal" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1TX-vd-5Wc" id="sez-xt-NsB">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="menu"/>
+                        <menu key="menu" id="Kns-x6-qxd">
+                            <items>
+                                <menuItem title="Normal" state="on" id="AKT-79-lFu"/>
+                                <menuItem title="Larger" id="MtC-0b-Unt"/>
+                                <menuItem title="Very large" id="1TX-vd-5Wc"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="self.textSize" id="6lw-wB-sdk"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <animations/>
+            <point key="canvasLocation" x="61" y="702"/>
         </customView>
     </objects>
     <resources>

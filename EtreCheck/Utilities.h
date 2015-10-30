@@ -29,6 +29,9 @@
   NSFont * myBoldFont;
   NSFont * myItalicFont;
   NSFont * myBoldItalicFont;
+  NSFont * myNormalFont;
+  NSFont * myLargerFont;
+  NSFont * myVeryLargeFont;
   
   NSColor * myGreen;
   NSColor * myBlue;
@@ -50,6 +53,9 @@
 @property (readonly) NSFont * boldFont;
 @property (readonly) NSFont * italicFont;
 @property (readonly) NSFont * boldItalicFont;
+@property (readonly) NSFont * normalFont;
+@property (readonly) NSFont * largerFont;
+@property (readonly) NSFont * veryLargeFont;
 
 @property (readonly) NSColor * green;
 @property (readonly) NSColor * blue;

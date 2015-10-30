@@ -48,6 +48,9 @@
   NSButton * myHelpButton;
   NSImage * myHelpButtonImage;
   NSImage * myHelpButtonInactiveImage;
+  NSView * myTextSizeToolbarItemView;
+  NSButton * myTextSizeButton;
+  NSUInteger myTextSize;
   NSToolbar * myToolbar;
 
   NSMutableDictionary * launchdStatus;
@@ -94,6 +97,9 @@
 @property (retain) IBOutlet NSButton * helpButton;
 @property (retain) IBOutlet NSImage * helpButtonImage;
 @property (retain) IBOutlet NSImage * helpButtonInactiveImage;
+@property (retain) IBOutlet NSView * textSizeToolbarItemView;
+@property (retain) IBOutlet NSButton * textSizeButton;
+@property (assign) NSUInteger textSize;
 @property (retain) IBOutlet NSToolbar * toolbar;
 @property (retain) IBOutlet DetailManager * detailManager;
 @property (retain) IBOutlet HelpManager * helpManager;
