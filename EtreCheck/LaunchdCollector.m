@@ -388,6 +388,8 @@
   [failures addObject: @"org.postfix.newaliases.plist"];
   [failures addObject: @"com.apple.airplaydiagnostics.server.mac.plist"];
   [failures addObject: @"com.apple.photostream-agent"];
+  [failures addObject: @"com.apple.MRTd.plist"];
+  [failures addObject: @"com.apple.MRTa.plist"];
 
   return failures;
   }
