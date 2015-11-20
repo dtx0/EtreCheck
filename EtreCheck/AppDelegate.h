@@ -67,6 +67,7 @@
   NSWindow * myTOUPanel;
   NSTextView * myTOUView;
   NSButton * myAcceptTOUButton;
+  BOOL myTOSAccepted;
   }
   
 @property (retain) IBOutlet NSWindow * window;
@@ -111,6 +112,7 @@
 @property (retain) IBOutlet NSWindow * TOUPanel;
 @property (retain) IBOutlet NSTextView * TOUView;
 @property (retain) IBOutlet NSButton * acceptTOUButton;
+@property (assign) BOOL TOSAccepted;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;

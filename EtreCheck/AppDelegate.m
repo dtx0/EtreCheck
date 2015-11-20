@@ -85,6 +85,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize TOUPanel = myTOUPanel;
 @synthesize TOUView = myTOUView;
 @synthesize acceptTOUButton = myAcceptTOUButton;
+@synthesize TOSAccepted = myTOSAccepted;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic checkAppleSignatures;
@@ -399,19 +400,29 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Show Terms of Use agreement.
 - (IBAction) showTOUAgreementCopy: (id) sender
   {
-  self.acceptTOUButton.target = self;
-  self.acceptTOUButton.action = @selector(copy:);
+  if(self.TOSAccepted)
+    [self copy: sender];
+  else
+    {
+    self.acceptTOUButton.target = self;
+    self.acceptTOUButton.action = @selector(copy:);
   
-  [self showTOUAgreement: sender];
+    [self showTOUAgreement: sender];
+    }
   }
 
 // Show Terms of Use agreement.
 - (IBAction) showTOUAgreementCopyAll: (id) sender
   {
-  self.acceptTOUButton.target = self;
-  self.acceptTOUButton.action = @selector(copyToClipboard:);
+  if(self.TOSAccepted)
+    [self copyToClipboard: sender];
+  else
+    {
+    self.acceptTOUButton.target = self;
+    self.acceptTOUButton.action = @selector(copyToClipboard:);
   
-  [self showTOUAgreement: sender];
+    [self showTOUAgreement: sender];
+    }
   }
 
 // Show Terms of Use agreement.
@@ -1091,6 +1102,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Copy the report to the clipboard.
 - (IBAction) copy: (id) sender
   {
+  self.TOSAccepted = YES;
+  
   [[NSApplication sharedApplication] endSheet: self.TOUPanel];
   
   [self.logView copy: sender];
@@ -1099,6 +1112,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Copy the report to the clipboard.
 - (IBAction) copyToClipboard: (id) sender
   {
+  self.TOSAccepted = YES;
+  
   [[NSApplication sharedApplication] endSheet: self.TOUPanel];
 
   NSPasteboard * pasteboard = [NSPasteboard generalPasteboard];
@@ -1274,8 +1289,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   frame.origin.x += horizontalOffset;
   frame.size.width = newWidth;
 
-  double duration = [window animationResizeTime: frame];
-  
   [window setFrame: frame display: YES animate: YES];
 
   [self.logView scaleUnitSquareToSize: size];
