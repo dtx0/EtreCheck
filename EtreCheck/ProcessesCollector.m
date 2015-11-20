@@ -124,17 +124,22 @@
 // Record process information.
 - (void) recordKernelTaskIn: (NSMutableDictionary *) processes
   {
-  NSArray * args = @[@"-c", @"/usr/bin/top -l 1 -stats pid,cpu,mem"];
+  NSArray * args = @[@"-c", @"/usr/bin/top -l 2 -stats pid,cpu,mem"];
   
   NSData * result = [Utilities execute: @"/bin/sh" arguments: args];
   
   NSArray * lines = [Utilities formatLines: result];
+  
+  int count = 0;
   
   for(NSString * line in lines)
     {
     if(![line hasPrefix: @"0 "])
       continue;
 
+    if(count++ == 0)
+      continue;
+      
     NSNumber * mem = nil;
     NSNumber * cpu = nil;
 
