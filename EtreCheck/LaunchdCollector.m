@@ -149,8 +149,8 @@
     NSMutableDictionary * jobData =
       [NSMutableDictionary dictionaryWithDictionary: job];
     
-    jobData[kPrinted] = @NO;
-    jobData[kHidden] = @NO;
+    [jobData setObject: [NSNumber numberWithBool: NO] forKey: kPrinted];
+    [jobData setObject: [NSNumber numberWithBool: NO] forKey: kHidden];
     
     if(label)
       [self.launchdStatus setObject: jobData forKey: label];
@@ -496,13 +496,15 @@
   // Apple file get special treatment.
   if([[status objectForKey: kApple] boolValue])
     {
+    NSString * signatureStatus = [status objectForKey: kSignature];
+    
     // I may want to report a failure.
     if([[status objectForKey: kStatus] isEqualToString: kStatusFailed])
       {
       // Should I ignore this failure?
       if([self ignoreFailuresOnFile: file])
         {
-        status[kIgnored] = ignore;
+        [status setObject: ignore forKey: kIgnored];
 
         if(hideAppleTasks)
           return NO;
@@ -513,9 +515,9 @@
       {
       }
       
-    else if([status[kSignature] isEqualToString: kSignatureValid])
+    else if([signatureStatus isEqualToString: kSignatureValid])
       {
-      status[kIgnored] = ignore;
+      [status setObject: ignore forKey: kIgnored];
       
       if(hideAppleTasks)
         return NO;
@@ -524,7 +526,7 @@
     // Should I ignore this failure?
     else if([self ignoreInvalidSignatures: file])
       {
-      status[kIgnored] = ignore;
+      [status setObject: ignore forKey: kIgnored];
 
       if(hideAppleTasks)
         return NO;
@@ -540,7 +542,7 @@
   
   [output appendString: @"\n"];
     
-  status[kPrinted] = @YES;
+  [status setObject: [NSNumber numberWithBool: YES] forKey: kPrinted];
   
   return YES;
   }
@@ -557,7 +559,7 @@
   // Get the status.
   NSMutableDictionary * status = [self collectJobStatus: plist];
     
-  NSString * jobStatus = status[kStatus];
+  NSString * jobStatus = [status objectForKey: kStatus];
   
   // Get the command.
   NSArray * command = [self collectLaunchdItemCommand: plist];
@@ -578,20 +580,24 @@
   
   bool isApple = [self isAppleFile: file];
   
-  status[kApple] = [NSNumber numberWithBool: isApple];
-  status[kFilename] = [Utilities sanitizeFilename: file];
-  status[kCommand] = command;
-  status[kExecutable] = executable;
-  status[kSupportURL] = [self getSupportURL: nil bundleID: path];
+  [status setObject: [NSNumber numberWithBool: isApple] forKey: kApple];
+  [status setObject: [Utilities sanitizeFilename: file] forKey: kFilename];
+  [status setObject: command forKey: kCommand];
+  [status setObject: executable forKey: kExecutable];
+  [status
+    setObject: [self getSupportURL: nil bundleID: path]
+    forKey: kSupportURL];
   
   if(detailsURL)
-    status[kDetailsURL] = detailsURL;
+    [status setObject: detailsURL forKey: kDetailsURL];
     
   if([file hasPrefix: @"."])
-    status[kHidden] = @YES;
+    [status setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
     
-  if(isApple && !status[kSignature])
-    status[kSignature] = [Utilities checkAppleExecutable: executable];
+  if(isApple && ![status objectForKey: kSignature])
+    [status
+      setObject: [Utilities checkAppleExecutable: executable]
+      forKey: kSignature];
 
   return status;
   }
@@ -756,9 +762,10 @@
           [NSCharacterSet whitespaceAndNewlineCharacterSet]];
       
     if([trimmedLine isEqualToString: @"app = 1"])
-      status[kApp] = @YES;
+      [status setObject: [NSNumber numberWithBool: YES] forKey: kApp];
     else if([trimmedLine hasPrefix: @"bundle id = "])
-      status[kBundleID] = [trimmedLine substringFromIndex: 12];
+      [status
+        setObject: [trimmedLine substringFromIndex: 12] forKey: kBundleID];
     }
   }
 
@@ -767,9 +774,9 @@
   {
   NSString * message = @"";
   
-  NSString * signature = status[kSignature];
+  NSString * signature = [status objectForKey: kSignature];
   
-  NSString * path = status[kExecutable];
+  NSString * path = [status objectForKey: kExecutable];
   
   if(![signature isEqualToString: kSignatureValid])
     {
@@ -813,13 +820,13 @@
     if([arguments respondsToSelector: @selector(isEqualToArray:)])
       if(arguments.count > 0)
         {
-        NSString * argument = arguments[0];
+        NSString * argument = [arguments objectAtIndex: 0];
         
         if(![argument isEqualToString: [program lastPathComponent]])
           [command addObject: argument];
           
         for(int i = 1; i < arguments.count; ++i)
-          [command addObject: arguments[i]];
+          [command addObject: [arguments objectAtIndex: i]];
       }
     }
     
@@ -859,7 +866,10 @@
       else if([argument isEqualToString: @"-D"])
         ++i;
       else
+        {
         executable = argument;
+        break;
+        }
       }
     }
     
@@ -976,9 +986,11 @@
       
     return [extra autorelease];
     }
-  else if([status[kApple] boolValue])
+  else if([[status objectForKey: kApple] boolValue])
     {
-    if(![status[kSignature] isEqualToString: kSignatureValid])
+    NSString * signatureStatus = [status objectForKey: kSignature];
+    
+    if(![signatureStatus isEqualToString: kSignatureValid])
       {
       NSMutableAttributedString * extra =
         [[NSMutableAttributedString alloc] init];

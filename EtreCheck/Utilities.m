@@ -244,7 +244,7 @@
     
     int64_t timeout = 60 * 5 * NSEC_PER_SEC;
     
-    NSNumber * timeoutValue = options[kExecutableTimeout];
+    NSNumber * timeoutValue = [options objectForKey: kExecutableTimeout];
     
     if(timeoutValue)
       timeout = [timeoutValue unsignedLongLongValue] * NSEC_PER_SEC;
@@ -828,7 +828,9 @@
 
   // Give Xcode a 10-minute timeout.
   if([[path lastPathComponent] isEqualToString: @"Xcode"])
-    options[kExecutableTimeout] = [NSNumber numberWithInt: 60 * 10];
+    [options
+      setObject: [NSNumber numberWithInt: 60 * 10]
+      forKey: kExecutableTimeout];
     
   NSString * output = nil;
   

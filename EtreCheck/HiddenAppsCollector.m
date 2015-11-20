@@ -74,7 +74,7 @@
     [self parsePs: line pid: & pid command: & command];
     
     if(pid && command)
-      currentProcesses[pid] = command;
+      [currentProcesses setObject: command forKey: pid];
     }
     
   myProcesses = [currentProcesses copy];
@@ -112,17 +112,17 @@
   for(NSString * bundleID in sortedBundleIDs)
     {
     NSMutableDictionary * status =
-      [self collectJobStatus: self.launchdStatus[bundleID]];
+      [self collectJobStatus: [self.launchdStatus objectForKey: bundleID]];
     
-    if([status[kPrinted] boolValue])
+    if([[status objectForKey: kPrinted] boolValue])
       continue;
       
-    if([status[kIgnored] boolValue])
+    if([[status objectForKey: kIgnored] boolValue])
       continue;
       
     [self updateDynamicStatus: status];
     
-    if([status[kIgnored] boolValue])
+    if([[status objectForKey: kIgnored] boolValue])
       continue;
       
     if(!titlePrinted)
@@ -153,18 +153,18 @@
   {
   [self updateDynamicTask: status];
   
-  NSString * bundleID = status[kBundleID];
+  NSString * bundleID = [status objectForKey: kBundleID];
   
   NSNumber * ignore =
     [NSNumber numberWithBool: [[Model model] hideAppleTasks]];
   
   bool isApple = [self isAppleFile: bundleID];
   
-  status[kApple] = [NSNumber numberWithBool: isApple];
+  [status setObject: [NSNumber numberWithBool: isApple] forKey: kApple];
 
   if(isApple && ([[Model model] majorOSVersion] < kYosemite))
     {
-    status[kIgnored] = ignore;
+    [status setObject: ignore forKey: kIgnored];
     return;
     }
     
@@ -173,14 +173,16 @@
     
   if(isApple && executable)
     {
-    status[kSignature] = [Utilities checkAppleExecutable: executable];
+    [status
+      setObject: [Utilities checkAppleExecutable: executable]
+      forKey: kSignature];
     
-    if([status[kSignature] isEqualToString: kSignatureValid])
-      status[kIgnored] = ignore;
+    if([[status objectForKey: kSignature] isEqualToString: kSignatureValid])
+      [status setObject: ignore forKey: kIgnored];
       
     // Should I ignore this failure?
     if([self ignoreInvalidSignatures: bundleID])
-      status[kIgnored] = ignore;
+      [status setObject: ignore forKey: kIgnored];
     }
   }
 
@@ -189,7 +191,7 @@
   status: (NSMutableDictionary *) status
   {
   NSString * executable = nil;
-  NSArray * command = status[kCommand];
+  NSArray * command = [status objectForKey: kCommand];
   
   if(!command)
     {
@@ -201,13 +203,13 @@
 
       if([executable length])
         {
-        status[kCommand] = command;
-        status[kExecutable] = executable;
+        [status setObject: command forKey: kCommand];
+        [status setObject: executable forKey: kExecutable];
         }
       }
     }
     
-  executable = status[kExecutable];
+  executable = [status objectForKey: kExecutable];
   
   // Next try NSWorkspace.
   if(![executable length])
@@ -217,12 +219,13 @@
     
   // Now try ps.
   if(![executable length])
-    executable = self.processes[status[kPID]];
+    executable = [self.processes objectForKey: [status objectForKey: kPID]];
     
   if([executable length] && ![command count])
     {
-    status[kExecutable] = executable;
-    status[kCommand] = @[ executable ];
+    [status setObject: executable forKey: kExecutable];
+    [status
+      setObject: [NSArray arrayWithObject: executable] forKey: kCommand];
     }
     
   return executable;
@@ -231,9 +234,11 @@
 // Include any extra content that may be useful.
 - (NSAttributedString *) formatExtraContent: (NSDictionary *) status
   {
-  if([status[kApple] boolValue])
+  if([[status objectForKey: kApple] boolValue])
     {
-    if(![status[kSignature] isEqualToString: kSignatureValid])
+    NSString * signatureStatus = [status objectForKey: kSignature];
+    
+    if(![signatureStatus isEqualToString: kSignatureValid])
       {
       NSMutableAttributedString * extra =
         [[NSMutableAttributedString alloc] init];
