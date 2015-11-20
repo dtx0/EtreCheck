@@ -322,6 +322,7 @@
   [failures addObject: @"com.apple.periodic-weekly.plist"];
   [failures addObject: @"org.amavis.amavisd.plist"];
   [failures addObject: @"org.amavis.amavisd_cleanup.plist"];
+  [failures addObject: @"com.apple.SafariNotificationAgent.plist"];
 
   return failures;
   }
