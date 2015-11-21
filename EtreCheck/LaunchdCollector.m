@@ -391,6 +391,7 @@
   [failures addObject: @"com.apple.photostream-agent"];
   [failures addObject: @"com.apple.MRTd.plist"];
   [failures addObject: @"com.apple.MRTa.plist"];
+  [failures addObject: @"com.apple.java.InstallOnDemand.plist"];
 
   return failures;
   }
