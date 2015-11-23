@@ -61,19 +61,29 @@
     updateStatus:
       NSLocalizedString(@"Checking Time Machine information", NULL)];
 
-  if([[Model model] majorOSVersion] < 9)
-    return;
-    
   [self.result appendAttributedString: [self buildTitle]];
 
-  bool tmutilExists =
-    [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/tmutil"];
-  
-  if(!tmutilExists)
+  if([[Model model] majorOSVersion] < kMountainLion)
     {
     [self.result
       appendString:
         NSLocalizedString(@"timemachineneedsmountainlion", NULL)
+      attributes:
+        [NSDictionary
+          dictionaryWithObjectsAndKeys:
+            [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    
+    return;
+    }
+    
+  bool tmutilExists =
+    [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/tmutil"];
+  
+  if(tmutilExists)
+    {
+    [self.result
+      appendString:
+        NSLocalizedString(@"timemachineinformationnotavailable", NULL)
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:

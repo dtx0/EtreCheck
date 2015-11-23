@@ -57,6 +57,7 @@
 "%@ Cached" = "%@ En Cache";
 "Time Machine:" = "Time Machine :";
 "timemachineneedsmountainlion" = "    Informations Time Machine nécessitent OS X 10.8 \"Mountain Lion\" ou plus tard.\n\n";
+"timemachineinformationnotavailable" = "    Informations Time Machine ne sont pas disponible\n\n";
 "    Mobile backups: " = "    Sauvegardes mobiles : ";
 "ON\n" = "Allumé\n";
 "OFF\n" = "Désactivé\n";
