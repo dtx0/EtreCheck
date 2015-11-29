@@ -602,8 +602,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.log
     appendAttributedString:
       [Utilities
-        buildURL: @"http://etresoft.com/etrecheck"
-        title: @"http://etresoft.com/etrecheck"]];
+        buildURL: @"http://etrecheck.com"
+        title: @"http://etrecheck.com"]];
     
   [self.log appendString: @"\n\n"];
   

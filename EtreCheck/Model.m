@@ -230,7 +230,7 @@
   for(NSString * argument in args)
     {
     [command appendString: @" "];
-    [command appendString: argument];
+    [command appendString: [Utilities cleanPath: argument]];
     }
     
   [self.terminatedTasks addObject: command];
