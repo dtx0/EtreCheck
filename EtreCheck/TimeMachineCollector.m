@@ -79,7 +79,7 @@
   bool tmutilExists =
     [[NSFileManager defaultManager] fileExistsAtPath: @"/usr/bin/tmutil"];
   
-  if(tmutilExists)
+  if(!tmutilExists)
     {
     [self.result
       appendString:
