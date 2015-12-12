@@ -24,56 +24,25 @@
   {
   NSMutableAttributedString * details = [NSMutableAttributedString new];
   
-  [details appendString: NSLocalizedString(@"adwaredetails1", NULL)];
+  if([name isEqualToString: kAdwareFound])
+    [details appendString: NSLocalizedString(@"definiteadware", NULL)];
   
-  [details appendAttributedString: [self getAppleLink]];
-  
-  [details appendString: NSLocalizedString(@"adwaredetails2", NULL)];
-
-  [[[Model model] adwareFiles]
-    enumerateKeysAndObjectsUsingBlock:
-      ^(id key, id obj, BOOL * stop)
-        {
-        if([name isEqualToString: obj])
-          {
-          [details appendString: [Utilities sanitizeFilename: key]];
-          [details appendString: @"\n"];
-          }
-        }];
-  
-  [details appendString: NSLocalizedString(@"adwaredetails3", NULL)];
-
+  else
+    [details appendString: NSLocalizedString(@"probableadware", NULL)];
+    
   [super
     showDetail: NSLocalizedString(@"About adware", NULL) content: details];
     
   [details release];
   }
 
-// Get a link to the Apple support document about adware.
-- (NSAttributedString *) getAppleLink
-  {
-  NSMutableAttributedString * urlString =
-    [[NSMutableAttributedString alloc] initWithString: @""];
-    
-  NSString * appleURL = @"http://support.apple.com/HT203987";
-  
-  [urlString
-    appendString: appleURL
-    attributes:
-      @{
-        NSFontAttributeName : [[Utilities shared] boldFont],
-        NSForegroundColorAttributeName : [[Utilities shared] blue],
-        NSLinkAttributeName : appleURL
-      }];
-    
-  return [urlString autorelease];
-  }
-
 // Go to Adware Medic.
 - (IBAction) gotoAdwareMedic: (id) sender
   {
   [[NSWorkspace sharedWorkspace]
-    openURL: [NSURL URLWithString: @"http://www.adwaremedic.com"]];
+    openURL:
+      [NSURL
+        URLWithString: @"https://www.malwarebytes.org/antimalware/mac/"]];
   }
 
 @end

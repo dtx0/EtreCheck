@@ -7,6 +7,9 @@
 #import <Foundation/Foundation.h>
 #import "PopoverManager.h"
 
+#define kAdwareFound @"adwarefound"
+#define kAdwarePossible @"adwarepossible"
+
 @interface AdwareManager : PopoverManager
 
 // Go to Adware Medic.

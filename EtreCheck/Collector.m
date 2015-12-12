@@ -389,16 +389,6 @@
   [urlString appendString: @" "];
   
   [urlString
-    appendString: NSLocalizedString(@"Adware!", NULL)
-    attributes:
-      @{
-        NSFontAttributeName : [[Utilities shared] boldFont],
-        NSForegroundColorAttributeName : [[Utilities shared] red]
-      }];
-
-  [urlString appendString: @" "];
-  
-  [urlString
     appendString: NSLocalizedString(@"[Click to remove]", NULL)
     attributes:
       @{

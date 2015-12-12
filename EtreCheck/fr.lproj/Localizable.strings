@@ -192,9 +192,10 @@
 "%d error (plural rule: other)" = "%d erreurs\n";
 "No help available" = "Aucune aide disponible";
 "About adware" = "À propos de l’adware";
-"adwaredetails1" = "EtreCheck a détecté que votre Macintosh peut être infecté par adware. Apple a publié cette liste des fichiers installés par types communs d’adware :\n\n";
-"adwaredetails2" = "\n\nEtreCheck á trouvé les fichiers suivants qui correspondent à la liste d’Apple:\n\n";
-"adwaredetails3" = "\nLa meilleure façon de supprimer ce logiciel est de télécharger et lancer Malwarebytes Anti-Malware for Mac (né AdwareMedic), un programme écrit par un autre membre de longue séjour chez Apple Support Communities.";
+"definiteadware" = "EtreCheck a détecté que votre Macintosh peut être infecté par adware. Télécharger et lancer Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour enlever l’adware.";
+"probableadware" = "EtreCheck a détecté quelques logiciel qui ne sont pas sur le whitelist des logiciels sûrs. Télécharger et lancer Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour vérifier que vous n’avez aucin adware ou malware.";
+"adwarefound" = "    L'infection d'adware trouvé.";
+"adwarecheck" = "    L'infection d'adware possible.";
 "Adware!" = "Adware !";
 "[Installed]" = "[Installé]";
 "[Cache]" = "[En cache]";

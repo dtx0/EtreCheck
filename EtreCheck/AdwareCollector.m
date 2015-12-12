@@ -9,6 +9,7 @@
 #import "DiagnosticEvent.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
+#import "AdwareManager.h"
 
 #define kExtensionsKey @"extensions"
 #define kGroup2Key \
@@ -190,26 +191,23 @@
     {
     [self.result appendAttributedString: [self buildTitle]];
     
-    for(NSString * adware in self.adwareFound)
-      {
-      [self.result
-        appendString: [NSString stringWithFormat: @"    %@", adware]
-        attributes:
-          @{
-            NSForegroundColorAttributeName : [[Utilities shared] red],
-            NSFontAttributeName : [[Utilities shared] boldFont]
-          }];
-      
-      NSAttributedString * removeLink =
-        [self generateRemoveAdwareLink: adware];
+    [self.result
+      appendString: NSLocalizedString(kAdwareFound, NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    
+    NSAttributedString * removeLink =
+      [self generateRemoveAdwareLink: kAdwareFound];
 
-      if(removeLink)
-        {
-        [self.result appendAttributedString: removeLink];
-        [self.result appendString: @"\n"];
-        }
+    if(removeLink)
+      {
+      [self.result appendAttributedString: removeLink];
+      [self.result appendString: @"\n"];
       }
-      
+    
     [self.result appendCR];
     }
   }
