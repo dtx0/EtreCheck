@@ -488,6 +488,28 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Start the progress timer.
 - (void) startProgressTimer
   {
+  NSDockTile * docTile = [[NSApplication sharedApplication] dockTile];
+  
+  NSImageView * docTileImageView = [[NSImageView alloc] init];
+  
+  [docTileImageView
+    setImage: [[NSApplication sharedApplication] applicationIconImage]];
+    
+  [docTile setContentView: docTileImageView];
+
+  self.dockProgress =
+    [[NSProgressIndicator alloc]
+      initWithFrame: NSMakeRect(0.0, 0.0, docTile.size.width, 10.0)];
+    
+  [self.dockProgress setStyle: NSProgressIndicatorBarStyle];
+  [self.dockProgress setIndeterminate: NO];
+  [docTileImageView addSubview: self.dockProgress];
+
+  //[self.dockProgress setBezeled: YES];
+  [self.dockProgress setMinValue: 0];
+  [self.dockProgress setMaxValue: 100];
+  [self.dockProgress release];
+
   self.progressTimer =
     [NSTimer
       scheduledTimerWithTimeInterval: .3
@@ -841,6 +863,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.progress setDoubleValue: amount];
   [self.progress setHidden: NO];
   [self.progress startAnimation: self];
+  
+  [self.dockProgress setDoubleValue: amount];
+  [[[NSApplication sharedApplication] dockTile] display];
   }
 
 // Handle an application found.
@@ -984,6 +1009,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   [self.progressTimer invalidate];
   
+  [self.dockProgress removeFromSuperview];
+  [[[NSApplication sharedApplication] dockTile] display];
+
   NSData * rtfData =
     [self.log
       RTFFromRange: NSMakeRange(0, [self.log length])

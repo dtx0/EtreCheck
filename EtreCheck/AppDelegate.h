@@ -24,6 +24,7 @@
   NSView * myReportView;
   NSProgressIndicator * myProgress;
   NSProgressIndicator * mySpinner;
+  NSProgressIndicator * myDockProgress;
   NSButton * myCancelButton;
   NSTextView * myStatusView;
   NSTextView * logView;
@@ -76,6 +77,7 @@
 @property (retain) IBOutlet NSView * reportView;
 @property (retain) IBOutlet NSProgressIndicator * progress;
 @property (retain) IBOutlet NSProgressIndicator * spinner;
+@property (retain) IBOutlet NSProgressIndicator * dockProgress;
 @property (retain) IBOutlet NSButton * cancelButton;
 @property (retain) IBOutlet NSTextView * statusView;
 @property (retain) IBOutlet NSTextView * logView;
