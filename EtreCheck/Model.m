@@ -27,13 +27,21 @@
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize adwareFiles = myAdwareFiles;
 @synthesize adwareExtensions = myAdwareExtensions;
+@synthesize whitelistFiles = myWhitelistFiles;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
 @synthesize adwareFound = myAdwareFound;
 @synthesize terminatedTasks = myTerminatedTasks;
+@synthesize greylistCount = myGreylistCount;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize checkAppleSignatures = myCheckAppleSignatures;
 @synthesize hideAppleTasks = myHideAppleTasks;
+@dynamic adwarePossible;
+
+- (bool) adwarePossible
+  {
+  return self.greylistCount > 0;
+  }
 
 // Return the singeton of shared values.
 + (Model *) model
@@ -212,6 +220,21 @@
       return YES;
     
   return NO;
+  }
+
+// Check the file against the whitelist.
+- (void) checkWhitelistFile: (NSString *) path
+  {
+  if(![self isWhitelistFile: path])
+    self.greylistCount = self.greylistCount + 1;
+  }
+
+// Is this file in the whitelist?
+- (bool) isWhitelistFile: (NSString *) path
+  {
+  NSString * name = [path lastPathComponent];
+  
+  return [self.whitelistFiles containsObject: name];
   }
 
 // What kind of adware is this?

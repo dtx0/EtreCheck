@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "AdwareManager.h"
 
+#define kWhitelistKey @"whitelist"
 #define kExtensionsKey @"extensions"
 #define kGroup2Key \
   @"Downlite, VSearch, Conduit, Trovi, MyBrand, Search Protect"
@@ -22,6 +23,12 @@
 
 @synthesize adwareSignatures = myAdwareSignatures;
 @synthesize adwareFound = myAdwareFound;
+@dynamic adwarePossible;
+
+- (bool) adwarePossible
+  {
+  return [[Model model] adwarePossible];
+  }
 
 // Constructor.
 - (id) init
@@ -100,6 +107,10 @@
     if(plist)
       {
       [self
+        addSignatures: [plist objectForKey: @"whitelist"]
+          forKey: kWhitelistKey];
+      
+      [self
         addSignatures: [plist objectForKey: @"item1"]
           forKey: kExtensionsKey];
       
@@ -122,9 +133,12 @@
     {
     NSString * localizedKey = NSLocalizedString(key, NULL);
     
-    if([key isEqualToString: @"extensions"])
-      [[Model model] setAdwareExtensions: signatures];
+    if([key isEqualToString: kWhitelistKey])
+      [[Model model] setWhitelistFiles: [NSSet setWithArray: signatures]];
       
+    else if([key isEqualToString: kExtensionsKey])
+      [[Model model] setAdwareExtensions: signatures];
+
     else
       [myAdwareSignatures
         setObject: [self expandSignatures: signatures]
@@ -188,28 +202,60 @@
 - (void) printAdware
   {
   if([self.adwareFound count])
-    {
-    [self.result appendAttributedString: [self buildTitle]];
-    
-    [self.result
-      appendString: NSLocalizedString(kAdwareFound, NULL)
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
-    
-    NSAttributedString * removeLink =
-      [self generateRemoveAdwareLink: kAdwareFound];
-
-    if(removeLink)
-      {
-      [self.result appendAttributedString: removeLink];
-      [self.result appendString: @"\n"];
-      }
-    
-    [self.result appendCR];
-    }
-  }
+    [self printDefiniteAdware];
   
+  else if(self.adwarePossible)
+    [self printPossibleAdware];
+  }
+
+// Print definite adware found.
+- (void) printDefiniteAdware
+  {
+  [self.result appendAttributedString: [self buildTitle]];
+  
+  [self.result
+    appendString: NSLocalizedString(kAdwareFound, NULL)
+    attributes:
+      @{
+        NSForegroundColorAttributeName : [[Utilities shared] red],
+        NSFontAttributeName : [[Utilities shared] boldFont]
+      }];
+  
+  NSAttributedString * removeLink =
+    [self generateRemoveAdwareLink: kAdwareFound];
+
+  if(removeLink)
+    {
+    [self.result appendAttributedString: removeLink];
+    [self.result appendString: @"\n"];
+    }
+  
+  [self.result appendCR];
+  }
+
+// Print possible adware found.
+- (void) printPossibleAdware
+  {
+  [self.result appendAttributedString: [self buildTitle]];
+  
+  [self.result
+    appendString: NSLocalizedString(kAdwarePossible, NULL)
+    attributes:
+      @{
+        NSForegroundColorAttributeName : [[Utilities shared] red],
+        NSFontAttributeName : [[Utilities shared] boldFont]
+      }];
+  
+  NSAttributedString * removeLink =
+    [self generateRemoveAdwareLink: kAdwarePossible];
+
+  if(removeLink)
+    {
+    [self.result appendAttributedString: removeLink];
+    [self.result appendString: @"\n"];
+    }
+  
+  [self.result appendCR];
+  }
+
 @end

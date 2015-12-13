@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
+#import "AdwareManager.h"
 
 @implementation Collector
 
@@ -388,14 +389,24 @@
   
   [urlString appendString: @" "];
   
-  [urlString
-    appendString: NSLocalizedString(@"[Click to remove]", NULL)
-    attributes:
-      @{
-        NSFontAttributeName : [[Utilities shared] boldFont],
-        NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSLinkAttributeName : url
-      }];
+  if([name isEqualToString: kAdwareFound])
+    [urlString
+      appendString: NSLocalizedString(@"[Click to remove]", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSLinkAttributeName : url
+        }];
+  else if([name isEqualToString: kAdwarePossible])
+    [urlString
+      appendString: NSLocalizedString(@"[Click to scan for adware]", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSLinkAttributeName : url
+        }];
     
   return [urlString autorelease];
   }

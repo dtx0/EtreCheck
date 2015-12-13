@@ -116,12 +116,6 @@
   [collectors addObject: [[ThunderboltCollector new] autorelease]];
   [collectors addObject: [[TimeMachineCollector new] autorelease]];
   
-  // In order to find adware in Safari extensions, the Adware collector has
-  // to be created first, but then the Safari extension collection has to
-  // run fist. Such is life.
-  [collectors addObject: [[SafariExtensionsCollector new] autorelease]];
-  [collectors addObject: [[AdwareCollector new] autorelease]];
-  
   // Start the machine animation.
   [self runMachineAnimation: hardwareCollector];
   
@@ -334,6 +328,12 @@
   [collectors addObject: [[UserLaunchAgentsCollector new] autorelease]];
   [collectors addObject: [[LoginItemsCollector new] autorelease]];
   [collectors addObject: [[HiddenAppsCollector new] autorelease]];
+  
+  // In order to find adware in Safari extensions, the Adware collector has
+  // to be created first, but then the Safari extension collection has to
+  // run fist. Such is life.
+  [collectors addObject: [[SafariExtensionsCollector new] autorelease]];
+  [collectors addObject: [[AdwareCollector new] autorelease]];
   
   // Start the agents and daemons animation.
   dispatch_semaphore_t semaphore = [self runAgentsAndDaemonsAnimation];

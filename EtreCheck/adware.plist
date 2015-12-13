@@ -29,10 +29,12 @@
 		<string>com.bombich.ccc.plist</string>
 		<string>com.bombich.ccchelper.plist</string>
 		<string>com.c-command.SpamSieve.LaunchAgent.plist</string>
+		<string>com.charlessoft.pacifist.helper.plist</string>
 		<string>com.ea.origin.ESHelper.plist</string>
 		<string>com.epson.esua.launcher.plist</string>
 		<string>com.f-secure.sync.BTCloud.plist</string>
 		<string>com.fitbit.galileod.plist</string>
+		<string>com.github.GitHub.GHInstallCLI.plist</string>
 		<string>com.google.keystone.agent.plist</string>
 		<string>com.google.keystone.daemon.plist</string>
 		<string>com.hp.help.tocgenerator.plist</string>

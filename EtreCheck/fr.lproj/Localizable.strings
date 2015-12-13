@@ -195,7 +195,7 @@
 "definiteadware" = "EtreCheck a détecté que votre Macintosh peut être infecté par adware. Télécharger et lancer Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour enlever l’adware.";
 "probableadware" = "EtreCheck a détecté quelques logiciel qui ne sont pas sur le whitelist des logiciels sûrs. Télécharger et lancer Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour vérifier que vous n’avez aucin adware ou malware.";
 "adwarefound" = "    L'infection d'adware trouvé.";
-"adwarecheck" = "    L'infection d'adware possible.";
+"adwarepossible" = "    L'infection d'adware possible.";
 "Adware!" = "Adware !";
 "[Installed]" = "[Installé]";
 "[Cache]" = "[En cache]";
@@ -212,6 +212,7 @@
 "(Technical Specifications)" = "(Caractéristiques techniques)";
 "Empty" = "Vide";
 "[Click to remove]" = "[Cliquer pour enlever]";
+"[Click to scan for adware]" = "[Cliquer pour vérifier l’adware]";
 "More adware files" = "Plus de fichiers adwares";
 "The following internal tasks failed to complete:" = "Les tâches internes ci-dessous ont faillis d’atteindre leur fin.";
 " - %@ Drive failure!" = " - %@ Échec du disque !";

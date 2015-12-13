@@ -32,7 +32,7 @@
 "definiteadware" = "EtreCheck has detected that your Macintosh is infected with adware. Download and run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to remove the adwware.";
 "probableadware" = "EtreCheck has detected software that is not on EtreCheck's whitelist. Download and run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to scan for adware and malware.";
 "adwarefound" = "    Adware infection found.";
-"adwarecheck" = "    Adware infection possible.";
+"adwarepossible" = "    Adware infection possible.";
 "%d pressurekilledcount (plural rule: zero)" = "    no processes killed due to insufficient RAM\n";
 "%d pressurekilledcount (plural rule: one)" = "    one process killed due to insufficient RAM\n";
 "%d pressurekilledcount (plural rule: other)" = "    %d processes killed due to insufficient RAM\n";

@@ -44,10 +44,12 @@
   NSMutableDictionary * myDiagnosticEvents;
   NSMutableDictionary * myAdwareFiles;
   NSArray * myAdwareExtensions;
+  NSSet * myWhitelistFiles;
   NSString * myComputerName;
   NSString * myHostName;
   bool myAdwareFound;
   NSMutableArray * myTerminatedTasks;
+  int myGreylistCount;
   NSMutableSet * mySeriousProblems;
   
   bool myIgnoreKnownAppleFailures;
@@ -98,6 +100,9 @@
 // Adware extensions.
 @property (retain) NSArray * adwareExtensions;
 
+// Whitelist files.
+@property (retain) NSSet * whitelistFiles;
+
 // Localized host name.
 @property (retain) NSString * computerName;
 
@@ -110,6 +115,9 @@
 // Which tasks had to be terminated.
 @property (retain) NSMutableArray * terminatedTasks;
 
+// Keep track of the number of files not in the whitelit.
+@property (assign) int greylistCount;
+
 // What serious problems were found?
 @property (retain) NSMutableSet * seriousProblems;
 
@@ -121,6 +129,9 @@
 
 // Hide Apple tasks.
 @property (assign) bool hideAppleTasks;
+
+// Is adware possible?
+@property (readonly) bool adwarePossible;
 
 // Return the singeton of shared values.
 + (Model *) model;
@@ -139,6 +150,12 @@
 
 // Is this file an adware extension?
 - (bool) isAdwareExtension: (NSString *) path;
+
+// Check the file against the whitelist.
+- (void) checkWhitelistFile: (NSString *) path;
+
+// Is this file in the whitelist?
+- (bool) isWhitelistFile: (NSString *) path;
 
 // What kind of adware is this?
 - (NSString *) adwareType: (NSString *) path;

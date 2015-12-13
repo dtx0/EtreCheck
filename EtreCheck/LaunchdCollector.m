@@ -534,6 +534,8 @@
         return NO;
       }
     }
+  else
+    [[Model model] checkWhitelistFile: file];
 
   [output appendAttributedString: [self formatPropertyListStatus: status]];
   

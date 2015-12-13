@@ -644,7 +644,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           [[NSBundle mainBundle]
             pathForResource: @"linkhelp" ofType: @"rtf"]]];
 
-  if([[Model model] adwareFound])
+  if([[Model model] adwareFound] || [[Model model] adwarePossible])
     [self.log
       appendRTFData:
         [NSData
