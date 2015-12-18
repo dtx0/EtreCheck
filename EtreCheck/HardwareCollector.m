@@ -414,9 +414,10 @@
 
   NSString * language = NSLocalizedString(@"en", NULL);
 
-  [self.result appendString: @"    "];
-
   if(upgradeable)
+    {
+    [self.result appendString: @"    "];
+
     [self.result
       appendAttributedString:
         [Utilities
@@ -424,7 +425,8 @@
           title:
             NSLocalizedString(
               @"[Click for upgrade instructions]\n", NULL)]];
-
+    }
+    
   if(details)
     {
     NSArray * banks = [details objectForKey: @"_items"];
