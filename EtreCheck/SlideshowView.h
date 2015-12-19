@@ -9,9 +9,7 @@
 
 @interface SlideshowView : NSView
   {
-  // An NSImageView that displays the current image, as a subview of the
-  // SlideshowView
-  NSImageView * currentImageView;
+  NSView * currentView;
   NSView * myMaskView;
   }
 
@@ -21,7 +19,14 @@
 // Show a new image.
 - (void) transitionToImage: (NSImage *) newImage;
 
+// Show a new view.
+- (void) transitionToView: (NSView *) newView;
+
 // Set the transition style.
 - (void) updateSubviewsWithTransition: (NSString *) transition;
+
+// Set the transition style with subtype.
+- (void) updateSubviewsWithTransition: (NSString *) transition
+  subType: (NSString *) subtype;
 
 @end

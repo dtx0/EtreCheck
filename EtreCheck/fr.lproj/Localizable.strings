@@ -145,7 +145,8 @@
 "startupitemsdeprecated" = "    Les éléments de démarrage sont obsolètes avec OS X Yosemite\n";
 "Quit and go to update" = "Quitter et mettre à jour";
 "EtreCheck Report" = "Rapport EtreCheck";
-"Problem description:\n" = "Description du problème :\n";
+"Problem: " = "Problème :";
+"Description:\n" = "Description :\n";
 "Confirm cancellation" = "Confirmer l'annulation";
 "Are you sure you want to cancel this EtreCheck report?" = "Êtes-vous sûr de vouloir annuler ce rapport EtreCheck ?";
 "No, continue" = "Non, continuer";
@@ -232,3 +233,9 @@
 "Check Apple signatures: Disabled\n" = "Vérifiez les signatures numériques des tâches d’Apple: Désactivé\n";
 "Ignore known Apple failures: Disabled\n" = "Ignorez les échecs d’Apple connus : Désactivé\n";
 "Hide Apple tasks: Disabled\n" = "Masquer les tâches d’Apple : Désactivé\n";
+"Defaults" = "Par défaut";
+"Performance: " = "La vitesse : ";
+"Excellent" = "Excellent";
+"Good" = "Bon";
+"Below average" = "Sous la moyenne";
+"Poor" = "Pire";

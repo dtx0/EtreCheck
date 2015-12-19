@@ -64,6 +64,17 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize collectionStatus = myCollectionStatus;
 @synthesize reportView = myReportView;
 @synthesize animationView = myAnimationView;
+@synthesize startPanel = myStartPanel;
+@synthesize startPanelAnimationView = myStartPanelAnimationView;
+@synthesize introPanel = myIntroPanel;
+@synthesize problemIndex = myProblemIndex;
+@synthesize chooseAProblemButton = myChooseAProblemButton;
+@synthesize chooseAProblemPromptItem = myChooseAProblemPromptItem;
+@synthesize beachballItem = myBeachballItem;
+@dynamic problemSelected;
+@synthesize problemDescription = myProblemDescription;
+@synthesize optionsButton = myOptionsButton;
+@synthesize optionsVisible = myOptionsVisible;
 @synthesize userParametersPanel = myUserParametersPanel;
 @synthesize clipboardCopyToolbarItemView = myClipboardCopyToolbarItemView;
 @synthesize clipboardCopyButton = myClipboardCopyButton;
@@ -90,6 +101,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @dynamic ignoreKnownAppleFailures;
 @dynamic checkAppleSignatures;
 @dynamic hideAppleTasks;
+
++ (NSSet *) keyPathsForValuesAffectingProblemSelected
+  {
+  return [NSSet setWithObject: @"problemIndex"];
+  }
+
+- (bool) problemSelected
+  {
+  return self.problemIndex > 0;
+  }
 
 - (bool) ignoreKnownAppleFailures
   {
@@ -153,6 +174,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   [self checkForUpdates];
   
+  [self setupStartMessage];
+
   [self.window.contentView addSubview: self.animationView];
   
   myDisplayStatus = [NSAttributedString new];
@@ -212,6 +235,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   self.helpButtonImage = [NSImage imageNamed: @"Help"];
   self.helpButtonInactiveImage = [NSImage imageNamed: @"HelpInactive"];
+  }
+
+// The application will terminate.
+- (void) applicationWillTerminate: (NSNotification *) notification
+  {
+  [self.introPanel.contentView release];
+  [self.userParametersPanel.contentView release];
   }
 
 // Dim the display on deactivate.
@@ -383,6 +413,44 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [alert release];
   }
 
+// Setup the start message.
+- (void) setupStartMessage
+  {
+  [self.introPanel.contentView retain];
+  [self.userParametersPanel.contentView retain];
+
+  [self.startPanelAnimationView
+    transitionToView: self.introPanel.contentView];
+
+  [self.chooseAProblemPromptItem setEnabled: YES];
+  [self.chooseAProblemButton selectItem: self.chooseAProblemPromptItem];
+  
+  bool is1011 = false;
+  
+  if(floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_10)
+    {
+    NSProcessInfo * processInfo = [NSProcessInfo processInfo];
+    
+    NSOperatingSystemVersion version;
+    
+    version.majorVersion = 10;
+    version.minorVersion = 11;
+    version.patchVersion = 0;
+    
+    is1011 = [processInfo isOperatingSystemAtLeastVersion: version];
+    }
+    
+  NSImage * image = nil;
+  
+  if(is1011)
+    image = [NSImage imageNamed: @"BeachballEC"];
+  else
+    image = [NSImage imageNamed: @"Beachball"];
+    
+  if(image)
+    [self.beachballItem setImage: image];
+  }
+
 // Collect the user message.
 - (void) collectUserParameters
   {
@@ -390,7 +458,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     removeObjectForKey: @"dontshowusermessage"];
 
   [[NSApplication sharedApplication]
-    beginSheet: self.userParametersPanel
+    beginSheet: self.startPanel
     modalForWindow: self.window
     modalDelegate: self
     didEndSelector: @selector(didEndSheet:returnCode:contextInfo:)
@@ -472,7 +540,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   self.cancelButton.enabled = YES;
   
-  [[NSApplication sharedApplication] endSheet: self.userParametersPanel];
+  [[NSApplication sharedApplication] endSheet: self.startPanel];
   
   self.reportStartTime = [NSDate date];
   
@@ -538,7 +606,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Cancel the report.
 - (IBAction) cancel: (id) sender
   {
-  [[NSApplication sharedApplication] endSheet: self.userParametersPanel];
+  [[NSApplication sharedApplication] endSheet: self.startPanel];
 
   [[NSApplication sharedApplication] terminate: sender];
   }
@@ -614,6 +682,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
        dictionaryWithObjectsAndKeys:
          [[Utilities shared] boldFont], NSFontAttributeName, nil]];
 
+  [self printPerformance];
+    
   [self.log
     appendString: NSLocalizedString(@"downloadetrecheck", NULL)
     attributes:
@@ -632,6 +702,61 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self printLinkInstructions];
   [self printOptions];
   [self printErrors];
+  [self printProblem];
+  }
+
+// Print performance.
+- (void) printPerformance
+  {
+  [self.log
+    appendString: NSLocalizedString(@"Performance: ", NULL)
+    attributes:
+      [NSDictionary
+       dictionaryWithObjectsAndKeys:
+         [[Utilities shared] boldFont], NSFontAttributeName, nil]];
+
+  NSTimeInterval interval = [self elapsedSeconds];
+  
+  if(interval > (60 * 10))
+    {
+    [self.log
+      appendString: NSLocalizedString(@"Poor", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    }
+  else if(interval > (60 * 5))
+    {
+    [self.log
+      appendString: NSLocalizedString(@"Below average", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    }
+  else if(interval > (60 * 3))
+    {
+    [self.log
+      appendString: NSLocalizedString(@"Good", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    }
+  else
+    {
+    [self.log
+      appendString: NSLocalizedString(@"Excellent", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    }
+    
+  [self.log appendString: @"\n"];
   }
 
 // Print link instructions.
@@ -740,6 +865,42 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
   }
 
+// Print the problem from the user.
+- (void) printProblem
+  {
+  [self.log
+    appendString: NSLocalizedString(@"Problem: ", NULL)
+    attributes:
+      @{
+        NSFontAttributeName : [[Utilities shared] boldFont]
+      }];
+  
+  if(self.problemIndex > 0)
+    if(self.problemIndex <= self.chooseAProblemButton.menu.itemArray.count)
+      {
+      NSMenuItem * selectedItem =
+        [self.chooseAProblemButton.menu.itemArray
+          objectAtIndex: self.problemIndex];
+      
+      [self.log appendString: selectedItem.title];
+      [self.log appendString: @"\n"];
+      }
+    
+  if(self.problemDescription)
+    {
+    [self.log
+      appendString: NSLocalizedString(@"Description:\n", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    [self.log appendAttributedString: self.problemDescription];
+    [self.log appendString: @"\n"];
+    }
+    
+  [self.log appendString: @"\n"];
+  }
+
 // Get the current date as a string.
 - (NSString *) currentDate
   {
@@ -752,6 +913,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [dateFormatter release];
 
   return dateString;
+  }
+
+// Get the elapsed time as a number of seconds.
+- (NSTimeInterval) elapsedSeconds
+  {
+  NSDate * current = [NSDate date];
+  
+  return [current timeIntervalSinceDate: self.reportStartTime];
   }
 
 // Get the elapsed time as a string.
@@ -854,9 +1023,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if((self.nextProgressIncrement - [self.progress doubleValue]) > 1)
     [self.progress setNeedsDisplay: YES];
 
-  if([self.progress isIndeterminate])
-    [self.progress setIndeterminate: NO];
-    
   // Snow Leopard doesn't like animations with CA layers.
   // Beat it with a rubber hose.
   [self.progress setHidden: YES];
@@ -1052,7 +1218,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if(frame.size.height < 512)
     {
     frame.size.height += 256;
-    frame.origin.y -= 200;
+    frame.origin.y -= 128;
     }
     
   double duration = [window animationResizeTime: frame];
@@ -1263,6 +1429,41 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (IBAction) printReport: (id) sender
   {
   [self.logView print: sender];
+  }
+
+// Toggle the options view.
+- (IBAction) toggleOptions: (id) sender
+  {
+  if(self.optionsVisible)
+    {
+    [self.startPanelAnimationView
+      updateSubviewsWithTransition: kCATransitionPush
+      subType: kCATransitionFromRight];
+
+    [self.startPanelAnimationView
+      transitionToView: self.introPanel.contentView];
+    
+    self.checkAppleSignatures = YES;
+    self.hideAppleTasks = YES;
+    self.ignoreKnownAppleFailures = YES;
+    
+    self.optionsButton.title = NSLocalizedString(@"Options", NULL);
+    
+    self.optionsVisible = NO;
+    }
+  else
+    {
+    [self.startPanelAnimationView
+      updateSubviewsWithTransition: kCATransitionPush
+      subType: kCATransitionFromLeft];
+    
+    [self.startPanelAnimationView
+      transitionToView: self.userParametersPanel.contentView];
+
+    self.optionsButton.title = NSLocalizedString(@"Defaults", NULL);
+
+    self.optionsVisible = YES;
+    }
   }
 
 // Set text size to normal.
@@ -1579,6 +1780,33 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [image addRepresentation: imageRep];
    
   return [image autorelease];
+  }
+
+#pragma mark - Menu item validation.
+
+- (BOOL) validateUserInterfaceItem:
+  (id<NSValidatedUserInterfaceItem>) anItem
+  {
+  if(anItem == self.chooseAProblemPromptItem)
+    return NO;
+    
+  return YES;
+  }
+
+// Dummy menu item action for auto-disable.
+- (IBAction) dummyAction: (id) sender
+  {
+  }
+
+#pragma mark - NSMenuDelegate conformance
+
+- (void) menuDidClose: (NSMenu *) menu
+  {
+  if(!self.problemSelected)
+    {
+    [self.chooseAProblemPromptItem setEnabled: YES];
+    [self.chooseAProblemButton selectItem: self.chooseAProblemPromptItem];
+    }
   }
 
 #pragma mark - Control EtreCheck behaviour

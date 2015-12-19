@@ -16,6 +16,15 @@
 // Set the transition style.
 - (void) updateSubviewsWithTransition: (NSString *) transition
   {
+  [self
+    updateSubviewsWithTransition: transition
+    subType: kCATransitionFromLeft];
+  }
+
+// Set the transition style with subtype.
+- (void) updateSubviewsWithTransition: (NSString *) transition
+  subType: (NSString *) subtype
+  {
   CIFilter * transitionFilter = [CIFilter filterWithName: transition];
     
   [transitionFilter setDefaults];
@@ -25,7 +34,7 @@
   // We want to specify one of Core Animation's built-in transitions.
   //[newTransition setFilter:transitionFilter];
   [newTransition setType: transition];
-  [newTransition setSubtype: kCATransitionFromLeft];
+  [newTransition setSubtype: subtype];
 
   // Specify an explicit duration for the transition.
   [newTransition setDuration: 0.2];
@@ -54,33 +63,42 @@
     [newImageView
       setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
     }
-    
-  if(currentImageView && newImageView)
-    [[self animator] replaceSubview: currentImageView with: newImageView];
+   
+  [self transitionToView: newImageView];
+  }
+
+// Swap a new NSView into the view in place of the previous NSView. This
+// will trigger the transition animation wired up in
+// -updateSubviewsTransition, which fires on changes in the "subviews"
+// property.
+- (void) transitionToView: (NSView *) newView
+  {
+  if(currentView && newView)
+    [[self animator] replaceSubview: currentView with: newView];
     
 	else
 	  {
-    if(currentImageView)
-			[[currentImageView animator] removeFromSuperview];
+    if(currentView)
+			[[currentView animator] removeFromSuperview];
     
     NSView * maskView = self.maskView;
     
     if(!maskView)
       maskView = self;
       
-    if(newImageView)
+    if(newView)
       {
-      if(currentImageView)
+      if(currentView)
         [[self animator]
-          addSubview: newImageView
+          addSubview: newView
           positioned: NSWindowBelow
           relativeTo: maskView];
       else
-        [self addSubview: newImageView];
+        [self addSubview: newView];
       }
     }
     
-  currentImageView = newImageView;
+  currentView = newView;
   }
 
 @end

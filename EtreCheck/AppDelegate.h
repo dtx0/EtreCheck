@@ -16,7 +16,8 @@
   NSUserNotificationCenterDelegate,
   NSToolbarDelegate,
   NSSharingServiceDelegate,
-  NSSharingServicePickerDelegate>
+  NSSharingServicePickerDelegate,
+  NSUserInterfaceValidations>
   {
   NSWindow * window;
   NSWindow * myLogWindow;
@@ -40,6 +41,16 @@
   NSImageView * myDemonImage;
   NSImageView * myAgentImage;
   NSString * myCollectionStatus;
+  NSWindow * myStartPanel;
+  SlideshowView * myStartPanelAnimationView;
+  NSWindow * myIntroPanel;
+  NSUInteger myProblemIndex;
+  NSPopUpButton * myChooseAProblemButton;
+  NSMenuItem * myChooseAProblemPromptItem;
+  NSMenuItem * myBeachballItem;
+  NSAttributedString * myProblemDescription;
+  NSButton * myOptionsButton;
+  BOOL myOptionsVisible;
   NSWindow * myUserParametersPanel;
   
   NSView * myClipboardCopyToolbarItemView;
@@ -93,6 +104,17 @@
 @property (retain) IBOutlet NSImageView * demonImage;
 @property (retain) IBOutlet NSImageView * agentImage;
 @property (retain) NSString * collectionStatus;
+@property (retain) IBOutlet NSWindow * startPanel;
+@property (retain) IBOutlet SlideshowView * startPanelAnimationView;
+@property (retain) IBOutlet NSWindow * introPanel;
+@property (assign) NSUInteger problemIndex;
+@property (retain) IBOutlet NSPopUpButton * chooseAProblemButton;
+@property (retain) IBOutlet NSMenuItem * chooseAProblemPromptItem;
+@property (retain) IBOutlet NSMenuItem * beachballItem;
+@property (readonly) bool problemSelected;
+@property (retain) NSAttributedString * problemDescription;
+@property (retain) IBOutlet NSButton * optionsButton;
+@property (assign) BOOL optionsVisible;
 @property (retain) IBOutlet NSWindow * userParametersPanel;
 @property (retain) IBOutlet NSView * shareToolbarItemView;
 @property (retain) IBOutlet NSButton * shareButton;
@@ -166,5 +188,8 @@
 
 // Decline the Terms of Use.
 - (IBAction) declineTOS: (id) sender;
+
+// Dummy menu item action for auto-disable.
+- (IBAction) dummyAction: (id) sender;
 
 @end

@@ -44,6 +44,8 @@
 		<string>com.kodak.KODAK AiO Firmware Updater.plist</string>
 		<string>com.kodak.KODAK AiO Software Updater.plist</string>
 		<string>com.leapfrog.connect.shell.plist</string>
+		<string>com.leapfrog.connect.authdaemon.plist</string>
+		<string>com.leapfrog.connect.monitor.plist</string>
 		<string>com.malwarebytes.MBAMHelperTool.plist</string>
 		<string>com.microsoft.office.licensing.helper.plist</string>
 		<string>com.microsoft.office.licensingV2.helper.plist</string>
@@ -63,6 +65,7 @@
 		<string>com.parallels.mobile.prl_deskctl_agent.launchagent.plist</string>
 		<string>com.parallels.vm.prl_pcproxy.plist</string>
 		<string>com.prosofteng.DriveGenius.locum.plist</string>
+		<string>com.seagate.TBDecorator.plist</string>
 		<string>com.skype.skypeinstaller.plist</string>
 		<string>com.sony.SonyAutoLauncher.agent.plist</string>
 		<string>com.sophos.common.servicemanager.plist</string>

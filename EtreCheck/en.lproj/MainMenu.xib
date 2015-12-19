@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -21,7 +21,10 @@
                 <outlet property="agentImage" destination="X6k-bh-0bO" id="029-YW-2tT"/>
                 <outlet property="animationView" destination="cs1-k8-fgW" id="UaA-Y7-kiB"/>
                 <outlet property="applicationIcon" destination="24p-7h-cH3" id="8z3-r1-Kkm"/>
+                <outlet property="beachballItem" destination="V55-YK-kuc" id="DGf-6e-HVf"/>
                 <outlet property="cancelButton" destination="mIX-Fq-FhE" id="s9D-m6-no7"/>
+                <outlet property="chooseAProblemButton" destination="fuC-gb-f3l" id="CE2-gH-5My"/>
+                <outlet property="chooseAProblemPromptItem" destination="IhM-Ny-kdQ" id="Mow-Ja-7oE"/>
                 <outlet property="clipboardCopyButton" destination="q8u-Lb-y4P" id="hKX-6h-uJY"/>
                 <outlet property="clipboardCopyToolbarItemView" destination="kwV-c6-t98" id="jf2-ry-FLb"/>
                 <outlet property="demonImage" destination="PBo-4n-aK2" id="x01-Zs-ecw"/>
@@ -30,21 +33,25 @@
                 <outlet property="helpButton" destination="vd5-kg-IdS" id="Atc-kB-9hT"/>
                 <outlet property="helpManager" destination="OAP-T5-MR2" id="xX9-71-M4r"/>
                 <outlet property="helpToolbarItemView" destination="SJD-oN-rKO" id="lPq-V4-U2W"/>
+                <outlet property="introPanel" destination="pae-8E-mPU" id="HGG-el-Bau"/>
                 <outlet property="logView" destination="rRU-vM-wce" id="5SF-dE-SRO"/>
                 <outlet property="logWindow" destination="LC3-aK-O61" id="D9A-nq-J3f"/>
                 <outlet property="machineIcon" destination="kxf-sE-hK4" id="g5f-Le-vgx"/>
                 <outlet property="magnifyingGlass" destination="unu-XY-TZC" id="kJW-mf-RrR"/>
                 <outlet property="magnifyingGlassShade" destination="PHl-IL-fhi" id="Gpp-rD-Etp"/>
+                <outlet property="optionsButton" destination="EBF-Wl-xZl" id="f4U-wd-G31"/>
                 <outlet property="progress" destination="tDb-Al-O2y" id="p6y-69-Ka0"/>
                 <outlet property="reportView" destination="Rah-Ot-abL" id="9Oc-0g-Xed"/>
                 <outlet property="shareButton" destination="eGD-du-9Qv" id="jI4-wr-wpU"/>
                 <outlet property="shareToolbarItemView" destination="Wry-qn-NGq" id="k9F-9h-KBJ"/>
                 <outlet property="spinner" destination="Udp-hz-whF" id="9PX-SM-esE"/>
+                <outlet property="startPanel" destination="hni-3i-hk1" id="fxa-bP-QVp"/>
+                <outlet property="startPanelAnimationView" destination="PhF-uw-q0W" id="sqN-ro-ubL"/>
                 <outlet property="statusView" destination="jBT-e2-hx3" id="h1T-1x-iC9"/>
                 <outlet property="textSizeButton" destination="Q7d-pz-eK5" id="D5j-0D-76z"/>
                 <outlet property="textSizeToolbarItemView" destination="JdO-Ik-I8L" id="zv3-iV-4oP"/>
                 <outlet property="toolbar" destination="HAH-8D-CvP" id="Spo-sd-EYf"/>
-                <outlet property="userParametersPanel" destination="hni-3i-hk1" id="ihs-yy-nI9"/>
+                <outlet property="userParametersPanel" destination="J2g-N6-sDu" id="TNU-ac-Cz5"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
             </connections>
         </customObject>
@@ -492,7 +499,6 @@
                                 <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" spellingCorrection="YES" id="jBT-e2-hx3">
                                     <rect key="frame" x="0.0" y="0.0" width="478" height="268"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <animations/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="478" height="268"/>
                                     <size key="maxSize" width="492" height="10000000"/>
@@ -508,119 +514,46 @@
                                     </connections>
                                 </textView>
                             </subviews>
-                            <animations/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </clipView>
-                        <animations/>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="nKD-7l-Qff">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="zZL-lq-vZd">
                             <rect key="frame" x="463" y="1" width="16" height="268"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
                         </scroller>
                     </scrollView>
                 </subviews>
-                <animations/>
             </view>
         </window>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="hni-3i-hk1" userLabel="Window - User Message">
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="hni-3i-hk1" userLabel="Window - Start">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
-            <rect key="contentRect" x="109" y="132" width="548" height="342"/>
+            <rect key="contentRect" x="109" y="132" width="548" height="329"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="ztf-cY-AUf">
-                <rect key="frame" x="0.0" y="0.0" width="548" height="342"/>
+                <rect key="frame" x="0.0" y="0.0" width="548" height="329"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="CYc-qI-gT3">
-                        <rect key="frame" x="18" y="254" width="512" height="68"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <animations/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="8c5-qk-jzN">
-                            <font key="font" metaFont="system"/>
-                            <string key="title">EtreCheck will collect a variety of information about the current state of your Mac and display it in a single, easy-to-read report. EtreCheck will identify any obvious problems in red. If you have a problem that EtreCheck does not show, please contact Apple Support directly or an Authorized Apple Service provider.</string>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="39u-5k-VWj">
-                        <rect key="frame" x="36" y="182" width="494" height="42"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <animations/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="lkt-yb-9vC">
-                            <font key="font" metaFont="smallSystem"/>
-                            <string key="title">This will ensure that your operating system has not been altered. It will also ensure that any tasks that claim to be from Apple really are from Apple. This option may take several additional minutes to run. </string>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Yli-l1-67K">
-                        <rect key="frame" x="36" y="119" width="483" height="28"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <animations/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Some Apple tasks are known to report harmless failures. This option will hide those failures." id="UkT-g4-6i3">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <button id="pUo-Nx-msa">
-                        <rect key="frame" x="18" y="153" width="236" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <animations/>
-                        <buttonCell key="cell" type="check" title="Ignore known Apple failures" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PkC-2F-H9b">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                    <button verticalHuggingPriority="750" id="EBF-Wl-xZl">
+                        <rect key="frame" x="14" y="13" width="88" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Options" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="geQ-Ka-sl1">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.ignoreKnownAppleFailures" id="bQO-Du-aEi"/>
-                            <outlet property="nextKeyView" destination="lrR-aP-PG2" id="6Td-Ju-M0R"/>
+                            <action selector="toggleOptions:" target="Voe-Tx-rLC" id="5Rn-tS-ASM"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="eHr-QE-4Ep">
-                        <rect key="frame" x="36" y="61" width="494" height="28"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <animations/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="f4t-6b-Dil">
-                            <font key="font" metaFont="smallSystem"/>
-                            <string key="title">There are many Apple tasks running on your Mac. EtreCheck hides these Apple tasks unless it finds a problem. Turn this option off to see all of them.</string>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <button id="3BR-w6-cMi">
-                        <rect key="frame" x="18" y="95" width="201" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <animations/>
-                        <buttonCell key="cell" type="check" title="Hide Apple tasks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="z1i-Mj-CTI">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="YfQ-7Z-BVU"/>
-                            <outlet property="nextKeyView" destination="lrR-aP-PG2" id="jmo-Yt-m6t"/>
-                        </connections>
-                    </button>
-                    <button id="enr-yW-RJE">
-                        <rect key="frame" x="18" y="230" width="311" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <animations/>
-                        <buttonCell key="cell" type="check" title="Check the digital signatures of Apple tasks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="FOg-3F-b26">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.checkAppleSignatures" id="pe1-B2-rDD"/>
-                            <outlet property="nextKeyView" destination="lrR-aP-PG2" id="bNY-Fc-QOr"/>
-                        </connections>
-                    </button>
+                    <customView wantsLayer="YES" id="PhF-uw-q0W" customClass="SlideshowView">
+                        <rect key="frame" x="0.0" y="41" width="548" height="288"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
                     <button verticalHuggingPriority="750" id="lrR-aP-PG2">
                         <rect key="frame" x="397" y="13" width="137" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <animations/>
                         <buttonCell key="cell" type="push" title="Start EtreCheck" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qTb-gt-ctA">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -630,15 +563,195 @@ DQ
                         </buttonCell>
                         <connections>
                             <action selector="start:" target="Voe-Tx-rLC" id="2ik-2d-dt0"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.problemSelected" id="UnW-8f-jQp"/>
                         </connections>
                     </button>
                 </subviews>
-                <animations/>
+            </view>
+            <point key="canvasLocation" x="338" y="-312.5"/>
+        </window>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="pae-8E-mPU" userLabel="Window - Intro">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <rect key="contentRect" x="109" y="132" width="548" height="291"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="FNB-pW-Air">
+                <rect key="frame" x="0.0" y="0.0" width="548" height="291"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="7Ob-yk-mJb">
+                        <rect key="frame" x="18" y="196" width="512" height="75"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="dgw-UT-CJc">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">EtreCheck will collect a variety of information about the current state of your Mac and display it in a single, easy-to-read report. EtreCheck automatically removes any personally identifiable information from the output.  Please start by identifying your problem and describing it in as much detail as possible.</string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <popUpButton verticalHuggingPriority="750" id="fuC-gb-f3l">
+                        <rect key="frame" x="18" y="164" width="219" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" altersStateOfSelectedItem="NO" id="sdl-fq-Ypj">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <menu key="menu" id="G6z-Jr-wWQ">
+                                <items>
+                                    <menuItem title="Choose a problem:" id="IhM-Ny-kdQ">
+                                        <connections>
+                                            <action selector="dummyAction:" target="Voe-Tx-rLC" id="hXt-4d-nEc"/>
+                                        </connections>
+                                    </menuItem>
+                                    <menuItem title="Computer is too slow" id="ROv-qy-ae4"/>
+                                    <menuItem title="Beachballing" id="V55-YK-kuc"/>
+                                    <menuItem title="Computer is restarting" id="U1A-ed-kcV"/>
+                                    <menuItem title="Apps are crashing" id="Kwc-ez-7k5"/>
+                                    <menuItem title="Other problem" id="MiE-Xk-sT3"/>
+                                    <menuItem title="No problem - just checking" id="TsZ-uZ-6ZT"/>
+                                </items>
+                                <connections>
+                                    <outlet property="delegate" destination="Voe-Tx-rLC" id="svO-4O-535"/>
+                                </connections>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="self.problemIndex" id="2Xb-Nj-VRD"/>
+                        </connections>
+                    </popUpButton>
+                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="xB3-o2-eO9">
+                        <rect key="frame" x="20" y="20" width="508" height="109"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <clipView key="contentView" id="OEe-Ko-s4T">
+                            <rect key="frame" x="1" y="1" width="506" height="107"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView importsGraphics="NO" richText="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="78R-B9-GBa">
+                                    <rect key="frame" x="0.0" y="0.0" width="506" height="107"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="506" height="107"/>
+                                    <size key="maxSize" width="517" height="10000000"/>
+                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="506" height="107"/>
+                                    <size key="maxSize" width="517" height="10000000"/>
+                                    <connections>
+                                        <binding destination="Voe-Tx-rLC" name="attributedString" keyPath="self.problemDescription" id="5Aa-6K-Vvl">
+                                            <dictionary key="options">
+                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="HlM-hq-qLk">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="yjL-Qa-ePP">
+                            <rect key="frame" x="491" y="1" width="16" height="107"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ldC-Qp-MWE">
+                        <rect key="frame" x="18" y="137" width="130" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Problem description:" id="rso-DD-zkk">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="369" y="654.5"/>
+        </window>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="J2g-N6-sDu" userLabel="Window - Options">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <rect key="contentRect" x="109" y="132" width="548" height="291"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="tvZ-oK-6GO">
+                <rect key="frame" x="0.0" y="0.0" width="548" height="291"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="ShI-Ks-kUm">
+                        <rect key="frame" x="18" y="215" width="512" height="56"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="0gp-Te-bVv">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">The EtreCheck report is most useful when run with all options enabled. These options can be changed, but will make the EtreCheck report longer and harder to read.</string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="CuE-DD-t5H">
+                        <rect key="frame" x="36" y="141" width="494" height="42"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="gif-fp-lXo">
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="title">This will ensure that your operating system has not been altered. It will also ensure that any tasks that claim to be from Apple really are from Apple. This option may take several additional minutes to run. </string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="pHg-lA-eh1">
+                        <rect key="frame" x="36" y="78" width="483" height="28"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Some Apple tasks are known to report harmless failures. This option will hide those failures." id="fU5-i8-ujm">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button id="KtB-ZS-8Df">
+                        <rect key="frame" x="18" y="112" width="236" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="check" title="Ignore known Apple failures" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="tch-E5-yas">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.ignoreKnownAppleFailures" id="vT7-Mk-Jty"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="aMf-0k-Z9O">
+                        <rect key="frame" x="36" y="20" width="494" height="28"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="5yx-3d-cHF">
+                            <font key="font" metaFont="smallSystem"/>
+                            <string key="title">There are many Apple tasks running on your Mac. EtreCheck hides these Apple tasks unless it finds a problem. Turn this option off to see all of them.</string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button id="rkY-oG-zY5">
+                        <rect key="frame" x="18" y="54" width="201" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="check" title="Hide Apple tasks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="d30-W3-fk9">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="1fO-ck-Pqp"/>
+                        </connections>
+                    </button>
+                    <button id="WKn-nL-k95">
+                        <rect key="frame" x="18" y="189" width="311" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="check" title="Check the digital signatures of Apple tasks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="v1v-j7-mER">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.checkAppleSignatures" id="pju-qp-fse"/>
+                        </connections>
+                    </button>
+                </subviews>
             </view>
             <connections>
-                <outlet property="initialFirstResponder" destination="CYc-qI-gT3" id="OoA-vb-jaA"/>
+                <outlet property="initialFirstResponder" destination="ShI-Ks-kUm" id="ZaK-Pw-UtO"/>
             </connections>
-            <point key="canvasLocation" x="341" y="-7"/>
+            <point key="canvasLocation" x="403" y="7.5"/>
         </window>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="eqA-WK-Xkh" userLabel="Window - TOU">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
@@ -651,7 +764,6 @@ DQ
                     <button verticalHuggingPriority="750" id="YuL-9R-Wxy">
                         <rect key="frame" x="14" y="13" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <animations/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Uax-hx-2Nu">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -673,7 +785,6 @@ Gw
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1GW-8d-S16">
                                     <rect key="frame" x="0.0" y="0.0" width="563" height="357"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <animations/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="563" height="357"/>
                                     <size key="maxSize" width="565" height="10000000"/>
@@ -682,25 +793,20 @@ Gw
                                     <size key="maxSize" width="565" height="10000000"/>
                                 </textView>
                             </subviews>
-                            <animations/>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <animations/>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="Mpu-wy-kcJ">
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
                         </scroller>
                         <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.5" horizontal="NO" id="wAc-vx-j22">
                             <rect key="frame" x="548" y="1" width="16" height="357"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
                         </scroller>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="6Wg-kO-rHz">
                         <rect key="frame" x="459" y="13" width="90" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <animations/>
                         <buttonCell key="cell" type="push" title="I Accept" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6Ji-v2-9L0">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -710,7 +816,6 @@ DQ
                         </buttonCell>
                     </button>
                 </subviews>
-                <animations/>
             </view>
             <point key="canvasLocation" x="333.5" y="1345.5"/>
         </window>
@@ -722,7 +827,6 @@ DQ
             <view key="contentView" wantsLayer="YES" id="LrJ-81-PLR">
                 <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
                 <autoresizingMask key="autoresizingMask"/>
-                <animations/>
             </view>
             <toolbar key="toolbar" implicitIdentifier="0AB5B57E-5C71-4497-9F5A-E4EF139A469D" autosavesConfiguration="NO" prefersToBeShown="NO" displayMode="iconAndLabel" sizeMode="regular" id="HAH-8D-CvP" customClass="EtreCheckToolbar">
                 <allowedToolbarItems>
@@ -760,7 +864,6 @@ DQ
                             <textView editable="NO" importsGraphics="NO" richText="NO" findStyle="panel" verticallyResizable="YES" id="9wF-Yp-vPY">
                                 <rect key="frame" x="0.0" y="0.0" width="238" height="179"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="minSize" width="238" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
@@ -769,26 +872,21 @@ DQ
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
-                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
-                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="SQV-o2-XiF">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="EI7-Xz-NOJ">
                         <rect key="frame" x="224" y="1" width="15" height="133"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                     <accessibility description="Detail contents"/>
                 </scrollView>
                 <button verticalHuggingPriority="750" id="PKc-FO-wiI">
                     <rect key="frame" x="82" y="5" width="76" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Hx1-1F-S0i">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -801,7 +899,6 @@ DQ
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="7aS-2D-TCp">
                     <rect key="frame" x="18" y="234" width="205" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="ejO-pC-dA9">
                         <font key="font" metaFont="systemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -809,7 +906,6 @@ DQ
                     </textFieldCell>
                 </textField>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="-200.5" y="-23.5"/>
         </customView>
         <customView id="nCU-Ry-DLu" userLabel="Help View">
@@ -819,7 +915,6 @@ DQ
                 <button verticalHuggingPriority="750" id="5iF-mu-oJy">
                     <rect key="frame" x="82" y="5" width="76" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kNI-Zd-Phb">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -832,7 +927,6 @@ DQ
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="B64-4Y-HGo">
                     <rect key="frame" x="18" y="234" width="205" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="z6N-iJ-6fw">
                         <font key="font" metaFont="systemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -849,7 +943,6 @@ DQ
                             <textView editable="NO" drawsBackground="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" id="GrL-30-ddq">
                                 <rect key="frame" x="0.0" y="0.0" width="201" height="180"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="minSize" width="201" height="180"/>
                                 <size key="maxSize" width="463" height="10000000"/>
@@ -858,23 +951,18 @@ DQ
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
-                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </clipView>
-                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="kks-SE-7QB">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="GYX-C6-Ru7">
                         <rect key="frame" x="224" y="1" width="15" height="133"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                 </scrollView>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="-244.5" y="234.5"/>
         </customView>
         <customView id="Pcb-y9-lki" userLabel="Adware View">
@@ -891,7 +979,6 @@ DQ
                             <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="L0P-vi-5NR">
                                 <rect key="frame" x="0.0" y="0.0" width="262" height="179"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="minSize" width="262" height="179"/>
                                 <size key="maxSize" width="463" height="10000000"/>
@@ -900,25 +987,20 @@ DQ
                                 <size key="maxSize" width="463" height="10000000"/>
                             </textView>
                         </subviews>
-                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
-                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="I4m-8a-jP1">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="65n-kC-w9f">
                         <rect key="frame" x="224" y="1" width="15" height="133"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                 </scrollView>
                 <button verticalHuggingPriority="750" id="Ldp-Ab-Gea">
                     <rect key="frame" x="214" y="7" width="76" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WBI-gH-cZf">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -931,7 +1013,6 @@ DQ
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ykc-Kx-Vns">
                     <rect key="frame" x="18" y="234" width="268" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="zf3-7Y-bzr">
                         <font key="font" metaFont="systemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -941,7 +1022,6 @@ DQ
                 <button verticalHuggingPriority="750" id="hd8-mv-48E">
                     <rect key="frame" x="8" y="7" width="193" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="push" title="Download MalwareBytes" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Hoe-Mj-1Ea">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -951,17 +1031,15 @@ DQ
                     </connections>
                 </button>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="-152" y="92.5"/>
         </customView>
         <customView wantsLayer="YES" id="cs1-k8-fgW" userLabel="Animation View">
             <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" style="bar" id="tDb-Al-O2y">
+                <progressIndicator maxValue="100" displayedWhenStopped="NO" style="bar" id="tDb-Al-O2y">
                     <rect key="frame" x="20" y="19" width="491" height="20"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <animations/>
                     <accessibility description="EtreCheck progress"/>
                     <connections>
                         <outlet property="nextKeyView" destination="mIX-Fq-FhE" id="1ws-wP-Yh2"/>
@@ -970,7 +1048,6 @@ DQ
                 <button verticalHuggingPriority="750" id="mIX-Fq-FhE">
                     <rect key="frame" x="513" y="11" width="82" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eNg-Ev-1vb">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -986,13 +1063,11 @@ Gw
                 <customView id="kxf-sE-hK4" userLabel="Machine" customClass="SlideshowView">
                     <rect key="frame" x="44" y="92" width="143" height="143"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                    <animations/>
                     <accessibility description="Picture of identified Macintosh model"/>
                 </customView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Uie-H3-jyY">
                     <rect key="frame" x="18" y="53" width="574" height="17"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <animations/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="BsZ-8w-6MC">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1006,47 +1081,39 @@ Gw
                 <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="Udp-hz-whF">
                     <rect key="frame" x="297" y="52" width="16" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <animations/>
                 </progressIndicator>
                 <customView wantsLayer="YES" id="24p-7h-cH3" userLabel="Apps" customClass="SlideshowView">
                     <rect key="frame" x="263" y="131" width="86" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                 </customView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" alphaValue="0.70000000000000007" id="PHl-IL-fhi" userLabel="Mask">
                     <rect key="frame" x="203" y="80" width="230" height="147"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="MagnifyingGlassShade" id="h2p-bx-vsM"/>
                 </imageView>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="unu-XY-TZC" userLabel="Magnifying Glass">
                     <rect key="frame" x="203" y="80" width="230" height="147"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="MagnifyingGlass" id="U0y-89-Dyg"/>
                     <accessibility description="Checking software animation"/>
                 </imageView>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="PBo-4n-aK2" userLabel="Demon">
                     <rect key="frame" x="453" y="131" width="64" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Demon" id="dk0-Hu-pih"/>
                 </imageView>
                 <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="X6k-bh-0bO" userLabel="Agent">
                     <rect key="frame" x="453" y="131" width="64" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Agent" id="ah4-O9-s19"/>
                 </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="YNi-t0-nyG" userLabel="Finder">
                     <rect key="frame" x="441" y="117" width="88" height="95"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="I43-rE-5l3"/>
                     <accessibility description="Daemons and agents animation"/>
                 </imageView>
             </subviews>
-            <animations/>
             <connections>
                 <outlet property="nextKeyView" destination="Uie-H3-jyY" id="RoK-tL-RhT"/>
             </connections>
@@ -1065,7 +1132,6 @@ Gw
                             <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" id="rRU-vM-wce">
                                 <rect key="frame" x="0.0" y="0.0" width="608" height="262"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="minSize" width="608" height="262"/>
                                 <size key="maxSize" width="1097" height="10000000"/>
@@ -1081,24 +1147,19 @@ Gw
                                 </connections>
                             </textView>
                         </subviews>
-                        <animations/>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
-                    <animations/>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="tCa-LM-4UN">
                         <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="ecj-hG-za1">
                         <rect key="frame" x="-100" y="-100" width="16" height="180"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
                     </scroller>
                     <accessibility description="EtreCheck report"/>
                 </scrollView>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="858" y="837.5"/>
         </customView>
         <customView id="Wry-qn-NGq" userLabel="Share ToolbarItem View">
@@ -1108,7 +1169,6 @@ Gw
                 <button id="eGD-du-9Qv">
                     <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSShareTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="AYY-x5-aZ5">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1118,7 +1178,6 @@ Gw
                     </connections>
                 </button>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="199" y="640"/>
         </customView>
         <customView id="kwV-c6-t98" userLabel="Copy ToolbarItem View">
@@ -1128,7 +1187,6 @@ Gw
                 <button id="q8u-Lb-y4P">
                     <rect key="frame" x="0.0" y="1" width="32" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Copy" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JKQ-vc-907">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1138,7 +1196,6 @@ Gw
                     </connections>
                 </button>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="402" y="625"/>
         </customView>
         <customView id="SJD-oN-rKO" userLabel="Help ToolbarItem View">
@@ -1148,7 +1205,6 @@ Gw
                 <button id="vd5-kg-IdS">
                     <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Help" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XJu-Hs-Mf1">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1158,7 +1214,6 @@ Gw
                     </connections>
                 </button>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="199" y="640"/>
         </customView>
         <customView id="JdO-Ik-I8L" userLabel="Text Size ToolbarItem View">
@@ -1168,7 +1223,6 @@ Gw
                 <popUpButton verticalHuggingPriority="750" id="Q7d-pz-eK5">
                     <rect key="frame" x="4" y="3" width="110" height="26"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <animations/>
                     <popUpButtonCell key="cell" type="push" title="Very large" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="1TX-vd-5Wc" id="sez-xt-NsB">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
@@ -1185,7 +1239,6 @@ Gw
                     </connections>
                 </popUpButton>
             </subviews>
-            <animations/>
             <point key="canvasLocation" x="61" y="702"/>
         </customView>
     </objects>
