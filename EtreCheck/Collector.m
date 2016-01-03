@@ -138,7 +138,7 @@
     [url appendString: @" "];
 
     [url
-      appendString: NSLocalizedString(@"[Click for support]", NULL)
+      appendString: NSLocalizedString(@"[Support]", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],
@@ -391,7 +391,7 @@
   
   if([name isEqualToString: kAdwareFound])
     [urlString
-      appendString: NSLocalizedString(@"[Click to remove]", NULL)
+      appendString: NSLocalizedString(@"[Scan for adware]", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],
@@ -400,7 +400,7 @@
         }];
   else if([name isEqualToString: kAdwarePossible])
     [urlString
-      appendString: NSLocalizedString(@"[Click to scan for adware]", NULL)
+      appendString: NSLocalizedString(@"[Scan for adware]", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],

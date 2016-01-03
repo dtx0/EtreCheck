@@ -74,7 +74,7 @@
     myTerminatedTasks = [NSMutableArray new];
     mySeriousProblems = [NSMutableSet new];
     myIgnoreKnownAppleFailures = YES;
-    myCheckAppleSignatures = YES;
+    myCheckAppleSignatures = NO;
     myHideAppleTasks = YES;
     }
     
@@ -193,7 +193,7 @@
     [NSString stringWithFormat: @"etrecheck://detail/%@", query];
   
   [urlString
-    appendString: NSLocalizedString(@"[Click for details]", NULL)
+    appendString: NSLocalizedString(@"[Details]", NULL)
     attributes:
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],

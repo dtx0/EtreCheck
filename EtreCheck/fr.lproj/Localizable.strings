@@ -97,7 +97,7 @@
 "%@ (hidden)" = "%@ (caché)";
 "Hidden" = "Caché";
 "    There was a problem retrieving launchd job status.\n" = "    Impossible de trouver le status des taches launchd\n";
-"[Click for support]" = "[Cliquer pour l’aide]";
+"[Support]" = "[L’aide]";
 "Version: %@" = "Version : %@";
 "    %@:    Version: %@%@" = "    %@ :    Version : %@%@";
 "    %@ - %@: %@\n" = "    %@ - %@ : %@\n";
@@ -141,7 +141,7 @@
 "(Verified)" = "(Verifié)";
 "Gatekeeper:" = "Gatekeeper :";
 " [Recovery]" = " [Restauration]";
-"info" = "(Qu'est-ce que cela signifie ?)";
+"info" = "ⓘ";
 "startupitemsdeprecated" = "    Les éléments de démarrage sont obsolètes avec OS X Yosemite\n";
 "Quit and go to update" = "Quitter et mettre à jour";
 "EtreCheck Report" = "Rapport EtreCheck";
@@ -182,7 +182,7 @@
 "NO\n" = "NON\n";
 "YES - System files not being backed up\n" = "OUI - Les fichiers du système ne sont pas sauvegardés\n";
 "/Library/Logs/DiagnosticReports permissions" = "    Les utilisateurs standard ne peuvent pas lire /Library/Logs/DiagnosticReports.\n    Lancer EtreCheck comme un utilisateur administrateur pour voir plus d'informations.";
-"[Click for details]" = "[Cliquer pour les détails]";
+"[Details]" = "[Les détails]";
 "Checking information from log files" = "Vérification des informations des fichiers journaux";
 "Self test - passed" = "Examen de soi - succès";
 "Self test - failed" = "Examen de soi - échec";
@@ -212,14 +212,13 @@
 "Poor" = "Remplacer maintenant";
 "(Technical Specifications)" = "(Caractéristiques techniques)";
 "Empty" = "Vide";
-"[Click to remove]" = "[Cliquer pour enlever]";
-"[Click to scan for adware]" = "[Cliquer pour vérifier l’adware]";
+"[Scan for adware]" = "[Vérifier l’adware]";
 "More adware files" = "Plus de fichiers adwares";
 "The following internal tasks failed to complete:" = "Les tâches internes ci-dessous ont faillis d’atteindre leur fin.";
 " - %@ Drive failure!" = " - %@ Échec du disque !";
-"[Click for Technical Specifications]\n" = "[Cliquer pour les Caractéristiques techniques]\n";
-"[Click for User Guide]\n" = "[Cliquer pour le Guide de l’utilisateur]\n";
-"[Click for upgrade instructions]\n" = "[Cliquer pour l’ajout de RAM]\n";
+"[Technical Specifications]" = "[Les caractéristiques techniques]";
+"[User Guide]" = "[Le guide de l’utilisateur]";
+"[Instructions]\n" = "[Instruction]\n";
 " - Invalid signature!" = " - Signature invalide !";
 " - No signature!" = "Aucune signature !";
 " - %@: Executable not found!" = " - %@ : Logiciel non-trouvé";
@@ -230,7 +229,7 @@
 "Copy" = "Copier";
 "Copy to clipboard" = "Copier au presse-papiers";
 "Checking for hidden apps" = "Vérification des apps cachés";
-"Check Apple signatures: Disabled\n" = "Vérifiez les signatures numériques des tâches d’Apple: Désactivé\n";
+"Check Apple signatures: Enabled\n" = "Vérifiez les signatures numériques des tâches d’Apple: Activé\n";
 "Ignore known Apple failures: Disabled\n" = "Ignorez les échecs d’Apple connus : Désactivé\n";
 "Hide Apple tasks: Disabled\n" = "Masquer les tâches d’Apple : Désactivé\n";
 "Defaults" = "Par défaut";
@@ -239,3 +238,6 @@
 "Good" = "Bon";
 "Below average" = "Sous la moyenne";
 "Poor" = "Pire";
+"[Warranty & Service]" = "[Garantie & service]";
+"service_desktop" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
+"service_notebook" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";

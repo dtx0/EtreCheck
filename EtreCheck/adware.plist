@@ -21,22 +21,37 @@
 		<string>com.adobe.versioncueCS4.plist</string>
 		<string>com.amazon.cloud-player.plist</string>
 		<string>com.amazon.music.plist</string>
+		<string>com.avid.sari.plist</string>
 		<string>com.backblaze.bzbmenu.plist</string>
 		<string>com.backblaze.bzserv.plist</string>
 		<string>com.barebones.bbedit.plist</string>
 		<string>com.barebones.authd.plist</string>
+		<string>com.bjango.istatmenusagent.plist</string>
 		<string>com.bjango.istatmenusdaemon.plist</string>
+		<string>com.bjango.istatmenusnotifications.plist</string>
+		<string>com.bjango.istatmenusstatus.plist</string>
+		<string>com.bitdefender.AuthHelperTool.plist</string>
+		<string>com.bitdefender.agent.plist</string>
+		<string>com.bitdefender.upgrade.plist</string>
 		<string>com.bombich.ccc.plist</string>
 		<string>com.bombich.ccchelper.plist</string>
 		<string>com.c-command.SpamSieve.LaunchAgent.plist</string>
+		<string>com.canon.SPPHelper.plist</string>
 		<string>com.charlessoft.pacifist.helper.plist</string>
+		<string>com.divx.dms.agent.plist</string>
+		<string>com.divx.update.agent.plist</string>
+		<string>com.divx.agent.postinstall.plist</string>
 		<string>com.ea.origin.ESHelper.plist</string>
+		<string>com.ecamm.iglasses3agent.plist</string>
 		<string>com.epson.esua.launcher.plist</string>
+		<string>com.epson.eventmanager.agent.plist</string>
+		<string>com.epson.Epson_Low_Ink_Reminder.launcher.plist</string>
 		<string>com.f-secure.sync.BTCloud.plist</string>
 		<string>com.fitbit.galileod.plist</string>
 		<string>com.github.GitHub.GHInstallCLI.plist</string>
 		<string>com.google.keystone.agent.plist</string>
 		<string>com.google.keystone.daemon.plist</string>
+		<string>com.gopro.stereomodestatus.plist</string>
 		<string>com.hp.help.tocgenerator.plist</string>
 		<string>com.hp.productresearch.plist</string>
 		<string>com.kodak.BonjourAgent.plist</string>
@@ -46,12 +61,18 @@
 		<string>com.leapfrog.connect.shell.plist</string>
 		<string>com.leapfrog.connect.authdaemon.plist</string>
 		<string>com.leapfrog.connect.monitor.plist</string>
+		<string>com.linotype.FontExplorerX.securityhelper.plist</string>
+		<string>com.linotype.FontFolderProtector.plist</string>
+		<string>com.Logitech.Control Center.Daemon.plist</string>
 		<string>com.malwarebytes.MBAMHelperTool.plist</string>
 		<string>com.microsoft.office.licensing.helper.plist</string>
 		<string>com.microsoft.office.licensingV2.helper.plist</string>
+		<string>com.microsoft.LaunchAgent.SyncServicesAgent.plist</string>
 		<string>com.mcafee.menulet.plist</string>
 		<string>com.mcafee.reporter.plist</string>
 		<string>com.mcafee.virusscan.fmpd.plist</string>
+		<string>com.netgear.wutility</string>
+		<string>com.nike.nikeplusconnect.plist</string>
 		<string>com.nvidia.cuda.launcher.plist</string>
 		<string>com.nvidia.nvroothelper.plist</string>
 		<string>com.oracle.java.Helper</string>
@@ -64,22 +85,32 @@
 		<string>com.parallels.mobile.kextloader.launchdaemon.plist</string>
 		<string>com.parallels.mobile.prl_deskctl_agent.launchagent.plist</string>
 		<string>com.parallels.vm.prl_pcproxy.plist</string>
+		<string>com.paragon-software.NTFS.fsnotifyagent.plist</string>
+		<string>com.paragon.updater.plist</string>
+		<string>com.paragon.ntfs12.refresh.plist</string>
+		<string>com.paragon.NTFS.launch.plist</string>
 		<string>com.prosofteng.DriveGenius.locum.plist</string>
+		<string>com.rogueamoeba.instanton-agent.plist</string>
 		<string>com.seagate.TBDecorator.plist</string>
 		<string>com.skype.skypeinstaller.plist</string>
+		<string>com.sonos.SonosLibraryServer.plist</string>
 		<string>com.sony.SonyAutoLauncher.agent.plist</string>
+		<string>com.sony.PMBPortable.AutoRun.plist</string>
 		<string>com.sophos.common.servicemanager.plist</string>
 		<string>com.sophos.uiserver.plist</string>
 		<string>com.spotify.webhelper.plist</string>
 		<string>com.thursby.pkard.tokendagent.plist</string>
 		<string>com.valvesoftware.steamclean.plist</string>
+		<string>com.wacom.displayhelper.plist</string>
 		<string>com.wacom.pentablet.plist</string>
 		<string>com.wacom.wacomtablet.plist</string>
 		<string>com.wdc.WDPrivilegedHelper.plist</string>
 		<string>jp.co.canon.Inkjet_Extended_Survey_Agent.plist</string>
 		<string>jp.co.canon.MasterInstaller.plist</string>
+		<string>jp.co.canon.SELPHYCP.BG.plist</string>
 		<string>org.macosforge.xquartz.privileged_startx.plist</string>
 		<string>org.macosforge.xquartz.startx.plist</string>
+		<string>org.serviio.server.plist</string>
 		<string>org.virtualbox.startup.plist</string>
 		<string>org.virtualbox.vboxwebsrv.plist</string>
 		<string>uk.co.markallan.clamxav.freshclam.plist</string>

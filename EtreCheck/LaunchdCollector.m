@@ -1028,7 +1028,7 @@
     [extra appendString: @" "];
 
     [extra
-      appendString: NSLocalizedString(@"[Click for support]", NULL)
+      appendString: NSLocalizedString(@"[Support]", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],

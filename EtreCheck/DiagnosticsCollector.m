@@ -17,6 +17,7 @@
 
 @synthesize dateFormatter = myDateFormatter;
 @synthesize logDateFormatter = myLogDateFormatter;
+@synthesize paths = myPaths;
 
 // Constructor.
 - (id) init
@@ -39,6 +40,8 @@
     [myLogDateFormatter setTimeZone: [NSTimeZone localTimeZone]];
     [myLogDateFormatter
       setLocale: [NSLocale localeWithLocaleIdentifier: @"en_US"]];
+      
+    myPaths = [NSMutableSet new];
     }
     
   return self;
@@ -47,6 +50,7 @@
 // Destructor.
 - (void) dealloc
   {
+  self.paths = nil;
   self.dateFormatter = nil;
   self.logDateFormatter = nil;
   
@@ -281,21 +285,8 @@
     event.type = type;
     event.file = file;
     
-    // Include the entire log file for a panic.
-    if(type == kPanic)
-      event.details =
-        [NSString
-          stringWithContentsOfFile: file
-          encoding: NSUTF8StringEncoding
-          error: NULL];
-    
-    // Include just the first section for a CPU report.
-    else if(type == kCPU)
-      event.details = [self CPUReportHeader: file];
-      
-    // For everything else, just look for matching events in the log file.
-    else
-      event.details = [[Model model] logEntriesAround: date];
+    // Parse the file contents.
+    [self parseFileContents: file event: event];
     
     [[[Model model] diagnosticEvents] setObject: event forKey: event.name];
     
@@ -344,8 +335,12 @@
   }
 
 // Collect just the first section for a CPU report header.
-- (NSString *) CPUReportHeader: (NSString *) file
+- (void) parseFileContents: (NSString *) file
+  event: (DiagnosticEvent *) event
   {
+  if(!event)
+    return;
+    
   NSString * contents =
     [NSString
       stringWithContentsOfFile: file
@@ -358,6 +353,9 @@
   
   __block NSUInteger lineCount = 0;
   
+  __block NSMutableString * path = [NSMutableString string];
+  __block NSMutableString * identifier = [NSMutableString string];
+  
   [lines
     enumerateObjectsUsingBlock:
       ^(id obj, NSUInteger idx, BOOL * stop)
@@ -369,9 +367,34 @@
         
         if(lineCount++ > 20)
           *stop = YES;
+          
+        if([line hasPrefix: @"Path:"])
+          [path
+            appendString:
+              [[line substringFromIndex: 5]
+                stringByTrimmingCharactersInSet:
+                  [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+        else if([line hasPrefix: @"Identifier:"])
+          [identifier
+            appendString:
+              [[line substringFromIndex: 11]
+                stringByTrimmingCharactersInSet:
+                  [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
         }];
     
-  return result;
+  if(event.type == kPanic)
+    event.details = contents;
+  else if(event.type == kCPU)
+    event.details = result;
+  else
+    event.details = [[Model model] logEntriesAround: event.date];
+    
+  if([path length])
+    event.path = [path copy];
+  
+  if([path length] && [identifier length])
+    if(![[path lastPathComponent] isEqualToString: identifier])
+      event.identifier = [identifier copy];
   }
 
 // Print crash logs.
@@ -455,6 +478,26 @@
 
   [self.result appendString: @"\n"];
   
+  if([event.path length] && ![self.paths containsObject: event.path])
+    {
+    [self.paths addObject: event.path];
+    
+    [self.result appendString: @"        "];
+    
+    if([event.identifier length])
+      [self.result appendString: event.identifier];
+      
+    if([event.path length])
+      {
+      if([event.identifier length])
+        [self.result appendString: @" - "];
+      
+      [self.result appendString: [Utilities cleanPath: event.path]];
+      }
+      
+    [self.result appendString: @"\n"];
+    }
+    
   hasOutput = YES;
   }
 

@@ -218,9 +218,9 @@
           [self technicalSpecificationsURL: language]
         title:
           NSLocalizedString(
-            @"[Click for Technical Specifications]\n", NULL)]];
+            @"[Technical Specifications]", NULL)]];
 
-  [self.result appendString: @"    "];
+  [self.result appendString: @" - "];
 
   [self.result
     appendAttributedString:
@@ -229,7 +229,19 @@
           [self userGuideURL: language]
         title:
           NSLocalizedString(
-            @"[Click for User Guide]\n", NULL)]];
+            @"[User Guide]", NULL)]];
+    
+  [self.result appendString: @" - "];
+
+  [self.result
+    appendAttributedString:
+      [Utilities
+        buildURL: [self serviceURL]
+        title:
+          NSLocalizedString(
+            @"[Warranty & Service]", NULL)]];
+
+  [self.result appendString: @"\n"];
   }
 
 // Try to get the marketing name directly from Apple.
@@ -283,6 +295,15 @@
       AppleSupportSPQueryURL: [[Model model] serialCode]
       language: language
       type: @"index?page=cpumemory"]; 
+  }
+
+// Construct a user guide URL.
+- (NSString *) serviceURL
+  {
+  if([[[Model model] model] hasPrefix: @"MacBook"])
+    return NSLocalizedString(@"service_notebook", NULL);
+  
+    return NSLocalizedString(@"service_desktop", NULL);
   }
 
 // Try to get information about the machine from system resources.
@@ -400,7 +421,7 @@
     [self.result
       appendString:
         [NSString
-          stringWithFormat: @"    %@ RAM %@\n", memory, upgradeableString]
+          stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
@@ -410,13 +431,13 @@
     [self.result
       appendString:
         [NSString
-          stringWithFormat: @"    %@ RAM %@\n", memory, upgradeableString]];
+          stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]];
 
   NSString * language = NSLocalizedString(@"en", NULL);
 
   if(upgradeable)
     {
-    [self.result appendString: @"    "];
+    [self.result appendString: @" - "];
 
     [self.result
       appendAttributedString:
@@ -424,8 +445,10 @@
           buildURL: [self memoryUpgradeURL: language]
           title:
             NSLocalizedString(
-              @"[Click for upgrade instructions]\n", NULL)]];
+              @"[Instructions]\n", NULL)]];
     }
+  else
+    [self.result appendString: @"\n"];
     
   if(details)
     {

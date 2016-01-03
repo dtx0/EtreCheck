@@ -14,5 +14,7 @@
 @synthesize name = myName;
 @synthesize details = myDetails;
 @synthesize file = myFile;
+@synthesize path = myPath;
+@synthesize identifier = myIdentifier;
 
 @end

@@ -673,18 +673,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
          [[Utilities shared] boldFont], NSFontAttributeName, nil]];
     
   [self.log
-    appendString:
-      [NSString
-        stringWithFormat:
-          NSLocalizedString(@"Runtime %@\n", NULL), [self elapsedTime]]
-    attributes:
-      [NSDictionary
-       dictionaryWithObjectsAndKeys:
-         [[Utilities shared] boldFont], NSFontAttributeName, nil]];
-
-  [self printPerformance];
-    
-  [self.log
     appendString: NSLocalizedString(@"downloadetrecheck", NULL)
     attributes:
       [NSDictionary
@@ -697,7 +685,21 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         buildURL: @"http://etrecheck.com"
         title: @"http://etrecheck.com"]];
     
-  [self.log appendString: @"\n\n"];
+  [self.log appendString: @"\n"];
+  
+  [self.log
+    appendString:
+      [NSString
+        stringWithFormat:
+          NSLocalizedString(@"Runtime %@\n", NULL), [self elapsedTime]]
+    attributes:
+      [NSDictionary
+       dictionaryWithObjectsAndKeys:
+         [[Utilities shared] boldFont], NSFontAttributeName, nil]];
+
+  [self printPerformance];
+    
+  [self.log appendString: @"\n"];
   
   [self printLinkInstructions];
   [self printOptions];
@@ -785,12 +787,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   bool options = NO;
   
-  if(![[Model model] checkAppleSignatures])
+  if([[Model model] checkAppleSignatures])
     {
     [self.log
       appendString:
         NSLocalizedString(
-          @"Check Apple signatures: Disabled\n", NULL)
+          @"Check Apple signatures: Enabled\n", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
@@ -1443,7 +1445,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [self.startPanelAnimationView
       transitionToView: self.introPanel.contentView];
     
-    self.checkAppleSignatures = YES;
+    self.checkAppleSignatures = NO;
     self.hideAppleTasks = YES;
     self.ignoreKnownAppleFailures = YES;
     
