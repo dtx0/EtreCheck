@@ -55,6 +55,16 @@
   [self
     updateStatus: NSLocalizedString(@"Checking disk information", NULL)];
 
+  if(![self collectSerialATA])
+    if(![self collectNVMExpress])
+      [self.result appendCR];
+    
+  dispatch_semaphore_signal(self.complete);
+  }
+
+// Perform the collection for old Serial ATA controllers.
+- (BOOL) collectSerialATA
+  {
   NSArray * args =
     @[
       @"-xml",
@@ -78,17 +88,52 @@
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
         
       for(NSDictionary * controller in controllers)
-        [self printController: controller];
+        [self printSerialATAController: controller];
+        
+      return YES;
       }
     }
-  else
-    [self.result appendCR];
-    
-  dispatch_semaphore_signal(self.complete);
+
+  return NO;
   }
 
-// Print disks attached to a single controller.
-- (void) printController: (NSDictionary *) controller
+// Perform the collection for new NVM controllers.
+- (BOOL) collectNVMExpress
+  {
+  NSArray * args =
+    @[
+      @"-xml",
+      @"SPNVMeDataType"
+    ];
+  
+  NSData * result =
+    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  
+  // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPSerialATADataType.xml"];
+  
+  if(result)
+    {
+    NSArray * plist = [NSArray readPropertyListData: result];
+  
+    if(plist && [plist count])
+      {
+      [self.result appendAttributedString: [self buildTitle]];
+      
+      NSDictionary * controllers =
+        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+        
+      for(NSDictionary * controller in controllers)
+        [self printNVMExpressController: controller];
+        
+      return YES;
+      }
+    }
+
+  return NO;
+  }
+
+// Print disks attached to a single Serial ATA controller.
+- (void) printSerialATAController: (NSDictionary *) controller
   {
   NSDictionary * disks = [controller objectForKey: @"_items"];
   
@@ -100,6 +145,61 @@
     NSString * UUID = [disk objectForKey: @"volume_uuid"];
     NSString * medium = [disk objectForKey: @"spsata_medium_type"];
     NSString * trim = [disk objectForKey: @"spsata_trim_support"];
+    
+    NSString * trimString =
+      [NSString
+        stringWithFormat: @" - TRIM: %@", NSLocalizedString(trim, NULL)];
+    
+    NSString * info =
+      [NSString
+        stringWithFormat:
+          @"(%@%@)",
+          medium
+            ? medium
+            : @"",
+          ([medium isEqualToString: @"Solid State"] && [trim length])
+            ? trimString
+            : @""];
+      
+    if(!diskDevice)
+      diskDevice = @"";
+      
+    if(!diskSize)
+      diskSize = @"";
+    else
+      diskSize = [NSString stringWithFormat: @": (%@)", diskSize];
+
+    if(UUID)
+      [self.volumes setObject: disk forKey: UUID];
+
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            @"    %@ %@ %@ %@\n",
+            diskName ? diskName : @"-", diskDevice, diskSize, info]];
+    
+    [self collectSMARTStatus: disk indent: @"    "];
+    
+    [self printDiskVolumes: disk];
+    
+    [self.result appendCR];
+    }
+  }
+
+// Print disks attached to a single NVMExpress controller.
+- (void) printNVMExpressController: (NSDictionary *) controller
+  {
+  NSDictionary * disks = [controller objectForKey: @"_items"];
+  
+  for(NSDictionary * disk in disks)
+    {
+    NSString * diskName = [disk objectForKey: @"_name"];
+    NSString * diskDevice = [disk objectForKey: @"bsd_name"];
+    NSString * diskSize = [disk objectForKey: @"size"];
+    NSString * UUID = [disk objectForKey: @"volume_uuid"];
+    NSString * medium = @"Solid State";
+    NSString * trim = [disk objectForKey: @"spnvme_trim_support"];
     
     NSString * trimString =
       [NSString
