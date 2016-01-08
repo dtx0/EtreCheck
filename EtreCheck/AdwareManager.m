@@ -42,7 +42,7 @@
   [[NSWorkspace sharedWorkspace]
     openURL:
       [NSURL
-        URLWithString: @"https://www.malwarebytes.org/antimalware/mac/"]];
+        URLWithString: @"http://www.malwarebytes.org/antimalware/mac/"]];
   }
 
 @end
