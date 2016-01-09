@@ -101,6 +101,8 @@
 		<string>com.spotify.webhelper.plist</string>
 		<string>com.thursby.pkard.tokendagent.plist</string>
 		<string>com.valvesoftware.steamclean.plist</string>
+		<string>com.vmware.launchd.tools.plist</string>
+		<string>com.vmware.launchd.vmware-tools-userd.plist</string>
 		<string>com.wacom.displayhelper.plist</string>
 		<string>com.wacom.pentablet.plist</string>
 		<string>com.wacom.wacomtablet.plist</string>

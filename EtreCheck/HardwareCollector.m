@@ -422,7 +422,11 @@
     [self.result
       appendString:
         [NSString
-          stringWithFormat: @"    %@ RAM %@", memory, upgradeableString]
+          stringWithFormat:
+            @"    %@ RAM %@ %@",
+            memory,
+            NSLocalizedString(@"insufficientram", NULL),
+            upgradeableString]
       attributes:
         [NSDictionary
           dictionaryWithObjectsAndKeys:
