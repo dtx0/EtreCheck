@@ -55,9 +55,13 @@
   [self
     updateStatus: NSLocalizedString(@"Checking disk information", NULL)];
 
-  if(![self collectSerialATA])
-    if(![self collectNVMExpress])
-      [self.result appendCR];
+  BOOL dataFound = [self collectSerialATA];
+  
+  if([self collectNVMExpress: dataFound])
+    dataFound = YES;
+  
+  if(!dataFound)
+    [self.result appendCR];
     
   dispatch_semaphore_signal(self.complete);
   }
@@ -74,7 +78,9 @@
   NSData * result =
     [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
   
-  // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPSerialATADataType.xml"];
+  //result =
+  //  [NSData
+  //    dataWithContentsOfFile: @"/tmp/etrecheck/SPSerialATADataType.xml"];
   
   if(result)
     {
@@ -98,7 +104,7 @@
   }
 
 // Perform the collection for new NVM controllers.
-- (BOOL) collectNVMExpress
+- (BOOL) collectNVMExpress: (BOOL) dataFound
   {
   NSArray * args =
     @[
@@ -109,7 +115,8 @@
   NSData * result =
     [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
   
-  // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPSerialATADataType.xml"];
+  // result =
+  //  [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPNVMeDataType.xml"];
   
   if(result)
     {
@@ -117,7 +124,8 @@
   
     if(plist && [plist count])
       {
-      [self.result appendAttributedString: [self buildTitle]];
+      if(!dataFound)
+        [self.result appendAttributedString: [self buildTitle]];
       
       NSDictionary * controllers =
         [[plist objectAtIndex: 0] objectForKey: @"_items"];
