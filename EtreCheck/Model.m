@@ -33,6 +33,7 @@
 @synthesize adwareFound = myAdwareFound;
 @synthesize terminatedTasks = myTerminatedTasks;
 @synthesize greylistCount = myGreylistCount;
+@synthesize seriousProblems = mySeriousProblems;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize checkAppleSignatures = myCheckAppleSignatures;
 @synthesize hideAppleTasks = myHideAppleTasks;

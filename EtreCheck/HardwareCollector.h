@@ -23,7 +23,7 @@
 @property (retain) NSImage * machineIcon;
 
 // A generic document icon in case a machine image lookup fails.
-@property (retain) NSImage * genericDocument;
+@property (retain) NSImage * genericDocumentIcon;
 
 // The Apple Marketing name.
 @property (retain) NSString * marketingName;

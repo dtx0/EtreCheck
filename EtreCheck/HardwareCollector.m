@@ -22,6 +22,7 @@
 
 @synthesize properties = myProperties;
 @synthesize machineIcon = myMachineIcon;
+@synthesize genericDocumentIcon = myGenericDocumentIcon;
 @synthesize marketingName = myMarketingName;
 @synthesize EnglishMarketingName = myEnglishMarketingName;
 

@@ -47,6 +47,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize logWindow = myLogWindow;
 @synthesize progress = myProgress;
 @synthesize spinner = mySpinner;
+@synthesize dockProgress = myDockProgress;
 @synthesize cancelButton = myCancelButton;
 @synthesize statusView = myStatusView;
 @synthesize logView;
