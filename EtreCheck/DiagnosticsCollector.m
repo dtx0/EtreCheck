@@ -390,11 +390,11 @@
     event.details = [[Model model] logEntriesAround: event.date];
     
   if([path length])
-    event.path = [path copy];
+    event.path = path;
   
   if([path length] && [identifier length])
     if(![[path lastPathComponent] isEqualToString: identifier])
-      event.identifier = [identifier copy];
+      event.identifier = identifier;
   }
 
 // Print crash logs.

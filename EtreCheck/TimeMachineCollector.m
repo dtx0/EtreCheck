@@ -313,6 +313,8 @@
     [destination
       setObject: [dateFormatter stringFromDate: lastBackup]
       forKey: kLastbackup];
+    
+  [dateFormatter release];
   }
 
 // Consolidate a single destination.

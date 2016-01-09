@@ -65,6 +65,7 @@
     }
    
   [self transitionToView: newImageView];
+  [newImageView release];
   }
 
 // Swap a new NSView into the view in place of the previous NSView. This

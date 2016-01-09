@@ -142,7 +142,7 @@
 
     event.type = kLog;
     event.name = name;
-    event.details = [result copy];
+    event.details = result;
       
     [[[Model model] diagnosticEvents] setObject: event forKey: name];
     

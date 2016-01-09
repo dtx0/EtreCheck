@@ -165,6 +165,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Destructor.
 - (void) dealloc
   {
+  self.dockProgress = nil;
   self.displayStatus = nil;
   
   [super dealloc];
@@ -566,10 +567,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   [docTile setContentView: docTileImageView];
 
-  self.dockProgress =
+  [docTileImageView release];
+  
+  NSProgressIndicator * progressIndicator =
     [[NSProgressIndicator alloc]
       initWithFrame: NSMakeRect(0.0, 0.0, docTile.size.width, 10.0)];
     
+  self.dockProgress = progressIndicator;
+  
+  [progressIndicator release];
+  
   [self.dockProgress setStyle: NSProgressIndicatorBarStyle];
   [self.dockProgress setIndeterminate: NO];
   [docTileImageView addSubview: self.dockProgress];
@@ -577,7 +584,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   //[self.dockProgress setBezeled: YES];
   [self.dockProgress setMinValue: 0];
   [self.dockProgress setMaxValue: 100];
-  [self.dockProgress release];
 
   self.progressTimer =
     [NSTimer

@@ -146,7 +146,7 @@
               expectedSize]];
     }
   
-  self.modifiedFiles = [files copy];
+  self.modifiedFiles = files;
   }
 
 // Find existing configuration files.
@@ -164,7 +164,7 @@
   if([fileManager fileExistsAtPath: @"/etc/launchd.conf"])
     [files addObject: @"/etc/launchd.conf"];
     
-  self.configFiles = [files copy];
+  self.configFiles = files;
   }
 
 // Check for other modifications.
@@ -186,7 +186,7 @@
               status]];
     }
     
-  self.modifications = [otherModificiations copy];
+  self.modifications = otherModificiations;
   }
 
 // Check System Integrity Protection.

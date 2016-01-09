@@ -621,7 +621,7 @@
         [self.launchdStatus objectForKey: label];
     
       if(status == nil)
-        status = [NSMutableDictionary new];
+        status = [NSMutableDictionary dictionary];
         
       NSNumber * pid = [status objectForKey: @"PID"];
       NSNumber * lastExitStatus = [status objectForKey: @"LastExitStatus"];
