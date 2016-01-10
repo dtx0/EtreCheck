@@ -74,6 +74,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize beachballItem = myBeachballItem;
 @dynamic problemSelected;
 @synthesize problemDescription = myProblemDescription;
+@synthesize problemDescriptionTextView = myProblemDescriptionTextView;
 @synthesize optionsButton = myOptionsButton;
 @synthesize optionsVisible = myOptionsVisible;
 @synthesize userParametersPanel = myUserParametersPanel;
@@ -562,8 +563,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   NSImageView * docTileImageView = [[NSImageView alloc] init];
   
-  [docTileImageView
-    setImage: [[NSApplication sharedApplication] applicationIconImage]];
+  NSImage * appIcon =
+    [[NSApplication sharedApplication] applicationIconImage];
+  
+  [appIcon setSize: NSMakeSize(1024.0, 1024.0)];
+  
+  [docTileImageView setImage: appIcon];
     
   [docTile setContentView: docTileImageView];
 
@@ -914,9 +919,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (NSString *) currentDate
   {
   NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-  [dateFormatter setDateStyle: NSDateFormatterShortStyle];
-  [dateFormatter setTimeStyle: NSDateFormatterShortStyle];
-  
+
+  [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
+  [dateFormatter setLocale: [NSLocale systemLocale]];
+
   NSString * dateString = [dateFormatter stringFromDate: [NSDate date]];
   
   [dateFormatter release];
@@ -1452,10 +1458,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [self.startPanelAnimationView
       transitionToView: self.introPanel.contentView];
     
-    self.checkAppleSignatures = NO;
-    self.hideAppleTasks = YES;
-    self.ignoreKnownAppleFailures = YES;
-    
     self.optionsButton.title = NSLocalizedString(@"Options", NULL);
     
     self.optionsVisible = NO;
@@ -1469,10 +1471,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     [self.startPanelAnimationView
       transitionToView: self.userParametersPanel.contentView];
 
-    self.optionsButton.title = NSLocalizedString(@"Defaults", NULL);
+    self.optionsButton.title = NSLocalizedString(@"Back", NULL);
 
     self.optionsVisible = YES;
     }
+  }
+
+// Set focus to the problem description when a problem is selected.
+- (IBAction) problemSelected: (id) sender
+  {
+  NSButton * button = sender;
+  
+  [button.window makeFirstResponder: self.problemDescriptionTextView];
   }
 
 // Set text size to normal.

@@ -49,6 +49,7 @@
   NSMenuItem * myChooseAProblemPromptItem;
   NSMenuItem * myBeachballItem;
   NSAttributedString * myProblemDescription;
+  NSTextView * myProblemDescriptionTextView;
   NSButton * myOptionsButton;
   BOOL myOptionsVisible;
   NSWindow * myUserParametersPanel;
@@ -113,6 +114,7 @@
 @property (retain) IBOutlet NSMenuItem * beachballItem;
 @property (readonly) bool problemSelected;
 @property (retain) NSAttributedString * problemDescription;
+@property (retain) IBOutlet NSTextView * problemDescriptionTextView;
 @property (retain) IBOutlet NSButton * optionsButton;
 @property (assign) BOOL optionsVisible;
 @property (retain) IBOutlet NSWindow * userParametersPanel;
@@ -191,5 +193,8 @@
 
 // Dummy menu item action for auto-disable.
 - (IBAction) dummyAction: (id) sender;
+
+// Set focus to the problem description when a problem is selected.
+- (IBAction) problemSelected: (id) sender;
 
 @end

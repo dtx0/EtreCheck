@@ -423,7 +423,7 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"    %@ RAM %@ %@",
+            @"    %@ RAM - %@ %@",
             memory,
             NSLocalizedString(@"insufficientram", NULL),
             upgradeableString]

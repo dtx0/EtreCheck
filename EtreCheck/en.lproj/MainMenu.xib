@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -40,6 +41,7 @@
                 <outlet property="magnifyingGlass" destination="unu-XY-TZC" id="kJW-mf-RrR"/>
                 <outlet property="magnifyingGlassShade" destination="PHl-IL-fhi" id="Gpp-rD-Etp"/>
                 <outlet property="optionsButton" destination="EBF-Wl-xZl" id="f4U-wd-G31"/>
+                <outlet property="problemDescriptionTextView" destination="78R-B9-GBa" id="USD-93-PLK"/>
                 <outlet property="progress" destination="tDb-Al-O2y" id="p6y-69-Ka0"/>
                 <outlet property="reportView" destination="Rah-Ot-abL" id="9Oc-0g-Xed"/>
                 <outlet property="shareButton" destination="eGD-du-9Qv" id="jI4-wr-wpU"/>
@@ -593,7 +595,7 @@ DQ
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" altersStateOfSelectedItem="NO" id="sdl-fq-Ypj">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" id="G6z-Jr-wWQ">
                                 <items>
                                     <menuItem title="Choose a problem:" id="IhM-Ny-kdQ">
@@ -614,17 +616,28 @@ DQ
                             </menu>
                         </popUpButtonCell>
                         <connections>
+                            <action selector="problemSelected:" target="Voe-Tx-rLC" id="v2n-9w-gtS"/>
                             <binding destination="Voe-Tx-rLC" name="selectedIndex" keyPath="self.problemIndex" id="2Xb-Nj-VRD"/>
                         </connections>
                     </popUpButton>
-                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="xB3-o2-eO9">
+                    <box title="Box" boxType="custom" borderType="none" titlePosition="noTitle" id="nuy-Xz-Kl5">
+                        <rect key="frame" x="20" y="20" width="508" height="109"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="6Nz-wH-TzP">
+                            <rect key="frame" x="0.0" y="0.0" width="508" height="109"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </view>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </box>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="xB3-o2-eO9">
                         <rect key="frame" x="20" y="20" width="508" height="109"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <clipView key="contentView" id="OEe-Ko-s4T">
+                        <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="OEe-Ko-s4T">
                             <rect key="frame" x="1" y="1" width="506" height="107"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView importsGraphics="NO" richText="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="78R-B9-GBa">
+                                <textView drawsBackground="NO" importsGraphics="NO" richText="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="78R-B9-GBa">
                                     <rect key="frame" x="0.0" y="0.0" width="506" height="107"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -634,6 +647,7 @@ DQ
                                     <size key="minSize" width="506" height="107"/>
                                     <size key="maxSize" width="517" height="10000000"/>
                                     <connections>
+                                        <binding destination="Voe-Tx-rLC" name="editable" keyPath="self.problemSelected" id="gDY-4c-Bum"/>
                                         <binding destination="Voe-Tx-rLC" name="attributedString" keyPath="self.problemDescription" id="5Aa-6K-Vvl">
                                             <dictionary key="options">
                                                 <bool key="NSContinuouslyUpdatesValue" value="YES"/>
@@ -648,7 +662,7 @@ DQ
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="yjL-Qa-ePP">
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="yjL-Qa-ePP">
                             <rect key="frame" x="491" y="1" width="16" height="107"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -661,6 +675,18 @@ DQ
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="HMd-qN-hbG">
+                        <rect key="frame" x="23" y="111" width="176" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Please choose a problem" id="2PY-NP-VPI">
+                            <font key="font" metaFont="systemMedium" size="13"/>
+                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="hidden" keyPath="self.problemSelected" id="wPR-SA-m0I"/>
+                        </connections>
                     </textField>
                 </subviews>
             </view>
