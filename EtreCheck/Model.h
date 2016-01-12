@@ -51,6 +51,7 @@
   NSMutableArray * myTerminatedTasks;
   int myGreylistCount;
   NSMutableSet * mySeriousProblems;
+  bool myHasMalwareBytes;
   
   bool myIgnoreKnownAppleFailures;
   bool myCheckAppleSignatures;
@@ -120,6 +121,9 @@
 
 // What serious problems were found?
 @property (retain) NSMutableSet * seriousProblems;
+
+// Is MalwareBytes installed?
+@property (assign) bool hasMalwareBytes;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;

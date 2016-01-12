@@ -19,9 +19,16 @@
 
 @implementation AdwareManager
 
+@synthesize downloadButton = myDownloadButton;
+
 // Show detail.
 - (void) showDetail: (NSString *) name
   {
+  if([[Model model] hasMalwareBytes])
+    self.downloadButton.title = NSLocalizedString(@"runmbam", NULL);
+  else
+    self.downloadButton.title = NSLocalizedString(@"downloadmbam", NULL);
+
   NSMutableAttributedString * details = [NSMutableAttributedString new];
   
   if([name isEqualToString: kAdwareFound])
@@ -39,6 +46,18 @@
 // Go to Adware Medic.
 - (IBAction) gotoAdwareMedic: (id) sender
   {
+  if([[Model model] hasMalwareBytes])
+    {
+    NSURL * url =
+      [[NSWorkspace sharedWorkspace]
+        URLForApplicationWithBundleIdentifier:
+          @"com.malwarebytes.antimalware"];
+      
+    [[NSWorkspace sharedWorkspace] openURL: url];
+    
+    return;
+    }
+  
   [[NSWorkspace sharedWorkspace]
     openURL:
       [NSURL

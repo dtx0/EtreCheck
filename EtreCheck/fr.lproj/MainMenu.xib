@@ -105,6 +105,7 @@
         <customObject id="PIp-F1-rtQ" userLabel="Adware Manager" customClass="AdwareManager">
             <connections>
                 <outlet property="contentView" destination="LrJ-81-PLR" id="VhS-gJ-3Zq"/>
+                <outlet property="downloadButton" destination="FS0-vD-dMp" id="DjV-NE-FP7"/>
                 <outlet property="drawer" destination="Tyd-VG-RG7" id="Qar-a9-uel"/>
                 <outlet property="popoverViewController" destination="OXn-E8-5ug" id="rT9-8O-wNU"/>
                 <outlet property="textView" destination="xXx-OK-dY4" id="lHe-gD-4Pz"/>
@@ -1169,12 +1170,12 @@ DQ
                                     <size key="minSize" width="506" height="107"/>
                                     <size key="maxSize" width="517" height="10000000"/>
                                     <connections>
-                                        <binding destination="Voe-Tx-rLC" name="editable" keyPath="self.problemSelected" id="SS5-lJ-XCg"/>
                                         <binding destination="Voe-Tx-rLC" name="attributedString" keyPath="self.problemDescription" id="60G-T5-ozT">
                                             <dictionary key="options">
                                                 <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                             </dictionary>
                                         </binding>
+                                        <binding destination="Voe-Tx-rLC" name="editable" keyPath="self.problemSelected" id="SS5-lJ-XCg"/>
                                     </connections>
                                 </textView>
                             </subviews>

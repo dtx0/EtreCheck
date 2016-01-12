@@ -137,6 +137,11 @@
         [info setObject: iconPath forKey: @"iconPath"];
     }
     
+  NSString * bundleID = [plist objectForKey: @"CFBundleIdentifier"];
+  
+  if([bundleID isEqualToString: @"com.malwarebytes.antimalware"])
+    [[Model model] setHasMalwareBytes: YES];
+    
   if(plist)
     [info addEntriesFromDictionary: plist];
   

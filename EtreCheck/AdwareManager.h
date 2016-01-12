@@ -11,6 +11,12 @@
 #define kAdwarePossible @"adwarepossible"
 
 @interface AdwareManager : PopoverManager
+  {
+  NSButton * myDownloadButton;
+  }
+
+// The Adware Medic download button.
+@property (retain) IBOutlet NSButton * downloadButton;
 
 // Go to Adware Medic.
 - (IBAction) gotoAdwareMedic: (id) sender;

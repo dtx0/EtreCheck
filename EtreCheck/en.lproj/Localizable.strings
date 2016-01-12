@@ -29,8 +29,8 @@
 "%d error (plural rule: one)" = "one error";
 "%d error (plural rule: other)" = "%d errors\n";
 "About adware" = "About adware";
-"definiteadware" = "EtreCheck has detected that your Macintosh is infected with adware. Download and run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to remove the adwware.";
-"probableadware" = "EtreCheck has detected software that is not on EtreCheck's whitelist. Download and run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to scan for adware and malware.";
+"definiteadware" = "EtreCheck has detected that your Macintosh is infected with adware. Run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to remove the adwware.";
+"probableadware" = "EtreCheck has detected software that is not on EtreCheck's whitelist. Run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to scan for adware and malware.";
 "adwarefound" = "    Adware infection found.";
 "adwarepossible" = "    Adware infection possible.";
 "%d pressurekilledcount (plural rule: zero)" = "    no processes killed due to insufficient RAM\n";
@@ -44,3 +44,5 @@
 "    %@ - Uptime: %@%@\n" = "    %@ - Time since boot: %@%@\n";
 "service_desktop" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
 "service_notebook" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
+"downloadmbam" = "Download MalwareBytes";
+"runmbam" = "Run MalwareBytes";

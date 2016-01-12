@@ -128,6 +128,9 @@
 // Collect a single diagnostic result.
 - (void) collectDiagnosticResult: (NSDictionary *) result
   {
+  if(![result respondsToSelector: @selector(objectForKey:)])
+    return;
+    
   NSString * name = [result objectForKey: @"_name"];
   
   if([name isEqualToString: @"spdiags_post_value"])

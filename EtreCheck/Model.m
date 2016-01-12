@@ -34,6 +34,7 @@
 @synthesize terminatedTasks = myTerminatedTasks;
 @synthesize greylistCount = myGreylistCount;
 @synthesize seriousProblems = mySeriousProblems;
+@synthesize hasMalwareBytes = myHasMalwareBytes;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize checkAppleSignatures = myCheckAppleSignatures;
 @synthesize hideAppleTasks = myHideAppleTasks;
