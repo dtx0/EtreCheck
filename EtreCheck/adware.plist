@@ -54,6 +54,7 @@
 		<string>com.gopro.stereomodestatus.plist</string>
 		<string>com.hp.help.tocgenerator.plist</string>
 		<string>com.hp.productresearch.plist</string>
+		<string>com.intel.haxm.plist</string>
 		<string>com.kodak.BonjourAgent.plist</string>
 		<string>com.kodak.KODAK AiO Annual Opt.plist</string>
 		<string>com.kodak.KODAK AiO Firmware Updater.plist</string>
@@ -89,6 +90,8 @@
 		<string>com.paragon.updater.plist</string>
 		<string>com.paragon.ntfs12.refresh.plist</string>
 		<string>com.paragon.NTFS.launch.plist</string>
+		<string>com.pharos.notify.plist</string>
+		<string>com.pharos.popup.plist</string>
 		<string>com.prosofteng.DriveGenius.locum.plist</string>
 		<string>com.rogueamoeba.instanton-agent.plist</string>
 		<string>com.seagate.TBDecorator.plist</string>
@@ -107,6 +110,8 @@
 		<string>com.wacom.pentablet.plist</string>
 		<string>com.wacom.wacomtablet.plist</string>
 		<string>com.wdc.WDPrivilegedHelper.plist</string>
+		<string>de.novamedia.nmnetmgrd.plist</string>
+		<string>de.novamedia.VodafoneDeviceObserver.plist</string>
 		<string>jp.co.canon.Inkjet_Extended_Survey_Agent.plist</string>
 		<string>jp.co.canon.MasterInstaller.plist</string>
 		<string>jp.co.canon.SELPHYCP.BG.plist</string>

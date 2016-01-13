@@ -734,7 +734,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if(interval > (60 * 10))
     {
     [self.log
-      appendString: NSLocalizedString(@"Poor", NULL)
+      appendString: NSLocalizedString(@"poorperformance", NULL)
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -744,7 +744,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   else if(interval > (60 * 5))
     {
     [self.log
-      appendString: NSLocalizedString(@"Below average", NULL)
+      appendString: NSLocalizedString(@"belowaverageperformance", NULL)
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
@@ -754,7 +754,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   else if(interval > (60 * 3))
     {
     [self.log
-      appendString: NSLocalizedString(@"Good", NULL)
+      appendString: NSLocalizedString(@"goodperformance", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
@@ -763,7 +763,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   else
     {
     [self.log
-      appendString: NSLocalizedString(@"Excellent", NULL)
+      appendString: NSLocalizedString(@"excellentperformance", NULL)
       attributes:
         @{
           NSFontAttributeName : [[Utilities shared] boldFont]
@@ -1457,6 +1457,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
     [self.startPanelAnimationView
       transitionToView: self.introPanel.contentView];
+    [self.startPanelAnimationView setNeedsDisplay: YES];
     
     self.optionsButton.title = NSLocalizedString(@"Options", NULL);
     
@@ -1470,6 +1471,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
     [self.startPanelAnimationView
       transitionToView: self.userParametersPanel.contentView];
+    [self.startPanelAnimationView setNeedsDisplay: YES];
 
     self.optionsButton.title = NSLocalizedString(@"Back", NULL);
 

@@ -235,10 +235,10 @@
 "Hide Apple tasks: Disabled\n" = "Masquer les tâches d’Apple : Désactivé\n";
 "Back" = "Retour";
 "Performance: " = "La vitesse : ";
-"Excellent" = "Excellent";
-"Good" = "Bon";
-"Below average" = "Sous la moyenne";
-"Poor" = "Pire";
+"excellentperformance" = "Excellent";
+"goodperformance" = "Bon";
+"belowaverageperformance" = "Sous la moyenne";
+"poorperformance" = "Pire";
 "[Warranty & Service]" = "[Garantie & service]";
 "service_desktop" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
 "service_notebook" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";

@@ -46,3 +46,7 @@
 "service_notebook" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
 "downloadmbam" = "Download MalwareBytes";
 "runmbam" = "Run MalwareBytes";
+"excellentperformance" = "Excellent";
+"goodperformance" = "Good";
+"belowaverageperformance" = "Below Average";
+"poorperformance" = "Poor";
