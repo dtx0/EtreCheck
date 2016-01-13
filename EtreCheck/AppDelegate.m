@@ -342,7 +342,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   NSURL * url =
     [NSURL
       URLWithString:
-        @"http://etresoft.com/download/ApplicationUpdates.plist"];
+        @"http://etrecheck.com/download/ApplicationUpdates.plist"];
   
   NSData * data = [NSData dataWithContentsOfURL: url];
   
@@ -1368,7 +1368,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   [[NSWorkspace sharedWorkspace]
     openURL:
-      [NSURL URLWithString: @"http://www.etresoft.com/etrecheck_story"]];
+      [NSURL URLWithString: @"http://www.etrecheck.com/#usage"]];
   }
 
 // Show the log window.

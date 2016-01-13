@@ -107,6 +107,10 @@
   NSData * result =
     [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
   
+  //result =
+  //  [NSData dataWithContentsOfFile:
+  //    @"/tmp/SPDiagnosticsDataType.xml" options: 0 error: NULL];
+  
   if(![result length])
     return;
     
