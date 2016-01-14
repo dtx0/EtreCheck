@@ -18,6 +18,7 @@
 		A50C9DC519A4052000BA6A25 /* LoginItemsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DC419A4052000BA6A25 /* LoginItemsCollector.m */; };
 		A50C9DC819A4063E00BA6A25 /* PlugInsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DC719A4063E00BA6A25 /* PlugInsCollector.m */; };
 		A50C9DCB19A4065B00BA6A25 /* InternetPlugInsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DCA19A4065B00BA6A25 /* InternetPlugInsCollector.m */; };
+		A518C4661C4814740094D7CC /* Help in Resources */ = {isa = PBXBuildFile; fileRef = A518C4641C4814740094D7CC /* Help */; };
 		A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */; };
 		A52006A21A292A2200644C40 /* PopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A52006A11A292A2200644C40 /* PopoverManager.m */; };
 		A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D2D19AB51BE003084C8 /* ProcessesCollector.m */; };
@@ -107,6 +108,8 @@
 		A50C9DC719A4063E00BA6A25 /* PlugInsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlugInsCollector.m; sourceTree = "<group>"; };
 		A50C9DC919A4065B00BA6A25 /* InternetPlugInsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InternetPlugInsCollector.h; sourceTree = "<group>"; };
 		A50C9DCA19A4065B00BA6A25 /* InternetPlugInsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternetPlugInsCollector.m; sourceTree = "<group>"; };
+		A518C4651C4814740094D7CC /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = en.lproj/Help; sourceTree = "<group>"; };
+		A518C4671C4814870094D7CC /* fr */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fr; path = fr.lproj/Help; sourceTree = "<group>"; };
 		A51BD14A1A7D7782000AAABA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
 		A51BD14C1A7D7784000AAABA /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
 		A52006A01A292A2200644C40 /* PopoverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverManager.h; sourceTree = "<group>"; };
@@ -450,6 +453,7 @@
 		A55BC17415BF987D00D42EF1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A518C4641C4814740094D7CC /* Help */,
 				A5B6BD5A19D7AAF900C48C37 /* Media.xcassets */,
 				A55BC17515BF987D00D42EF1 /* EtreCheck-Info.plist */,
 				A54DA5711A3117E100F09B19 /* adware.plist */,
@@ -549,6 +553,7 @@
 				A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */,
 				A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */,
 				A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */,
+				A518C4661C4814740094D7CC /* Help in Resources */,
 				A5E9E2C01A2522A600309185 /* Help.strings in Resources */,
 				A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */,
 			);
@@ -642,6 +647,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		A518C4641C4814740094D7CC /* Help */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A518C4651C4814740094D7CC /* en */,
+				A518C4671C4814870094D7CC /* fr */,
+			);
+			name = Help;
+			sourceTree = "<group>";
+		};
 		A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (

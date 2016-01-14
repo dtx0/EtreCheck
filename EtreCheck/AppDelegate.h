@@ -164,8 +164,11 @@
 // Go to the Etresoft web site.
 - (IBAction) gotoEtresoft: (id) sender;
 
-// Display more info.
-- (IBAction) moreInfo: (id) sender;
+// Display help.
+- (IBAction) showHelp: (id) sender;
+
+// Display FAQ.
+- (IBAction) showFAQ: (id) sender;
 
 // Show the log window.
 - (IBAction) showLog: (id) sender;

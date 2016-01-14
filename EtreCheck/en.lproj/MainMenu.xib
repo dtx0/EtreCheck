@@ -476,7 +476,13 @@
                         <items>
                             <menuItem title="EtreCheck Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                 <connections>
-                                    <action selector="moreInfo:" target="Voe-Tx-rLC" id="gH7-dl-sT9"/>
+                                    <action selector="showHelp:" target="Voe-Tx-rLC" id="DPO-a4-fui"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Frequently asked questions" id="3MB-7M-aZi">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="showFAQ:" target="Voe-Tx-rLC" id="dCE-5I-qc0"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1235,10 +1241,10 @@ Gw
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Help" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XJu-Hs-Mf1">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
+                        <connections>
+                            <action selector="showHelp:" target="Voe-Tx-rLC" id="keN-2w-rXy"/>
+                        </connections>
                     </buttonCell>
-                    <connections>
-                        <action selector="moreInfo:" target="Voe-Tx-rLC" id="wsS-np-O1i"/>
-                    </connections>
                 </button>
             </subviews>
             <point key="canvasLocation" x="199" y="640"/>

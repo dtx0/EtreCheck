@@ -156,7 +156,7 @@
 - (bool) isAdwareExtension: (NSString *) path;
 
 // Check the file against the whitelist.
-- (void) checkWhitelistFile: (NSString *) path;
+- (bool) checkWhitelistFile: (NSString *) path;
 
 // Is this file in the whitelist?
 - (bool) isWhitelistFile: (NSString *) path;

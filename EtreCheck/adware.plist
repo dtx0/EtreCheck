@@ -21,6 +21,20 @@
 		<string>com.adobe.versioncueCS4.plist</string>
 		<string>com.amazon.cloud-player.plist</string>
 		<string>com.amazon.music.plist</string>
+		<string>com.amazon.sendtokindle.launcher.plist</string>
+		<string>com.autodesk.backburner_manager.plist</string>
+		<string>com.autodesk.backburner_server.plist</string>
+		<string>com.autodesk.backburner_start.plist</string>
+		<string>com.avast.secureline.update-agent.plist</string>
+		<string>com.avast.secureline.userinit.plist</string>
+		<string>com.avast.update-agent.plist</string>
+		<string>com.avast.userinit.plist</string>
+		<string>com.avast.init.plist</string>
+		<string>com.avast.secureline.init.plist</string>
+		<string>com.avast.secureline.uninstall.plist</string>
+		<string>com.avast.secureline.update.plist</string>
+		<string>com.avast.uninstall.plist</string>
+		<string>com.avast.update.plist</string>
 		<string>com.avid.sari.plist</string>
 		<string>com.backblaze.bzbmenu.plist</string>
 		<string>com.backblaze.bzserv.plist</string>
@@ -38,6 +52,7 @@
 		<string>com.c-command.SpamSieve.LaunchAgent.plist</string>
 		<string>com.canon.SPPHelper.plist</string>
 		<string>com.charlessoft.pacifist.helper.plist</string>
+		<string>com.cleverfiles.cfbackd.plist</string>
 		<string>com.divx.dms.agent.plist</string>
 		<string>com.divx.update.agent.plist</string>
 		<string>com.divx.agent.postinstall.plist</string>
@@ -47,6 +62,7 @@
 		<string>com.epson.eventmanager.agent.plist</string>
 		<string>com.epson.Epson_Low_Ink_Reminder.launcher.plist</string>
 		<string>com.f-secure.sync.BTCloud.plist</string>
+		<string>com.facebook.videochat.[redacted].plist</string>
 		<string>com.fitbit.galileod.plist</string>
 		<string>com.github.GitHub.GHInstallCLI.plist</string>
 		<string>com.google.keystone.agent.plist</string>
@@ -65,13 +81,28 @@
 		<string>com.linotype.FontExplorerX.securityhelper.plist</string>
 		<string>com.linotype.FontFolderProtector.plist</string>
 		<string>com.Logitech.Control Center.Daemon.plist</string>
+		<string>com.logmein.logmeingui.plist</string>
+		<string>com.logmein.logmeinguiagent.plist</string>
+		<string>com.logmein.logmeinguiagentatlogin.plist</string>
+		<string>com.logmein.logmeinserver.plist</string>
+		<string>com.logmein.raupdate.plist</string>
+		<string>com.maintain.LogOut.plist</string>
+		<string>com.maintain.PurgeInactiveMemory.plist</string>
+		<string>com.maintain.Restart.plist</string>
+		<string>com.maintain.ShutDown.plist</string>
+		<string>com.maintain.Sleep.plist</string>
+		<string>com.maintain.SystemEvents.plist</string>
+		<string>com.maintain.CocktailScheduler.plist</string>
+		<string>com.maintain.HideSpotlightMenuBarIcon.plist</string>
 		<string>com.malwarebytes.MBAMHelperTool.plist</string>
+		<string>com.mice.360Daemon.plist</string>
 		<string>com.microsoft.office.licensing.helper.plist</string>
 		<string>com.microsoft.office.licensingV2.helper.plist</string>
 		<string>com.microsoft.LaunchAgent.SyncServicesAgent.plist</string>
 		<string>com.mcafee.menulet.plist</string>
 		<string>com.mcafee.reporter.plist</string>
 		<string>com.mcafee.virusscan.fmpd.plist</string>
+		<string>com.myheritage.familytreebuilder.checkupdates.plist</string>
 		<string>com.netgear.wutility</string>
 		<string>com.nike.nikeplusconnect.plist</string>
 		<string>com.nvidia.cuda.launcher.plist</string>
@@ -93,15 +124,39 @@
 		<string>com.pharos.notify.plist</string>
 		<string>com.pharos.popup.plist</string>
 		<string>com.prosofteng.DriveGenius.locum.plist</string>
+		<string>com.rim.bbdmmediaserver.plist</string>
 		<string>com.rogueamoeba.instanton-agent.plist</string>
+		<string>com.rosettastone.rosettastonedaemon.plist</string>
 		<string>com.seagate.TBDecorator.plist</string>
 		<string>com.skype.skypeinstaller.plist</string>
 		<string>com.sonos.SonosLibraryServer.plist</string>
 		<string>com.sony.SonyAutoLauncher.agent.plist</string>
 		<string>com.sony.PMBPortable.AutoRun.plist</string>
+		<string>com.sony.ReaderLibrary.RunReaderLibrary.plist</string>
 		<string>com.sophos.common.servicemanager.plist</string>
 		<string>com.sophos.uiserver.plist</string>
 		<string>com.spotify.webhelper.plist</string>
+		<string>com.symantec.errorreporter-periodicagent.NFM.plist</string>
+		<string>com.symantec.uiagent.application.NFM.plist</string>
+		<string>com.symantec.SymLUHelper.NFM.plist</string>
+		<string>com.symantec.UninstallerToolHelper.NFM.plist</string>
+		<string>com.symantec.deepsight-extractor.NFM.plist</string>
+		<string>com.symantec.errorreporter-periodic.NFM.plist</string>
+		<string>com.symantec.liveupdate.daemon.NFM.plist</string>
+		<string>com.symantec.nfm.wps.plist</string>
+		<string>com.symantec.sharedsettings.NFM.plist</string>
+		<string>com.symantec.symdaemon.NFM.plist</string>
+		<string>com.symantec.liveupdate.daemon.ondemand.plist</string>
+		<string>com.symantec.liveupdate.daemon.plist</string>
+		<string>com.symantec.sep.migratesettings.plist</string>
+		<string>com.symantec.sharedsettings.plist</string>
+		<string>com.symantec.symdaemon.plist</string>
+		<string>com.symantec.nis.uninstall.English.plist</string>
+		<string>com.symantec.uiagent.application.plist</string>
+		<string>com.teamviewer.teamviewer.plist</string>
+		<string>com.teamviewer.teamviewer_desktop.plist</string>
+		<string>com.teamviewer.Helper.plist</string>
+		<string>com.teamviewer.teamviewer_service.plist</string>
 		<string>com.thursby.pkard.tokendagent.plist</string>
 		<string>com.valvesoftware.steamclean.plist</string>
 		<string>com.vmware.launchd.tools.plist</string>
@@ -115,6 +170,10 @@
 		<string>jp.co.canon.Inkjet_Extended_Survey_Agent.plist</string>
 		<string>jp.co.canon.MasterInstaller.plist</string>
 		<string>jp.co.canon.SELPHYCP.BG.plist</string>
+		<string>net.culater.SIMBL.Agent.plist</string>
+		<string>net.infinite-labs.SIMBLEnablerForSandboxedApps.plist</string>
+		<string>org.freedesktop.dbus-session.plist</string>
+		<string>org.freedesktop.dbus-system.plist</string>
 		<string>org.macosforge.xquartz.privileged_startx.plist</string>
 		<string>org.macosforge.xquartz.startx.plist</string>
 		<string>org.serviio.server.plist</string>

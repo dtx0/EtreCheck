@@ -1363,12 +1363,28 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     openURL: [NSURL URLWithString: @"http://www.etresoft.com"]];
   }
 
-// Display more info.
-- (IBAction) moreInfo: (id) sender
+// Display help.
+- (IBAction) showHelp: (id) sender
   {
-  [[NSWorkspace sharedWorkspace]
-    openURL:
-      [NSURL URLWithString: @"http://www.etrecheck.com/#usage"]];
+  NSURL * url =
+    [[NSBundle mainBundle]
+      URLForResource: @"index"
+      withExtension: @"html"
+      subdirectory: @"Help"];
+
+  [[NSWorkspace sharedWorkspace] openURL: url];
+  }
+
+// Display FAQ.
+- (IBAction) showFAQ: (id) sender
+  {
+  NSURL * url =
+    [[NSBundle mainBundle]
+      URLForResource: @"faq"
+      withExtension: @"html"
+      subdirectory: @"Help"];
+
+  [[NSWorkspace sharedWorkspace] openURL: url];
   }
 
 // Show the log window.

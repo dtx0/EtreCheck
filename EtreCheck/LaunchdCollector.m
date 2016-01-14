@@ -492,9 +492,12 @@
   if(!status)
     return NO;
     
+  NSString * filename = [status objectForKey: kFilename];
   bool hideAppleTasks = [[Model model] hideAppleTasks];
   NSNumber * ignore = [NSNumber numberWithBool: hideAppleTasks];
 
+  bool whitelist = YES;
+  
   // Apple file get special treatment.
   if([[status objectForKey: kApple] boolValue])
     {
@@ -535,12 +538,15 @@
       }
     }
   else
-    [[Model model] checkWhitelistFile: file];
+    whitelist = [[Model model] checkWhitelistFile: filename];
 
   [output appendAttributedString: [self formatPropertyListStatus: status]];
   
-  [output appendString: [status objectForKey: kFilename]];
+  [output appendString: filename];
   
+  if(whitelist)
+    [output appendString: NSLocalizedString(@"whitelistcheckmark", NULL)];
+    
   [output
     appendAttributedString: [self formatExtraContent: status for: path]];
   

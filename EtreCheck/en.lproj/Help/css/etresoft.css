@@ -1,0 +1,192 @@
+/* Modify core HTML elements. */
+
+/* Ajust the body. */
+body
+  {
+  /* Make the text a nice dark green. */
+  color: #004400;
+
+  /* Use a nice, tight font. */
+  font-family: Helvetica, Arial, sans-serif;
+  line-height: 1.5em;
+
+  background-color: #ffffcc;
+  
+  margin: 0;
+  }
+
+/* Turn off image borders. */
+img
+  {
+  border: none;
+  }
+
+/* Links. */
+a
+  {
+  /* Make the text a nice sea green. */
+  color: #006644;
+  
+  /* Use a proper pointer. */
+  cursor: pointer;
+  }
+
+/* Hover links. */
+a:hover
+  {
+  /* Use a brigher green for this one. */
+  color: #00aa00;
+  }
+
+/* Active links. */
+a:active
+  {
+  /* Make the text a nice dark green. */
+  color: #004400;
+
+  /* While the button is pressed, keep the underline and press the link. */
+  text-decoration: underline;
+  border-width: 1px;
+  }
+
+/* Header. */
+div.header
+  {
+  /* Make a fixed header across the top. */
+  height: 85px;
+  margin: 0;
+  border-bottom: 1px solid #ddddaa;
+  background-color: rgba(204, 255, 204, .6); 
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  
+  /* Use vibrancy on Safari. */
+  -webkit-backdrop-filter: blur(10px);
+  
+  z-index: 2000; 
+  }
+  
+/* Specify the size of the header logo. */
+div.header .logo
+  {
+  float: left;
+  height: 65px;
+  margin: 10px;
+  }
+  
+/* Take the app name and icon, float it right and center vertically. */
+div.header .app
+  {
+  float: right;
+  margin-right: 20px;
+  }
+  
+/* Make the app name dark green and bold. */
+div.header .app span
+  {
+  color: #77aa77;
+  vertical-align: middle;
+  font-size: 2em;
+  font-weight: bold;
+  line-height: 85px;
+  }
+
+/* Use the correct size for the app icon. */
+div.header .app img
+  {
+  width: 48px;
+  height: 48px;
+  vertical-align: middle;
+  margin-top: 12px;
+  margin-bottom: 13px;
+  }
+      
+/* Site content. */
+.content
+  {
+  padding: 10px;
+
+  /* Position in the middle. */
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  }
+  
+.anchor
+  {
+  margin-top: 0;
+  margin-bottom: 100px;
+  
+  padding-bottom: 1px;
+  }
+  
+.section
+  {
+  margin-bottom: 100px;
+  }
+
+/* dt and dd items. */
+.content dt
+  {
+  font-weight: bold;
+  }
+  
+.content dd
+  {
+  margin-bottom: 10px;
+  }
+  
+.usage li
+  {
+  margin-bottom: 10px;
+  }
+  
+.usage img
+  {
+  float: right;
+  }
+  
+#intro_image
+  {
+  float: none;
+  display: block;
+  }
+
+#tips_link
+  {
+  text-decoration: underline;
+  }
+    
+/* Don't let these look like regular links. */
+div.footer a,
+div.footer a:hover,
+div.footer a:active,
+div.footer a:visited
+  {
+  text-decoration: none;
+
+  border: none;
+
+  margin-left: 10px;
+  margin-right: 10px;
+  }
+
+/* Firefox hacks. */
+@-moz-document url-prefix() 
+  {
+  /* Header. */
+  div.header
+    {
+    /* Firefox doesn't support vibrancy. */
+    background-color: rgba(204, 255, 204, .9); 
+    }
+  
+  /* Footer menu. */
+  div.footer
+    {
+    /* Firefox doesn't support vibrancy. */
+    background-color: rgba(204, 255, 204, .9); 
+    }
+  }

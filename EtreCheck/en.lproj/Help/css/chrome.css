@@ -1,0 +1,15 @@
+/* Chrome-specific hacks. */
+
+/* Header. */
+div.header
+  {
+  /* Chrome doesn't support vibrancy. */
+  background-color: rgba(204, 255, 204, .9); 
+  }
+  
+/* Footer menu. */
+div.footer
+  {
+  /* Chrome doesn't support vibrancy. */
+  background-color: rgba(204, 255, 204, .9); 
+  }

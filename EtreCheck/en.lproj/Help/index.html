@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+    <title>EtreCheck Help</title>
+    
+    <!-- Fancy favicon stuff. -->
+    <link rel="apple-touch-icon" sizes="57x57" href="favicons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicons/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="favicons/favicon-16x16.png" sizes="16x16">
+    <!-- Fails validation. <link rel="mask-icon" href="favicons/safari-pinned-tab.svg" color="#5bbad5"> -->
+    
+    <!-- Make iOS display correctly. -->
+    <meta name="viewport" content="width=device-width">
+    
+    <!-- Styles. -->
+    <link media="only screen" href="css/etresoft.css" type="text/css" rel="stylesheet">
+    
+    <!-- Site stuff. -->
+    <script type="text/javascript" src="script/site.js"></script>
+    
+  </head>
+  <body>
+    <div class="header">
+      <a href="http://etresoft.com" title="Etresoft"><img src="images/Etresoft.png" alt="Etresoft" class="logo"></a>
+      <div class="app">
+        <span>EtreCheck</span>
+        <img src="images/EtreCheck.png" alt="EtreCheck">
+      </div>
+    </div>
+    
+    <div class="content">
+          
+      <div class="anchor" id="usage"></div>
+      <div class="section usage">
+        <h1>How to use EtreCheck</h1>
+        <p>EtreCheck is frequently recommended on internet discussion forums like Apple Support Communities. EtreCheck was designed to help provide the kind of information members of Apple Support Communities need when helping you with your Mac. But you can run EtreCheck and read the report yourself. The following is an explanation of how to use EtreCheck and the meaning of each section of an EtreCheck report.</p>
+        <img id="intro_image" class="usage" src="images/intro_en.png" alt="Startup">
+        <img class="usage" src="images/problems_en.png" alt="Problems">
+        <p>When you first run EtreCheck, you will have to choose a problem that best describes your issue. You should also include any other details you can think of in the problem description.</p>
+        <p>You can click the <strong>Options</strong> button to turn on more diagnostics. This is an advanced feature and should not be used when posting an EtreCheck report online.</p>
+        <p>Finally, click the <strong>Start EtreCheck</strong> button to generate your EtreCheck report.</p>
+        <ul>
+          <li>
+            <a id="header"></a><strong>Header:</strong><br>
+            <img class="usage" src="images/header_en.png" alt="Header">
+            This section contains basic information about EtreCheck itself, when you ran it, and how long EtreCheck took to run. People sometimes omit this section but it can be very useful as a rough estimate of your machine's performance. If EtreCheck takes more than 5 minutes to run, you have problems.<br>This section also explains that the EtreCheck report is a hypertext document. You can click on virtually any part of the report for more details.
+          </li>
+          <li>
+            <a id="problem"></a><strong>Problem:</strong><br>
+            <img class="usage" src="images/problem_en.png" alt="Problem">
+            This is the problem you described when you first ran EtreCheck.
+          </li>
+          <li>
+            <a id="hardware"></a><strong>Hardware Information:</strong><br>
+            <img class="usage" src="images/hardware_en.png" alt="Hardware information">
+            Basic Information about your machine - the number of processors, cores, and RAM. This section connects to Apple support servers to return the ”marketing name” of your machine that Apple uses. This section also includes links to Apple support resources for your machine such as technical specification, user guides, warranty &amp; service, and RAM upgrade instructions.
+          </li>
+          <li>
+            <a id="video"></a><strong>Video Information:</strong><br>
+            Your graphics card and any attached displays.
+          </li>
+          <li>
+            <a id="systemsoftware"></a><strong>System Software:</strong><br>
+            <img class="usage" src="images/system_en.png" alt="System software">
+            Your operating system version, including specific build version. Also reports the time since your machine has been restarted. If possible, you should run EtreCheck on your machine while it is encountering problems. EtreCheck results will be more valuable if you run it before restarting.
+          </li>
+          <li>
+            <a id="diskinformation"></a><strong>Disk Information:</strong><br>
+            <img class="usage" src="images/disk_en.png" alt="Disk information">
+            This may include several hidden volumes used for startup and recovery. This section may report low disk space, <span style="color: red; font-weight: bold;">disk errors</span>, or <span style="color: red; font-weight: bold;">SMART failures</span>. If your report lists disk errors or SMART failures, you probably need to replace your hard drive. Disk Utility cannot repair these errors.
+          </li>
+          <li>
+            <a id="usbinformation"></a><a id="thunderboltinformation"></a><a id="firewireinformation"></a><strong>USB/Thunderbolt/Firewire Information:</strong><br>
+            Any USB, Thunderbolt, or FireWire peripherals, such as external disk drives.
+          </li>
+          <li>
+            <a id="configurationfiles"></a><strong>Configuration files:</strong><br>
+            <img class="usage" src="images/configuration_en.png" alt="Configuration files">
+            If there have been unusual, low-level changes to your system configuration files, they will be listed here. This may not necessarily be a problem unless you don't recognize these files or know what these changes are.
+          </li>
+          <li>
+            <a id="gatekeeper"></a><strong>Gatekeeper:</strong><br>
+            <img class="usage" src="images/gatekeeper_en.png" alt="Gatekeeper">
+            Your current GateKeeper settings. This should <em>always</em> be set to "Mac App Store and identified developers".
+          </li>
+          <li>
+            <a id="adware"></a><strong>Adware:</strong><br>
+            <img class="usage" src="images/adware_en.png" alt="Adware">
+            Possible ad-injection software or malware. EtreCheck uses a whitelist of known safe software. If you have software that isn't on EtreCheck's whitelist, EtreCheck will suggest that you run <a href="https://www.malwarebytes.org/antimalware/mac/" target="_blank">MalwareBytes for Mac</a> as a precaution. 
+          </li>
+          <li>
+            <a id="kernelextensions"></a><strong>Kernel Extensions:</strong><br>
+            <img class="usage" src="images/kernel_en.png" alt="Kernel extensions">
+            Lists any 3rd party kernel extensions. These extensions actually modify your operating system. Many may be necessary for hardware or software you want to run. However, because they run deep within the core of the operating system, they can destabilize your computer. The most common result from misbehaving kernel extensions are kernel panics where “you need to restart your machine”.
+          </li>
+          <li>
+            <a id="startupitems"></a><strong>Startup Items:</strong><br>
+            These items start up with your Macintosh. They no longer function on OS X “Yosemite” or later. If you have items listed here, then you need to contact the developer of that software and update it.
+          </li>
+          <li>
+            <a id="systemlaunchagents"></a><strong>Problem System Launch Agents:</strong><br>
+            <img class="usage" src="images/systemlaunchagents_en.png" alt="Problem System Launch Agents">
+            These are any low-level, Apple-provided parts of your operating system that run hidden. Any failure that appears here may indicate a problem with your system. There may be a long list of <span style="color: red; font-weight: bold;">killed processes</span> due to memory pressure. This means your computer needs more RAM.
+          </li>
+          <li>
+            <a id="systemlaunchdaemons"></a><strong>Problem System Launch Daemons:</strong><br>
+            Same as above.
+          </li>
+          <li>
+            <a id="launchagents"></a><strong>Launch Agents:</strong><br>
+            <img class="usage" src="images/launchagents_en.png" alt="Launch Agents">
+            Same as above, but for 3rd party software. It is common for software to use 3rd party launch daemons. However, this software is always running in the background. this software can include various types of "clean up" or scam-ware software that you really don’t need.
+          </li>
+          <li>
+            <a id="launchdaemons"></a><strong>Launch Daemons:</strong><br>
+            Same as above.
+          </li>
+          <li>
+            <a id="userlaunchagents"></a><strong>User Launch Agents:</strong><br>
+            Similar to the above. The biggest difference is that this software runs under your normal user account instead of as the super-user. This section may include evidence of scam-ware or <span style="color: red; font-weight: bold;">adware</span>.
+          </li>
+          <li>
+            <a id="loginitems"></a><strong>User Login Items:</strong><br>
+            <img class="usage" src="images/loginitems_en.png" alt="Login Items">
+            These are programs that start as soon as your login to the computer. If there are many items, you can run out of memory or your machine could run slowly.
+          </li>
+          <li>
+            <a id="otherapps"></a><strong>Other apps:</strong><br>
+            <img class="usage" src="images/other_en.png" alt="Other apps">
+            There are many programs that are started dynamically. Sometimes these are helpers, modern login items, or just about anything else. They may not be visible, so EtreCheck prints them here.
+          </li>
+          <li>
+            <a id="internetplugins"></a><strong>Internet Plug-ins:</strong><br>
+            These items could impact your web browsing.
+          </li>
+          <li>
+            <a id="safariextensions"></a><strong>Safari Extensions:</strong><br>
+            <img class="usage" src="images/safariextensions_en.png" alt="Safari extensions">
+            These items could impact your web browsing.
+          </li>
+          <li>
+            <a id="timemachine"></a><strong>Time Machine:</strong><br>It is critical to have a good backup. All Mac users should be running Time Machine.
+          </li>
+          <li>
+            <a id="cpu"></a><strong>Top Processes by CPU:</strong><br>These are the apps that are currently using the majority of your processing capacity.
+          </li>
+          <li>
+            <a id="memory"></a><strong>Top Processes by Memory:</strong><br>Same as above, but for memory usage.
+          </li>
+          <li>
+            <a id="vm"></a><strong>Virtual Memory Information:</strong><br>Unfortunately, as of OS X “Yosemite” and later, this section has little value. OS X tries to use all of your RAM so you should have very little free RAM. OS X “Yosemite” and later may perform poorly on machines with only 4 GB. Older machines with only 4 GB RAM and an old hard drive may run particularly bad on OS X “Yosemite” and later.
+          </li>
+          <li>
+            <a id="diagnostics"></a><strong>Diagnostics:</strong><br>Recent diagnostic files generated by your system. EtreCheck includes crash, hang, and CPU reports for the past three days. All kernel panic reports are also included, as is your most recent self-test results. For best results, run EtreCheck as an Administrator user (this is the default setting).
+          </li>
+        </ul>
+        <p>When the EtreCheck report is complete, you can share it by copying it to the clipboard. Please remember that Etresoft, Inc. cannot guarantee the accuracy of any suggestions you may receive on an internet discussion forum. </p>
+      </div>
+            
+    </div>      
+  </body>
+</html>

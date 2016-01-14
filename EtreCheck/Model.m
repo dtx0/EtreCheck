@@ -225,10 +225,13 @@
   }
 
 // Check the file against the whitelist.
-- (void) checkWhitelistFile: (NSString *) path
+- (bool) checkWhitelistFile: (NSString *) path
   {
-  if(![self isWhitelistFile: path])
-    self.greylistCount = self.greylistCount + 1;
+  if([self isWhitelistFile: path])
+    return YES;
+    
+  self.greylistCount = self.greylistCount + 1;
+  return NO;
   }
 
 // Is this file in the whitelist?
