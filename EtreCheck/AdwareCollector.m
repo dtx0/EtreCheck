@@ -15,10 +15,9 @@
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
 #define kExtensionsKey @"extensions"
-#define kGroup2Key \
-  @"Downlite, VSearch, Conduit, Trovi, MyBrand, Search Protect"
-#define kGroup3Key @"Genieo, InstallMac"
-#define kGroup4Key @"More adware files"
+#define kGroup2Key @"group2"
+#define kGroup3Key @"group3"
+#define kGroup4Key @"group4"
 
 // Collect information about adware.
 @implementation AdwareCollector
@@ -75,9 +74,9 @@
 // Collect adware.
 - (void) collectAdware
   {
-  [self searchForAdware: NSLocalizedString(kGroup2Key, NULL)];
-  [self searchForAdware: NSLocalizedString(kGroup3Key, NULL)];
-  [self searchForAdware: NSLocalizedString(kGroup4Key, NULL)];
+  [self searchForAdware: kGroup2Key];
+  [self searchForAdware: kGroup3Key];
+  [self searchForAdware: kGroup4Key];
   }
 
 // Load signatures from an obfuscated list of signatures.
