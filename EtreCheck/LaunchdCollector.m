@@ -540,6 +540,9 @@
   else
     whitelist = [[Model model] checkWhitelistFile: filename];
 
+  if(!whitelist)
+    whitelist = [self handleWhitelistExceptions: status];
+    
   [output appendAttributedString: [self formatPropertyListStatus: status]];
   
   [output appendString: filename];
@@ -555,6 +558,28 @@
   [status setObject: [NSNumber numberWithBool: YES] forKey: kPrinted];
   
   return YES;
+  }
+
+// Handle whitelist exceptions.
+- (bool) handleWhitelistExceptions: (NSDictionary *) status
+  {
+  bool whitelist = NO;
+  
+  // Special case for Folder Actions Dispatcher.
+  NSArray * command = [status objectForKey: kCommand];
+
+  for(NSString * part in command)
+    if([part containsString: @"Folder Actions Dispatcher"])
+      whitelist = true;
+    
+  if(whitelist)
+    {
+    int greyListCount = [[Model model] greylistCount];
+    
+    [[Model model] setGreylistCount: greyListCount - 1];
+    }
+  
+  return whitelist;
   }
 
 // Collect the status of a launchd item.

@@ -10,8 +10,10 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "AdwareManager.h"
+#import "TTTLocalizedPluralString.h"
 
 #define kWhitelistKey @"whitelist"
+#define kWhitelistPrefixKey @"whitelist_prefix"
 #define kExtensionsKey @"extensions"
 #define kGroup2Key \
   @"Downlite, VSearch, Conduit, Trovi, MyBrand, Search Protect"
@@ -107,9 +109,13 @@
     if(plist)
       {
       [self
-        addSignatures: [plist objectForKey: @"whitelist"]
+        addSignatures: [plist objectForKey: kWhitelistKey]
           forKey: kWhitelistKey];
       
+      [self
+        addSignatures: [plist objectForKey: kWhitelistPrefixKey]
+          forKey: kWhitelistPrefixKey];
+
       [self
         addSignatures: [plist objectForKey: @"item1"]
           forKey: kExtensionsKey];
@@ -135,6 +141,10 @@
     
     if([key isEqualToString: kWhitelistKey])
       [[Model model] setWhitelistFiles: [NSSet setWithArray: signatures]];
+
+    else if([key isEqualToString: kWhitelistPrefixKey])
+      [[Model model]
+        setWhitelistPrefixes: [NSSet setWithArray: signatures]];
       
     else if([key isEqualToString: kExtensionsKey])
       [[Model model] setAdwareExtensions: signatures];
@@ -238,8 +248,15 @@
   {
   [self.result appendAttributedString: [self buildTitle]];
   
+    NSString * message =
+      [NSString
+        stringWithFormat:
+          NSLocalizedString(kAdwarePossible, NULL),
+          TTTLocalizedPluralString(
+            [[Model model] greylistCount], @"unknown file", NULL)];
+
   [self.result
-    appendString: NSLocalizedString(kAdwarePossible, NULL)
+    appendString: message
     attributes:
       @{
         NSForegroundColorAttributeName : [[Utilities shared] red],

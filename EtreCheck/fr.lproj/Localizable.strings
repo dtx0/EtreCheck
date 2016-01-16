@@ -194,9 +194,12 @@
 "No help available" = "Aucune aide disponible";
 "About adware" = "À propos de l’adware";
 "definiteadware" = "EtreCheck a détecté que votre Macintosh peut être infecté par adware. Lancez Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour enlever l’adware.";
-"probableadware" = "EtreCheck a détecté quelques logiciel qui ne sont pas sur le whitelist des logiciels sûrs. Lancez Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour vérifier que vous n’avez aucin adware ou malware.";
+"probableadware" = "EtreCheck a détecté quelques logiciel qui ne sont pas sur le whitelist des logiciels sûrs. Les fichiers trouvés dans EtreCheck liste blanche sont identifiés par une coche ✓. Pour vérifier, lancez Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour vérifier que vous n’avez aucin adware ou malware.";
 "adwarefound" = "    L'infection d'adware trouvé.";
-"adwarepossible" = "    L'infection d'adware possible.";
+"adwarepossible" = "    %@L'infection d'adware possible.";
+"%d unknown file (plural rule: zero)" = "";
+"%d unknown file (plural rule: one)" = "Un fichier inconnu trouvé. ";
+"%d unknown file (plural rule: other)" = "%d fichiers inconnus trouvés. ";
 "Adware!" = "Adware !";
 "[Installed]" = "[Installé]";
 "[Cache]" = "[En cache]";

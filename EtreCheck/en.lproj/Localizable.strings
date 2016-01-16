@@ -30,9 +30,12 @@
 "%d error (plural rule: other)" = "%d errors\n";
 "About adware" = "About adware";
 "definiteadware" = "EtreCheck has detected that your Macintosh is infected with adware. Run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to remove the adwware.";
-"probableadware" = "EtreCheck has detected software that is not on EtreCheck's whitelist. Run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to scan for adware and malware.";
+"probableadware" = "EtreCheck has detected software that is not on EtreCheck's whitelist. Files found in EtreCheck's whitelist are identified with a checkmark ✓. To verify, run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to scan for adware and malware.";
 "adwarefound" = "    Adware infection found.";
-"adwarepossible" = "    Adware infection possible.";
+"adwarepossible" = "    %@Adware infection possible.";
+"%d unknown file (plural rule: zero)" = "";
+"%d unknown file (plural rule: one)" = "One unknown file found. ";
+"%d unknown file (plural rule: other)" = "%d unknown files found. ";
 "%d pressurekilledcount (plural rule: zero)" = "    no processes killed due to insufficient RAM\n";
 "%d pressurekilledcount (plural rule: one)" = "    one process killed due to insufficient RAM\n";
 "%d pressurekilledcount (plural rule: other)" = "    %d processes killed due to insufficient RAM\n";

@@ -28,6 +28,7 @@
 @synthesize adwareFiles = myAdwareFiles;
 @synthesize adwareExtensions = myAdwareExtensions;
 @synthesize whitelistFiles = myWhitelistFiles;
+@synthesize whitelistPrefixes = myWhitelistPrefixes;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
 @synthesize adwareFound = myAdwareFound;
@@ -86,6 +87,8 @@
 // Destructor.
 - (void) dealloc
   {
+  self.whitelistPrefixes = nil;
+  self.whitelistFiles = nil;
   self.seriousProblems = nil;
   self.terminatedTasks = nil;
   self.adwareFiles = nil;
@@ -239,7 +242,14 @@
   {
   NSString * name = [path lastPathComponent];
   
-  return [self.whitelistFiles containsObject: name];
+  if([self.whitelistFiles containsObject: name])
+    return YES;
+    
+  for(NSString * whitelistPrefix in self.whitelistPrefixes)
+    if([name hasPrefix: whitelistPrefix])
+      return YES;
+      
+  return NO;
   }
 
 // What kind of adware is this?

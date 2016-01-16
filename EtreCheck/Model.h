@@ -45,6 +45,7 @@
   NSMutableDictionary * myAdwareFiles;
   NSArray * myAdwareExtensions;
   NSSet * myWhitelistFiles;
+  NSSet * myWhitelistPrefixes;
   NSString * myComputerName;
   NSString * myHostName;
   bool myAdwareFound;
@@ -103,6 +104,9 @@
 
 // Whitelist files.
 @property (retain) NSSet * whitelistFiles;
+
+// Whitelist prefixes.
+@property (retain) NSSet * whitelistPrefixes;
 
 // Localized host name.
 @property (retain) NSString * computerName;

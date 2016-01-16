@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>whitelist_prefix</key>
+	<array>
+		<string>net.decimus.Synk.script.</string>
+	</array>
 	<key>whitelist</key>
 	<array>
 		<string>at.obdev.littlesnitchd.plist</string>
@@ -15,13 +19,16 @@
 		<string>com.adobe.ARMDC.SMJobBlessHelper.plist</string>
 		<string>com.adobe.ARMDCHelper.cc24aef4a1b90ed56a...plist</string>
 		<string>com.adobe.CS4ServiceManager.plist</string>
+		<string>com.adobe.CS5ServiceManager.plist</string>
 		<string>com.adobe.fpsaud.plist</string>
 		<string>com.adobe.SC.FPFeedbackService-1.0.plist</string>
 		<string>com.adobe.SwitchBoard.plist</string>
 		<string>com.adobe.versioncueCS4.plist</string>
+		<string>com.akamai.single-user-client.plist</string>
 		<string>com.amazon.cloud-player.plist</string>
 		<string>com.amazon.music.plist</string>
 		<string>com.amazon.sendtokindle.launcher.plist</string>
+		<string>com.ambrosiasw.ambrosiaaudiosupporthelper.daemon.plist</string>
 		<string>com.autodesk.backburner_manager.plist</string>
 		<string>com.autodesk.backburner_server.plist</string>
 		<string>com.autodesk.backburner_start.plist</string>
@@ -36,6 +43,10 @@
 		<string>com.avast.uninstall.plist</string>
 		<string>com.avast.update.plist</string>
 		<string>com.avid.sari.plist</string>
+		<string>com.avid.bsd.shoetoolv120.plist</string>
+		<string>com.avid.ApplicationManager.plist</string>
+		<string>com.avid.ApplicationManagerHelper.plist</string>
+		<string>com.aviator.agent.plist</string>
 		<string>com.backblaze.bzbmenu.plist</string>
 		<string>com.backblaze.bzserv.plist</string>
 		<string>com.barebones.bbedit.plist</string>
@@ -47,29 +58,50 @@
 		<string>com.bitdefender.AuthHelperTool.plist</string>
 		<string>com.bitdefender.agent.plist</string>
 		<string>com.bitdefender.upgrade.plist</string>
+		<string>com.bittorrent.uTorrent.plist</string>
 		<string>com.bombich.ccc.plist</string>
 		<string>com.bombich.ccchelper.plist</string>
+		<string>com.brother.LOGINserver.plist</string>
 		<string>com.c-command.SpamSieve.LaunchAgent.plist</string>
 		<string>com.canon.SPPHelper.plist</string>
 		<string>com.charlessoft.pacifist.helper.plist</string>
+		<string>com.citrixonline.GoToMeeting.G2MUpdate.plist</string>
 		<string>com.cleverfiles.cfbackd.plist</string>
+		<string>com.cloudpath.maccmd.plist</string>
+		<string>com.cocoatech.pathfinder.SMFHelper.plist</string>
+		<string>com.cocoatech.pathfinder.SMFHelper7.plist</string>
+		<string>com.coupons.coupond.plist</string>
+		<string>com.datarobotics.ddservice64d.plist</string>
+		<string>com.datarobotics.ddserviced.plist</string>
+		<string>com.disc-soft.DAEMONTools.PrivilegedHelper.plist</string>
 		<string>com.divx.dms.agent.plist</string>
 		<string>com.divx.update.agent.plist</string>
 		<string>com.divx.agent.postinstall.plist</string>
 		<string>com.ea.origin.ESHelper.plist</string>
 		<string>com.ecamm.iglasses3agent.plist</string>
+		<string>com.edb.launchd.postgresql-8.4.plist</string>
 		<string>com.epson.esua.launcher.plist</string>
 		<string>com.epson.eventmanager.agent.plist</string>
 		<string>com.epson.Epson_Low_Ink_Reminder.launcher.plist</string>
+		<string>com.epson.epw.agent.plist</string>
+		<string>com.eScan.escanmond.plist</string>
+		<string>com.eScan.escanstatusmenu.plist</string>
+		<string>com.eScan.escantool.plist</string>
+		<string>com.eScan.mwagent.plist</string>
+		<string>com.eScan.winclient.plist</string>
 		<string>com.f-secure.sync.BTCloud.plist</string>
 		<string>com.facebook.videochat.[redacted].plist</string>
 		<string>com.fitbit.galileod.plist</string>
+		<string>com.fxfactory.FxFactory.helper.plist</string>
 		<string>com.github.GitHub.GHInstallCLI.plist</string>
+		<string>com.google.Chrome.framework.plist</string>
 		<string>com.google.keystone.agent.plist</string>
 		<string>com.google.keystone.daemon.plist</string>
 		<string>com.gopro.stereomodestatus.plist</string>
 		<string>com.hp.help.tocgenerator.plist</string>
 		<string>com.hp.productresearch.plist</string>
+		<string>com.hp.printerAgent.plist</string>
+		<string>com.infrascale.OnlineBackup.scheduledBackup.plist</string>
 		<string>com.intel.haxm.plist</string>
 		<string>com.kodak.BonjourAgent.plist</string>
 		<string>com.kodak.KODAK AiO Annual Opt.plist</string>
@@ -86,30 +118,43 @@
 		<string>com.logmein.logmeinguiagentatlogin.plist</string>
 		<string>com.logmein.logmeinserver.plist</string>
 		<string>com.logmein.raupdate.plist</string>
+		<string>com.macpaw.CleanMyMac2.Agent.plist</string>
+		<string>com.macpaw.CleanMyMac2Helper.diskSpaceWatcher.plist</string>
+		<string>com.macpaw.CleanMyMac2Helper.scheduledScan.plist</string>
+		<string>com.macpaw.CleanMyMac2Helper.trashWatcher.plist</string>
+		<string>com.maintain.AutoLoginUserScreenLocked.plist</string>
+		<string>com.maintain.CocktailScheduler.plist</string>
+		<string>com.maintain.HideSpotlightMenuBarIcon.plist</string>
 		<string>com.maintain.LogOut.plist</string>
 		<string>com.maintain.PurgeInactiveMemory.plist</string>
 		<string>com.maintain.Restart.plist</string>
 		<string>com.maintain.ShutDown.plist</string>
 		<string>com.maintain.Sleep.plist</string>
 		<string>com.maintain.SystemEvents.plist</string>
-		<string>com.maintain.CocktailScheduler.plist</string>
-		<string>com.maintain.HideSpotlightMenuBarIcon.plist</string>
 		<string>com.malwarebytes.MBAMHelperTool.plist</string>
 		<string>com.mice.360Daemon.plist</string>
+		<string>com.micromat.TechToolProAgent.plist</string>
+		<string>com.micromat.TechToolProDaemon.plist</string>
 		<string>com.microsoft.office.licensing.helper.plist</string>
 		<string>com.microsoft.office.licensingV2.helper.plist</string>
 		<string>com.microsoft.LaunchAgent.SyncServicesAgent.plist</string>
+		<string>com.microsoft.autoupdate.helpertool.plist</string>
 		<string>com.mcafee.menulet.plist</string>
 		<string>com.mcafee.reporter.plist</string>
 		<string>com.mcafee.virusscan.fmpd.plist</string>
 		<string>com.myheritage.familytreebuilder.checkupdates.plist</string>
+		<string>com.nchsoftware.expressaccounts.agent.plist</string>
+		<string>com.nchsoftware.expressinvoice.agent.plist</string>
 		<string>com.netgear.wutility</string>
 		<string>com.nike.nikeplusconnect.plist</string>
+		<string>com.noiseindustries.FxFactory.plist</string>
 		<string>com.nvidia.cuda.launcher.plist</string>
 		<string>com.nvidia.nvroothelper.plist</string>
 		<string>com.oracle.java.Helper</string>
 		<string>com.oracle.java.Helper-Tool.plist</string>
 		<string>com.oracle.java.Java-Updater.plist</string>
+		<string>com.oracle.java.JavaUpdateHelper.plist</string>
+		<string>com.paceap.eden.licensed.plist</string>
 		<string>com.parallels.desktop.launch.plist</string>
 		<string>com.parallels.desktop.launchdaemon.plist</string>
 		<string>com.parallels.DesktopControlAgent.plist</string>
@@ -129,6 +174,8 @@
 		<string>com.rosettastone.rosettastonedaemon.plist</string>
 		<string>com.seagate.TBDecorator.plist</string>
 		<string>com.skype.skypeinstaller.plist</string>
+		<string>com.softraid.softraidd.plist</string>
+		<string>com.softraid.SoftRAIDMonitor.plist</string>
 		<string>com.sonos.SonosLibraryServer.plist</string>
 		<string>com.sony.SonyAutoLauncher.agent.plist</string>
 		<string>com.sony.PMBPortable.AutoRun.plist</string>
@@ -153,11 +200,18 @@
 		<string>com.symantec.symdaemon.plist</string>
 		<string>com.symantec.nis.uninstall.English.plist</string>
 		<string>com.symantec.uiagent.application.plist</string>
+		<string>com.synium.cleanappdaemon.plist</string>
 		<string>com.teamviewer.teamviewer.plist</string>
 		<string>com.teamviewer.teamviewer_desktop.plist</string>
 		<string>com.teamviewer.Helper.plist</string>
 		<string>com.teamviewer.teamviewer_service.plist</string>
+		<string>com.timesoftware.timemachineeditor.backup-auto.plist</string>
+		<string>com.timesoftware.timemachineeditor.helper.plist</string>
 		<string>com.thursby.pkard.tokendagent.plist</string>
+		<string>com.trusteer.rapport.rapportd.plist</string>
+		<string>com.trusteer.rooks.rooksd.plist</string>
+		<string>com.tunabellysoftware.TGFanHelper.plist</string>
+		<string>com.tunnelbear.mac.tbeard.plist</string>
 		<string>com.valvesoftware.steamclean.plist</string>
 		<string>com.vmware.launchd.tools.plist</string>
 		<string>com.vmware.launchd.vmware-tools-userd.plist</string>
@@ -165,20 +219,35 @@
 		<string>com.wacom.pentablet.plist</string>
 		<string>com.wacom.wacomtablet.plist</string>
 		<string>com.wdc.WDPrivilegedHelper.plist</string>
+		<string>com.wondershare.mobilegodaemon.plist</string>
+		<string>de.appgineers.Mountain.Helper.plist</string>
 		<string>de.novamedia.nmnetmgrd.plist</string>
 		<string>de.novamedia.VodafoneDeviceObserver.plist</string>
 		<string>jp.co.canon.Inkjet_Extended_Survey_Agent.plist</string>
 		<string>jp.co.canon.MasterInstaller.plist</string>
 		<string>jp.co.canon.SELPHYCP.BG.plist</string>
 		<string>net.culater.SIMBL.Agent.plist</string>
+		<string>net.decimus.Synk.AuthTool.plist</string>
+		<string>net.decimus.Synk.SynkAgent.plist</string>
+		<string>net.decimus.Synk.synksharingd.plist</string>
 		<string>net.infinite-labs.SIMBLEnablerForSandboxedApps.plist</string>
+		<string>org.cindori.SenseiTool.plist</string>
+		<string>org.cindori.TEAuth.plist</string>
 		<string>org.freedesktop.dbus-session.plist</string>
 		<string>org.freedesktop.dbus-system.plist</string>
 		<string>org.macosforge.xquartz.privileged_startx.plist</string>
 		<string>org.macosforge.xquartz.startx.plist</string>
+		<string>org.macports.apache2.plist</string>
 		<string>org.serviio.server.plist</string>
+		<string>org.tcpdump.chmod_bpf.plist</string>
+		<string>org.TraktForVLC.plist</string>
 		<string>org.virtualbox.startup.plist</string>
 		<string>org.virtualbox.vboxwebsrv.plist</string>
+		<string>org.xbmc.helper.plist</string>
+		<string>PACESupport.plist</string>
+		<string>SOS.OnlineBackup.LaunchAgent.plist</string>
+		<string>uk.co.canimaansoftware.clamxav.freshclam.plist</string>
+		<string>uk.co.canimaansoftware.clamxav.clamscan.plist</string>
 		<string>uk.co.markallan.clamxav.freshclam.plist</string>
 		<string>ws.agile.1PasswordAgent.</string>
 	</array>
