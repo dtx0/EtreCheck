@@ -179,11 +179,18 @@
     if(![status isEqualToString: @"enabled"])
       [otherModificiations
         addObject:
-          [NSString
-            stringWithFormat:
-              NSLocalizedString(
-                @"System Integrity Protection status: %@", NULL),
-              status]];
+          [[[NSMutableAttributedString alloc]
+            initWithString:
+              [NSString
+                stringWithFormat:
+                  NSLocalizedString(
+                    @"System Integrity Protection status: %@", NULL),
+                  status]
+            attributes:
+              [NSDictionary
+                dictionaryWithObjectsAndKeys:
+                  [NSColor redColor], NSForegroundColorAttributeName, nil]]
+            autorelease]];
     }
     
   self.modifications = otherModificiations;

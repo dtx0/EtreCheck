@@ -538,18 +538,15 @@
       }
     }
   else
-    whitelist = [[Model model] checkWhitelistFile: filename];
+    whitelist = [[Model model] checkWhitelistFile: filename path: path];
 
   if(!whitelist)
-    whitelist = [self handleWhitelistExceptions: status];
+    [self handleWhitelistExceptions: status path: path];
     
   [output appendAttributedString: [self formatPropertyListStatus: status]];
   
   [output appendString: filename];
   
-  if(whitelist)
-    [output appendString: NSLocalizedString(@"whitelistcheckmark", NULL)];
-    
   [output
     appendAttributedString: [self formatExtraContent: status for: path]];
   
@@ -561,7 +558,8 @@
   }
 
 // Handle whitelist exceptions.
-- (bool) handleWhitelistExceptions: (NSDictionary *) status
+- (void) handleWhitelistExceptions: (NSDictionary *) status
+  path: (NSString *) path
   {
   bool whitelist = NO;
   
@@ -569,17 +567,15 @@
   NSArray * command = [status objectForKey: kCommand];
 
   for(NSString * part in command)
-    if([part containsString: @"Folder Actions Dispatcher"])
+    {
+    NSRange foundRange = [part rangeOfString: @"Folder Actions Dispatcher"];
+    
+    if(foundRange.location != NSNotFound)
       whitelist = true;
+    }
     
   if(whitelist)
-    {
-    int greyListCount = [[Model model] greylistCount];
-    
-    [[Model model] setGreylistCount: greyListCount - 1];
-    }
-  
-  return whitelist;
+    [[[Model model] unknownFiles] removeObject: path];
   }
 
 // Collect the status of a launchd item.
@@ -757,7 +753,7 @@
     
   if([[Model model] majorOSVersion] < kLion)
     {
-    if([bundleID hasPrefix: @"0x1"])
+    if([bundleID hasPrefix: @"0x"])
       if([bundleID rangeOfString: @".mach_init."].location != NSNotFound)
         return YES;
     }
@@ -1003,10 +999,7 @@
 
     [extra appendString: @" "];
 
-    NSString * adware = [[[Model model] adwareFiles] objectForKey: path];
-    
-    NSAttributedString * removeLink =
-      [self generateRemoveAdwareLink: adware];
+    NSAttributedString * removeLink = [self generateRemoveAdwareLink];
 
     if(removeLink)
       [extra appendAttributedString: removeLink];

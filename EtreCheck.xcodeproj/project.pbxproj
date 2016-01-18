@@ -45,6 +45,9 @@
 		A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A55BC17C15BF987D00D42EF1 /* Credits.rtf */; };
 		A55BC18115BF987D00D42EF1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BC18015BF987D00D42EF1 /* AppDelegate.m */; };
 		A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A55BC18215BF987D00D42EF1 /* MainMenu.xib */; };
+		A5716E0F1C4C41BB00297727 /* unknownhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */; };
+		A5716E151C4C5A6E00297727 /* UnknownFilesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */; };
+		A5716E161C4C5A6E00297727 /* UnknownFilesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E141C4C5A6E00297727 /* UnknownFilesManager.m */; };
 		A57516AF1A14D9E700F374FB /* DiagnosticsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */; };
 		A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */; };
 		A5B659231A16D57800476A76 /* DiagnosticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B659221A16D57800476A76 /* DiagnosticEvent.m */; };
@@ -168,6 +171,12 @@
 		A55BC1C815C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A55BC1C915C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A55BC1CA15C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
+		A5716E0E1C4C41BB00297727 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/unknownhelp.rtf; sourceTree = "<group>"; };
+		A5716E101C4C41C700297727 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/unknownhelp.rtf; sourceTree = "<group>"; };
+		A5716E111C4C5A6E00297727 /* UnknownFilesCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnknownFilesCollector.h; sourceTree = "<group>"; };
+		A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnknownFilesCollector.m; sourceTree = "<group>"; };
+		A5716E131C4C5A6E00297727 /* UnknownFilesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnknownFilesManager.h; sourceTree = "<group>"; };
+		A5716E141C4C5A6E00297727 /* UnknownFilesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnknownFilesManager.m; sourceTree = "<group>"; };
 		A57516AD1A14D9E700F374FB /* DiagnosticsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsCollector.h; sourceTree = "<group>"; };
 		A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsCollector.m; sourceTree = "<group>"; };
 		A59B506B15C45EC000250772 /* NSMutableAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Etresoft.h"; sourceTree = "<group>"; };
@@ -285,6 +294,8 @@
 				A54B87371A1D4FED00F25213 /* DetailManager.m */,
 				A5CF26E91A27FB21002386F0 /* AdwareManager.h */,
 				A5CF26EA1A27FB21002386F0 /* AdwareManager.m */,
+				A5716E131C4C5A6E00297727 /* UnknownFilesManager.h */,
+				A5716E141C4C5A6E00297727 /* UnknownFilesManager.m */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -372,6 +383,8 @@
 				A5C9FC031A1AADA200C1EAA5 /* LogCollector.m */,
 				A5CF26E61A279DAD002386F0 /* AdwareCollector.h */,
 				A5CF26E71A279DAD002386F0 /* AdwareCollector.m */,
+				A5716E111C4C5A6E00297727 /* UnknownFilesCollector.h */,
+				A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */,
 			);
 			name = Collectors;
 			sourceTree = "<group>";
@@ -467,6 +480,7 @@
 				A54DF6561BD70A3C00753E87 /* TOU.rtf */,
 				A55BC17C15BF987D00D42EF1 /* Credits.rtf */,
 				A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */,
+				A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */,
 				A546BFB91A5348880032C354 /* linkhelp.rtf */,
 			);
 			name = "Supporting Files";
@@ -551,6 +565,7 @@
 				A55BC17815BF987D00D42EF1 /* InfoPlist.strings in Resources */,
 				A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */,
 				A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */,
+				A5716E0F1C4C41BB00297727 /* unknownhelp.rtf in Resources */,
 				A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */,
 				A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */,
 				A518C4661C4814740094D7CC /* Help in Resources */,
@@ -591,6 +606,7 @@
 				A5C292F219A13D0800464E86 /* HardwareCollector.m in Sources */,
 				A5CF26E81A279DAD002386F0 /* AdwareCollector.m in Sources */,
 				A5FC11FA19A4C03E00E81E9C /* UserInternetPlugInsCollector.m in Sources */,
+				A5716E161C4C5A6E00297727 /* UnknownFilesManager.m in Sources */,
 				A5FC11F119A4BFF500E81E9C /* UserAudioPlugInsCollector.m in Sources */,
 				A5257D3419AB525D003084C8 /* MemoryUsageCollector.m in Sources */,
 				A5FC120619A5443500E81E9C /* ApplicationsCollector.m in Sources */,
@@ -622,6 +638,7 @@
 				A5257D3119AB5251003084C8 /* CPUUsageCollector.m in Sources */,
 				A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */,
 				A5257D3D19AC0AA3003084C8 /* Utilities.m in Sources */,
+				A5716E151C4C5A6E00297727 /* UnknownFilesCollector.m in Sources */,
 				A5FC11EE19A4BFDC00E81E9C /* AudioPlugInsCollector.m in Sources */,
 				A50C9DB019A2DFDB00BA6A25 /* DiskCollector.m in Sources */,
 				A550C55A1BBC75FD00CA75EA /* EtreCheckToolbar.m in Sources */,
@@ -726,6 +743,15 @@
 				A55BC1C815C0F4FA00D42EF1 /* fr */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5716E0E1C4C41BB00297727 /* en */,
+				A5716E101C4C41C700297727 /* fr */,
+			);
+			name = unknownhelp.rtf;
 			sourceTree = "<group>";
 		};
 		A5E9E2C21A2522A600309185 /* Help.strings */ = {

@@ -55,4 +55,7 @@
 // Resize the detail pane to match the content.
 - (void) resizeDetail: (NSTextStorage *) storage;
 
+// Close a drawer if it is not the new drawer.
+- (void) closeDrawerIfNotDrawer: (NSDrawer *) drawer;
+
 @end

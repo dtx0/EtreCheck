@@ -93,6 +93,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize detailManager = myDetailManager;
 @synthesize helpManager = myHelpManager;
 @synthesize adwareManager = myAdwareManager;
+@synthesize unknownFilesManager = myUnknownFilesManager;
 @synthesize reportAvailable = myReportAvailable;
 @synthesize reportStartTime = myReportStartTime;
 @synthesize TOUPanel = myTOUPanel;
@@ -333,6 +334,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self.helpManager showDetail: [[url path] substringFromIndex: 1]];
     else if([manager isEqualToString: @"adware"])
       [self.adwareManager showDetail: [[url path] substringFromIndex: 1]];
+    else if([manager isEqualToString: @"unknownfiles"])
+      [self.unknownFilesManager
+        showDetail: [[url path] substringFromIndex: 1]];
     }
   }
 
@@ -380,6 +384,17 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
               [self
                 presentUpdate:
                   [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
+              
+            NSArray * whitelist = [attributes objectForKey: @"whitelist"];
+            
+            if([whitelist respondsToSelector: @selector(addObject:)])
+              [[Model model] appendToWhitelist: whitelist];
+
+            NSArray * whitelistPrefixes =
+              [attributes objectForKey: @"whitelist_prefixes"];
+            
+            if([whitelist respondsToSelector: @selector(addObject:)])
+              [[Model model] appendToWhitelistPrefixes: whitelistPrefixes];
             }
         }
       
@@ -783,13 +798,21 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           [[NSBundle mainBundle]
             pathForResource: @"linkhelp" ofType: @"rtf"]]];
 
-  if([[Model model] adwareFound] || [[Model model] adwarePossible])
+  if([[Model model] adwareFound])
     [self.log
       appendRTFData:
         [NSData
           dataWithContentsOfFile:
             [[NSBundle mainBundle]
               pathForResource: @"adwarehelp" ofType: @"rtf"]]];
+    
+  if([[Model model] adwarePossible])
+    [self.log
+      appendRTFData:
+        [NSData
+          dataWithContentsOfFile:
+            [[NSBundle mainBundle]
+              pathForResource: @"unknownhelp" ofType: @"rtf"]]];
 
   [self.log appendString: @"\n"];
   }
@@ -1274,6 +1297,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.detailManager closeDetail: self];
   [self.helpManager closeDetail: self];
   [self.adwareManager closeDetail: self];
+  [self.unknownFilesManager closeDetail: self];
+  }
+
+// If a drawer is going to open, close the existing drawer, if any.
+- (void) drawerWillOpen: (NSNotification *) notification
+  {
+  NSDrawer * drawer = [notification object];
+  
+  [self.detailManager closeDrawerIfNotDrawer: drawer];
+  [self.helpManager closeDrawerIfNotDrawer: drawer];
+  [self.adwareManager closeDrawerIfNotDrawer: drawer];
+  [self.unknownFilesManager closeDrawerIfNotDrawer: drawer];
   }
 
 // Notify the user that the report is done.

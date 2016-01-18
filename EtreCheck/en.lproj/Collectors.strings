@@ -38,4 +38,5 @@
 "systemlaunchdaemons" = "System Launch Daemons:";
 "userlaunchagents" = "User Launch Agents:";
 "adware" = "Adware:";
+"unknownfiles" = "Unknown Files:";
 "hiddenapps" = "Other Apps:";

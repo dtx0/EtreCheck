@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 #import "PopoverManager.h"
 
-@interface AdwareManager : PopoverManager
+@interface UnknownFilesManager : PopoverManager
   {
   NSButton * myDownloadButton;
   }
@@ -17,5 +17,8 @@
 
 // Go to Adware Medic.
 - (IBAction) gotoAdwareMedic: (id) sender;
+
+// Contact Etresoft to add to whitelist.
+- (IBAction) addToWhitelist: (id) sender;
 
 @end

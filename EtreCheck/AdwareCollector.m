@@ -6,10 +6,8 @@
 
 #import "AdwareCollector.h"
 #import "Model.h"
-#import "DiagnosticEvent.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "AdwareManager.h"
 #import "TTTLocalizedPluralString.h"
 
 #define kWhitelistKey @"whitelist"
@@ -24,12 +22,6 @@
 
 @synthesize adwareSignatures = myAdwareSignatures;
 @synthesize adwareFound = myAdwareFound;
-@dynamic adwarePossible;
-
-- (bool) adwarePossible
-  {
-  return [[Model model] adwarePossible];
-  }
 
 // Constructor.
 - (id) init
@@ -139,15 +131,14 @@
     NSString * localizedKey = NSLocalizedString(key, NULL);
     
     if([key isEqualToString: kWhitelistKey])
-      [[Model model] setWhitelistFiles: [NSSet setWithArray: signatures]];
+      [[Model model] appendToWhitelist: signatures];
 
     else if([key isEqualToString: kWhitelistPrefixKey])
-      [[Model model]
-        setWhitelistPrefixes: [NSSet setWithArray: signatures]];
-      
-    else if([key isEqualToString: kExtensionsKey])
-      [[Model model] setAdwareExtensions: signatures];
+      [[Model model] appendToWhitelistPrefixes: signatures];
 
+    if([key isEqualToString: @"extensions"])
+      [[Model model] setAdwareExtensions: signatures];
+      
     else
       [myAdwareSignatures
         setObject: [self expandSignatures: signatures]
@@ -211,67 +202,49 @@
 - (void) printAdware
   {
   if([self.adwareFound count])
-    [self printDefiniteAdware];
-  
-  else if(self.adwarePossible)
-    [self printPossibleAdware];
-  }
-
-// Print definite adware found.
-- (void) printDefiniteAdware
-  {
-  [self.result appendAttributedString: [self buildTitle]];
-  
-  [self.result
-    appendString: NSLocalizedString(kAdwareFound, NULL)
-    attributes:
-      @{
-        NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSFontAttributeName : [[Utilities shared] boldFont]
-      }];
-  
-  NSAttributedString * removeLink =
-    [self generateRemoveAdwareLink: kAdwareFound];
-
-  if(removeLink)
     {
-    [self.result appendAttributedString: removeLink];
-    [self.result appendString: @"\n"];
-    }
-  
-  [self.result appendCR];
-  }
-
-// Print possible adware found.
-- (void) printPossibleAdware
-  {
-  [self.result appendAttributedString: [self buildTitle]];
-  
+    [self.result appendAttributedString: [self buildTitle]];
+    
+    __block int adwareCount = 0;
+    
+    [[[Model model] adwareFiles]
+      enumerateKeysAndObjectsUsingBlock:
+        ^(id key, id obj, BOOL * stop)
+          {
+          ++adwareCount;
+          [self.result appendString: @"    "];
+          [self.result
+            appendString: [Utilities sanitizeFilename: key]
+            attributes:
+              @{
+                NSFontAttributeName : [[Utilities shared] boldFont],
+                NSForegroundColorAttributeName : [[Utilities shared] red],
+              }];
+          [self.result appendString: @"\n"];
+          }];
+      
     NSString * message =
-      [NSString
-        stringWithFormat:
-          NSLocalizedString(kAdwarePossible, NULL),
-          TTTLocalizedPluralString(
-            [[Model model] greylistCount], @"unknown file", NULL)];
+      TTTLocalizedPluralString(adwareCount, @"adware file", NULL);
 
-  [self.result
-    appendString: message
-    attributes:
-      @{
-        NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSFontAttributeName : [[Utilities shared] boldFont]
-      }];
-  
-  NSAttributedString * removeLink =
-    [self generateRemoveAdwareLink: kAdwarePossible];
+    [self.result appendString: @"    "];
+    [self.result
+      appendString: message
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+        }];
+    
+    NSAttributedString * removeLink = [self generateRemoveAdwareLink];
 
-  if(removeLink)
-    {
-    [self.result appendAttributedString: removeLink];
-    [self.result appendString: @"\n"];
+    if(removeLink)
+      {
+      [self.result appendAttributedString: removeLink];
+      [self.result appendString: @"\n"];
+      }
+    
+    [self.result appendCR];
     }
-  
-  [self.result appendCR];
   }
-
+  
 @end

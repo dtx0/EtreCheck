@@ -225,4 +225,22 @@
     [self.drawer close];
   }
 
+// Close a drawer if it is not the new drawer.
+- (void) closeDrawerIfNotDrawer: (NSDrawer *) drawer
+  {
+  NSDrawerState currentState = [self.drawer state];
+  
+  switch(currentState)
+    {
+    case NSDrawerOpenState:
+    case NSDrawerOpeningState:
+      if(self.drawer != drawer)
+        [self.drawer close];
+      break;
+      
+    default:
+      break;
+    }
+  }
+
 @end

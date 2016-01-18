@@ -44,13 +44,13 @@
   NSMutableDictionary * myDiagnosticEvents;
   NSMutableDictionary * myAdwareFiles;
   NSArray * myAdwareExtensions;
-  NSSet * myWhitelistFiles;
-  NSSet * myWhitelistPrefixes;
+  NSMutableSet * myWhitelistFiles;
+  NSMutableSet * myWhitelistPrefixes;
   NSString * myComputerName;
   NSString * myHostName;
   bool myAdwareFound;
   NSMutableArray * myTerminatedTasks;
-  int myGreylistCount;
+  NSMutableSet * myUnknownFiles;
   NSMutableSet * mySeriousProblems;
   bool myHasMalwareBytes;
   
@@ -103,10 +103,10 @@
 @property (retain) NSArray * adwareExtensions;
 
 // Whitelist files.
-@property (retain) NSSet * whitelistFiles;
+@property (readonly) NSMutableSet * whitelistFiles;
 
 // Whitelist prefixes.
-@property (retain) NSSet * whitelistPrefixes;
+@property (readonly) NSMutableSet * whitelistPrefixes;
 
 // Localized host name.
 @property (retain) NSString * computerName;
@@ -121,7 +121,7 @@
 @property (retain) NSMutableArray * terminatedTasks;
 
 // Keep track of the number of files not in the whitelit.
-@property (assign) int greylistCount;
+@property (retain) NSMutableSet * unknownFiles;
 
 // What serious problems were found?
 @property (retain) NSMutableSet * seriousProblems;
@@ -159,11 +159,17 @@
 // Is this file an adware extension?
 - (bool) isAdwareExtension: (NSString *) path;
 
+// Add files to the whitelist.
+- (void) appendToWhitelist: (NSArray *) names;
+
+// Add files to the whitelist prefixes.
+- (void) appendToWhitelistPrefixes: (NSArray *) names;
+
 // Check the file against the whitelist.
-- (bool) checkWhitelistFile: (NSString *) path;
+- (bool) checkWhitelistFile: (NSString *) name path: (NSString *) path;
 
 // Is this file in the whitelist?
-- (bool) isWhitelistFile: (NSString *) path;
+- (bool) isWhitelistFile: (NSString *) name;
 
 // What kind of adware is this?
 - (NSString *) adwareType: (NSString *) path;

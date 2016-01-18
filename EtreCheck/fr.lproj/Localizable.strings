@@ -42,7 +42,7 @@
 "Checking Gatekeeper information" = "Vérification des informations Gatekeeper";
 "Checking software" = "Vérification du logiciel";
 "Checking daemons and agents" = "Vérification des daemons et des agents";
-"Checking for adware" = "Vérification de l’adware";
+"Checking for unknown files" = "Vérification des fichiers inconnus";
 "model" = "modèle";
 "%@S.M.A.R.T. Status: %@\n" = "%@Statut S.M.A.R.T. : %@\n";
 "<not mounted>" = "<non monté>";
@@ -193,13 +193,15 @@
 "%d error (plural rule: other)" = "%d erreurs\n";
 "No help available" = "Aucune aide disponible";
 "About adware" = "À propos de l’adware";
-"definiteadware" = "EtreCheck a détecté que votre Macintosh peut être infecté par adware. Lancez Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour enlever l’adware.";
-"probableadware" = "EtreCheck a détecté quelques logiciel qui ne sont pas sur le whitelist des logiciels sûrs. Les fichiers trouvés dans EtreCheck liste blanche sont identifiés par une coche ✓. Pour vérifier, lancez Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour vérifier que vous n’avez aucin adware ou malware.";
-"adwarefound" = "    L'infection d'adware trouvé.";
-"adwarepossible" = "    %@L'infection d'adware possible.";
+"About unknown files" = "À propos des fichiers inconnus";
+"adware" = "EtreCheck a détecté que votre Macintosh peut être infecté par adware comme identifié par Apple (voir http://support.apple.com/HT203987). Lancez Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour enlever l’adware.";
+"unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas sur le whitelist des logiciels sûrs. C’est possible qu’il soit adware ou malware. Mais aussi, c’est possible qu’il soit quelque chose de nouveau qui a besoin d’être ajouté au whitelist. Si vous reconnaissez ce logiciel, faire contact avec Etresoft pour le faire ajouter au whitelist. Sinon, lancez Malwarebytes Anti-Malware for Mac pour vérifier que vous n’avez aucun adware ou malware.";
+"%d adware file (plural rule: zero)" = "";
+"%d adware file (plural rule: one)" = "Un fichier adware trouvé.";
+"%d adware file (plural rule: other)" = "%d fichiers adware trouvés.";
 "%d unknown file (plural rule: zero)" = "";
-"%d unknown file (plural rule: one)" = "Un fichier inconnu trouvé. ";
-"%d unknown file (plural rule: other)" = "%d fichiers inconnus trouvés. ";
+"%d unknown file (plural rule: one)" = "Un fichier inconnu trouvé.";
+"%d unknown file (plural rule: other)" = "%d fichiers inconnus trouvés.";
 "Adware!" = "Adware !";
 "[Installed]" = "[Installé]";
 "[Cache]" = "[En cache]";
@@ -216,7 +218,8 @@
 "Poor" = "Remplacer maintenant";
 "(Technical Specifications)" = "(Caractéristiques techniques)";
 "Empty" = "Vide";
-"[Scan for adware]" = "[Vérifier l’adware]";
+"[Remove]" = "[Enlever]";
+"[Check files]" = "[Vérifier ces fichiers]";
 "More adware files" = "Plus de fichiers adwares";
 "The following internal tasks failed to complete:" = "Les tâches internes ci-dessous ont faillis d’atteindre leur fin.";
 " - %@ Drive failure!" = " - %@ Échec du disque !";
@@ -247,6 +250,7 @@
 "service_notebook" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
 "Text Size" = "La taille du texte";
 "downloadmbam" = "Téléchargez MalwareBytes";
-"runmbam" = "Lancez MalwareBytes";
-"whitelistcheckmark" = " ✓";
+"runmbam" = "Lancer MalwareBytes";
+"addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
+"appleadwareurl" = "(Voir http://support.apple.com/HT203987)";
 

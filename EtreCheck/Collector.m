@@ -378,35 +378,41 @@
   }
 
 // Generate a "remove adware" link.
-- (NSAttributedString *) generateRemoveAdwareLink: (NSString *) name
+- (NSAttributedString *) generateRemoveAdwareLink
   {
   NSMutableAttributedString * urlString =
     [[NSMutableAttributedString alloc] initWithString: @""];
     
-  NSString * url =
-    [NSString
-      stringWithFormat: @"etrecheck://adware/%@", [name lowercaseString]];
-  
   [urlString appendString: @" "];
   
-  if([name isEqualToString: kAdwareFound])
-    [urlString
-      appendString: NSLocalizedString(@"[Scan for adware]", NULL)
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont],
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSLinkAttributeName : url
-        }];
-  else if([name isEqualToString: kAdwarePossible])
-    [urlString
-      appendString: NSLocalizedString(@"[Scan for adware]", NULL)
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont],
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSLinkAttributeName : url
-        }];
+  [urlString
+    appendString: NSLocalizedString(@"[Remove]", NULL)
+    attributes:
+      @{
+        NSFontAttributeName : [[Utilities shared] boldFont],
+        NSForegroundColorAttributeName : [[Utilities shared] red],
+        NSLinkAttributeName : @"etrecheck://adware/remove"
+      }];
+    
+  return [urlString autorelease];
+  }
+
+// Generate a "check files" link.
+- (NSAttributedString *) generateCheckFilesLink: (NSString *) name
+  {
+  NSMutableAttributedString * urlString =
+    [[NSMutableAttributedString alloc] initWithString: @""];
+    
+  [urlString appendString: @" "];
+  
+  [urlString
+    appendString: NSLocalizedString(@"[Check files]", NULL)
+    attributes:
+      @{
+        NSFontAttributeName : [[Utilities shared] boldFont],
+        NSForegroundColorAttributeName : [[Utilities shared] red],
+        NSLinkAttributeName : @"etrecheck://unknownfiles/check"
+      }];
     
   return [urlString autorelease];
   }

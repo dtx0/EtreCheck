@@ -65,6 +65,9 @@
 - (NSString *) maxVersion: (NSArray *) versions;
 
 // Generate a "remove adware" link.
-- (NSAttributedString *) generateRemoveAdwareLink: (NSString *) name;
+- (NSAttributedString *) generateRemoveAdwareLink;
+
+// Generate a "check files" link.
+- (NSAttributedString *) generateCheckFilesLink: (NSString *) name;
 
 @end

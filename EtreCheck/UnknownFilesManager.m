@@ -4,7 +4,7 @@
  ** Copyright (c) 2012-2014. All rights reserved.
  **********************************************************************/
 
-#import "AdwareManager.h"
+#import "UnknownFilesManager.h"
 #import "Model.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation AdwareManager
+@implementation UnknownFilesManager
 
 @synthesize downloadButton = myDownloadButton;
 
@@ -28,7 +28,7 @@
   
   if(self)
     {
-    myMinPopoverSize = NSMakeSize(400, 200);
+    myMinPopoverSize = NSMakeSize(500, 200);
     }
   
   return self;
@@ -44,11 +44,11 @@
 
   NSMutableAttributedString * details = [NSMutableAttributedString new];
   
-  [details appendString: NSLocalizedString(@"adware", NULL)];
+  [details appendString: NSLocalizedString(@"unknownfiles", NULL)];
 
   [super
-    showDetail: NSLocalizedString(@"About adware", NULL)
-    content: details];
+    showDetail: NSLocalizedString(@"About unknown files", NULL)
+    content: details];      
     
   [details release];
   }
@@ -72,6 +72,40 @@
     openURL:
       [NSURL
         URLWithString: @"http://www.malwarebytes.org/antimalware/mac/"]];
+  }
+
+// Contact Etresoft to add to whitelist.
+- (IBAction) addToWhitelist: (id) sender
+  {
+  NSMutableString * content = [NSMutableString string];
+  
+  [content appendString: @"EtreCheck found the following unknown files:\n"];
+  
+  for(NSString * path in [[Model model] unknownFiles])
+    [content appendString: [NSString stringWithFormat: @"%@\n", path]];
+    
+  [self
+    sendEmailTo: @"info@etresoft.com"
+    withSubject: @"Add to whitelist"
+    content: content];
+  }
+
+- (void) sendEmailTo: (NSString *) toAddress
+  withSubject: (NSString *) subject
+  content: (NSString *) bodyText
+  {
+  NSString * emailString =
+    [NSString
+      stringWithFormat:
+        NSLocalizedString(@"addtowhitelistemail", NULL),
+        subject, bodyText, @"Etresoft support", toAddress ];
+
+
+  NSAppleScript * emailScript =
+    [[NSAppleScript alloc] initWithSource: emailString];
+
+  [emailScript executeAndReturnError: nil];
+  [emailScript release];
   }
 
 @end

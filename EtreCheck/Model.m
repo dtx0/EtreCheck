@@ -8,7 +8,6 @@
 #import "DiagnosticEvent.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
-#import "AdwareCollector.h"
 
 @implementation Model
 
@@ -33,7 +32,7 @@
 @synthesize hostName = myHostName;
 @synthesize adwareFound = myAdwareFound;
 @synthesize terminatedTasks = myTerminatedTasks;
-@synthesize greylistCount = myGreylistCount;
+@synthesize unknownFiles = myUnknownFiles;
 @synthesize seriousProblems = mySeriousProblems;
 @synthesize hasMalwareBytes = myHasMalwareBytes;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
@@ -43,7 +42,7 @@
 
 - (bool) adwarePossible
   {
-  return self.greylistCount > 0;
+  return self.unknownFiles.count > 0;
   }
 
 // Return the singeton of shared values.
@@ -69,6 +68,7 @@
   
   if(self)
     {
+    myUnknownFiles = [NSMutableSet new];
     myVolumes = [NSMutableDictionary new];
     myCoreStorageVolumes = [NSMutableDictionary new];
     myDiskErrors = [NSMutableDictionary new];
@@ -79,6 +79,8 @@
     myIgnoreKnownAppleFailures = YES;
     myCheckAppleSignatures = NO;
     myHideAppleTasks = YES;
+    myWhitelistFiles = [NSMutableSet new];
+    myWhitelistPrefixes = [NSMutableSet new];
     }
     
   return self;
@@ -87,8 +89,10 @@
 // Destructor.
 - (void) dealloc
   {
-  self.whitelistPrefixes = nil;
-  self.whitelistFiles = nil;
+  [myWhitelistFiles release];
+  [myWhitelistPrefixes release];
+  
+  self.unknownFiles = nil;
   self.seriousProblems = nil;
   self.terminatedTasks = nil;
   self.adwareFiles = nil;
@@ -227,21 +231,32 @@
   return NO;
   }
 
-// Check the file against the whitelist.
-- (bool) checkWhitelistFile: (NSString *) path
+// Add files to the whitelist.
+- (void) appendToWhitelist: (NSArray *) names;
   {
-  if([self isWhitelistFile: path])
+  [self.whitelistFiles addObjectsFromArray: names];
+  }
+  
+// Add files to the whitelist prefixes.
+- (void) appendToWhitelistPrefixes: (NSArray *) names;
+  {
+  [self.whitelistPrefixes addObjectsFromArray: names];
+  }
+  
+// Check the file against the whitelist.
+- (bool) checkWhitelistFile: (NSString *) name path: (NSString *) path
+  {
+  if([self isWhitelistFile: name])
     return YES;
     
-  self.greylistCount = self.greylistCount + 1;
+  [self.unknownFiles addObject: path];
+
   return NO;
   }
 
 // Is this file in the whitelist?
-- (bool) isWhitelistFile: (NSString *) path
+- (bool) isWhitelistFile: (NSString *) name
   {
-  NSString * name = [path lastPathComponent];
-  
   if([self.whitelistFiles containsObject: name])
     return YES;
     

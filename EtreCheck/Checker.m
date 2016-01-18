@@ -42,6 +42,7 @@
 #import "Model.h"
 #import "LogCollector.h"
 #import "AdwareCollector.h"
+#import "UnknownFilesCollector.h"
 #import "HiddenAppsCollector.h"
 
 // Perform the check.
@@ -334,6 +335,7 @@
   // run fist. Such is life.
   [collectors addObject: [[SafariExtensionsCollector new] autorelease]];
   [collectors addObject: [[AdwareCollector new] autorelease]];
+  [collectors addObject: [[UnknownFilesCollector new] autorelease]];
   
   // Start the agents and daemons animation.
   dispatch_semaphore_t semaphore = [self runAgentsAndDaemonsAnimation];
@@ -411,6 +413,7 @@
   [result appendAttributedString: [self getResult: @"gatekeeper"]];
   [result appendAttributedString: [self getResult: @"applications"]];
   [result appendAttributedString: [self getResult: @"adware"]];
+  [result appendAttributedString: [self getResult: @"unknownfiles"]];
   [result appendAttributedString: [self getResult: @"kernelextensions"]];
   [result appendAttributedString: [self getResult: @"startupitems"]];
   [result appendAttributedString: [self getResult: @"systemlaunchagents"]];

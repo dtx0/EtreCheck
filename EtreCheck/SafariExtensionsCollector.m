@@ -165,8 +165,7 @@
       setObject: @"extension" forKey: humanReadableName];
     [[Model model] setAdwareFound: YES];
 
-    NSAttributedString * removeLink =
-      [self generateRemoveAdwareLink: @"extension"];
+    NSAttributedString * removeLink = [self generateRemoveAdwareLink];
 
     if(removeLink)
       [self.result appendAttributedString: removeLink];

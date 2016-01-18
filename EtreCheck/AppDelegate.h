@@ -10,6 +10,7 @@
 @class DetailManager;
 @class HelpManager;
 @class AdwareManager;
+@class UnknownFilesManager;
 
 @interface AppDelegate : NSObject
   <NSApplicationDelegate,
@@ -17,7 +18,8 @@
   NSToolbarDelegate,
   NSSharingServiceDelegate,
   NSSharingServicePickerDelegate,
-  NSUserInterfaceValidations>
+  NSUserInterfaceValidations,
+  NSDrawerDelegate>
   {
   NSWindow * window;
   NSWindow * myLogWindow;
@@ -73,6 +75,7 @@
   DetailManager * myDetailManager;
   HelpManager * myHelpManager;
   AdwareManager * myAdwareManager;
+  UnknownFilesManager * myUnknownFilesManager;
   
   BOOL myReportAvailable;
   NSDate * myReportStartTime;
@@ -133,6 +136,7 @@
 @property (retain) IBOutlet DetailManager * detailManager;
 @property (retain) IBOutlet HelpManager * helpManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
+@property (retain) IBOutlet UnknownFilesManager * unknownFilesManager;
 @property (assign) BOOL reportAvailable;
 @property (retain) NSDate * reportStartTime;
 @property (retain) IBOutlet NSWindow * TOUPanel;

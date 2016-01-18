@@ -15,6 +15,5 @@
 
 @property (retain) NSMutableDictionary * adwareSignatures;
 @property (retain) NSMutableDictionary * adwareFound;
-@property (readonly) bool adwarePossible;
 
 @end
