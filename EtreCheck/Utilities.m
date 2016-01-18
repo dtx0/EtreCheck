@@ -895,4 +895,24 @@
   return result;
   }
 
+// Create a temporary directory.
++ (NSString *) createTemporaryDirectory
+  {
+  NSString * template =
+    [NSTemporaryDirectory()
+      stringByAppendingPathComponent: @"XXXXXXXXXXXX"];
+  
+  char * buffer = strdup([template fileSystemRepresentation]);
+  
+  mkdtemp(buffer);
+  
+  NSString * temporaryDirectory =
+    [[NSFileManager defaultManager]
+      stringWithFileSystemRepresentation: buffer length: strlen(buffer)];
+  
+  free(buffer);
+  
+  return temporaryDirectory;
+  }
+
 @end

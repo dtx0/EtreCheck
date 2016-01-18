@@ -27,6 +27,8 @@
       {
       NSDictionary * plugin = [bundles objectForKey: filename];
 
+      NSString * path = [plugin objectForKey: @"path"];
+      
       NSString * name = [filename stringByDeletingPathExtension];
 
       NSString * version =
@@ -53,6 +55,9 @@
       else if([name isEqualToString: @"Flash Player"])
         [self.result
           appendAttributedString: [self getFlashSupportLink: plugin]];
+      else if([[Model model] isAdware: path])
+        [self.result
+          appendAttributedString: [self getAdwareLink: plugin]];
       else
         [self.result
           appendAttributedString: [self getSupportLink: plugin]];
@@ -91,7 +96,12 @@
             NSLocalizedString(@"Unknown", NULL)
           };
 
-    [bundles setObject: plist forKey: filename];
+    NSMutableDictionary * bundle =
+      [NSMutableDictionary dictionaryWithDictionary: plist];
+    
+    [bundle setObject: path forKey: @"path"];
+    
+    [bundles setObject: bundle forKey: filename];
     }
     
   return bundles;
@@ -219,6 +229,34 @@
   [outdated release];
   
   return [string autorelease];
+  }
+
+// Construct an adware link.
+- (NSAttributedString *) getAdwareLink: (NSDictionary *) plugin
+  {
+  NSMutableAttributedString * extra =
+    [[NSMutableAttributedString alloc] init];
+
+  [extra appendString: @" "];
+
+  [extra
+    appendString: NSLocalizedString(@"Adware!", NULL)
+    attributes:
+      @{
+        NSForegroundColorAttributeName : [[Utilities shared] red],
+        NSFontAttributeName : [[Utilities shared] boldFont]
+      }];      
+
+  NSAttributedString * removeLink = [self generateRemoveAdwareLink];
+
+  if(removeLink)
+    {
+    [extra appendString: @" "];
+
+    [extra appendAttributedString: removeLink];
+    }
+    
+  return [extra autorelease];
   }
 
 // Parse user plugins

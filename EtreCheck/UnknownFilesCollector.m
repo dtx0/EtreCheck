@@ -54,7 +54,10 @@
     
     for(NSString * unknownFile in [[Model model] unknownFiles])
       [self.result
-        appendString: [NSString stringWithFormat: @"    %@\n", unknownFile]];
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"    %@\n", [Utilities sanitizeFilename: unknownFile]]];
       
     NSString * message =
       TTTLocalizedPluralString(unknownFileCount, @"unknown file", NULL);

@@ -165,18 +165,22 @@
       setObject: @"extension" forKey: humanReadableName];
     [[Model model] setAdwareFound: YES];
 
+    [self.result
+      appendString: NSLocalizedString(@"Adware!", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+      
     NSAttributedString * removeLink = [self generateRemoveAdwareLink];
 
     if(removeLink)
+      {
+      [self.result appendString: @" "];
+      
       [self.result appendAttributedString: removeLink];
-    else
-      [self.result
-        appendString: NSLocalizedString(@"Adware!", NULL)
-        attributes:
-          @{
-            NSForegroundColorAttributeName : [[Utilities shared] red],
-            NSFontAttributeName : [[Utilities shared] boldFont]
-          }];
+      }
     }
 
   [self.result appendString: @"\n"];
@@ -216,7 +220,7 @@
   {
   NSString * resolvedPath = [path stringByResolvingSymlinksInPath];
   
-  NSString * tempDirectory = [self createTemporaryDirectory];
+  NSString * tempDirectory = [Utilities createTemporaryDirectory];
   
   [[NSFileManager defaultManager]
     createDirectoryAtPath: tempDirectory
@@ -235,25 +239,6 @@
   [Utilities execute: @"/usr/bin/xar" arguments: args];
   
   return tempDirectory;
-  }
-
-- (NSString *) createTemporaryDirectory
-  {
-  NSString * template =
-    [NSTemporaryDirectory()
-      stringByAppendingPathComponent: @"XXXXXXXXXXXX"];
-  
-  char * buffer = strdup([template fileSystemRepresentation]);
-  
-  mkdtemp(buffer);
-  
-  NSString * temporaryDirectory =
-    [[NSFileManager defaultManager]
-      stringWithFileSystemRepresentation: buffer length: strlen(buffer)];
-  
-  free(buffer);
-  
-  return temporaryDirectory;
   }
 
 - (NSDictionary *) findExtensionPlist: (NSString *) directory

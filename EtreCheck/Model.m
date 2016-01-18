@@ -216,7 +216,10 @@
 // Is this file an adware file?
 - (bool) isAdware: (NSString *) path
   {
-  return [self.adwareFiles objectForKey: path];
+  if(path)
+    return [self.adwareFiles objectForKey: path];
+  
+  return NO;
   }
 
 // Is this file an adware extension?
@@ -247,6 +250,9 @@
 - (bool) checkWhitelistFile: (NSString *) name path: (NSString *) path
   {
   if([self isWhitelistFile: name])
+    return YES;
+    
+  if([self isAdware: path])
     return YES;
     
   [self.unknownFiles addObject: path];

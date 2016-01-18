@@ -140,4 +140,7 @@
 // Check the signature of an Apple executable.
 + (NSString *) checkAppleExecutable: (NSString *) path;
 
+// Create a temporary directory.
++ (NSString *) createTemporaryDirectory;
+
 @end

@@ -88,12 +88,16 @@
     [plistGzipData appendBytes: buf length: 3];
     [plistGzipData appendData: partialData];
     
-    [plistGzipData writeToFile: @"/tmp/out.bin" atomically: YES];
+    NSString * tempDir = [Utilities createTemporaryDirectory];
+    
+    NSString * tempFile =
+      [tempDir stringByAppendingPathComponent: @"out.bin"];
+    
+    [plistGzipData writeToFile: tempFile atomically: YES];
     
     NSData * plistData = [Utilities ungzip: plistGzipData];
     
-    [[NSFileManager defaultManager]
-      removeItemAtPath: @"/tmp/out.bin" error: NULL];
+    [[NSFileManager defaultManager] removeItemAtPath: tempDir error: NULL];
     
     NSDictionary * plist = [Utilities readPropertyListData: plistData];
   

@@ -999,18 +999,22 @@
 
     [extra appendString: @" "];
 
+    [extra
+      appendString: NSLocalizedString(@"Adware!", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+      
     NSAttributedString * removeLink = [self generateRemoveAdwareLink];
 
     if(removeLink)
+      {
+      [extra appendString: @" "];
+      
       [extra appendAttributedString: removeLink];
-    else
-      [extra
-        appendString: NSLocalizedString(@"Adware!", NULL)
-        attributes:
-          @{
-            NSForegroundColorAttributeName : [[Utilities shared] red],
-            NSFontAttributeName : [[Utilities shared] boldFont]
-          }];      
+      }
       
     return [extra autorelease];
     }
