@@ -67,6 +67,10 @@
   NSView * myTextSizeToolbarItemView;
   NSButton * myTextSizeButton;
   NSUInteger myTextSize;
+  NSView * myDonateToolbarItemView;
+  NSButton * myDonateButton;
+  NSImage * myDonateButtonImage;
+  NSImage * myDonateButtonInactiveImage;
   NSToolbar * myToolbar;
 
   NSMutableDictionary * launchdStatus;
@@ -84,6 +88,9 @@
   NSTextView * myTOUView;
   NSButton * myAcceptTOUButton;
   BOOL myTOSAccepted;
+
+  NSWindow * myDonatePanel;
+  NSTextView * myDonateView;
   }
   
 @property (retain) IBOutlet NSWindow * window;
@@ -132,6 +139,10 @@
 @property (retain) IBOutlet NSView * textSizeToolbarItemView;
 @property (retain) IBOutlet NSButton * textSizeButton;
 @property (assign) NSUInteger textSize;
+@property (retain) IBOutlet NSView * donateToolbarItemView;
+@property (retain) IBOutlet NSButton * donateButton;
+@property (retain) IBOutlet NSImage * donateButtonImage;
+@property (retain) IBOutlet NSImage * donateButtonInactiveImage;
 @property (retain) IBOutlet NSToolbar * toolbar;
 @property (retain) IBOutlet DetailManager * detailManager;
 @property (retain) IBOutlet HelpManager * helpManager;
@@ -143,6 +154,8 @@
 @property (retain) IBOutlet NSTextView * TOUView;
 @property (retain) IBOutlet NSButton * acceptTOUButton;
 @property (assign) BOOL TOSAccepted;
+@property (retain) IBOutlet NSWindow * donatePanel;
+@property (retain) IBOutlet NSTextView * donateView;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
@@ -203,5 +216,14 @@
 
 // Set focus to the problem description when a problem is selected.
 - (IBAction) problemSelected: (id) sender;
+
+// Show the donate panel.
+- (IBAction) showDonate: (id) sender;
+
+// Donate another day.
+- (IBAction) donateLater: (id) sender;
+
+// Donate now.
+- (IBAction) donate: (id) sender;
 
 @end

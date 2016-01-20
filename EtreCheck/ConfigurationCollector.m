@@ -354,11 +354,14 @@
 - (void) printOtherModifications
   {
   // Print existing configFiles.
-  for(NSString * modification in self.modifications)
-    [self.result
-      appendString:
-        [NSString stringWithFormat:
-          NSLocalizedString(@"    %@\n", NULL), modification]];
+  for(NSAttributedString * modification in self.modifications)
+    {
+    [self.result appendString: @"    "];
+    
+    [self.result appendAttributedString: modification];
+    
+    [self.result appendString: @"\n"];
+    }
   }
 
 // Print the status of the hosts file.

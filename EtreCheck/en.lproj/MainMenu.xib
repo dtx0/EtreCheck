@@ -30,6 +30,10 @@
                 <outlet property="clipboardCopyToolbarItemView" destination="kwV-c6-t98" id="jf2-ry-FLb"/>
                 <outlet property="demonImage" destination="PBo-4n-aK2" id="x01-Zs-ecw"/>
                 <outlet property="detailManager" destination="91K-cv-wWe" id="9WT-yE-oIo"/>
+                <outlet property="donateButton" destination="eY1-TG-MMs" id="OoP-Xa-ZsS"/>
+                <outlet property="donatePanel" destination="JnU-dB-S5j" id="hD4-L1-qIC"/>
+                <outlet property="donateToolbarItemView" destination="N7f-kv-4aH" id="V6d-So-1t1"/>
+                <outlet property="donateView" destination="VAZ-3F-fRB" id="8Sk-nG-jXF"/>
                 <outlet property="finderIcon" destination="YNi-t0-nyG" id="VwO-Jj-e1b"/>
                 <outlet property="helpButton" destination="vd5-kg-IdS" id="Atc-kB-9hT"/>
                 <outlet property="helpManager" destination="OAP-T5-MR2" id="xX9-71-M4r"/>
@@ -817,7 +821,7 @@ DQ
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="eqA-WK-Xkh" userLabel="Window - TOU">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <rect key="contentRect" x="109" y="132" width="563" height="419"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1600" height="877"/>
             <view key="contentView" id="gjb-XA-03v">
                 <rect key="frame" x="0.0" y="0.0" width="563" height="419"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -836,7 +840,7 @@ Gw
                             <action selector="declineTOS:" target="Voe-Tx-rLC" id="9dQ-RM-zG0"/>
                         </connections>
                     </button>
-                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="l82-sm-bBb">
+                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="l82-sm-bBb">
                         <rect key="frame" x="-1" y="61" width="565" height="359"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <clipView key="contentView" copiesOnScroll="NO" id="VIQ-qK-qD0">
@@ -860,8 +864,8 @@ Gw
                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.5" horizontal="NO" id="wAc-vx-j22">
-                            <rect key="frame" x="548" y="1" width="16" height="357"/>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="NO" id="wAc-vx-j22">
+                            <rect key="frame" x="-100" y="-100" width="16" height="357"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
@@ -879,6 +883,75 @@ DQ
                 </subviews>
             </view>
             <point key="canvasLocation" x="333.5" y="1345.5"/>
+        </window>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="JnU-dB-S5j" userLabel="Window - Donate">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <rect key="contentRect" x="109" y="132" width="486" height="282"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1600" height="877"/>
+            <view key="contentView" id="XM8-Qc-j3F">
+                <rect key="frame" x="0.0" y="0.0" width="486" height="282"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" id="Pdh-9K-GvA">
+                        <rect key="frame" x="14" y="13" width="72" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Later" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="85H-p7-hWD">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="donateLater:" target="Voe-Tx-rLC" id="WDG-Zm-DLq"/>
+                        </connections>
+                    </button>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" id="wh0-Hs-Dza">
+                        <rect key="frame" x="-1" y="61" width="487" height="222"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <clipView key="contentView" copiesOnScroll="NO" id="cOn-KS-6rq">
+                            <rect key="frame" x="1" y="1" width="485" height="220"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="VAZ-3F-fRB">
+                                    <rect key="frame" x="0.0" y="0.0" width="485" height="220"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="485" height="220"/>
+                                    <size key="maxSize" width="565" height="10000000"/>
+                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="485" height="220"/>
+                                    <size key="maxSize" width="565" height="10000000"/>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="ku8-M2-0AA">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="NO" id="zAw-0H-hvc">
+                            <rect key="frame" x="-100" y="-100" width="16" height="241"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                    <button verticalHuggingPriority="750" id="0me-if-qRu">
+                        <rect key="frame" x="388" y="13" width="84" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Donate" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lNV-C8-KMs">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="donate:" target="Voe-Tx-rLC" id="G9l-Hz-KSk"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="289" y="1788"/>
         </window>
         <window title="EtreCheck" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="HCb-1A-LX1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
@@ -1320,6 +1393,24 @@ Gw
             </subviews>
             <point key="canvasLocation" x="199" y="640"/>
         </customView>
+        <customView id="N7f-kv-4aH" userLabel="Donate ToolbarItem View">
+            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button id="eY1-TG-MMs">
+                    <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Donate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="P0F-2g-oQv">
+                        <behavior key="behavior" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="showDonate:" target="Voe-Tx-rLC" id="6kw-vq-UV9"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="-351" y="574"/>
+        </customView>
         <customView id="kwV-c6-t98" userLabel="Copy ToolbarItem View">
             <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1386,6 +1477,7 @@ Gw
         <image name="Agent" width="118" height="125"/>
         <image name="Copy" width="1024" height="1024"/>
         <image name="Demon" width="110" height="125"/>
+        <image name="Donate" width="1024" height="1024"/>
         <image name="Help" width="1024" height="1024"/>
         <image name="MagnifyingGlass" width="800" height="400"/>
         <image name="MagnifyingGlassShade" width="800" height="400"/>

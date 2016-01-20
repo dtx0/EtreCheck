@@ -28,6 +28,7 @@
 #define kShareToolbarItemID @"sharetoolbaritem"
 #define kHelpToolbarItemID @"helptoolbaritem"
 #define kTextSizeToolbarItemID @"textsizetoolbaritem"
+#define kDonateTollbarItemID @"donatetoolbaritem"
 
 #define kTextSizeNormal 0
 #define kTextSizeLarger 1
@@ -89,6 +90,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize textSizeToolbarItemView = myTextSizeToolbarItemView;
 @synthesize textSizeButton = myTextSizeButton;
 @synthesize textSize = myTextSize;
+@synthesize donateToolbarItemView = myDonateToolbarItemView;
+@synthesize donateButton = myDonateButton;
+@synthesize donateButtonImage = myDonateButtonImage;
+@synthesize donateButtonInactiveImage = myDonateButtonInactiveImage;
 @synthesize toolbar = myToolbar;
 @synthesize detailManager = myDetailManager;
 @synthesize helpManager = myHelpManager;
@@ -100,6 +105,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize TOUView = myTOUView;
 @synthesize acceptTOUButton = myAcceptTOUButton;
 @synthesize TOSAccepted = myTOSAccepted;
+@synthesize donatePanel = myDonatePanel;
+@synthesize donateView = myDonateView;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic checkAppleSignatures;
@@ -239,6 +246,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   self.helpButtonImage = [NSImage imageNamed: @"Help"];
   self.helpButtonInactiveImage = [NSImage imageNamed: @"HelpInactive"];
+
+  self.donateButtonImage = [NSImage imageNamed: @"Donate"];
+  self.donateButtonInactiveImage = [NSImage imageNamed: @"DonateInactive"];
   }
 
 // The application will terminate.
@@ -272,6 +282,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     dispatch_get_main_queue(),
     ^{
       self.helpButton.image = self.helpButtonInactiveImage;
+      self.donateButton.image = self.donateButtonInactiveImage;
+      
       [self.reportView setContentFilters: @[grayscale, gamma]];
       
       if(self.animationView)
@@ -304,6 +316,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     dispatch_get_main_queue(),
     ^{
       self.helpButton.image = self.helpButtonImage;
+      self.donateButton.image = self.donateButtonImage;
+      
       [self.reportView setContentFilters: @[]];
 
       if(self.animationView)
@@ -553,6 +567,44 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [sheet orderOut: self];
   }
 
+// Show the donate panel.
+- (IBAction) showDonate: (id) sender;
+  {
+  NSData * rtfData =
+    [NSData
+      dataWithContentsOfFile:
+        [[NSBundle mainBundle]
+          pathForResource: @"donate" ofType: @"rtf"]];
+  
+  NSRange range =
+    NSMakeRange(0, [[self.donateView textStorage] length]);
+
+  [self.donateView
+    replaceCharactersInRange: range withRTF: rtfData];
+
+  [[NSApplication sharedApplication]
+    beginSheet: self.donatePanel
+    modalForWindow: self.window
+    modalDelegate: self
+    didEndSelector: @selector(didEndSheet:returnCode:contextInfo:)
+    contextInfo: nil];
+  }
+
+// Donate another day.
+- (IBAction) donateLater: (id) sender;
+  {
+  [[NSApplication sharedApplication] endSheet: self.donatePanel];
+  }
+
+// Donate now.
+- (IBAction) donate: (id) sender
+  {
+  [[NSWorkspace sharedWorkspace]
+    openURL: [NSURL URLWithString: @"http://etrecheck.com/donate"]];
+
+  [[NSApplication sharedApplication] endSheet: self.donatePanel];
+  }
+
 // Start the report.
 - (IBAction) start: (id) sender
   {
@@ -633,6 +685,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Cancel the report.
 - (IBAction) cancel: (id) sender
   {
+  [[NSApplication sharedApplication] endSheet: self.donatePanel];
+  [[NSApplication sharedApplication] endSheet: self.TOUPanel];
   [[NSApplication sharedApplication] endSheet: self.startPanel];
 
   [[NSApplication sharedApplication] terminate: sender];
@@ -1616,69 +1670,114 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   willBeInsertedIntoToolbar: (BOOL) flag
   {
   if([itemIdentifier isEqualToString: kShareToolbarItemID])
-    {
-    // Create the NSToolbarItem and setup its attributes.
-    EtreCheckToolbarItem * item =
-      [[[EtreCheckToolbarItem alloc]
-        initWithItemIdentifier: itemIdentifier] autorelease];
-    
-    if([NSSharingServicePicker class])
-      {
-      [item setLabel: NSLocalizedString(@"Share Report", nil)];
-      [item setPaletteLabel: NSLocalizedString(@"Share Report", nil)];
-      [item setView: self.shareToolbarItemView];
-      item.control = self.shareButton;
-      }
-    else
-      {
-      [item setLabel: NSLocalizedString(@"Copy to clipboard", nil)];
-      [item setPaletteLabel: NSLocalizedString(@"Copy to clipboard", nil)];
-      [item setView: self.clipboardCopyToolbarItemView];
-      item.control = self.clipboardCopyButton;
-      }
-      
-    [item setTarget: self];
-    [item setAction: nil];
-    item.appDelegate = self;
-    
-    return item;
-    }
+    return
+      [self
+        createShareToolbar: toolbar itemForItemIdentifier: itemIdentifier];
+
   else if([itemIdentifier isEqualToString: kHelpToolbarItemID])
-    {
-    // Create the NSToolbarItem and setup its attributes.
-    EtreCheckToolbarItem * item =
-      [[[EtreCheckToolbarItem alloc]
-        initWithItemIdentifier: itemIdentifier] autorelease];
-    
-    [item setLabel: NSLocalizedString(@"Help", nil)];
-    [item setPaletteLabel: NSLocalizedString(@"Help", nil)];
-    [item setTarget: self];
-    [item setAction: nil];
-    [item setView: self.helpToolbarItemView];
-    item.control = self.helpButton;
-    item.appDelegate = self;
-    
-    return item;
-    }
+    return
+      [self
+        createHelpToolbar: toolbar itemForItemIdentifier: itemIdentifier];
+
   else if([itemIdentifier isEqualToString: kTextSizeToolbarItemID])
-    {
-    // Create the NSToolbarItem and setup its attributes.
-    EtreCheckToolbarItem * item =
-      [[[EtreCheckToolbarItem alloc]
-        initWithItemIdentifier: itemIdentifier] autorelease];
-    
-    [item setLabel: NSLocalizedString(@"Text Size", nil)];
-    [item setPaletteLabel: NSLocalizedString(@"Text Size", nil)];
-    [item setTarget: self];
-    [item setAction: nil];
-    [item setView: self.textSizeToolbarItemView];
-    item.control = self.textSizeButton;
-    item.appDelegate = self;
-    
-    return item;
-    }
+    return
+      [self
+        createTextSizeToolbar: toolbar
+        itemForItemIdentifier: itemIdentifier];
+
+  else if([itemIdentifier isEqualToString: kDonateTollbarItemID])
+    return
+      [self
+        createDonateToolbar: toolbar itemForItemIdentifier: itemIdentifier];
     
   return nil;
+  }
+
+- (NSToolbarItem *) createShareToolbar: (NSToolbar *) toolbar
+  itemForItemIdentifier: (NSString *) itemIdentifier
+  {
+  // Create the NSToolbarItem and setup its attributes.
+  EtreCheckToolbarItem * item =
+    [[[EtreCheckToolbarItem alloc]
+      initWithItemIdentifier: itemIdentifier] autorelease];
+  
+  if([NSSharingServicePicker class])
+    {
+    [item setLabel: NSLocalizedString(@"Share Report", nil)];
+    [item setPaletteLabel: NSLocalizedString(@"Share Report", nil)];
+    [item setView: self.shareToolbarItemView];
+    item.control = self.shareButton;
+    }
+  else
+    {
+    [item setLabel: NSLocalizedString(@"Copy to clipboard", nil)];
+    [item setPaletteLabel: NSLocalizedString(@"Copy to clipboard", nil)];
+    [item setView: self.clipboardCopyToolbarItemView];
+    item.control = self.clipboardCopyButton;
+    }
+    
+  [item setTarget: self];
+  [item setAction: nil];
+  item.appDelegate = self;
+  
+  return item;
+  }
+
+- (NSToolbarItem *) createHelpToolbar: (NSToolbar *) toolbar
+  itemForItemIdentifier: (NSString *) itemIdentifier
+  {
+  // Create the NSToolbarItem and setup its attributes.
+  EtreCheckToolbarItem * item =
+    [[[EtreCheckToolbarItem alloc]
+      initWithItemIdentifier: itemIdentifier] autorelease];
+  
+  [item setLabel: NSLocalizedString(@"Help", nil)];
+  [item setPaletteLabel: NSLocalizedString(@"Help", nil)];
+  [item setTarget: self];
+  [item setAction: nil];
+  [item setView: self.helpToolbarItemView];
+  item.control = self.helpButton;
+  item.appDelegate = self;
+  
+  return item;
+  }
+
+- (NSToolbarItem *) createTextSizeToolbar: (NSToolbar *) toolbar
+  itemForItemIdentifier: (NSString *) itemIdentifier
+  {
+  // Create the NSToolbarItem and setup its attributes.
+  EtreCheckToolbarItem * item =
+    [[[EtreCheckToolbarItem alloc]
+      initWithItemIdentifier: itemIdentifier] autorelease];
+  
+  [item setLabel: NSLocalizedString(@"Text Size", nil)];
+  [item setPaletteLabel: NSLocalizedString(@"Text Size", nil)];
+  [item setTarget: self];
+  [item setAction: nil];
+  [item setView: self.textSizeToolbarItemView];
+  item.control = self.textSizeButton;
+  item.appDelegate = self;
+  
+  return item;
+  }
+
+- (NSToolbarItem *) createDonateToolbar: (NSToolbar *) toolbar
+  itemForItemIdentifier: (NSString *) itemIdentifier
+  {
+  // Create the NSToolbarItem and setup its attributes.
+  EtreCheckToolbarItem * item =
+    [[[EtreCheckToolbarItem alloc]
+      initWithItemIdentifier: itemIdentifier] autorelease];
+  
+  [item setLabel: NSLocalizedString(@"Donate", nil)];
+  [item setPaletteLabel: NSLocalizedString(@"Donate", nil)];
+  [item setTarget: self];
+  [item setAction: nil];
+  [item setView: self.donateToolbarItemView];
+  item.control = self.donateButton;
+  item.appDelegate = self;
+  
+  return item;
   }
 
 - (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar
@@ -1693,6 +1792,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         kShareToolbarItemID,
         kHelpToolbarItemID,
         NSToolbarFlexibleSpaceItemIdentifier,
+        kDonateTollbarItemID,
         NSToolbarPrintItemIdentifier
       ];
 
@@ -1702,6 +1802,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       kHelpToolbarItemID,
       kTextSizeToolbarItemID,
       NSToolbarFlexibleSpaceItemIdentifier,
+      kDonateTollbarItemID,
       NSToolbarPrintItemIdentifier
     ];
     
@@ -1722,6 +1823,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         kShareToolbarItemID,
         kHelpToolbarItemID,
         NSToolbarFlexibleSpaceItemIdentifier,
+        kDonateTollbarItemID,
         NSToolbarPrintItemIdentifier
       ];
 
@@ -1731,6 +1833,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       kHelpToolbarItemID,
       kTextSizeToolbarItemID,
       NSToolbarFlexibleSpaceItemIdentifier,
+      kDonateTollbarItemID,
       NSToolbarPrintItemIdentifier
     ];
 
