@@ -77,19 +77,113 @@
 // Contact Etresoft to add to whitelist.
 - (IBAction) addToWhitelist: (id) sender
   {
-  NSMutableString * content = [NSMutableString string];
+  NSMutableString * json = [NSMutableString string];
   
-  [content appendString: @"EtreCheck found the following unknown files:\n"];
+  [json appendString: @"["];
+  
+  bool first = YES;
   
   for(NSString * path in [[Model model] unknownFiles])
-    [content appendString: [NSString stringWithFormat: @"%@\n", path]];
+    {
+    if(!first)
+      [json appendString: @","];
+      
+    first = NO;
     
-  [self
-    sendEmailTo: @"info@etresoft.com"
-    withSubject: @"Add to whitelist"
-    content: content];
+    [json
+      appendString:
+        [NSString stringWithFormat: @"\"%@\"", [path lastPathComponent]]];
+    }
+    
+  [json appendString: @"]"];
+  
+  NSString * server = @"http://etrecheck.com/server/whitelist.php";
+  
+  NSArray * args =
+    @[
+      @"--data",
+      json,
+      server
+    ];
+
+  NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  if(result)
+    {
+    NSString * status =
+      [[NSString alloc]
+        initWithData: result encoding: NSUTF8StringEncoding];
+      
+    if([status isEqualToString: @"OK"])
+      [self thanksForWhitelist];
+    else
+      [self uploadWhitelistFallbackToEmail];
+      
+    [status release];
+    }
   }
 
+// Thank the user for their whitelist submission.
+- (void) thanksForWhitelist
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"Thanks for your submission", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert
+    setInformativeText: NSLocalizedString(@"thanksforwhitelist", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+
+  [alert runModal];
+
+  [alert release];
+  }
+
+- (void) uploadWhitelistFallbackToEmail
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"Whitelist upload failed", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert
+    setInformativeText: NSLocalizedString(@"whitelistuploadfailed", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"Yes - Send via e-mail", NULL)];
+
+  [alert addButtonWithTitle: NSLocalizedString(@"No", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  if(result == NSAlertFirstButtonReturn)
+    {
+    NSMutableString * content = [NSMutableString string];
+    
+    [content
+      appendString: @"EtreCheck found the following unknown files:\n"];
+    
+    for(NSString * path in [[Model model] unknownFiles])
+      [content appendString: [NSString stringWithFormat: @"%@\n", path]];
+      
+    [self
+      sendEmailTo: @"info@etresoft.com"
+      withSubject: @"Add to whitelist"
+      content: content];
+    }
+
+  [alert release];
+  }
+
+// Send an e-mail.
 - (void) sendEmailTo: (NSString *) toAddress
   withSubject: (NSString *) subject
   content: (NSString *) bodyText

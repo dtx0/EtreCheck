@@ -55,3 +55,6 @@
 "poorperformance" = "Poor";
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "appleadwareurl" = "(See http://support.apple.com/HT203987)";
+"thanksforwhitelist" = "Thank you for your submission to the EtreCheck whitelist. It may take a couple of days to verify your submission and update our data. We appreciate your patience.";
+"whitelistuploadfailed" = "Your whitelist upload to the EtreCheck server failed. Would you like to use e-mail instead?";
+
