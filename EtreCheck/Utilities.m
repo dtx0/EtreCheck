@@ -452,33 +452,36 @@
   {
   NSString * prettyFile = [self cleanPath: file];
   
+  NSString * name = [prettyFile lastPathComponent];
+  
   // What are you trying to hide?
-  if([file hasPrefix: @"."])
+  if([name hasPrefix: @"."])
     prettyFile =
       [NSString
-        stringWithFormat: NSLocalizedString(@"%@ (hidden)", NULL), file];
+        stringWithFormat:
+          NSLocalizedString(@"%@ (hidden)", NULL), prettyFile];
 
   // Silly Apple.
-  else if([file hasPrefix: @"com.apple.CSConfigDotMacCert-"])
-    prettyFile = [self sanitizeMobileMe: file];
+  else if([name hasPrefix: @"com.apple.CSConfigDotMacCert-"])
+    prettyFile = [self sanitizeMobileMe: prettyFile];
 
   // What are you trying to expose?
-  else if([file hasPrefix: @"com.facebook.videochat."])
-    prettyFile = [self sanitizeFacebook: file];
+  else if([name hasPrefix: @"com.facebook.videochat."])
+    prettyFile = [self sanitizeFacebook: prettyFile];
 
   // What are you trying to expose?
-  else if([file hasPrefix: @"com.adobe.ARM."])
+  else if([name hasPrefix: @"com.adobe.ARM."])
     prettyFile = @"com.adobe.ARM.[...].plist";
 
   // I don't want to see it.
-  else if([file length] > 76)
+  else if([prettyFile length] > 76)
     {
-    NSString * extension = [file pathExtension];
+    NSString * extension = [prettyFile pathExtension];
     
     prettyFile =
       [NSString
         stringWithFormat:
-          @"%@...%@", [file substringToIndex: 40], extension];
+          @"%@...%@", [prettyFile substringToIndex: 40], extension];
     }
     
   return prettyFile;

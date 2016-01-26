@@ -1289,6 +1289,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.logView setFrame: contentFrame];
   
   [self transitionToReportView];
+  [self updateRunCount];
   }
 
 // Transition to the report view.
@@ -1343,6 +1344,22 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.logView
     scrollRangeToVisible: NSMakeRange([self.log length] - 2, 1)];
   [self.logView scrollRangeToVisible: NSMakeRange(0, 1)];
+  }
+
+// Update the run count.
+- (void) updateRunCount
+  {
+  NSNumber * count =
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"reportcount"];
+    
+  int runCount = 1;
+  
+  if([count respondsToSelector: @selector(intValue)])
+    runCount = [count intValue] + 1;
+    
+  [[NSUserDefaults standardUserDefaults]
+    setObject: [NSNumber numberWithInt: runCount] forKey: @"reportcount"];
   }
 
 // Handle a scroll change in the report view.
