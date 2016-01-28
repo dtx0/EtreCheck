@@ -278,6 +278,7 @@
     <string>com.github.dnscrypt-osxclient.DNSCryptControlChange.plist</string>
     <string>com.github.dnscrypt-osxclient.DNSCryptMenuBar.plist</string>
     <string>com.github.dnscrypt-osxclient.DNSCryptNetworkChange.plist</string>
+    <string>com.github.facebook.watchman.plist</string>
     <string>com.github.GitHub.GHInstallCLI.plist</string>
     <string>com.github.IngmarStein.Monolingual.Helper.plist</string>
     <string>com.gobbler.bsd.HelperTool.plist</string>
@@ -779,6 +780,8 @@
     <string>homebrew.mxcl.unbound.plist</string>
     <string>homebrew.mxcl.mongodb.plist</string>
     <string>homebrew.mxcl.php56.plist</string>
+    <string>homebrew.mxcl.php70.plist</string>
+    <string>homebrew.mxcl.postgresql.plist</string>
     <string>homebrew.mxcl.redis.plist</string>
     <string>HWNetMgr.plist</string>
     <string>HWPortCfg.plist</string>
