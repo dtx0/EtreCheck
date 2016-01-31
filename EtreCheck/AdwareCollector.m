@@ -205,7 +205,7 @@
 // Print any adware found.
 - (void) printAdware
   {
-  if([self.adwareFound count])
+  if([[Model model] adwareFound])
     {
     [self.result appendAttributedString: [self buildTitle]];
     

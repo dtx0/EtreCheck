@@ -223,7 +223,7 @@
   }
 
 // Is this file an adware extension?
-- (bool) isAdwareExtension: (NSString *) path
+- (bool) isAdwareExtension: (NSString *) name path: (NSString *) path
   {
   NSString * search = [path lowercaseString];
   

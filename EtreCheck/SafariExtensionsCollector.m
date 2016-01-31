@@ -12,6 +12,7 @@
 #define kIdentifier @"identifier"
 #define kHumanReadableName @"humanreadablename"
 #define kFileName @"filename"
+#define kFilePath @"filepath"
 
 // Collect Safari extensions.
 @implementation SafariExtensionsCollector
@@ -87,7 +88,7 @@
       
     NSDictionary * plist = [self readSafariExtensionPropertyList: path];
 
-    [self createExtensionsFromPlist: plist name: name];
+    [self createExtensionsFromPlist: plist name: name path: path];
     }
   }
 
@@ -113,7 +114,7 @@
 
 // Create an extension dictionary from a plist.
 - (void) createExtensionsFromPlist: (NSDictionary *) plist
-  name: (NSString *) name
+  name: (NSString *) name path: (NSString *) path
   {
   NSString * humanReadableName =
     [plist objectForKey: @"CFBundleDisplayName"];
@@ -138,6 +139,7 @@
   [extension setObject: humanReadableName forKey: kHumanReadableName];
   [extension setObject: identifier forKey: kIdentifier];
   [extension setObject: name forKey: kFileName];
+  [extension setObject: path forKey: kFilePath];
   }
 
 // Print a Safari extension.
@@ -150,9 +152,16 @@
     appendString:
       [NSString stringWithFormat: @"    %@", humanReadableName]];
     
-  bool adware = [[Model model] isAdwareExtension: humanReadableName];
+  NSString * path = [extension objectForKey: kFilePath];
   
-  if([[Model model] isAdwareExtension: [extension objectForKey: kFileName]])
+  bool adware =
+    [[Model model] isAdwareExtension: humanReadableName path: path];
+  
+  bool adwareName =
+    [[Model model]
+      isAdwareExtension: [extension objectForKey: kFileName ] path: path];
+   
+  if(adwareName)
     adware = true;
     
   if(adware)
@@ -161,8 +170,7 @@
     
     // Add this adware extension under the "extension" category so only it
     // will be printed.
-    [[[Model model] adwareFiles]
-      setObject: @"extension" forKey: humanReadableName];
+    [[[Model model] adwareFiles] setObject: @"extension" forKey: path];
     [[Model model] setAdwareFound: YES];
 
     [self.result

@@ -157,7 +157,7 @@
 - (bool) isAdware: (NSString *) path;
 
 // Is this file an adware extension?
-- (bool) isAdwareExtension: (NSString *) path;
+- (bool) isAdwareExtension: (NSString *) name path: (NSString *) path;
 
 // Add files to the whitelist.
 - (void) appendToWhitelist: (NSArray *) names;
