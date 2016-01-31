@@ -57,4 +57,7 @@
 "appleadwareurl" = "(See http://support.apple.com/HT203987)";
 "thanksforwhitelist" = "Thank you for your submission to the EtreCheck whitelist. It may take a couple of days to verify your submission and update our data. We appreciate your patience.";
 "whitelistuploadfailed" = "Your whitelist upload to the EtreCheck server failed. Would you like to use e-mail instead?";
+"%d applecount (plural rule: zero)" = "";
+"%d applecount (plural rule: one)" = "One Apple task";
+"%d applecount (plural rule: other)" = "%d Apple tasks";
 

@@ -19,6 +19,9 @@
 @dynamic appleLaunchd;
 @synthesize showExecutable = myShowExecutable;
 @synthesize pressureKilledCount = myPressureKilledCount;
+@synthesize AppleNotLoadedCount = myAppleNotLoadedCount;
+@synthesize AppleLoadedCount = myAppleLoadedCount;
+@synthesize AppleRunningCount = myAppleRunningCount;
 @dynamic knownAppleFailures;
 @dynamic knownAppleSignatureFailures;
 
@@ -461,6 +464,9 @@
     progress += increment;
     }
     
+  if([self formatAppleCounts: formattedOutput])
+    haveOutput = YES;
+  
   if(!haveOutput)
     return nil;
     
@@ -501,8 +507,10 @@
   // Apple file get special treatment.
   if([[status objectForKey: kApple] boolValue])
     {
-    NSString * signatureStatus = [status objectForKey: kSignature];
+    [self updateAppleCounts: status];
     
+    NSString * signatureStatus = [status objectForKey: kSignature];
+      
     // I may want to report a failure.
     if([[status objectForKey: kStatus] isEqualToString: kStatusFailed])
       {
@@ -555,6 +563,71 @@
   [status setObject: [NSNumber numberWithBool: YES] forKey: kPrinted];
   
   return YES;
+  }
+
+// Format Apple counts.
+// Return YES if there was any output.
+- (bool) formatAppleCounts: (NSMutableAttributedString *) output
+  {
+  bool haveOutput = NO;
+  
+  haveOutput =
+    [self
+      formatAppleCount: self.AppleNotLoadedCount
+      output: output
+      status: kStatusNotLoaded]
+      || haveOutput;
+  
+  haveOutput =
+    [self
+      formatAppleCount: self.AppleLoadedCount
+      output: output
+      status: kStatusLoaded]
+      || haveOutput;
+
+  haveOutput =
+    [self
+      formatAppleCount: self.AppleRunningCount
+      output: output
+      status: kStatusRunning]
+      || haveOutput;
+
+  return haveOutput;
+  }
+
+// Format Apple counts for a given status.
+// Return YES if there was any output.
+- (bool) formatAppleCount: (NSUInteger) count
+  output: (NSMutableAttributedString *) output
+  status: (NSString *) statusString
+  {
+  if(count)
+    {
+    NSDictionary * status =
+      [NSDictionary dictionaryWithObjectsAndKeys: statusString, kStatus, nil];
+      
+    [output appendAttributedString: [self formatPropertyListStatus: status]];
+    
+    [output
+      appendString: TTTLocalizedPluralString(count, @"applecount", nil)];
+    
+    [output appendString: @"\n"];
+      
+    return YES;
+    }
+    
+  return NO;
+  }
+
+// Handle whitelist exceptions.
+- (void) updateAppleCounts: (NSDictionary *) status
+  {
+  if([[status objectForKey: kStatus] isEqualToString: kStatusNotLoaded])
+    self.AppleNotLoadedCount = self.AppleNotLoadedCount + 1;
+  else if([[status objectForKey: kStatus] isEqualToString: kStatusLoaded])
+    self.AppleLoadedCount = self.AppleLoadedCount + 1;
+  else if([[status objectForKey: kStatus] isEqualToString: kStatusRunning])
+    self.AppleRunningCount = self.AppleRunningCount + 1;
   }
 
 // Handle whitelist exceptions.

@@ -260,4 +260,8 @@
 "whitelistuploadfailed" = "Votre téléchargement whitelist au serveur EtreCheck a échoué. Voulez-vous utiliser le courriel à la place?";
 "Yes - Send via e-mail" = "Oui - Envoyer au courriel";
 "No" = "Non";
+"%d applecount (plural rule: zero)" = "";
+"%d applecount (plural rule: one)" = "Une tâche d’Apple";
+"%d applecount (plural rule: other)" = "%d tâches d’Apple";
+
 

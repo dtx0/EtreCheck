@@ -36,6 +36,9 @@
   NSMutableDictionary * myHiddenItems;
   bool myShowExecutable;
   NSUInteger myPressureKilledCount;
+  NSUInteger myAppleNotLoadedCount;
+  NSUInteger myAppleLoadedCount;
+  NSUInteger myAppleRunningCount;
   }
 
 // These need to be shared by all launchd collector objects.
@@ -43,6 +46,9 @@
 @property (retain) NSMutableSet * appleLaunchd;
 @property (assign) bool showExecutable;
 @property (assign) NSUInteger pressureKilledCount;
+@property (assign) NSUInteger AppleNotLoadedCount;
+@property (assign) NSUInteger AppleLoadedCount;
+@property (assign) NSUInteger AppleRunningCount;
 @property (retain) NSMutableSet * knownAppleFailures;
 @property (retain) NSMutableSet * knownAppleSignatureFailures;
 
