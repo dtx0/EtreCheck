@@ -357,63 +357,96 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Check for a new version.
 - (void) checkForUpdates
   {
+  dispatch_semaphore_t ready = dispatch_semaphore_create(0);
+
   NSURL * url =
     [NSURL
       URLWithString:
         @"http://etrecheck.com/download/ApplicationUpdates.plist"];
+
+  __block NSData * data = nil;
   
-  NSData * data = [NSData dataWithContentsOfURL: url];
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+      ^{
+      data = [[NSData alloc] initWithContentsOfURL: url];
+      
+      dispatch_semaphore_signal(ready);
+      });
+    
+  // Wait 5 seconds until ready.
+  dispatch_time_t soon =
+    dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 5);
   
-  if(data)
+  long timedout = dispatch_semaphore_wait(ready, soon);
+    
+  // If I timed out, I'm not ready. Signal the sync semaphore to prevent
+  // the update from ever being handled if it ever does happen.
+  if(timedout)
+    dispatch_async(
+      dispatch_get_main_queue(),
+      ^{
+       [self updateFailed];
+      });
+  else
     {
-    NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
-      
-    [numberFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
-    
-    NSString * appBundleId = [[NSBundle mainBundle] bundleIdentifier];
-    
-    NSNumber * appVersion =
-      [numberFormatter
-        numberFromString:
-          [[[NSBundle mainBundle] infoDictionary]
-            objectForKey: @"CFBundleVersion"]];
-
-    NSDictionary * info = [NSDictionary readPropertyListData: data];
-    
-    for(NSString * key in info)
-      if([key isEqualToString: @"Application Updates"])
-        for(NSDictionary * attributes in [info objectForKey: key])
-          {
-          NSString * bundleId =
-            [attributes objectForKey: @"CFBundleIdentifier"];
-          
-          if([appBundleId isEqualToString: bundleId])
-            {
-            NSNumber * version =
-              [numberFormatter
-                numberFromString:
-                  [attributes objectForKey: @"CFBundleVersion"]];
-            
-            if([version intValue] > [appVersion intValue])
-              [self
-                presentUpdate:
-                  [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
-              
-            NSArray * whitelist = [attributes objectForKey: @"whitelist"];
-            
-            if([whitelist respondsToSelector: @selector(addObject:)])
-              [[Model model] appendToWhitelist: whitelist];
-
-            NSArray * whitelistPrefixes =
-              [attributes objectForKey: @"whitelist_prefixes"];
-            
-            if([whitelist respondsToSelector: @selector(addObject:)])
-              [[Model model] appendToWhitelistPrefixes: whitelistPrefixes];
-            }
-        }
-      
-    [numberFormatter release];
+    [self handleUpdate: data];
+    [data release];
     }
+    
+  dispatch_release(ready);
+  }
+
+// Handle update data.
+- (void) handleUpdate: (NSData *) data
+  {
+  NSNumberFormatter * numberFormatter = [[NSNumberFormatter alloc] init];
+    
+  [numberFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
+  
+  NSString * appBundleId = [[NSBundle mainBundle] bundleIdentifier];
+  
+  NSNumber * appVersion =
+    [numberFormatter
+      numberFromString:
+        [[[NSBundle mainBundle] infoDictionary]
+          objectForKey: @"CFBundleVersion"]];
+
+  NSDictionary * info = [NSDictionary readPropertyListData: data];
+  
+  for(NSString * key in info)
+    if([key isEqualToString: @"Application Updates"])
+      for(NSDictionary * attributes in [info objectForKey: key])
+        {
+        NSString * bundleId =
+          [attributes objectForKey: @"CFBundleIdentifier"];
+        
+        if([appBundleId isEqualToString: bundleId])
+          {
+          NSNumber * version =
+            [numberFormatter
+              numberFromString:
+                [attributes objectForKey: @"CFBundleVersion"]];
+          
+          if([version intValue] > [appVersion intValue])
+            [self
+              presentUpdate:
+                [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
+            
+          NSArray * whitelist = [attributes objectForKey: @"whitelist"];
+          
+          if([whitelist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToWhitelist: whitelist];
+
+          NSArray * whitelistPrefixes =
+            [attributes objectForKey: @"whitelist_prefixes"];
+          
+          if([whitelist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToWhitelistPrefixes: whitelistPrefixes];
+          }
+      }
+    
+  [numberFormatter release];
   }
 
 // Show the update dialog.
@@ -441,6 +474,30 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
     [[NSApplication sharedApplication] terminate: self];
     }
+    
+  [alert release];
+  }
+
+// Show the update failed dialog.
+- (void) updateFailed
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert setMessageText: NSLocalizedString(@"Update Failed", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert setInformativeText: NSLocalizedString(@"updatefailed", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"Quit", NULL)];
+
+  [alert addButtonWithTitle: NSLocalizedString(@"Continue", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  if(result == NSAlertFirstButtonReturn)
+    [[NSApplication sharedApplication] terminate: self];
     
   [alert release];
   }
@@ -1344,6 +1401,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.logView
     scrollRangeToVisible: NSMakeRange([self.log length] - 2, 1)];
   [self.logView scrollRangeToVisible: NSMakeRange(0, 1)];
+  
+  // Beg for money.
+  [self askForDonation];
   }
 
 // Update the run count.
@@ -1360,6 +1420,33 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   [[NSUserDefaults standardUserDefaults]
     setObject: [NSNumber numberWithInt: runCount] forKey: @"reportcount"];
+  }
+
+// Ask for a donation under certain circumstances.
+- (void) askForDonation
+  {
+  bool ask = NO;
+  
+  NSUInteger justCheckingIndex =
+    (self.chooseAProblemButton.menu.itemArray.count - 1);
+    
+  if(self.problemIndex == justCheckingIndex)
+    ask = YES;
+    
+  NSNumber * count =
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"reportcount"];
+    
+  int runCount = 1;
+  
+  if([count respondsToSelector: @selector(intValue)])
+    runCount = [count intValue];
+  
+  if(runCount > 5)
+    ask = YES;
+    
+  if(ask)
+    [self showDonate: self];
   }
 
 // Handle a scroll change in the report view.

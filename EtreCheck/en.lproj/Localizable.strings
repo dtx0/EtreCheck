@@ -60,4 +60,5 @@
 "%d applecount (plural rule: zero)" = "";
 "%d applecount (plural rule: one)" = "One Apple task";
 "%d applecount (plural rule: other)" = "%d Apple tasks";
+"updatefailed" = "The EtreCheck update failed. You can continue, but there may be a new version of EtreCheck available.";
 
