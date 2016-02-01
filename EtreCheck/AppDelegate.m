@@ -23,6 +23,7 @@
 #import "DetailManager.h"
 #import "HelpManager.h"
 #import "EtreCheckToolbarItem.h"
+#import "UnknownFilesManager.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -349,8 +350,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     else if([manager isEqualToString: @"adware"])
       [self.adwareManager showDetail: [[url path] substringFromIndex: 1]];
     else if([manager isEqualToString: @"unknownfiles"])
-      [self.unknownFilesManager
-        showDetail: [[url path] substringFromIndex: 1]];
+      [self.unknownFilesManager show];
     }
   }
 
@@ -1368,7 +1368,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.detailManager closeDetail: self];
   [self.helpManager closeDetail: self];
   [self.adwareManager closeDetail: self];
-  [self.unknownFilesManager closeDetail: self];
   }
 
 // If a drawer is going to open, close the existing drawer, if any.
@@ -1379,7 +1378,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.detailManager closeDrawerIfNotDrawer: drawer];
   [self.helpManager closeDrawerIfNotDrawer: drawer];
   [self.adwareManager closeDrawerIfNotDrawer: drawer];
-  [self.unknownFilesManager closeDrawerIfNotDrawer: drawer];
   }
 
 // Notify the user that the report is done.

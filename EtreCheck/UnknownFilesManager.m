@@ -9,34 +9,45 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 
-@interface PopoverManager ()
-
-// Show detail.
-- (void) showDetail: (NSString *) title
-  content: (NSAttributedString *) content;
-
-@end
+#define kWhitelist @"whitelist"
+#define kPath @"path"
 
 @implementation UnknownFilesManager
 
+@synthesize window = myWindow;
+@synthesize textView = myTextView;
+@synthesize tableView = myTableView;
+@synthesize whitelistIndicators = myWhitelistIndicators;
+@synthesize unknownFiles = myUnknownFiles;
+@synthesize whitelistDescription = myWhitelistDescription;
 @synthesize downloadButton = myDownloadButton;
 
 // Constructor.
 - (id) init
   {
-  self = [super init];
-  
-  if(self)
+  if(self = [super init])
     {
-    myMinPopoverSize = NSMakeSize(500, 200);
+    myWhitelistDescription = [NSAttributedString new];
     }
-  
+    
   return self;
   }
 
-// Show detail.
-- (void) showDetail: (NSString *) name
+// Destructor.
+- (void) dealloc
   {
+  [super dealloc];
+  
+  self.whitelistIndicators = nil;
+  self.unknownFiles = nil;
+  self.whitelistDescription = nil;
+  }
+
+// Show the window.
+- (void) show
+  {
+  [self.window makeKeyAndOrderFront: self];
+  
   if([[Model model] hasMalwareBytes])
     self.downloadButton.title = NSLocalizedString(@"runmbam", NULL);
   else
@@ -46,11 +57,41 @@
   
   [details appendString: NSLocalizedString(@"unknownfiles", NULL)];
 
-  [super
-    showDetail: NSLocalizedString(@"About unknown files", NULL)
-    content: details];      
+  NSData * rtfData =
+    [details
+      RTFFromRange: NSMakeRange(0, [details length])
+      documentAttributes: @{}];
+
+  NSRange range = NSMakeRange(0, [[self.textView textStorage] length]);
+  
+  [self.textView replaceCharactersInRange: range withRTF: rtfData];
+  [self.textView setFont: [NSFont systemFontOfSize: 13]];
+  
+  [self.textView setEditable: YES];
+  [self.textView setEnabledTextCheckingTypes: NSTextCheckingTypeLink];
+  [self.textView checkTextInDocument: nil];
+  [self.textView setEditable: NO];
+
+  [self.textView scrollRangeToVisible: NSMakeRange(0, 1)];
     
   [details release];
+  
+  myWhitelistIndicators = [NSMutableArray new];
+  
+  NSUInteger count = [[[Model model] unknownFiles] count];
+  
+  for(NSUInteger i = 0; i < count; ++i)
+    [myWhitelistIndicators addObject: [NSNumber numberWithBool: NO]];
+    
+  self.unknownFiles = [[[Model model] unknownFiles] allObjects];
+  
+  [self.tableView reloadData];
+  }
+
+// Close the window.
+- (IBAction) close: (id) sender
+  {
+  [self.window close];
   }
 
 // Go to Adware Medic.
@@ -79,12 +120,18 @@
   {
   NSMutableString * json = [NSMutableString string];
   
-  [json appendString: @"["];
+  [json appendString: @"{\"files\":["];
   
   bool first = YES;
   
-  for(NSString * path in [[Model model] unknownFiles])
+  NSUInteger index = 0;
+  
+  for(; index < self.whitelistIndicators.count; ++index)
     {
+    NSString * path =
+      [[self.unknownFiles objectAtIndex: index]
+        stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+    
     if(!first)
       [json appendString: @","];
       
@@ -92,12 +139,21 @@
     
     [json
       appendString:
-        [NSString stringWithFormat: @"\"%@\"", [path lastPathComponent]]];
+        [NSString
+          stringWithFormat:
+            @"{\"known\": %@, \"path\":\"%@\"}",
+            [self.whitelistIndicators objectAtIndex: index],
+            path]];
     }
     
-  [json appendString: @"]"];
+  [json appendString: @"],"];
+  [json
+    appendFormat:
+      @"\"description\":\"%@\"}",
+      [[self.whitelistDescription string]
+        stringByReplacingOccurrencesOfString: @"\"" withString: @"'"]];
   
-  NSString * server = @"http://etrecheck.com/server/whitelist.php";
+  NSString * server = @"http://etrecheck.com/server/addtowhitelist.php";
   
   NSArray * args =
     @[
@@ -169,10 +225,25 @@
     NSMutableString * content = [NSMutableString string];
     
     [content
-      appendString: @"EtreCheck found the following unknown files:\n"];
+      appendString: @"EtreCheck found the following unknown files:\n\n"];
+
+    NSUInteger index = 0;
     
-    for(NSString * path in [[Model model] unknownFiles])
-      [content appendString: [NSString stringWithFormat: @"%@\n", path]];
+    for(; index < self.whitelistIndicators.count; ++index)
+      {
+      [content
+        appendString:
+          [NSString
+            stringWithFormat:
+              @"%@ %@\n",
+              [[self.whitelistIndicators objectAtIndex: index] boolValue]
+                ? @"Known" : @"Unknown",
+              [self.unknownFiles objectAtIndex: index]]];
+      }
+      
+    [content appendString: @"\n\n"];
+    [content appendString: [self.whitelistDescription string]];
+    [content appendString: @"\n"];
       
     [self
       sendEmailTo: @"info@etresoft.com"
@@ -200,6 +271,35 @@
 
   [emailScript executeAndReturnError: nil];
   [emailScript release];
+  }
+
+#pragma mark - NSTableViewDataSource
+
+- (NSInteger) numberOfRowsInTableView: (NSTableView *) aTableView
+  {
+  return self.whitelistIndicators.count;
+  }
+
+- (id) tableView: (NSTableView *) aTableView
+  objectValueForTableColumn: (NSTableColumn *) aTableColumn
+  row: (NSInteger) rowIndex
+  {
+  if([[aTableColumn identifier] isEqualToString: kWhitelist])
+    return [self.whitelistIndicators objectAtIndex: rowIndex];
+
+  else if([[aTableColumn identifier] isEqualToString: kPath])
+    return [self.unknownFiles objectAtIndex: rowIndex];
+    
+  return nil;
+  }
+
+- (void) tableView: (NSTableView *) tableView
+  setObjectValue: (id) object
+  forTableColumn: (NSTableColumn *) tableColumn
+  row: (NSInteger) row
+  {
+  if([[tableColumn identifier] isEqualToString: kWhitelist])
+    [self.whitelistIndicators replaceObjectAtIndex: row withObject: object];
   }
 
 @end
