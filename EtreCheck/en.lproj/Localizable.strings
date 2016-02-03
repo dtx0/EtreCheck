@@ -63,6 +63,9 @@
 "%d file deleted (plural rule: one)" = "One file moved to the trash";
 "%d file deleted (plural rule: other)" = "%d files moved to the trash";
 "filesdeleted" = "The following files have been moved to the trash. The software may still be running so you should restart your machine to complete the process. Your current EtreCheck report will be availble in EtreCheck's “Recent” menu.\n\n";
+"filesdeletedfailed" = "\nSome files could not be deleted. Any remaining files must be deleted manually.";
+"nofilesdeleted" = "No files could be deleted. They must be deleted manually.";
 "restartfailed" = "EtreCheck failed to restart your machine. Please restart your machine manually.";
 "notimemachinebackup" = "EtreCheck could not find a Time Machine backup. The delete files operation is disabled.";
-
+"passwordrequired" = "The following files will require an administrator password to remove.\n\n";
+"continuewithpassword" = "\nDo you want to proceed?";

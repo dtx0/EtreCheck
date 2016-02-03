@@ -14,11 +14,24 @@
 #define kWhitelist @"whitelist"
 #define kPath @"path"
 
+@interface AdminManager ()
+
+// Show the window with content.
+- (void) show: (NSString *) content;
+
+// Report which files were deleted.
+- (void) reportDeletedFiles: (NSArray *) paths;
+
+// Report which files were deleted.
+- (void) reportDeletedFilesFailed: (NSArray *) paths;
+
+// Restart failed.
+- (void) restartFailed;
+
+@end
+
 @implementation UnknownFilesManager
 
-@synthesize window = myWindow;
-@synthesize textView = myTextView;
-@synthesize tableView = myTableView;
 @synthesize deleteIndicators = myDeleteIndicators;
 @synthesize whitelistIndicators = myWhitelistIndicators;
 @synthesize unknownFiles = myUnknownFiles;
@@ -79,30 +92,7 @@
 // Show the window.
 - (void) show
   {
-  [self.window makeKeyAndOrderFront: self];
-  
-  NSMutableAttributedString * details = [NSMutableAttributedString new];
-  
-  [details appendString: NSLocalizedString(@"unknownfiles", NULL)];
-
-  NSData * rtfData =
-    [details
-      RTFFromRange: NSMakeRange(0, [details length])
-      documentAttributes: @{}];
-
-  NSRange range = NSMakeRange(0, [[self.textView textStorage] length]);
-  
-  [self.textView replaceCharactersInRange: range withRTF: rtfData];
-  [self.textView setFont: [NSFont systemFontOfSize: 13]];
-  
-  [self.textView setEditable: YES];
-  [self.textView setEnabledTextCheckingTypes: NSTextCheckingTypeLink];
-  [self.textView checkTextInDocument: nil];
-  [self.textView setEditable: NO];
-
-  [self.textView scrollRangeToVisible: NSMakeRange(0, 1)];
-    
-  [details release];
+  [super show: NSLocalizedString(@"unknownfiles", NULL)];
   
   myWhitelistIndicators = [NSMutableArray new];
   myDeleteIndicators = [NSMutableArray new];
@@ -122,21 +112,11 @@
   [self.tableView reloadData];
   }
 
-// Close the window.
-- (IBAction) close: (id) sender
-  {
-  [self.window close];
-  }
-
 // Remove the adware.
 - (IBAction) removeAdware: (id) sender
   {
-  if(![[Model model] backupExists])
-    {
-    [Utilities reportNoBackup];
-    
+  if(![super canRemoveAdware])
     return;
-    }
     
   NSUInteger count = [self.unknownFiles count];
   
@@ -146,6 +126,9 @@
     if([[self.deleteIndicators objectAtIndex: i] boolValue])
       [paths addObject: [self.unknownFiles objectAtIndex: i]];
     
+  NSMutableSet * pathsToRemove =
+    [[NSMutableSet alloc] initWithArray: paths];
+  
   [Utilities
     removeFiles: paths
       completionHandler:
@@ -167,6 +150,7 @@
               [[[Model model] unknownFiles] removeObject: path];
               [deletedFiles addObject: path];
               [indexSet addIndex: i];
+              [pathsToRemove removeObject: path];
               }
             }
             
@@ -179,64 +163,11 @@
           [self didChangeValueForKey: @"canAddToWhitelist"];
           [self didChangeValueForKey: @"canDelete"];
           
-          [self reportDeletedFiles: deletedFiles];
+          if([pathsToRemove count] > 0)
+            [self reportDeletedFilesFailed: deletedFiles];
+          else
+            [self reportDeletedFiles: deletedFiles];
           }];
-  }
-
-// Report which files were deleted.
-- (void) reportDeletedFiles: (NSArray *) paths
-  {
-  NSUInteger count = [paths count];
-  
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert
-    setMessageText: TTTLocalizedPluralString(count, @"file deleted", NULL)];
-    
-  [alert setAlertStyle: NSInformationalAlertStyle];
-
-  NSMutableString * message = [NSMutableString string];
-  
-  [message appendString: NSLocalizedString(@"filesdeleted", NULL)];
-  
-  for(NSString * path in paths)
-    [message appendFormat: @"- %@\n", path];
-    
-  [alert setInformativeText: message];
-
-  // This is the rightmost, first, default button.
-  [alert addButtonWithTitle: NSLocalizedString(@"Restart", NULL)];
-
-  [alert addButtonWithTitle: NSLocalizedString(@"Restart later", NULL)];
-
-  NSInteger result = [alert runModal];
-
-  [alert release];
-
-  if(result == NSAlertFirstButtonReturn)
-    {
-    if(![Utilities restart])
-      [self restartFailed];
-    }
-  }
-
-// Restart failed.
-- (void) restartFailed
-  {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert setMessageText: NSLocalizedString(@"Restart failed", NULL)];
-    
-  [alert setAlertStyle: NSWarningAlertStyle];
-
-  [alert setInformativeText: NSLocalizedString(@"restartfailed", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
-  
-  [alert runModal];
-
-  [alert release];
   }
 
 // Contact Etresoft to add to whitelist.

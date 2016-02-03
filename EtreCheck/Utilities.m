@@ -925,7 +925,7 @@
   completionHandler:
     (void (^)(NSDictionary * newURLs, NSError *error)) handler
   {
-  __block NSMutableSet * urlsToRemove = [NSMutableSet set];
+  __block NSMutableSet * urlsToRemove = [[NSMutableSet alloc] init];
   
   NSMutableArray * urls = [NSMutableArray array];
   
@@ -939,7 +939,119 @@
     
   [[NSWorkspace sharedWorkspace]
     recycleURLs: urls
-    completionHandler: handler];
+    completionHandler:
+      ^(NSDictionary * newURLs, NSError * error)
+        {
+        for(NSURL * url in newURLs)
+          [urlsToRemove removeObject: url];
+          
+        if([urlsToRemove count] > 0)
+          {
+          NSArray * urlsRemovedByAdmin =
+            [Utilities removeAdminFiles: urlsToRemove];
+          
+          NSMutableDictionary * urls =
+            [NSMutableDictionary dictionaryWithDictionary: newURLs];
+            
+          for(NSURL * url in urlsRemovedByAdmin)
+            [urls setObject: url forKey: url];
+            
+          handler(urls, error);
+          
+          [urlsToRemove release];
+          }
+        }];
+  }
+
+// Remove files with administrator privileges.
++ (NSArray *) removeAdminFiles: (NSMutableSet *) urlsToRemove
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert setMessageText: NSLocalizedString(@"Password required!", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  NSMutableString * message = [NSMutableString string];
+  
+  [message appendString: NSLocalizedString(@"passwordrequired", NULL)];
+  
+  for(NSURL * url in urlsToRemove)
+    [message appendFormat: @"- %@\n", [url path]];
+    
+  [message appendString: NSLocalizedString(@"continuewithpassword", NULL)];
+
+  [alert setInformativeText: message];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"Yes", NULL)];
+
+  [alert addButtonWithTitle: NSLocalizedString(@"No", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  [alert release];
+
+  if(result == NSAlertFirstButtonReturn)
+    return [Utilities performAdminDelete: urlsToRemove];
+    
+  return [NSArray array];
+  }
+
+// Perform a deletion of files with administrator privileges.
++ (NSArray *) performAdminDelete: (NSMutableSet *) urlsToRemove
+  {
+  NSMutableString * source = [NSMutableString string];
+  
+  [source appendString: @"set posixFiles to {"];
+  
+  int i = 0;
+  
+  for(NSURL * url in urlsToRemove)
+    {
+    if(i)
+      [source appendString: @","];
+      
+    [source
+      appendString:
+        [NSString
+          stringWithFormat:
+            @"POSIX file \"%@\"", [url path]]];
+      
+    ++i;
+    }
+
+  [source appendString: @"}\n"];
+
+  [source appendString: @"tell application \"Finder\"\n"];
+  [source appendString: @"activate\n"];
+  [source appendString: @"move posixFiles to the trash\n"];
+  [source appendString: @"end tell\n"];
+
+  NSAppleScript * scriptObject =
+    [[NSAppleScript alloc] initWithSource: source];
+
+  NSDictionary * errorDict;
+  
+  NSAppleEventDescriptor * returnDescriptor =
+    [scriptObject executeAndReturnError: & errorDict];
+    
+  [scriptObject release];
+
+  if(returnDescriptor != NULL)
+    // Successful execution
+    if(kAENullEvent != [returnDescriptor descriptorType])
+      {
+      NSMutableArray * urlsDeleted = [NSMutableArray array];
+  
+      for(NSURL * url in urlsToRemove)
+        if(![[NSFileManager defaultManager] fileExistsAtPath: [url path]])
+          [urlsDeleted addObject: url];
+        
+      return urlsDeleted;
+      }
+    
+  return [NSArray array];
   }
 
 // Restart the machine.

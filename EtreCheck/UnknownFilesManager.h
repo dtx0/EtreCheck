@@ -5,28 +5,16 @@
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "PopoverManager.h"
+#import "AdminManager.h"
 
-@interface UnknownFilesManager : NSObject
+@interface UnknownFilesManager : AdminManager
   <NSTableViewDelegate, NSTableViewDataSource>
   {
-  NSWindow * myWindow;
-  NSTextView * myTextView;
-  NSTableView * myTableView;
   NSMutableArray * myDeleteIndicators;
   NSMutableArray * myWhitelistIndicators;
   NSMutableArray * myUnknownFiles;
   NSAttributedString * myWhitelistDescription;
   }
-
-// The window itself.
-@property (retain) IBOutlet NSWindow * window;
-
-// The text view.
-@property (retain) IBOutlet NSTextView * textView;
-
-// The table view.
-@property (retain) IBOutlet NSTableView * tableView;
 
 // Array of NSNumber booleans to indicate adware files.
 @property (retain) NSMutableArray * deleteIndicators;
@@ -45,15 +33,6 @@
 
 // Can I add something to the whitelist?
 @property (readonly) BOOL canAddToWhitelist;
-
-// Show the window.
-- (void) show;
-
-// Close the window.
-- (IBAction) close: (id) sender;
-
-// Remove the adware.
-- (IBAction) removeAdware: (id) sender;
 
 // Contact Etresoft to add to whitelist.
 - (IBAction) addToWhitelist: (id) sender;

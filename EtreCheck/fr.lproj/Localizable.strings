@@ -266,12 +266,17 @@
 "%d file deleted (plural rule: one)" = "Un fichier placé dans la corbeille";
 "%d file deleted (plural rule: other)" = "%d fichiers placés dans la corbeille";
 "filesdeleted" = "Les fichiers suivants ont été placés dans la corbeille. Le logiciel est peut-être toujour en cours. Vous devez faire redémarrer votre ordinateur pour finalizer le processus. Votre rapport EtreCheck actuel sera disponible dans le menu «Récent» d’EtreCheck.\n\n";
+"filesdeletedfailed" = "\nQuelques fichiers ne peuvent pas être enlevés. Tous fichiers restants doivent être enlevés à la main.";
+"nofilesdeleted" = "Aucun fichier peut être supprimé. Ces fichers doivent être enlevés à la main";
 "Restart" = "Redémarrer";
 "Restart later" = "Redémarrer plus tard";
 "Restart failed" = "Échec de redémarrer";
 "restartfailed" = "EtreCheck a échoué de redémarrer votre ordinateur. S’il vous plaît, faire redémarrer votre ordinateur vous-même.";
 "No Time Machine backup!" = "Pas de sauvegarde Time Machine";
 "notimemachinebackup" = "EtreCheck n‘a pas pu trouver une sauvegarde Time Machine. EtreCheck requit une sauvegarde Time Machine pour l’enlèvement des fichiers.";
+"Password required!" = "Mot de passe requis !";
+"passwordrequired" = "Vous devez utiliser votre mot de passe administrateur pour enlever certains de ces fichiers.\n\n";
+"continuewithpassword" = "\nVoulez-vous continuer ?";
 
 
 
