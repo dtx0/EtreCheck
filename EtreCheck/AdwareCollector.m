@@ -178,7 +178,14 @@
   {
   NSMutableArray * expandedSignatures = [NSMutableArray array];
   
-  for(NSString * signature in signatures)
+  // Don't forget to add any live updates.
+  NSMutableArray * allSignatures =
+    [NSMutableArray arrayWithArray: signatures];
+  
+  [allSignatures
+    addObjectsFromArray: [[[Model model] blacklistFiles] allObjects]];
+  
+  for(NSString * signature in allSignatures)
     {
     [expandedSignatures
       addObject:
@@ -255,14 +262,18 @@
     
     __block int adwareCount = 0;
     
-    [[[Model model] adwareFiles]
-      enumerateKeysAndObjectsUsingBlock:
-        ^(id key, id obj, BOOL * stop)
+    NSArray * sortedAdwareFiles =
+      [[[[Model model] adwareFiles] allKeys]
+        sortedArrayUsingSelector: @selector(compare:)];
+      
+    [sortedAdwareFiles
+      enumerateObjectsUsingBlock:
+        ^(id obj, NSUInteger idx, BOOL * stop)
           {
           ++adwareCount;
           [self.result appendString: @"    "];
           [self.result
-            appendString: [Utilities sanitizeFilename: key]
+            appendString: [Utilities sanitizeFilename: obj]
             attributes:
               @{
                 NSFontAttributeName : [[Utilities shared] boldFont],

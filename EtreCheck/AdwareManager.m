@@ -46,8 +46,10 @@
   myAdwareFiles = [NSMutableArray new];
   
   for(NSString * adware in [[Model model] adwareFiles])
-    [myAdwareFiles addObject: adware];
+    [myAdwareFiles addObject: [Utilities makeURLPath: adware]];
     
+  [myAdwareFiles sortUsingSelector: @selector(compare:)];
+
   [self.tableView reloadData];
   }
 
@@ -74,7 +76,7 @@
             
             if([newURLs objectForKey: url])
               {
-              [[[Model model] unknownFiles] removeObject: path];
+              [[[Model model] adwareFiles] removeObjectForKey: path];
               [deletedFiles addObject: path];
               [indexSet addIndex: i];
               }
@@ -89,43 +91,6 @@
           else
             [self reportDeletedFiles: deletedFiles];
           }];
-  }
-
-// Notify Etresoft.
-- (void) reportDeletedFilesToEtresoft
-  {
-  NSMutableString * json = [NSMutableString string];
-  
-  [json appendString: @"{\"files\":["];
-  
-  bool first = YES;
-  
-  NSUInteger index = 0;
-  
-  for(; index < self.adwareFiles.count; ++index)
-    {
-    NSString * path =
-      [[self.adwareFiles objectAtIndex: index]
-        stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
-    
-    if(!first)
-      [json appendString: @","];
-      
-    first = NO;
-    
-    [json appendString: [NSString stringWithFormat: @"\"%@\"", path]];
-    }
-    
-  NSString * server = @"http://etrecheck.com/server/addtoblacklist.php";
-  
-  NSArray * args =
-    @[
-      @"--data",
-      json,
-      server
-    ];
-
-  [Utilities execute: @"/usr/bin/curl" arguments: args];
   }
 
 #pragma mark - NSTableViewDataSource

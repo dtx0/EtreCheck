@@ -151,7 +151,7 @@
 // Restart the machine.
 + (BOOL) restart;
 
-// Tell the user that EtreCheck won't delete files without a backup.
-+ (void) reportNoBackup;
+// Make a path that is suitable for a URL by appending a / for a directory.
++ (NSString *) makeURLPath: (NSString *) path;
 
 @end

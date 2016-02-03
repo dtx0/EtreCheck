@@ -440,6 +440,11 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       URLWithString:
         @"http://etrecheck.com/download/ApplicationUpdates.plist"];
 
+  /* NSURL * url =
+    [NSURL
+      URLWithString:
+        @"http://etrecheck.com/download/ApplicationUpdatesTest.plist"]; */
+
   __block NSData * data = nil;
   
   dispatch_async(
@@ -519,6 +524,11 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           
           if([whitelist respondsToSelector: @selector(addObject:)])
             [[Model model] appendToWhitelistPrefixes: whitelistPrefixes];
+
+          NSArray * blacklist = [attributes objectForKey: @"blacklist"];
+          
+          if([blacklist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToBlacklist: blacklist];
           }
       }
     

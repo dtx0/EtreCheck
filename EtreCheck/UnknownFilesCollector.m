@@ -52,12 +52,20 @@
     {
     [self.result appendAttributedString: [self buildTitle]];
     
-    for(NSString * unknownFile in [[Model model] unknownFiles])
-      [self.result
-        appendString:
-          [NSString
-            stringWithFormat:
-              @"    %@\n", [Utilities sanitizeFilename: unknownFile]]];
+    NSArray * sortedUnknownFiles =
+      [[[[Model model] unknownFiles] allObjects]
+        sortedArrayUsingSelector: @selector(compare:)];
+      
+    [sortedUnknownFiles
+      enumerateObjectsUsingBlock:
+        ^(id obj, NSUInteger idx, BOOL * stop)
+          {
+          [self.result
+            appendString:
+              [NSString
+                stringWithFormat:
+                  @"    %@\n", [Utilities sanitizeFilename: obj]]];
+          }];
       
     NSString * message =
       TTTLocalizedPluralString(unknownFileCount, @"unknown file", NULL);

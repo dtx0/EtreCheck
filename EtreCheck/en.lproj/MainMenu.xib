@@ -1504,27 +1504,27 @@ Gw
         <window title="Adware" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="zLb-Mx-zP0" userLabel="Adware Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="152" y="158" width="568" height="295"/>
+            <rect key="contentRect" x="152" y="158" width="568" height="328"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="Win-BX-Abe">
-                <rect key="frame" x="0.0" y="0.0" width="568" height="295"/>
+                <rect key="frame" x="0.0" y="0.0" width="568" height="328"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="6qk-K0-uWQ">
-                        <rect key="frame" x="20" y="207" width="528" height="68"/>
+                        <rect key="frame" x="20" y="207" width="528" height="101"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="HkX-Oy-Cu0">
-                            <rect key="frame" x="1" y="1" width="526" height="66"/>
+                            <rect key="frame" x="1" y="1" width="526" height="99"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="AJQ-PD-fXE">
-                                    <rect key="frame" x="0.0" y="0.0" width="526" height="66"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="99"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="526" height="66"/>
+                                    <size key="minSize" width="526" height="99"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="526" height="66"/>
+                                    <size key="minSize" width="526" height="99"/>
                                     <size key="maxSize" width="528" height="10000000"/>
                                 </textView>
                             </subviews>
@@ -1613,7 +1613,7 @@ Gw
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="167" y="2158.5"/>
+            <point key="canvasLocation" x="178" y="1988"/>
         </window>
     </objects>
     <resources>

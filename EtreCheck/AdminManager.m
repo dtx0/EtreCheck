@@ -59,14 +59,68 @@
 // Can I remove adware?
 - (BOOL) canRemoveAdware
   {
+  if([[Model model] majorOSVersion] < kMountainLion)
+    return [self warnBackup];
+    
   if(![[Model model] backupExists])
     {
-    [Utilities reportNoBackup];
+    [self reportNoBackup];
     
     return NO;
     }
     
   return YES;
+  }
+
+// Warn the user to make a backup.
+- (BOOL) warnBackup
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText:
+      NSLocalizedString(@"Cannot verify Time Machine backup!", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert
+    setInformativeText:
+      NSLocalizedString(@"cannotverifytimemachinebackup", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert
+    addButtonWithTitle:
+      NSLocalizedString(@"No, I don't have a backup", NULL)];
+
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"Yes, I have a backup", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  [alert release];
+
+  return (result == NSAlertSecondButtonReturn);
+  }
+
+// Tell the user that EtreCheck won't delete files without a backup.
+- (void) reportNoBackup
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"No Time Machine backup!", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert
+    setInformativeText: NSLocalizedString(@"notimemachinebackup", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+
+  [alert runModal];
+
+  [alert release];
   }
 
 // Report which files were deleted.
@@ -86,7 +140,7 @@
   [message appendString: NSLocalizedString(@"filesdeleted", NULL)];
   
   for(NSString * path in paths)
-    [message appendFormat: @"- %@\n", path];
+    [message appendFormat: @"%@\n", path];
     
   [alert setInformativeText: message];
 
@@ -133,7 +187,7 @@
     [message appendString: NSLocalizedString(@"filesdeleted", NULL)];
   
     for(NSString * path in paths)
-      [message appendFormat: @"- %@\n", path];
+      [message appendFormat: @"%@\n", path];
       
     [message appendString: NSLocalizedString(@"filesdeletedfailed", NULL)];
     

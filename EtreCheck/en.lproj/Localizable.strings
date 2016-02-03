@@ -28,7 +28,7 @@
 "%d error (plural rule: zero)" = "no errors\n";
 "%d error (plural rule: one)" = "one error";
 "%d error (plural rule: other)" = "%d errors\n";
-"adware" = "EtreCheck has detected that your Macintosh is infected with adware. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft and added to the list of known adware.";
+"adware" = "EtreCheck has detected that your Macintosh is infected with adware as defined by Apple (see http://support.apple.com/HT203987) and Etresoft's own research, and the contributions of other EtreCheck users. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft and added to the list of known adware.";
 "unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. Select the files that are adware and click the “Remove” button to remove them. Files you remove will be automatically reported to Etresoft and added to the list of known adware. Identify the files that are valid and click the “Whitelist” button to add them to EtreCheck’s whitelist.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "One adware file found.";
@@ -52,7 +52,6 @@
 "belowaverageperformance" = "Below Average";
 "poorperformance" = "Poor";
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
-"appleadwareurl" = "(See http://support.apple.com/HT203987)";
 "thanksforwhitelist" = "Thank you for your submission to the EtreCheck whitelist. It may take a couple of days to verify your submission and update our data. We appreciate your patience.";
 "whitelistuploadfailed" = "Your whitelist upload to the EtreCheck server failed. Would you like to use e-mail instead?";
 "%d applecount (plural rule: zero)" = "";
@@ -69,3 +68,4 @@
 "notimemachinebackup" = "EtreCheck could not find a Time Machine backup. The delete files operation is disabled.";
 "passwordrequired" = "The following files will require an administrator password to remove.\n\n";
 "continuewithpassword" = "\nDo you want to proceed?";
+"cannotverifytimemachinebackup" = "EtreCheck cannot verify a Time Machine backup on OS X 10.7 “Lion” and earlier. Do you have a Time Machine backup?";

@@ -105,9 +105,12 @@
     [myWhitelistIndicators addObject: [NSNumber numberWithBool: NO]];
     }
     
-  self.unknownFiles =
-    [NSMutableArray
-      arrayWithArray: [[[Model model] unknownFiles] allObjects]];
+  myUnknownFiles = [NSMutableArray new];
+  
+  for(NSString * adware in [[Model model] unknownFiles])
+    [myUnknownFiles addObject: [Utilities makeURLPath: adware]];
+  
+  [myUnknownFiles sortUsingSelector: @selector(compare:)];
   
   [self.tableView reloadData];
   }
@@ -167,7 +170,61 @@
             [self reportDeletedFilesFailed: deletedFiles];
           else
             [self reportDeletedFiles: deletedFiles];
+            
+          [self reportDeletedFilesToEtresoft: deletedFiles];
           }];
+  }
+
+// Notify Etresoft.
+- (void) reportDeletedFilesToEtresoft: (NSArray *) deletedFiles
+  {
+  NSMutableString * json = [NSMutableString string];
+  
+  [json appendString: @"{\"files\":["];
+  
+  bool first = YES;
+  
+  NSUInteger index = 0;
+  
+  for(; index < [deletedFiles count]; ++index)
+    {
+    NSString * path =
+      [[deletedFiles objectAtIndex: index]
+        stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+    
+    if(!first)
+      [json appendString: @","];
+      
+    first = NO;
+    
+    [json appendString: [NSString stringWithFormat: @"\"%@\"", path]];
+    }
+    
+  [json appendString: @"]}"];
+  
+  NSString * server = @"http://etrecheck.com/server/addtoblacklist.php";
+  
+  NSArray * args =
+    @[
+      @"--data",
+      json,
+      server
+    ];
+
+  [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  /* NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  if(result)
+    {
+    NSString * status =
+      [[NSString alloc]
+        initWithData: result encoding: NSUTF8StringEncoding];
+      
+    NSLog(status);
+      
+    [status release];
+    } */
   }
 
 // Contact Etresoft to add to whitelist.

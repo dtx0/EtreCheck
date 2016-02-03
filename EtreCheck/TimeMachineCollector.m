@@ -57,14 +57,6 @@
 // Perform the collection.
 - (void) collect
   {
-  // For debugging and testing.
-  NSNumber * override =
-    [[NSUserDefaults standardUserDefaults]
-      objectForKey: @"overridetm"];
-
-  if([override boolValue])
-    [[Model model] setBackupExists: YES];
-    
   [self
     updateStatus:
       NSLocalizedString(@"Checking Time Machine information", NULL)];

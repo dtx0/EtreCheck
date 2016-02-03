@@ -28,6 +28,7 @@
 @synthesize adwareExtensions = myAdwareExtensions;
 @synthesize whitelistFiles = myWhitelistFiles;
 @synthesize whitelistPrefixes = myWhitelistPrefixes;
+@synthesize blacklistFiles = myBlacklistFiles;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
 @synthesize adwareFound = myAdwareFound;
@@ -81,6 +82,7 @@
     myHideAppleTasks = YES;
     myWhitelistFiles = [NSMutableSet new];
     myWhitelistPrefixes = [NSMutableSet new];
+    myBlacklistFiles = [NSMutableSet new];
     }
     
   return self;
@@ -89,6 +91,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myBlacklistFiles release];
   [myWhitelistFiles release];
   [myWhitelistPrefixes release];
   
@@ -246,6 +249,12 @@
   [self.whitelistPrefixes addObjectsFromArray: names];
   }
   
+// Add files to the blacklist.
+- (void) appendToBlacklist: (NSArray *) names
+  {
+  [self.blacklistFiles addObjectsFromArray: names];
+  }
+
 // Check the file against the whitelist.
 - (bool) checkWhitelistFile: (NSString *) name path: (NSString *) path
   {

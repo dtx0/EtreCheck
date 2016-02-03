@@ -26,6 +26,6 @@
 "vm" = "Des informations détaillées sur votre comportement de la mémoire virtuelle. La valeur la plus importante ici est mis en cache. Si cette valeur est une partie importante de la mémoire vive disponible, votre ordinateur peut fonctionner plus lentement.";
 "gatekeeper" = "Vos paramètres de Gatekeeper actuelles. Cela devrait être réglé sur «Mac App Store et de développeurs identifiés»";
 "diagnostics" = "Fichiers de diagnostic récents générés par votre système. EtreCheck comprend crash, hang, et les rapports de CPU pour les trois derniers jours. Tous les rapports de panique de noyau sont également inclus, ainsi que vos plus récents résultats d‘examen de soi. Pour de meilleurs résultats, exécutez EtreCheck comme un utilisateur administrateur (c’est le réglage par défaut).";
-"adware" = "Le logiciel adware comme identifier par Apple (voir http://support.apple.com/HT203987).";
+"adware" = "Le logiciel adware comme identifié par Apple (voir http://support.apple.com/HT203987), les recherches propres d’Etresoft, et les contributions des autres utilisateurs EtreCheck.";
 "unknownfiles" = "Ce sont des fichiers qui ne se trouvent pas dans le whitelist d’EtreCheck du logiciel bien connu et sûr. C’est possible qu’ils soient adware ou malware. Mais aussi, c’est possible qu’ils soient simplement quelque chose de nouveau qui a besoin d’être ajouté au whitelist d’EtreCheck.";
 "hiddenapps" = "Les autres logiciels qui sont en marche, parfois cachés.";

@@ -942,6 +942,9 @@
     completionHandler:
       ^(NSDictionary * newURLs, NSError * error)
         {
+        NSMutableDictionary * urlsRemoved =
+          [NSMutableDictionary dictionaryWithDictionary: newURLs];
+            
         for(NSURL * url in newURLs)
           [urlsToRemove removeObject: url];
           
@@ -950,16 +953,16 @@
           NSArray * urlsRemovedByAdmin =
             [Utilities removeAdminFiles: urlsToRemove];
           
-          NSMutableDictionary * urls =
-            [NSMutableDictionary dictionaryWithDictionary: newURLs];
-            
           for(NSURL * url in urlsRemovedByAdmin)
-            [urls setObject: url forKey: url];
-            
-          handler(urls, error);
-          
-          [urlsToRemove release];
+            {
+            [urlsToRemove removeObject: url];
+            [urlsRemoved setObject: url forKey: url];
+            }
           }
+          
+        handler(urlsRemoved, error);
+          
+        [urlsToRemove release];
         }];
   }
 
@@ -977,7 +980,7 @@
   [message appendString: NSLocalizedString(@"passwordrequired", NULL)];
   
   for(NSURL * url in urlsToRemove)
-    [message appendFormat: @"- %@\n", [url path]];
+    [message appendFormat: @"%@\n", [url path]];
     
   [message appendString: NSLocalizedString(@"continuewithpassword", NULL)];
 
@@ -1109,24 +1112,19 @@
   return YES;
   }
 
-// Tell the user that EtreCheck won't delete files without a backup.
-+ (void) reportNoBackup
+// Make a path that is suitable for a URL by appending a / for a directory.
++ (NSString *) makeURLPath: (NSString *) path
   {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert
-    setMessageText: NSLocalizedString(@"No Time Machine backup!", NULL)];
+  BOOL isDirectory = NO;
+  
+  BOOL exists =
+    [[NSFileManager defaultManager]
+      fileExistsAtPath: path isDirectory: & isDirectory];
+  
+  if(exists && isDirectory && ![path hasSuffix: @"/"])
+    return [path stringByAppendingString: @"/"];
     
-  [alert setAlertStyle: NSWarningAlertStyle];
-
-  [alert setInformativeText: NSLocalizedString(@"notimemachinebackup", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
-
-  [alert runModal];
-
-  [alert release];
+  return path;
   }
 
 @end
