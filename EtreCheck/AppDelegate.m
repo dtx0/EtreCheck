@@ -251,6 +251,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
   self.donateButtonImage = [NSImage imageNamed: @"Donate"];
   self.donateButtonInactiveImage = [NSImage imageNamed: @"DonateInactive"];
+  
+  [[NSNotificationCenter defaultCenter]
+    addObserver: self
+    selector: @selector(windowDidResignKey:)
+    name: NSWindowDidResignKeyNotification
+    object: nil];
+    
+  [[NSNotificationCenter defaultCenter]
+    addObserver: self
+    selector: @selector(windowDidBecomeKey:)
+    name: NSWindowDidBecomeKeyNotification
+    object: nil];
   }
 
 // The application will terminate.
@@ -400,6 +412,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
         [self.progress setNeedsDisplay: YES];
         }
     });
+  }
+
+- (void) windowDidResignKey: (NSNotification *) notification
+  {
+  if(notification.object == self.window)
+    [self applicationDidResignActive: notification];
+  }
+
+- (void) windowDidBecomeKey: (NSNotification *) notification
+  {
+  if(notification.object == self.window)
+    [self applicationWillBecomeActive: notification];
   }
 
 // Handle an "etrecheck:" URL.
