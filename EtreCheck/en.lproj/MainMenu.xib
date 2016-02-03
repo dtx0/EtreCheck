@@ -1548,6 +1548,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="removeAdware:" target="Vj9-lq-jPe" id="eff-A4-GiL"/>
+                            <binding destination="Vj9-lq-jPe" name="enabled" keyPath="self.canDelete" id="ClA-RY-FbB"/>
                         </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="ca8-Aq-0rf">

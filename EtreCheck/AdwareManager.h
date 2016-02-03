@@ -13,6 +13,9 @@
   NSMutableArray * myAdwareFiles;
   }
 
+// Can I delete something?
+@property (readonly) BOOL canDelete;
+
 // Array of adware files.
 @property (retain) NSMutableArray * adwareFiles;
 

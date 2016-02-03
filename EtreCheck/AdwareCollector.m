@@ -230,7 +230,8 @@
     
     for(NSString * path in foundFiles)
       [[[Model model] adwareFiles]
-        setObject: [adware lowercaseString] forKey: path];
+        setObject: [adware lowercaseString]
+        forKey: [Utilities makeURLPath: path]];
     }
   }
 

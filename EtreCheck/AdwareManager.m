@@ -30,6 +30,14 @@
 
 @synthesize adwareFiles = myAdwareFiles;
 
+@dynamic canDelete;
+
+// Can I delete something?
+- (BOOL) canDelete
+  {
+  return [self.adwareFiles count] > 0;
+  }
+
 // Destructor.
 - (void) dealloc
   {
@@ -43,6 +51,8 @@
   {
   [super show: NSLocalizedString(@"adware", NULL)];
   
+  [self willChangeValueForKey: @"canDelete"];
+  
   myAdwareFiles = [NSMutableArray new];
   
   for(NSString * adware in [[Model model] adwareFiles])
@@ -51,6 +61,8 @@
   [myAdwareFiles sortUsingSelector: @selector(compare:)];
 
   [self.tableView reloadData];
+  
+  [self didChangeValueForKey: @"canDelete"];
   }
 
 // Remove the adware.
@@ -82,10 +94,14 @@
               }
             }
             
+          [self willChangeValueForKey: @"canDelete"];
+          
           [self.adwareFiles removeObjectsAtIndexes: indexSet];
           
           [self.tableView reloadData];
 
+          [self didChangeValueForKey: @"canDelete"];
+          
           if([self.adwareFiles count] > 0)
             [self reportDeletedFilesFailed: deletedFiles];
           else

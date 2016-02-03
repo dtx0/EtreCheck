@@ -1526,6 +1526,7 @@ DQ
                         </buttonCell>
                         <connections>
                             <action selector="removeAdware:" target="PIp-F1-rtQ" id="SaN-Qc-ZdV"/>
+                            <binding destination="PIp-F1-rtQ" name="enabled" keyPath="self.canDelete" id="dvY-KT-aoP"/>
                         </connections>
                     </button>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="mIu-mJ-qka">
