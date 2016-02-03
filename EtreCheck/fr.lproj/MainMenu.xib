@@ -111,31 +111,13 @@
         </viewController>
         <customObject id="PIp-F1-rtQ" userLabel="Adware Manager" customClass="AdwareManager">
             <connections>
-                <outlet property="contentView" destination="LrJ-81-PLR" id="VhS-gJ-3Zq"/>
-                <outlet property="downloadButton" destination="FS0-vD-dMp" id="DjV-NE-FP7"/>
-                <outlet property="drawer" destination="Tyd-VG-RG7" id="Qar-a9-uel"/>
-                <outlet property="popoverViewController" destination="OXn-E8-5ug" id="rT9-8O-wNU"/>
-                <outlet property="textView" destination="xXx-OK-dY4" id="lHe-gD-4Pz"/>
-                <outlet property="title" destination="0OW-gg-1fA" id="WIC-3o-d4N"/>
+                <outlet property="tableView" destination="Clg-wI-oR5" id="Lq9-El-HtZ"/>
+                <outlet property="textView" destination="BtD-0T-27q" id="2qS-0q-m72"/>
+                <outlet property="window" destination="EUw-Fv-WNg" id="2Yh-Xi-4zb"/>
             </connections>
         </customObject>
-        <drawer trailingOffset="15" id="Tyd-VG-RG7" userLabel="Adware Drawer">
-            <size key="contentSize" width="100" height="100"/>
-            <size key="maxContentSize" width="10000" height="10000"/>
-            <connections>
-                <outlet property="contentView" destination="17p-xo-e23" id="bjL-Fl-IkZ"/>
-                <outlet property="delegate" destination="Voe-Tx-rLC" id="vLG-nj-pKV"/>
-                <outlet property="parentWindow" destination="HCb-1A-LX1" id="iJe-O7-nxI"/>
-            </connections>
-        </drawer>
-        <viewController id="OXn-E8-5ug" userLabel="Adware Popover View Controller">
-            <connections>
-                <outlet property="view" destination="17p-xo-e23" id="1Mw-od-8fh"/>
-            </connections>
-        </viewController>
         <customObject id="co3-N1-xdH" userLabel="Unknown files Manager" customClass="UnknownFilesManager">
             <connections>
-                <outlet property="downloadButton" destination="MVD-aU-8tB" id="rY8-LV-6Qz"/>
                 <outlet property="tableView" destination="eq8-ku-8TT" id="kDL-95-4rp"/>
                 <outlet property="textView" destination="I31-Ch-mPs" id="OaW-Ai-8p0"/>
                 <outlet property="window" destination="xrD-Uw-hrd" id="etE-80-nof"/>
@@ -196,6 +178,20 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Fichier" id="bib-Uj-vzu">
                         <items>
+                            <menuItem title="Ouvrir un élément récent" id="q19-pX-SzK">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Ouvrir un élément récent" systemMenu="recentDocuments" id="BMG-LN-gC2">
+                                    <items>
+                                        <menuItem title="Effacer le menu" id="B4I-X0-RYc">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="clearRecentDocuments:" target="-1" id="J26-M9-I8u"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="bXa-9h-lFc"/>
                             <menuItem title="Enregistrer…" keyEquivalent="s" id="pxx-59-PXV">
                                 <connections>
                                     <action selector="saveReport:" target="Voe-Tx-rLC" id="utn-Fk-5JP"/>
@@ -691,73 +687,6 @@
                 </textField>
             </subviews>
             <point key="canvasLocation" x="-200.5" y="-23.5"/>
-        </customView>
-        <customView id="17p-xo-e23" userLabel="Adware View">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="200"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <subviews>
-                <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="0P0-rE-o5p">
-                    <rect key="frame" x="20" y="61" width="360" height="104"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <clipView key="contentView" id="QWU-Lp-htZ">
-                        <rect key="frame" x="1" y="1" width="358" height="102"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="xXx-OK-dY4">
-                                <rect key="frame" x="0.0" y="0.0" width="358" height="102"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <size key="minSize" width="358" height="102"/>
-                                <size key="maxSize" width="477" height="10000000"/>
-                                <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <size key="minSize" width="358" height="102"/>
-                                <size key="maxSize" width="477" height="10000000"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="fy1-VB-WY9">
-                        <rect key="frame" x="-100" y="-100" width="87" height="18"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="fpZ-3z-cAp">
-                        <rect key="frame" x="224" y="1" width="15" height="133"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </scroller>
-                </scrollView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="0OW-gg-1fA">
-                    <rect key="frame" x="18" y="173" width="364" height="17"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="k4r-Ui-C45">
-                        <font key="font" metaFont="systemBold"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <button verticalHuggingPriority="750" id="FS0-vD-dMp">
-                    <rect key="frame" x="14" y="13" width="203" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="push" title="Télécharger MalwareBytes" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="scM-2i-olp">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="gotoAdwareMedic:" target="PIp-F1-rtQ" id="wY0-Lx-8Yy"/>
-                    </connections>
-                </button>
-                <button verticalHuggingPriority="750" id="LBf-0y-YHh">
-                    <rect key="frame" x="302" y="13" width="84" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="push" title="Fermer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hPz-7R-Qi4">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="closeDetail:" target="PIp-F1-rtQ" id="7AY-DK-b0v"/>
-                    </connections>
-                </button>
-            </subviews>
-            <point key="canvasLocation" x="-389" y="475"/>
         </customView>
         <customView wantsLayer="YES" id="cs1-k8-fgW" userLabel="Animation View">
             <rect key="frame" x="0.0" y="0.0" width="610" height="265"/>
@@ -1357,23 +1286,41 @@ DQ
         <window title="Les fichier inconnus" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="xrD-Uw-hrd" userLabel="Unknown files Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="152" y="158" width="568" height="446"/>
+            <rect key="contentRect" x="152" y="158" width="568" height="457"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="X63-pi-apo">
-                <rect key="frame" x="0.0" y="0.0" width="568" height="446"/>
+                <rect key="frame" x="0.0" y="0.0" width="568" height="457"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" id="MVD-aU-8tB">
-                        <rect key="frame" x="14" y="13" width="200" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Télécharger MalwareBytes" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sTc-Zn-z6g">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="gotoAdwareMedic:" target="co3-N1-xdH" id="im0-TY-xeC"/>
-                        </connections>
-                    </button>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="33g-pq-5uP">
+                        <rect key="frame" x="20" y="312" width="528" height="125"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <clipView key="contentView" id="gky-52-loU">
+                            <rect key="frame" x="1" y="1" width="526" height="123"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="I31-Ch-mPs">
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="123"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="526" height="123"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
+                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="526" height="123"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="u6a-gy-vwl">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="zFv-Tg-eLX">
+                            <rect key="frame" x="224" y="1" width="15" height="133"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
                     <button verticalHuggingPriority="750" id="UgK-I0-lIk">
                         <rect key="frame" x="470" y="13" width="84" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -1387,14 +1334,27 @@ DQ
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="928-Rk-LBh">
-                        <rect key="frame" x="214" y="13" width="93" height="32"/>
+                        <rect key="frame" x="99" y="13" width="189" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Whitelist" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dtH-FC-58T">
+                        <buttonCell key="cell" type="push" title="Ajouter à la liste blanche" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dtH-FC-58T">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
                             <action selector="addToWhitelist:" target="co3-N1-xdH" id="8jY-PO-ZBv"/>
+                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canAddToWhitelist" id="SWt-h0-LSM"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="Is7-Bm-9KA">
+                        <rect key="frame" x="14" y="13" width="85" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Enlever" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kbt-Ie-n1n">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="removeAdware:" target="co3-N1-xdH" id="ufl-rt-CnQ"/>
+                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canDelete" id="4ua-6o-NAv"/>
                         </connections>
                     </button>
                     <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="wVf-Ia-oPd">
@@ -1409,10 +1369,10 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="526" height="70"/>
-                                    <size key="maxSize" width="526" height="10000000"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <size key="minSize" width="526" height="70"/>
-                                    <size key="maxSize" width="526" height="10000000"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
                                     <connections>
                                         <binding destination="co3-N1-xdH" name="attributedString" keyPath="self.whitelistDescription" id="84z-H0-0Cu">
                                             <dictionary key="options">
@@ -1433,39 +1393,10 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="33g-pq-5uP">
-                        <rect key="frame" x="20" y="312" width="528" height="114"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <clipView key="contentView" id="gky-52-loU">
-                            <rect key="frame" x="1" y="1" width="526" height="112"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="I31-Ch-mPs">
-                                    <rect key="frame" x="0.0" y="0.0" width="526" height="112"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="526" height="112"/>
-                                    <size key="maxSize" width="526" height="10000000"/>
-                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="526" height="112"/>
-                                    <size key="maxSize" width="526" height="10000000"/>
-                                </textView>
-                            </subviews>
-                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="u6a-gy-vwl">
-                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="zFv-Tg-eLX">
-                            <rect key="frame" x="224" y="1" width="15" height="133"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                    </scrollView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ZUN-tR-hGR">
                         <rect key="frame" x="18" y="141" width="532" height="17"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Pourquoi est-ce que ces fichiers ne sont pas inconnu pour vous?" id="ntI-kb-Okc">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Pourquoi est-ce que ces fichiers doivent être ajoutés à la liste blanche ?" id="ntI-kb-Okc">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1479,14 +1410,26 @@ DQ
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="qrf-DP-hp6" id="eq8-ku-8TT">
-                                    <rect key="frame" x="0.0" y="0.0" width="535" height="114"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="615" height="19"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="whitelist" width="127" minWidth="40" maxWidth="1000" id="Ifg-0y-pp5">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Je reconnais ce fichier">
+                                        <tableColumn identifier="delete" width="57.83203125" minWidth="10" maxWidth="3.4028234663852886e+38" id="gGN-k1-g6E">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Enlever ?">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="overlaps" inset="2" id="yO4-Kw-6wT">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        </tableColumn>
+                                        <tableColumn identifier="whitelist" width="146" minWidth="40" maxWidth="1000" id="Ifg-0y-pp5">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Ajouter à la liste blanche ?">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1523,18 +1466,132 @@ DQ
                             <rect key="frame" x="1" y="121" width="526" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="8Hj-Jw-3ti">
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="8Hj-Jw-3ti">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="qrf-DP-hp6">
-                            <rect key="frame" x="0.0" y="0.0" width="535" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="615" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="167" y="2234"/>
+            <point key="canvasLocation" x="167" y="2239.5"/>
+        </window>
+        <window title="L’adware" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="EUw-Fv-WNg" userLabel="Adware Window">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="152" y="158" width="568" height="307"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="lqg-oY-SSs">
+                <rect key="frame" x="0.0" y="0.0" width="568" height="307"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="leE-Df-DrA">
+                        <rect key="frame" x="20" y="207" width="528" height="80"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <clipView key="contentView" id="bby-ow-PbR">
+                            <rect key="frame" x="1" y="1" width="526" height="78"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="BtD-0T-27q">
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="78"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="526" height="78"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
+                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="526" height="78"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="qPQ-NI-Wg4">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="GcJ-Us-Jcp">
+                            <rect key="frame" x="224" y="1" width="15" height="133"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                    <button verticalHuggingPriority="750" id="RwR-Qx-ZW5">
+                        <rect key="frame" x="14" y="13" width="85" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Enlever" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pGT-E5-n5v">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="removeAdware:" target="PIp-F1-rtQ" id="SaN-Qc-ZdV"/>
+                        </connections>
+                    </button>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="mIu-mJ-qka">
+                        <rect key="frame" x="20" y="61" width="528" height="138"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <clipView key="contentView" id="qCN-Lz-pg2">
+                            <rect key="frame" x="1" y="23" width="526" height="114"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="rk2-K1-5kK" id="Clg-wI-oR5">
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="114"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <tableColumns>
+                                        <tableColumn identifier="path" editable="NO" width="522.8515625" minWidth="40" maxWidth="1000" id="KkZ-kd-4Kz">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Le fichier adware">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                            </tableHeaderCell>
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="eg9-Xn-Lkn">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        </tableColumn>
+                                    </tableColumns>
+                                    <connections>
+                                        <outlet property="dataSource" destination="PIp-F1-rtQ" id="stC-NG-WhJ"/>
+                                        <outlet property="delegate" destination="PIp-F1-rtQ" id="uhe-ty-bJf"/>
+                                    </connections>
+                                </tableView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="5ga-WG-kDu">
+                            <rect key="frame" x="1" y="121" width="526" height="16"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="jky-nN-gBW">
+                            <rect key="frame" x="224" y="17" width="15" height="102"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <tableHeaderView key="headerView" id="rk2-K1-5kK">
+                            <rect key="frame" x="0.0" y="0.0" width="527" height="23"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </tableHeaderView>
+                    </scrollView>
+                    <button verticalHuggingPriority="750" id="ZId-EJ-R13">
+                        <rect key="frame" x="470" y="13" width="84" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Fermer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C4L-06-Ae6">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <accessibility description="Close the adware window"/>
+                        <connections>
+                            <action selector="close:" target="PIp-F1-rtQ" id="UY7-J0-101"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="173" y="2716.5"/>
         </window>
     </objects>
     <resources>

@@ -39,6 +39,7 @@
     <string>com.abnamro.becwsupa.plist</string>
     <string>com.actualtechnologies.odbcmanager.plist</string>
     <string>com.addressbookserver.client.tool.plist</string>
+    <string>com.adnx.xScanSoloDaemon.plist</string>
     <string>com.adobe.AAM.Updater-1.0.plist.lock</string>
     <string>com.adobe.AAM.Updater-1.0.plist</string>
     <string>com.adobe.AD4ServiceManager.plist</string>
@@ -137,6 +138,7 @@
     <string>com.avid.ApplicationManagerHelper.plist</string>
     <string>com.avid.asset.cache.service.plist</string>
     <string>com.avid.asset.delivery.service.plist</string>
+    <string>com.avid.AvidUninstaller.plist</string>
     <string>com.avid.backgroundservicesmanager.plist</string>
     <string>com.avid.bsd.DigiShoeTool.plist</string>
     <string>com.avid.bsd.shoe.plist</string>
@@ -171,6 +173,8 @@
     <string>com.barebones.authd.plist</string>
     <string>com.barebones.bbedit.plist</string>
     <string>com.barebones.textwrangler.plist</string>
+    <string>com.binaryage.asepsis.daemon.plist</string>
+    <string>com.binaryage.asepsis.updater.plist</string>
     <string>com.bitdefender.agent.plist</string>
     <string>com.bitdefender.antivirusformac.plist</string>
     <string>com.bitdefender.AuthHelperTool.plist</string>
@@ -228,6 +232,7 @@
     <string>com.checkpoint.eps.gui.plist</string>
     <string>com.checkpoint.eps.upgrader.plist</string>
     <string>com.chungwasoft.shimo.helper.plist</string>
+    <string>com.cineform.stereomodestatus.plist</string>
     <string>com.cipafilter.CIPAFilter.plist</string>
     <string>com.cisco.anyconnect.ciscod.plist</string>
     <string>com.cisco.anyconnect.gui.plist</string>
@@ -252,10 +257,12 @@
     <string>com.cocoatech.pathfinder.SMFHelper.plist</string>
     <string>com.cocoatech.pathfinder.SMFHelper6.plist</string>
     <string>com.cocoatech.pathfinder.SMFHelper7.plist</string>
+    <string>com.codingcurious.Otomatic.Helper.plist</string>
     <string>com.commvault.galaxy.plist</string>
     <string>com.comodo.Agent.plist</string>
     <string>com.comodo.fileaccessdaemon.plist</string>
     <string>com.comodo.TrayMenu.plist</string>
+    <string>com.connecteddata.CDHelperApp.plist</string>
     <string>com.contentwatch.NetNanny.agent.plist</string>
     <string>com.contentwatch.NetNanny.daemon.plist</string>
     <string>com.cooliris.SetLaunchArch.plist</string>
@@ -288,14 +295,17 @@
     <string>com.dervishsoftware.MailHubUserAgent.plist</string>
     <string>com.DesignScience.DSMTTool.plist</string>
     <string>com.deterministicnetworks.daemon.dniregsvr.plist</string>
+    <string>com.dexcom.ClarityUploaderLaunch.plist</string>
     <string>com.digidesign.elevenrack.helper.plist</string>
     <string>com.digidesign.fwfamily.heler.plist</string>
     <string>com.digidesign.fwfamily.helper.plist</string>
     <string>com.digitalrebellion.CrashAnalyzerLogWatcher.plist</string>
     <string>com.digitalrebellion.PreferenceManagerAutoSave.plist</string>
     <string>com.digitalrebellion.SoftwareUpdateAutoCheck.plist</string>
+    <string>com.dilaroga.itaf_d.plist</string>
     <string>com.disc-soft.DAEMONTools.DAEMONToolsAgent.plist</string>
     <string>com.disc-soft.DAEMONTools.PrivilegedHelper.plist</string>
+    <string>com.disconnect.networklistener.plist</string>
     <string>com.displaylink.displaylinkmanager.plist</string>
     <string>com.displaylink.useragent-prelogin.plist</string>
     <string>com.displaylink.useragent.plist</string>
@@ -514,6 +524,7 @@
     <string>com.jamfsoftware.startupItem.plist</string>
     <string>com.jamfsoftware.task.1.plist</string>
     <string>com.jamfsoftware.task.checkForTasks.plist</string>
+    <string>com.jft.PdaNetMac.plist</string>
     <string>com.JWVD.cbcache.plist</string>
     <string>com.kaspersky.kav.gui.plist</string>
     <string>com.kaspersky.kav.plist</string>
@@ -535,6 +546,7 @@
     <string>com.lacie.maclock.gui.plist</string>
     <string>com.lacie.raidmonitor.daemon.plist</string>
     <string>com.lacie.RaidService.plist</string>
+    <string>com.lacie.remoteburn.plist</string>
     <string>com.lacie.safemanager.daemon.plist</string>
     <string>com.lacie.WebService.plist</string>
     <string>com.landesk.broker.plist</string>
@@ -567,7 +579,10 @@
     <string>com.leapfrog.connect.shell.plist</string>
     <string>com.leapmotion.Leap-Motion.plist</string>
     <string>com.leapmotion.leapd.plist</string>
+    <string>com.lexar.IRInstaller.plist</string>
     <string>com.lexmark.bmspecificlaunchd.plist</string>
+    <string>com.lexmark.hbnlistener.plist</string>
+    <string>com.lexmark.hostregister.plist</string>
     <string>com.lexmark.lexprint.plist</string>
     <string>com.lg.TrueColorFinder.plist</string>
     <string>com.line6.l6ksettingmgr.plist</string>
@@ -613,6 +628,7 @@
     <string>com.maintain.ShutDown.plist</string>
     <string>com.maintain.Sleep.plist</string>
     <string>com.maintain.SystemEvents.plist</string>
+    <string>com.makerbot.conveyor.plist</string>
     <string>com.malwarebytes.MBAMHelperTool.plist</string>
     <string>com.marketcircle.daylite.accessd.plist</string>
     <string>com.marketcircle.daylite.attachmentd.plist</string>
@@ -628,6 +644,7 @@
     <string>com.marketcircle.daylite.touch.localsync.plist</string>
     <string>com.marketcircle.daylite.touch.remotesync.plist</string>
     <string>com.marketcircle.daylite.touchd.plist</string>
+    <string>com.matrox.vpg.Agent.plist</string>
     <string>com.mcafee.agent.cma.plist</string>
     <string>com.mcafee.menulet.plist</string>
     <string>com.mcafee.reporter.plist</string>
@@ -781,6 +798,7 @@
     <string>com.pharos.popup.plist</string>
     <string>com.pia.pia_manager.plist</string>
     <string>com.pike.yosefix.plist</string>
+    <string>com.PKWARE.Viivo.plist</string>
     <string>com.plex.plexconnect.auto.plist</string>
     <string>com.plex.plexconnect.bash.plist</string>
     <string>com.plexapp.helper.plist</string>
@@ -845,7 +863,10 @@
     <string>com.redgiantsoftware.updater.plist</string>
     <string>com.regularrateandrhythm.rowmotehelperaide.plist</string>
     <string>com.RemoMORE.remoMOREOnlineCommunication.plist</string>
+    <string>com.retrospect.client.updater.plist</string>
+    <string>com.retrospect.clientapp.plist</string>
     <string>com.retrospect.engine.updater.plist</string>
+    <string>com.retrospect.retroclient.plist</string>
     <string>com.retrospect.retroengine.plist</string>
     <string>com.retrospect.retroisa.plist</string>
     <string>com.reviversoft.MacReviver.FileSystemHelper.plist</string>
@@ -1140,8 +1161,11 @@
     <string>jp.co.canon.UFR2.BG.plist</string>
     <string>jp.co.pfu.ScanSnap.SearchablePDFConverter.plist</string>
     <string>jp.co.roland.RDUSB00A3Setupd.plist</string>
+    <string>jp.co.roland.RDUSB0113Setupd.plist</string>
     <string>jp.co.roland.RDUSB0159Setupd.plist</string>
     <string>jp.co.roland.RDUSB017BSetupd.plist</string>
+    <string>jp.co.roland.RDUSB017DSetupd.plist</string>
+    <string>jp.co.roland.RDUSB0185Setupd.plist</string>
     <string>limit.maxfiles.plist</string>
     <string>limit.maxproc.plist</string>
     <string>local.opendkim.plist</string>
@@ -1159,6 +1183,8 @@
     <string>net.hannesschmidt.EnvAgent.plist</string>
     <string>net.infinite-labs.PlugSuit.Agent.plist</string>
     <string>net.infinite-labs.SIMBLEnablerForSandboxedApps.plist</string>
+    <string>net.interacto.Flavours2AgentDaemon.plist</string>
+    <string>net.interacto.Flavours2Helper.plist</string>
     <string>net.jonstovell.keep1BACKUPSSpinning.plist</string>
     <string>net.jonstovell.keepBackupSpinning.plist</string>
     <string>net.jonstovell.keepBIG_RAIDSpinning.plist</string>
@@ -1205,6 +1231,7 @@
     <string>org.macosforge.xquartz.privileged_startx.plist</string>
     <string>org.macosforge.xquartz.startx.plist</string>
     <string>org.macports.apache2.plist</string>
+    <string>org.macports.certsync.plist</string>
     <string>org.macports.clamd.plist</string>
     <string>org.macports.frameworks.macports.plist</string>
     <string>org.macports.freshclam.plist</string>
@@ -1232,6 +1259,7 @@
     <string>org.pqrs.KeyRemap4MacBook.load.plist</string>
     <string>org.pqrs.KeyRemap4MacBook.server.plist</string>
     <string>org.pqrs.NoEjectDelay.load.plist</string>
+    <string>org.pqrs.Seil.load.plist</string>
     <string>org.samba.nmbd.plist</string>
     <string>org.samba.smbd.plist</string>
     <string>org.serviio.server.plist</string>
@@ -1355,6 +1383,143 @@
 		<string>~/Library/Saved Application State/com.genieo.RemoveGenieoMac.savedState</string>
 		<string>~/Library/Saved Application State/com.VSearch.bulk.installer.savedstate</string>
 		<string>~/Library/WebTools/</string>
+	</array>
+	<key>blacklist</key>
+	<array>
+    <string>Asistents.AppRemoval.plist</string>
+    <string>Asistents.download.plist</string>
+    <string>Asistents.ltvbit.plist</string>
+    <string>Asistents.update.plist</string>
+    <string>cinema-+-pro1-1_updater.plist</string>
+    <string>cinema-plus-1-1_enabler.plist</string>
+    <string>cinema-plus-1-1_updater.plist</string>
+    <string>cinemas-+-plus-+_updater.plist</string>
+    <string>com.acetylamineUpd.plist</string>
+    <string>com.adhesivenessUpd.plist</string>
+    <string>com.agnominalUpd.plist</string>
+    <string>com.annualistUpd.plist</string>
+    <string>com.avickUpd.plist</string>
+    <string>com.begar.net-preferences.plist</string>
+    <string>com.burse.net-preferences.plist</string>
+    <string>com.cerulean.net-preferences.plist</string>
+    <string>com.chaffcutterUpd.plist</string>
+    <string>com.ChoesUpd.plist</string>
+    <string>com.cinemapro1-2.agent.plist</string>
+    <string>com.cloudful.net-preferences.plist</string>
+    <string>com.clypealrevoice.agent.plist</string>
+    <string>com.clypealrevoice.daemon.plist</string>
+    <string>com.clypealrevoice.helper.plist</string>
+    <string>com.cnemis.net-preferences.plist</string>
+    <string>com.cornflowerUpd.plist</string>
+    <string>com.corticose.agent.plist</string>
+    <string>com.corticose.daemon.plist</string>
+    <string>com.corticose.helper.plist</string>
+    <string>com.d56a51a9a1942f5c.agent.plist</string>
+    <string>com.d56a51a9a1942f5c.daemon.plist</string>
+    <string>com.d56a51a9a1942f5c.helper.plist</string>
+    <string>com.discardUpd.plist</string>
+    <string>com.endostomaUpd.plist</string>
+    <string>com.ephemeridesUpd.plist</string>
+    <string>com.extensions.updater60094.agent.plist</string>
+    <string>com.extensions.updater69337.agent.plist</string>
+    <string>com.FuligulaUpd.plist</string>
+    <string>com.honorariumvascularize.agent.plist</string>
+    <string>com.honorariumvascularize.daemon.plist</string>
+    <string>com.honorariumvascularize.helper.plist</string>
+    <string>com.HooverismUpd.plist</string>
+    <string>com.Installer.completer.download.plist</string>
+    <string>com.Installer.completer.ltvbit.plist</string>
+    <string>com.Installer.completer.update.plist</string>
+    <string>com.irreflectiveness.net-preferences.plist</string>
+    <string>com.isabnormalUpd.plist</string>
+    <string>com.markdownUpd.plist</string>
+    <string>com.mitigantkhu.agent.plist</string>
+    <string>com.mitigantkhu.daemon.plist</string>
+    <string>com.mitigantkhu.helper.plist</string>
+    <string>com.monorailUpd.plist</string>
+    <string>com.myiodesopsiasedimentate.agent.plist</string>
+    <string>com.myiodesopsiasedimentate.daemon.plist</string>
+    <string>com.myiodesopsiasedimentate.helper.plist</string>
+    <string>com.nephrolithUpd.plist</string>
+    <string>com.pandermite.net-preferences.plist</string>
+    <string>com.parietary.agent.plist</string>
+    <string>com.parietary.daemon.plist</string>
+    <string>com.parietary.helper.plist</string>
+    <string>com.pattable.net-preferences.plist</string>
+    <string>com.perion.searchprotectd.plist</string>
+    <string>com.polyposisUpd.plist</string>
+    <string>com.precollapsableUpd.plist</string>
+    <string>com.preloralUpd.plist</string>
+    <string>com.princewoodUpd.plist</string>
+    <string>com.quoilersUpd.plist</string>
+    <string>com.sodioaurousrougy.agent.plist</string>
+    <string>com.sodioaurousrougy.daemon.plist</string>
+    <string>com.sodioaurousrougy.helper.plist</string>
+    <string>com.sookasa.agent.plist</string>
+    <string>com.sookasa.daemon.plist</string>
+    <string>com.spigot.ApplicationManager.plist</string>
+    <string>com.surmisedly.agent.plist</string>
+    <string>com.surmisedly.daemon.plist</string>
+    <string>com.surmisedly.helper.plist</string>
+    <string>com.tetraedron.agent.plist</string>
+    <string>com.tetraedron.daemon.plist</string>
+    <string>com.tetraedron.helper.plist</string>
+    <string>com.unduplicablemichoacan.agent.plist</string>
+    <string>com.unduplicablemichoacan.daemon.plist</string>
+    <string>com.unduplicablemichoacan.helper.plist</string>
+    <string>com.vsearch.agent.plist</string>
+    <string>com.vsearch.daemon.plist</string>
+    <string>com.vsearch.helper.plist</string>
+    <string>com.xanthene.net-preferences.plist</string>
+    <string>InstallMac.download.plist</string>
+    <string>InstallMac.ltvbit.plist</string>
+    <string>InstallMac.update.plist</string>
+    <string>Joyround.AppRemoval.plist</string>
+    <string>Joyround.download.plist</string>
+    <string>Joyround.ltvbit.plist</string>
+    <string>Joyround.update.plist</string>
+    <string>Kuklorest.AppRemoval.plist</string>
+    <string>Kuklorest.download.plist</string>
+    <string>Kuklorest.ltvbit.plist</string>
+    <string>Kuklorest.update.plist</string>
+    <string>Leperdvil.AppRemoval.plist</string>
+    <string>Leperdvil.download.plist</string>
+    <string>Leperdvil.ltvbit.plist</string>
+    <string>Leperdvil.update.plist</string>
+    <string>Lexside.AppRemoval.plist</string>
+    <string>Lexside.download.plist</string>
+    <string>Lexside.ltvbit.plist</string>
+    <string>Lexside.update.plist</string>
+    <string>Myppes.AppRemoval.plist</string>
+    <string>Myppes.download.plist</string>
+    <string>Myppes.ltvbit.plist</string>
+    <string>Myppes.update.plist</string>
+    <string>Olivernetko.AppRemoval.plist</string>
+    <string>Olivernetko.download.plist</string>
+    <string>Olivernetko.ltvbit.plist</string>
+    <string>Olivernetko.update.plist</string>
+    <string>Perfetnight.AppRemoval.plist</string>
+    <string>Perfetnight.download.plist</string>
+    <string>Perfetnight.ltvbit.plist</string>
+    <string>Perfetnight.update.plist</string>
+    <string>Portsayd.AppRemoval.plist</string>
+    <string>Portsayd.download.plist</string>
+    <string>Portsayd.ltvbit.plist</string>
+    <string>Portsayd.update.plist</string>
+    <string>Qamails.download.plist</string>
+    <string>Qamails.ltvbit.plist</string>
+    <string>Qamails.update.plist</string>
+    <string>Quitelex.AppRemoval.plist</string>
+    <string>Quitelex.download.plist</string>
+    <string>Quitelex.ltvbit.plist</string>
+    <string>Quitelex.update.plist</string>
+    <string>Texiday.download.plist</string>
+    <string>Texiday.ltvbit.plist</string>
+    <string>Texiday.update.plist</string>
+    <string>Youppes.AppRemoval.plist</string>
+    <string>Youppes.download.plist</string>
+    <string>Youppes.ltvbit.plist</string>
+    <string>Youppes.update.plist</string>
 	</array>
 </dict>
 </plist>

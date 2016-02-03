@@ -23,6 +23,7 @@
 #import "DetailManager.h"
 #import "HelpManager.h"
 #import "EtreCheckToolbarItem.h"
+#import "AdwareManager.h"
 #import "UnknownFilesManager.h"
 
 // Toolbar items.
@@ -255,8 +256,79 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // The application will terminate.
 - (void) applicationWillTerminate: (NSNotification *) notification
   {
+  [self autosave];
   [self.introPanel.contentView release];
   [self.userParametersPanel.contentView release];
+  }
+
+// Autosave the current report.
+- (void) autosave
+  {
+  if(self.reportAvailable && [self.log length])
+    {
+    NSData * rtfData =
+      [self.log
+        dataFromRange: NSMakeRange(0, [self.log length])
+        documentAttributes:
+          @
+            {
+            NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType
+            }
+        error: NULL];
+      
+    if(rtfData)
+      {
+      NSURL * applicationSupportURL =
+        [[NSFileManager defaultManager]
+          URLForDirectory: NSApplicationSupportDirectory
+          inDomain: NSUserDomainMask
+          appropriateForURL: nil
+          create: YES
+          error: NULL];
+
+      NSURL * reportsDirectory =
+        [applicationSupportURL URLByAppendingPathComponent: @"Reports"];
+        
+      [[NSFileManager defaultManager]
+        createDirectoryAtURL: reportsDirectory
+        withIntermediateDirectories: YES
+        attributes: [NSDictionary dictionary]
+        error: NULL];
+      
+      NSURL * url =
+        [reportsDirectory
+          URLByAppendingPathComponent:
+            [NSString
+              stringWithFormat:
+                @"EtreCheck %@.rtf", [self currentFilename]]];
+      
+      [[NSUserDefaults standardUserDefaults]
+        setObject: [url path] forKey: @"lastreport"];
+        
+      [rtfData writeToURL: url atomically: YES];
+      
+      [[NSDocumentController sharedDocumentController]
+        noteNewRecentDocumentURL: url];
+      }
+    }
+  }
+
+// Open a recent report.
+- (BOOL) application: (NSApplication *) sender
+  openFile: (NSString *) filename
+  {
+  NSString * extension = [filename pathExtension];
+  
+  if([extension isEqualToString: @"rtf"])
+    {
+    NSURL * url = [NSURL fileURLWithPath: filename];
+    
+    [[NSWorkspace sharedWorkspace] openURL: url];
+    
+    return YES;
+    }
+    
+  return NO;
   }
 
 // Dim the display on deactivate.
@@ -334,6 +406,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (void) handleGetURLEvent: (NSAppleEventDescriptor *) event
   withReplyEvent: (NSAppleEventDescriptor *) reply
   {
+  // Don't reply to events unless there is a report available.
+  if(!self.reportAvailable)
+    return;
+    
   NSString * urlString =
     [[event paramDescriptorForKeyword: keyDirectObject] stringValue];
   
@@ -348,7 +424,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     else if([manager isEqualToString: @"help"])
       [self.helpManager showDetail: [[url path] substringFromIndex: 1]];
     else if([manager isEqualToString: @"adware"])
-      [self.adwareManager showDetail: [[url path] substringFromIndex: 1]];
+      [self.adwareManager show];
     else if([manager isEqualToString: @"unknownfiles"])
       [self.unknownFilesManager show];
     }
@@ -1064,6 +1140,21 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   return dateString;
   }
 
+// Get the current file name as a string.
+- (NSString *) currentFilename
+  {
+  NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
+
+  [dateFormatter setDateFormat: @"yyyy-MM-dd HHmmss"];
+  [dateFormatter setLocale: [NSLocale systemLocale]];
+
+  NSString * dateString = [dateFormatter stringFromDate: [NSDate date]];
+  
+  [dateFormatter release];
+
+  return dateString;
+  }
+
 // Get the elapsed time as a number of seconds.
 - (NSTimeInterval) elapsedSeconds
   {
@@ -1454,7 +1545,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   [self.detailManager closeDetail: self];
   [self.helpManager closeDetail: self];
-  [self.adwareManager closeDetail: self];
   }
 
 // If a drawer is going to open, close the existing drawer, if any.
@@ -1464,7 +1554,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [self.detailManager closeDrawerIfNotDrawer: drawer];
   [self.helpManager closeDrawerIfNotDrawer: drawer];
-  [self.adwareManager closeDrawerIfNotDrawer: drawer];
   }
 
 // Notify the user that the report is done.

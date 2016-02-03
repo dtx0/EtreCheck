@@ -195,10 +195,8 @@
 "%d error (plural rule: one)" = "une erreur";
 "%d error (plural rule: other)" = "%d erreurs\n";
 "No help available" = "Aucune aide disponible";
-"About adware" = "À propos de l’adware";
-"About unknown files" = "À propos des fichiers inconnus";
-"adware" = "EtreCheck a détecté que votre Macintosh peut être infecté par adware comme identifié par Apple (voir http://support.apple.com/HT203987). Lancez Malwarebytes Anti-Malware for Mac (né AdwareMedic) pour enlever l’adware.";
-"unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas sur le whitelist des logiciels sûrs. C’est possible qu’il soit adware ou malware. Mais aussi, c’est possible qu’il soit quelque chose de nouveau qui a besoin d’être ajouté au whitelist. Si vous reconnaissez ce logiciel, faire contact avec Etresoft pour le faire ajouter au whitelist. Sinon, lancez Malwarebytes Anti-Malware for Mac pour vérifier que vous n’avez aucun adware ou malware.";
+"adware" = "EtreCheck a détecté que votre Macintosh est infecté par adware. Cliquez sur le bouton «Enlever» pour retirer l’adware. Les fichiers que vous enlevez seront automatiquement envoyés à Etresoft pour la liste d’adware.";
+"unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas sur la liste blanche des logiciels sûrs. C’est possible qu’il soit adware ou malware. Mais aussi, c’est possible qu’il soit quelque chose de nouveau qui a besoin d’être ajouté à la liste blanche d’EtreCheck. Choisissez les fichiers qui sont adware et cliquez sur le bouton «Enlever» pour les retirer. Les fichiers que vous enlevez seront automatiquement envoyés à Etresoft pour la liste d’adware. Choisissez les fichiers qui sont légitimes et cliquez sur le bouton «La liste blanche» pour les faire ajouter à la liste blanche d‘EtreCheck.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "Un fichier adware trouvé.";
 "%d adware file (plural rule: other)" = "%d fichiers adware trouvés.";
@@ -252,8 +250,6 @@
 "service_desktop" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
 "service_notebook" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
 "Text Size" = "La taille du texte";
-"downloadmbam" = "Téléchargez MalwareBytes";
-"runmbam" = "Lancer MalwareBytes";
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "appleadwareurl" = "(Voir http://support.apple.com/HT203987)";
 "Donate" = "Faire un don";
@@ -266,5 +262,16 @@
 "%d applecount (plural rule: zero)" = "";
 "%d applecount (plural rule: one)" = "Une tâche d’Apple";
 "%d applecount (plural rule: other)" = "%d tâches d’Apple";
+"%d file deleted (plural rule: zero)" = "Aucun fichier placé dans la corbeille";
+"%d file deleted (plural rule: one)" = "Un fichier placé dans la corbeille";
+"%d file deleted (plural rule: other)" = "%d fichiers placés dans la corbeille";
+"filesdeleted" = "Les fichiers suivants ont été placés dans la corbeille. Le logiciel est peut-être toujour en cours. Vous devez faire redémarrer votre ordinateur pour finalizer le processus. Votre rapport EtreCheck actuel sera disponible dans le menu «Récent» d’EtreCheck.\n\n";
+"Restart" = "Redémarrer";
+"Restart later" = "Redémarrer plus tard";
+"Restart failed" = "Échec de redémarrer";
+"restartfailed" = "EtreCheck a échoué de redémarrer votre ordinateur. S’il vous plaît, faire redémarrer votre ordinateur vous-même.";
+"No Time Machine backup!" = "Pas de sauvegarde Time Machine";
+"notimemachinebackup" = "EtreCheck n‘a pas pu trouver une sauvegarde Time Machine. EtreCheck requit une sauvegarde Time Machine pour l’enlèvement des fichiers.";
+
 
 

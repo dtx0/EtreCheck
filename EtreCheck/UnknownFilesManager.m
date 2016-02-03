@@ -1,14 +1,16 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2012-2014. All rights reserved.
+ ** Copyright (c) 2016. All rights reserved.
  **********************************************************************/
 
 #import "UnknownFilesManager.h"
 #import "Model.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
+#import "TTTLocalizedPluralString.h"
 
+#define kDelete @"delete"
 #define kWhitelist @"whitelist"
 #define kPath @"path"
 
@@ -17,10 +19,40 @@
 @synthesize window = myWindow;
 @synthesize textView = myTextView;
 @synthesize tableView = myTableView;
+@synthesize deleteIndicators = myDeleteIndicators;
 @synthesize whitelistIndicators = myWhitelistIndicators;
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize whitelistDescription = myWhitelistDescription;
-@synthesize downloadButton = myDownloadButton;
+@dynamic canDelete;
+@dynamic canAddToWhitelist;
+
+// Can I delete something?
+- (BOOL) canDelete
+  {
+  BOOL canDelete = NO;
+
+  NSUInteger count = [self.unknownFiles count];
+  
+  for(NSUInteger i = 0; i < count; ++i)
+    if([[self.deleteIndicators objectAtIndex: i] boolValue])
+      canDelete = YES;
+    
+  return canDelete;
+  }
+
+// Can I add something to the whitelist?
+- (BOOL) canAddToWhitelist
+  {
+  BOOL canAdd = NO;
+
+  NSUInteger count = [self.unknownFiles count];
+  
+  for(NSUInteger i = 0; i < count; ++i)
+    if([[self.whitelistIndicators objectAtIndex: i] boolValue])
+      canAdd = YES;
+    
+  return canAdd;
+  }
 
 // Constructor.
 - (id) init
@@ -38,6 +70,7 @@
   {
   [super dealloc];
   
+  self.deleteIndicators = nil;
   self.whitelistIndicators = nil;
   self.unknownFiles = nil;
   self.whitelistDescription = nil;
@@ -48,11 +81,6 @@
   {
   [self.window makeKeyAndOrderFront: self];
   
-  if([[Model model] hasMalwareBytes])
-    self.downloadButton.title = NSLocalizedString(@"runmbam", NULL);
-  else
-    self.downloadButton.title = NSLocalizedString(@"downloadmbam", NULL);
-
   NSMutableAttributedString * details = [NSMutableAttributedString new];
   
   [details appendString: NSLocalizedString(@"unknownfiles", NULL)];
@@ -77,13 +105,19 @@
   [details release];
   
   myWhitelistIndicators = [NSMutableArray new];
+  myDeleteIndicators = [NSMutableArray new];
   
   NSUInteger count = [[[Model model] unknownFiles] count];
   
   for(NSUInteger i = 0; i < count; ++i)
+    {
+    [myDeleteIndicators addObject: [NSNumber numberWithBool: NO]];
     [myWhitelistIndicators addObject: [NSNumber numberWithBool: NO]];
+    }
     
-  self.unknownFiles = [[[Model model] unknownFiles] allObjects];
+  self.unknownFiles =
+    [NSMutableArray
+      arrayWithArray: [[[Model model] unknownFiles] allObjects]];
   
   [self.tableView reloadData];
   }
@@ -94,25 +128,115 @@
   [self.window close];
   }
 
-// Go to Adware Medic.
-- (IBAction) gotoAdwareMedic: (id) sender
+// Remove the adware.
+- (IBAction) removeAdware: (id) sender
   {
-  if([[Model model] hasMalwareBytes])
+  if(![[Model model] backupExists])
     {
-    NSURL * url =
-      [[NSWorkspace sharedWorkspace]
-        URLForApplicationWithBundleIdentifier:
-          @"com.malwarebytes.antimalware"];
-      
-    [[NSWorkspace sharedWorkspace] openURL: url];
+    [Utilities reportNoBackup];
     
     return;
     }
+    
+  NSUInteger count = [self.unknownFiles count];
   
-  [[NSWorkspace sharedWorkspace]
-    openURL:
-      [NSURL
-        URLWithString: @"http://www.malwarebytes.org/antimalware/mac/"]];
+  NSMutableArray * paths = [NSMutableArray array];
+  
+  for(NSUInteger i = 0; i < count; ++i)
+    if([[self.deleteIndicators objectAtIndex: i] boolValue])
+      [paths addObject: [self.unknownFiles objectAtIndex: i]];
+    
+  [Utilities
+    removeFiles: paths
+      completionHandler:
+        ^(NSDictionary * newURLs, NSError * error)
+          {
+          [self willChangeValueForKey: @"canDelete"];
+          [self willChangeValueForKey: @"canAddToWhitelist"];
+          
+          NSMutableIndexSet * indexSet = [NSMutableIndexSet indexSet];
+          NSMutableArray * deletedFiles = [NSMutableArray array];
+          
+          for(NSUInteger i = 0; i < count; ++i)
+            {
+            NSString * path = [self.unknownFiles objectAtIndex: i];
+            NSURL * url = [NSURL fileURLWithPath: path];
+            
+            if([newURLs objectForKey: url])
+              {
+              [[[Model model] unknownFiles] removeObject: path];
+              [deletedFiles addObject: path];
+              [indexSet addIndex: i];
+              }
+            }
+            
+          [self.whitelistIndicators removeObjectsAtIndexes: indexSet];
+          [self.unknownFiles removeObjectsAtIndexes: indexSet];
+          [self.deleteIndicators removeObjectsAtIndexes: indexSet];
+          
+          [self.tableView reloadData];
+
+          [self didChangeValueForKey: @"canAddToWhitelist"];
+          [self didChangeValueForKey: @"canDelete"];
+          
+          [self reportDeletedFiles: deletedFiles];
+          }];
+  }
+
+// Report which files were deleted.
+- (void) reportDeletedFiles: (NSArray *) paths
+  {
+  NSUInteger count = [paths count];
+  
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: TTTLocalizedPluralString(count, @"file deleted", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  NSMutableString * message = [NSMutableString string];
+  
+  [message appendString: NSLocalizedString(@"filesdeleted", NULL)];
+  
+  for(NSString * path in paths)
+    [message appendFormat: @"- %@\n", path];
+    
+  [alert setInformativeText: message];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"Restart", NULL)];
+
+  [alert addButtonWithTitle: NSLocalizedString(@"Restart later", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  [alert release];
+
+  if(result == NSAlertFirstButtonReturn)
+    {
+    if(![Utilities restart])
+      [self restartFailed];
+    }
+  }
+
+// Restart failed.
+- (void) restartFailed
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert setMessageText: NSLocalizedString(@"Restart failed", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert setInformativeText: NSLocalizedString(@"restartfailed", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+  
+  [alert runModal];
+
+  [alert release];
   }
 
 // Contact Etresoft to add to whitelist.
@@ -141,7 +265,8 @@
       appendString:
         [NSString
           stringWithFormat:
-            @"{\"known\": %@, \"path\":\"%@\"}",
+            @"{\"deleted\": %@, \"known\": %@, \"path\":\"%@\"}",
+            [self.deleteIndicators objectAtIndex: index],
             [self.whitelistIndicators objectAtIndex: index],
             path]];
     }
@@ -235,7 +360,9 @@
         appendString:
           [NSString
             stringWithFormat:
-              @"%@ %@\n",
+              @"%@ %@ %@\n",
+              [[self.deleteIndicators objectAtIndex: index] boolValue]
+                ? @"Deleted" : @"Kept",
               [[self.whitelistIndicators objectAtIndex: index] boolValue]
                 ? @"Known" : @"Unknown",
               [self.unknownFiles objectAtIndex: index]]];
@@ -284,7 +411,10 @@
   objectValueForTableColumn: (NSTableColumn *) aTableColumn
   row: (NSInteger) rowIndex
   {
-  if([[aTableColumn identifier] isEqualToString: kWhitelist])
+  if([[aTableColumn identifier] isEqualToString: kDelete])
+    return [self.deleteIndicators objectAtIndex: rowIndex];
+  
+  else if([[aTableColumn identifier] isEqualToString: kWhitelist])
     return [self.whitelistIndicators objectAtIndex: rowIndex];
 
   else if([[aTableColumn identifier] isEqualToString: kPath])
@@ -298,8 +428,35 @@
   forTableColumn: (NSTableColumn *) tableColumn
   row: (NSInteger) row
   {
-  if([[tableColumn identifier] isEqualToString: kWhitelist])
+  if([[tableColumn identifier] isEqualToString: kDelete])
+    {
+    [self willChangeValueForKey: @"canDelete"];
+    
+    [self.deleteIndicators replaceObjectAtIndex: row withObject: object];
+    
+    [self.whitelistIndicators
+      replaceObjectAtIndex: row withObject: [NSNumber numberWithBool: NO]];
+    [tableView
+      reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
+      columnIndexes: [NSIndexSet indexSetWithIndex: 1]];
+    
+    [self didChangeValueForKey: @"canDelete"];
+    }
+    
+  else if([[tableColumn identifier] isEqualToString: kWhitelist])
+    {
+    [self willChangeValueForKey: @"canAddToWhitelist"];
+    
     [self.whitelistIndicators replaceObjectAtIndex: row withObject: object];
+
+    [self.deleteIndicators
+      replaceObjectAtIndex: row withObject: [NSNumber numberWithBool: NO]];
+    [tableView
+      reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
+      columnIndexes: [NSIndexSet indexSetWithIndex: 0]];
+
+    [self didChangeValueForKey: @"canAddToWhitelist"];
+    }
   }
 
 @end

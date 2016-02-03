@@ -143,4 +143,15 @@
 // Create a temporary directory.
 + (NSString *) createTemporaryDirectory;
 
+// Delete an array of files.
++ (void) removeFiles: (NSArray *) paths
+  completionHandler:
+    (void (^)(NSDictionary * newURLs, NSError *error)) handler;
+
+// Restart the machine.
++ (BOOL) restart;
+
+// Tell the user that EtreCheck won't delete files without a backup.
++ (void) reportNoBackup;
+
 @end

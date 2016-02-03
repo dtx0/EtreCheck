@@ -16,6 +16,7 @@
 #define kGroup2Key @"group2"
 #define kGroup3Key @"group3"
 #define kGroup4Key @"group4"
+#define kBlacklistKey @"blacklist"
 
 // Collect information about adware.
 @implementation AdwareCollector
@@ -69,6 +70,7 @@
   [self searchForAdware: kGroup2Key];
   [self searchForAdware: kGroup3Key];
   [self searchForAdware: kGroup4Key];
+  [self searchForAdware: kBlacklistKey];
   }
 
 // Load signatures from an obfuscated list of signatures.
@@ -123,6 +125,10 @@
       
       [self
         addSignatures: [plist objectForKey: @"item4"] forKey: kGroup4Key];
+
+      [self
+        addSignatures: [plist objectForKey: @"blacklist"]
+        forKey: kBlacklistKey];
       }
     }
   }
@@ -143,6 +149,11 @@
     if([key isEqualToString: @"extensions"])
       [[Model model] setAdwareExtensions: signatures];
       
+    else if([key isEqualToString: kBlacklistKey])
+      [myAdwareSignatures
+        setObject: [self expandBlacklist: signatures]
+        forKey: localizedKey];
+      
     else
       [myAdwareSignatures
         setObject: [self expandSignatures: signatures]
@@ -158,6 +169,39 @@
   for(NSString * signature in signatures)
     [expandedSignatures
       addObject: [signature stringByExpandingTildeInPath]];
+    
+  return expandedSignatures;
+  }
+
+// Expand the blacklist.
+- (NSArray *) expandBlacklist: (NSArray *) signatures
+  {
+  NSMutableArray * expandedSignatures = [NSMutableArray array];
+  
+  for(NSString * signature in signatures)
+    {
+    [expandedSignatures
+      addObject:
+        [@"/System/Library/LaunchDaemons"
+          stringByAppendingPathComponent: signature]];
+    [expandedSignatures
+      addObject:
+        [@"/System/Library/LaunchAgents"
+          stringByAppendingPathComponent: signature]];
+    [expandedSignatures
+      addObject:
+        [@"/Library/LaunchDaemons"
+          stringByAppendingPathComponent: signature]];
+    [expandedSignatures
+      addObject:
+        [@"/Library/LaunchAgents"
+          stringByAppendingPathComponent: signature]];
+    [expandedSignatures
+      addObject:
+        [[@"~/Library/LaunchAgents"
+          stringByAppendingPathComponent: signature]
+            stringByExpandingTildeInPath]];
+    }
     
   return expandedSignatures;
   }

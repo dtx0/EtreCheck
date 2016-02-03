@@ -7,6 +7,8 @@
 #import "Utilities.h"
 #import "Model.h"
 #import "NSMutableAttributedString+Etresoft.h"
+#import <CoreServices/CoreServices.h>
+#import <Carbon/Carbon.h>
 
 // Assorted utilities.
 @implementation Utilities
@@ -916,6 +918,103 @@
   free(buffer);
   
   return temporaryDirectory;
+  }
+
+// Delete an array of files.
++ (void) removeFiles: (NSArray *) paths
+  completionHandler:
+    (void (^)(NSDictionary * newURLs, NSError *error)) handler
+  {
+  __block NSMutableSet * urlsToRemove = [NSMutableSet set];
+  
+  NSMutableArray * urls = [NSMutableArray array];
+  
+  for(NSString * path in paths)
+    {
+    NSURL * url = [NSURL fileURLWithPath: path];
+    
+    [urls addObject: url];
+    [urlsToRemove addObject: url];
+    }
+    
+  [[NSWorkspace sharedWorkspace]
+    recycleURLs: urls
+    completionHandler: handler];
+  }
+
+// Restart the machine.
++ (BOOL) restart
+  {
+  AEAddressDesc targetDesc;
+  
+  static const ProcessSerialNumber kPSNOfSystemProcess =
+    { 0, kSystemProcess };
+    
+  AppleEvent eventReply = {typeNull, NULL};
+  AppleEvent appleEventToSend = {typeNull, NULL};
+
+  OSStatus error =
+    AECreateDesc(
+      typeProcessSerialNumber,
+      & kPSNOfSystemProcess,
+      sizeof(kPSNOfSystemProcess),
+      & targetDesc);
+
+  if(error != noErr)
+    return NO;
+
+  error =
+    AECreateAppleEvent(
+      kCoreEventClass,
+      kAERestart,
+      & targetDesc,
+      kAutoGenerateReturnID,
+      kAnyTransactionID,
+      & appleEventToSend);
+
+  AEDisposeDesc(& targetDesc);
+  
+  if(error != noErr)
+    return NO;
+
+  error =
+    AESend(
+      & appleEventToSend,
+      & eventReply,
+      kAENoReply,
+      kAENormalPriority,
+      kAEDefaultTimeout,
+      NULL,
+      NULL);
+
+  AEDisposeDesc(& appleEventToSend);
+  
+  if(error != noErr)
+    return NO;
+
+  AEDisposeDesc(& eventReply);
+
+  return YES;
+  }
+
+// Tell the user that EtreCheck won't delete files without a backup.
++ (void) reportNoBackup
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"No Time Machine backup!", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert setInformativeText: NSLocalizedString(@"notimemachinebackup", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+
+  [alert runModal];
+
+  [alert release];
   }
 
 @end

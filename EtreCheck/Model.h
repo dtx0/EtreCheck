@@ -52,7 +52,7 @@
   NSMutableArray * myTerminatedTasks;
   NSMutableSet * myUnknownFiles;
   NSMutableSet * mySeriousProblems;
-  bool myHasMalwareBytes;
+  bool myBackupExists;
   
   bool myIgnoreKnownAppleFailures;
   bool myCheckAppleSignatures;
@@ -126,8 +126,8 @@
 // What serious problems were found?
 @property (retain) NSMutableSet * seriousProblems;
 
-// Is MalwareBytes installed?
-@property (assign) bool hasMalwareBytes;
+// Do I have a Time Machine backup?
+@property (assign) bool backupExists;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;

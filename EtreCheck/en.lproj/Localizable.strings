@@ -28,8 +28,8 @@
 "%d error (plural rule: zero)" = "no errors\n";
 "%d error (plural rule: one)" = "one error";
 "%d error (plural rule: other)" = "%d errors\n";
-"adware" = "EtreCheck has detected that your Macintosh is infected with adware as defined by Apple (see http://support.apple.com/HT203987). Run Malwarebytes Anti-Malware for Mac (formerly AdwareMedic) to remove the adwware.";
-"unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. If you recognize this software, contact Etresoft to have it added to the whitelist. Otherwise, run Malwarebytes to scan for adware and malware.";
+"adware" = "EtreCheck has detected that your Macintosh is infected with adware. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft and added to the list of known adware.";
+"unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. Select the files that are adware and click the “Remove” button to remove them. Files you remove will be automatically reported to Etresoft and added to the list of known adware. Identify the files that are valid and click the “Whitelist” button to add them to EtreCheck’s whitelist.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "One adware file found.";
 "%d adware file (plural rule: other)" = "%d adware files found.";
@@ -47,8 +47,6 @@
 "    %@ - Uptime: %@%@\n" = "    %@ - Time since boot: %@%@\n";
 "service_desktop" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
 "service_notebook" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
-"downloadmbam" = "Download MalwareBytes";
-"runmbam" = "Run MalwareBytes";
 "excellentperformance" = "Excellent";
 "goodperformance" = "Good";
 "belowaverageperformance" = "Below Average";
@@ -61,4 +59,10 @@
 "%d applecount (plural rule: one)" = "One Apple task";
 "%d applecount (plural rule: other)" = "%d Apple tasks";
 "updatefailed" = "The EtreCheck update failed. You can continue, but there may be a new version of EtreCheck available.";
+"%d file deleted (plural rule: zero)" = "No files moved to the trash";
+"%d file deleted (plural rule: one)" = "One file moved to the trash";
+"%d file deleted (plural rule: other)" = "%d files moved to the trash";
+"filesdeleted" = "The following files have been moved to the trash. The software may still be running so you should restart your machine to complete the process. Your current EtreCheck report will be availble in EtreCheck's “Recent” menu.\n\n";
+"restartfailed" = "EtreCheck failed to restart your machine. Please restart your machine manually.";
+"notimemachinebackup" = "EtreCheck could not find a Time Machine backup. The delete files operation is disabled.";
 

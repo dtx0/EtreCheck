@@ -1,7 +1,7 @@
 /***********************************************************************
  ** Etresoft
  ** John Daniel
- ** Copyright (c) 2012-2014. All rights reserved.
+ ** Copyright (c) 2016. All rights reserved.
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
@@ -13,9 +13,9 @@
   NSWindow * myWindow;
   NSTextView * myTextView;
   NSTableView * myTableView;
-  NSButton * myDownloadButton;
+  NSMutableArray * myDeleteIndicators;
   NSMutableArray * myWhitelistIndicators;
-  NSArray * myUnknownFiles;
+  NSMutableArray * myUnknownFiles;
   NSAttributedString * myWhitelistDescription;
   }
 
@@ -28,23 +28,32 @@
 // The table view.
 @property (retain) IBOutlet NSTableView * tableView;
 
-// The Adware Medic download button.
-@property (retain) IBOutlet NSButton * downloadButton;
+// Array of NSNumber booleans to indicate adware files.
+@property (retain) NSMutableArray * deleteIndicators;
 
 // Array of NSNumber booleans to indicate known files.
 @property (retain) NSMutableArray * whitelistIndicators;
 
 // Array of unknown files.
-@property (retain) NSArray * unknownFiles;
+@property (retain) NSMutableArray * unknownFiles;
 
 // User's whitelist description.
 @property (retain) NSAttributedString * whitelistDescription;
 
+// Can I delete something?
+@property (readonly) BOOL canDelete;
+
+// Can I add something to the whitelist?
+@property (readonly) BOOL canAddToWhitelist;
+
 // Show the window.
 - (void) show;
 
-// Go to Adware Medic.
-- (IBAction) gotoAdwareMedic: (id) sender;
+// Close the window.
+- (IBAction) close: (id) sender;
+
+// Remove the adware.
+- (IBAction) removeAdware: (id) sender;
 
 // Contact Etresoft to add to whitelist.
 - (IBAction) addToWhitelist: (id) sender;
