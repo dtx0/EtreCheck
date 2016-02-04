@@ -280,5 +280,9 @@
 "cannotverifytimemachinebackup" = "EtreCheck ne peut pas vérifier une sauvegarde Time Machine sur OS X 10.7 «Lion» ou plus tôt. Avez-vous une sauvegarde Time Machine ?";
 "No, I don't have a backup" = "Non. Je n’ai pas de sauvegarde";
 "Yes, I have a backup" = "Oui. J’ai une sauvegarde";
+"Are you sure?" = "Vous êtes sûr ?";
+"confirmdelete" = "EtreCheck n‘est pas un outil de déinstallation. Vous pouvez endommager votre système si vous enlevez un fichier légitime ! Pour enlever le logiciel légitime, utilisez seulement un outil ou les instructions fourni par le vendeur.\n\nN’enlevez pas un fichier sauf que vous êtes sûr qu'il est malveillant.";
+"No, I'm not sure" = "Non. Je ne suis pas sûr";
+"Yes, I know the risks" = "Oui. Je sais les risques";
 
 

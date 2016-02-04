@@ -121,6 +121,9 @@
   if(![super canRemoveAdware])
     return;
     
+  if(![self confirmAdware])
+    return;
+    
   NSUInteger count = [self.unknownFiles count];
   
   NSMutableArray * paths = [NSMutableArray array];
@@ -175,6 +178,33 @@
           }];
   }
 
+// Make sure the user is sure about this!
+- (BOOL) confirmAdware
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert setMessageText: NSLocalizedString(@"Are you sure?", NULL)];
+    
+  [alert setAlertStyle: NSCriticalAlertStyle];
+
+  [alert
+    setInformativeText:
+      NSLocalizedString(@"confirmdelete", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"No, I'm not sure", NULL)];
+
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"Yes, I know the risks", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  [alert release];
+
+  return (result == NSAlertSecondButtonReturn);
+  }
+
 // Notify Etresoft.
 - (void) reportDeletedFilesToEtresoft: (NSArray *) deletedFiles
   {
@@ -192,12 +222,14 @@
       [[deletedFiles objectAtIndex: index]
         stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
     
+    NSString * name = [path lastPathComponent];
+    
     if(!first)
       [json appendString: @","];
       
     first = NO;
     
-    [json appendString: [NSString stringWithFormat: @"\"%@\"", path]];
+    [json appendString: [NSString stringWithFormat: @"\"%@\"", name]];
     }
     
   [json appendString: @"]}"];
@@ -244,6 +276,8 @@
       [[self.unknownFiles objectAtIndex: index]
         stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
     
+    NSString * name = [path lastPathComponent];
+    
     if(!first)
       [json appendString: @","];
       
@@ -256,7 +290,7 @@
             @"{\"deleted\": %@, \"known\": %@, \"path\":\"%@\"}",
             [self.deleteIndicators objectAtIndex: index],
             [self.whitelistIndicators objectAtIndex: index],
-            path]];
+            name]];
     }
     
   [json appendString: @"],"];

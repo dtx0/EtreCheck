@@ -69,3 +69,4 @@
 "passwordrequired" = "The following files will require an administrator password to remove.\n\n";
 "continuewithpassword" = "\nDo you want to proceed?";
 "cannotverifytimemachinebackup" = "EtreCheck cannot verify a Time Machine backup on OS X 10.7 “Lion” and earlier. Do you have a Time Machine backup?";
+"confirmdelete" = "EtreCheck is not an uninstaller. You can damage your system by removing the wrong file. To uninstall software, only use a vendor-provided uninstaller or uninstallation instructions.\n\nDo not remove files unless you are sure they are malicious.";

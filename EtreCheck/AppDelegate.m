@@ -761,6 +761,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (IBAction) donateLater: (id) sender;
   {
   [[NSApplication sharedApplication] endSheet: self.donatePanel];
+
+  [[NSUserDefaults standardUserDefaults]
+    setObject: [NSNumber numberWithInt: 4] forKey: @"reportcount"];
   }
 
 // Donate now.
@@ -770,6 +773,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     openURL: [NSURL URLWithString: @"http://etrecheck.com/donate"]];
 
   [[NSApplication sharedApplication] endSheet: self.donatePanel];
+
+  [[NSUserDefaults standardUserDefaults]
+    removeObjectForKey: @"reportcount"];
   }
 
 // Start the report.
@@ -1569,6 +1575,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   if(runCount > 5)
     ask = YES;
+    
+  if(runCount > 100)
+    ask = NO;
     
   if(ask)
     [self showDonate: self];

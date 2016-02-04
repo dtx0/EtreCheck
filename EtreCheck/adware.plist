@@ -258,6 +258,7 @@
     <string>com.cocoatech.pathfinder.SMFHelper6.plist</string>
     <string>com.cocoatech.pathfinder.SMFHelper7.plist</string>
     <string>com.codingcurious.Otomatic.Helper.plist</string>
+    <string>com.colorburstrip.ColorBurst-Overdrive.plist</string>
     <string>com.commvault.galaxy.plist</string>
     <string>com.comodo.Agent.plist</string>
     <string>com.comodo.fileaccessdaemon.plist</string>
@@ -301,6 +302,7 @@
     <string>com.digidesign.fwfamily.helper.plist</string>
     <string>com.digitalrebellion.CrashAnalyzerLogWatcher.plist</string>
     <string>com.digitalrebellion.PreferenceManagerAutoSave.plist</string>
+    <string>com.digitalrebellion.ProVersioner.plist</string>
     <string>com.digitalrebellion.SoftwareUpdateAutoCheck.plist</string>
     <string>com.dilaroga.itaf_d.plist</string>
     <string>com.disc-soft.DAEMONTools.DAEMONToolsAgent.plist</string>
@@ -707,6 +709,8 @@
     <string>com.netgear.switchTool.plist</string>
     <string>com.netgear.wutility</string>
     <string>com.netputing.airprintactivator.plist</string>
+    <string>com.netsq.datafence.ps.plist</string>
+    <string>com.netsq.datafence.fencemon.plist</string>
     <string>com.newshosting.helper.openvpn.plist</string>
     <string>com.newshosting.helper.pppd.plist</string>
     <string>com.nextlimit.realflowrlm.plist</string>
@@ -886,6 +890,7 @@
     <string>com.rogueamoeba.loopbackd.plist</string>
     <string>com.rosettastone.rosettastonedaemon.plist</string>
     <string>com.roxio.UpdateRetrospect.plist</string>
+    <string>com.safenet.sentinel.kext.plist</string>
     <string>com.sandisk.cruzeragent.plist</string>
     <string>com.screenhero.SHAccessibilityHelper.plist</string>
     <string>com.seagate.dashboard.plist</string>
@@ -1121,6 +1126,7 @@
     <string>ee.ria.id-updater.plist</string>
     <string>fi.polar.libpolar.plist</string>
     <string>fi.polar.polard.plist</string>
+    <string>fr.whitebox.packages_dispatcher.plist</string>
     <string>hdapm.plist</string>
     <string>hdjsd.plist</string>
     <string>homebrew.mxcl.dnscrypt-proxy.plist</string>
@@ -1213,6 +1219,8 @@
     <string>org.colorsidebar.root.plist</string>
     <string>org.eyebeam.SelfControl.plist</string>
     <string>org.firebird.gds.plist</string>
+    <string>com.flipvideo.FlipShare.AutoRun.plist</string>
+    <string>com.flipvideo.FlipShareServer.launchd.plist</string>
     <string>org.freedesktop.dbus-session.plist</string>
     <string>org.freedesktop.dbus-system.plist</string>
     <string>org.glimmerblocker.installer.plist</string>
