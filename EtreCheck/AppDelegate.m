@@ -1127,6 +1127,20 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
     [self.log appendString: @"\n"];
     }
+    
+  if([[[Model model] whitelistFiles] count] < kMinimumWhitelistSize)
+    {
+    [self.log
+      appendString:
+        NSLocalizedString(@"Failed to read adware signatures!", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    
+    [self.log appendString: @"\n\n"];
+    }
   }
 
 // Print the problem from the user.

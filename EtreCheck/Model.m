@@ -272,6 +272,9 @@
 // Is this file in the whitelist?
 - (bool) isWhitelistFile: (NSString *) name
   {
+  if([self.whitelistFiles count] < kMinimumWhitelistSize)
+    return YES;
+    
   if([self.whitelistFiles containsObject: name])
     return YES;
     

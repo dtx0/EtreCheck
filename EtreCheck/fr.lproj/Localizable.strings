@@ -284,5 +284,5 @@
 "confirmdelete" = "EtreCheck n‘est pas un outil de déinstallation. Vous pouvez endommager votre système si vous enlevez un fichier légitime ! Pour enlever le logiciel légitime, utilisez seulement un outil ou les instructions fourni par le vendeur.\n\nN’enlevez pas un fichier sauf que vous êtes sûr qu'il est malveillant.";
 "No, I'm not sure" = "Non. Je ne suis pas sûr";
 "Yes, I know the risks" = "Oui. Je sais les risques";
-
+"Failed to read adware signatures!" = "Échec de lire les signatures d’adware !";
 

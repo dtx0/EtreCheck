@@ -24,6 +24,8 @@
 #define kOutdatedOS @"outdatedos"
 #define kHighCache @"highcache"
 
+#define kMinimumWhitelistSize 1000
+
 @class DiagnosticEvent;
 
 // A singleton to keep track of system information.
