@@ -29,7 +29,4 @@
 // Close the window.
 - (IBAction) close: (id) sender;
 
-// Can I remove adware?
-- (BOOL) canRemoveAdware;
-
 @end

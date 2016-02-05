@@ -1333,28 +1333,16 @@ DQ
                             <action selector="close:" target="co3-N1-xdH" id="OU3-hy-rCt"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="928-Rk-LBh">
-                        <rect key="frame" x="99" y="13" width="189" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Ajouter à la liste blanche" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dtH-FC-58T">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="addToWhitelist:" target="co3-N1-xdH" id="8jY-PO-ZBv"/>
-                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canAddToWhitelist" id="SWt-h0-LSM"/>
-                        </connections>
-                    </button>
                     <button verticalHuggingPriority="750" id="Is7-Bm-9KA">
-                        <rect key="frame" x="14" y="13" width="85" height="32"/>
+                        <rect key="frame" x="14" y="13" width="190" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Enlever" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kbt-Ie-n1n">
+                        <buttonCell key="cell" type="push" title="Identifier comme adware" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kbt-Ie-n1n">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="removeAdware:" target="co3-N1-xdH" id="ufl-rt-CnQ"/>
-                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canDelete" id="4ua-6o-NAv"/>
+                            <action selector="reportAdware:" target="co3-N1-xdH" id="IsI-QM-4zB"/>
+                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canReport" id="JCd-lc-AR9"/>
                         </connections>
                     </button>
                     <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="wVf-Ia-oPd">
@@ -1416,8 +1404,8 @@ DQ
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="delete" width="57.83203125" minWidth="10" maxWidth="3.4028234663852886e+38" id="gGN-k1-g6E">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Enlever ?">
+                                        <tableColumn identifier="report" width="57.83203125" minWidth="10" maxWidth="3.4028234663852886e+38" id="gGN-k1-g6E">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Adware ?">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1475,6 +1463,18 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
+                    <button verticalHuggingPriority="750" id="928-Rk-LBh">
+                        <rect key="frame" x="204" y="13" width="189" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Ajouter à la liste blanche" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dtH-FC-58T">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="addToWhitelist:" target="co3-N1-xdH" id="8jY-PO-ZBv"/>
+                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canAddToWhitelist" id="SWt-h0-LSM"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="167" y="2239.5"/>
@@ -1592,7 +1592,7 @@ DQ
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="179" y="2544"/>
+            <point key="canvasLocation" x="183" y="2787"/>
         </window>
     </objects>
     <resources>

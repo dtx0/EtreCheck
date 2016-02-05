@@ -10,7 +10,7 @@
 #import "Utilities.h"
 #import "TTTLocalizedPluralString.h"
 
-#define kDelete @"delete"
+#define kReport @"report"
 #define kWhitelist @"whitelist"
 #define kPath @"path"
 
@@ -19,38 +19,29 @@
 // Show the window with content.
 - (void) show: (NSString *) content;
 
-// Report which files were deleted.
-- (void) reportDeletedFiles: (NSArray *) paths;
-
-// Report which files were deleted.
-- (void) reportDeletedFilesFailed: (NSArray *) paths;
-
-// Restart failed.
-- (void) restartFailed;
-
 @end
 
 @implementation UnknownFilesManager
 
-@synthesize deleteIndicators = myDeleteIndicators;
+@synthesize adwareIndicators = myAdwareIndicators;
 @synthesize whitelistIndicators = myWhitelistIndicators;
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize whitelistDescription = myWhitelistDescription;
-@dynamic canDelete;
+@dynamic canReport;
 @dynamic canAddToWhitelist;
 
-// Can I delete something?
-- (BOOL) canDelete
+// Can I report something?
+- (BOOL) canReport
   {
-  BOOL canDelete = NO;
+  BOOL canReport = NO;
 
   NSUInteger count = [self.unknownFiles count];
   
   for(NSUInteger i = 0; i < count; ++i)
-    if([[self.deleteIndicators objectAtIndex: i] boolValue])
-      canDelete = YES;
+    if([[self.adwareIndicators objectAtIndex: i] boolValue])
+      canReport = YES;
     
-  return canDelete;
+  return canReport;
   }
 
 // Can I add something to the whitelist?
@@ -83,7 +74,7 @@
   {
   [super dealloc];
   
-  self.deleteIndicators = nil;
+  self.adwareIndicators = nil;
   self.whitelistIndicators = nil;
   self.unknownFiles = nil;
   self.whitelistDescription = nil;
@@ -95,13 +86,13 @@
   [super show: NSLocalizedString(@"unknownfiles", NULL)];
   
   myWhitelistIndicators = [NSMutableArray new];
-  myDeleteIndicators = [NSMutableArray new];
+  myAdwareIndicators = [NSMutableArray new];
   
   NSUInteger count = [[[Model model] unknownFiles] count];
   
   for(NSUInteger i = 0; i < count; ++i)
     {
-    [myDeleteIndicators addObject: [NSNumber numberWithBool: NO]];
+    [myAdwareIndicators addObject: [NSNumber numberWithBool: NO]];
     [myWhitelistIndicators addObject: [NSNumber numberWithBool: NO]];
     }
     
@@ -115,99 +106,17 @@
   [self.tableView reloadData];
   }
 
-// Remove the adware.
-- (IBAction) removeAdware: (id) sender
+// Report the adware.
+- (IBAction) reportAdware: (id) sender
   {
-  if(![super canRemoveAdware])
-    return;
-    
-  if(![self confirmAdware])
-    return;
-    
   NSUInteger count = [self.unknownFiles count];
   
   NSMutableArray * paths = [NSMutableArray array];
   
   for(NSUInteger i = 0; i < count; ++i)
-    if([[self.deleteIndicators objectAtIndex: i] boolValue])
+    if([[self.adwareIndicators objectAtIndex: i] boolValue])
       [paths addObject: [self.unknownFiles objectAtIndex: i]];
     
-  NSMutableSet * pathsToRemove =
-    [[NSMutableSet alloc] initWithArray: paths];
-  
-  [Utilities
-    removeFiles: paths
-      completionHandler:
-        ^(NSDictionary * newURLs, NSError * error)
-          {
-          [self willChangeValueForKey: @"canDelete"];
-          [self willChangeValueForKey: @"canAddToWhitelist"];
-          
-          NSMutableIndexSet * indexSet = [NSMutableIndexSet indexSet];
-          NSMutableArray * deletedFiles = [NSMutableArray array];
-          
-          for(NSUInteger i = 0; i < count; ++i)
-            {
-            NSString * path = [self.unknownFiles objectAtIndex: i];
-            NSURL * url = [NSURL fileURLWithPath: path];
-            
-            if([newURLs objectForKey: url])
-              {
-              [[[Model model] unknownFiles] removeObject: path];
-              [deletedFiles addObject: path];
-              [indexSet addIndex: i];
-              [pathsToRemove removeObject: path];
-              }
-            }
-            
-          [self.whitelistIndicators removeObjectsAtIndexes: indexSet];
-          [self.unknownFiles removeObjectsAtIndexes: indexSet];
-          [self.deleteIndicators removeObjectsAtIndexes: indexSet];
-          
-          [self.tableView reloadData];
-
-          [self didChangeValueForKey: @"canAddToWhitelist"];
-          [self didChangeValueForKey: @"canDelete"];
-          
-          if([pathsToRemove count] > 0)
-            [self reportDeletedFilesFailed: deletedFiles];
-          else
-            [self reportDeletedFiles: deletedFiles];
-            
-          [self reportDeletedFilesToEtresoft: deletedFiles];
-          }];
-  }
-
-// Make sure the user is sure about this!
-- (BOOL) confirmAdware
-  {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert setMessageText: NSLocalizedString(@"Are you sure?", NULL)];
-    
-  [alert setAlertStyle: NSCriticalAlertStyle];
-
-  [alert
-    setInformativeText:
-      NSLocalizedString(@"confirmdelete", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert
-    addButtonWithTitle: NSLocalizedString(@"No, I'm not sure", NULL)];
-
-  [alert
-    addButtonWithTitle: NSLocalizedString(@"Yes, I know the risks", NULL)];
-
-  NSInteger result = [alert runModal];
-
-  [alert release];
-
-  return (result == NSAlertSecondButtonReturn);
-  }
-
-// Notify Etresoft.
-- (void) reportDeletedFilesToEtresoft: (NSArray *) deletedFiles
-  {
   NSMutableString * json = [NSMutableString string];
   
   [json appendString: @"{\"files\":["];
@@ -216,10 +125,10 @@
   
   NSUInteger index = 0;
   
-  for(; index < [deletedFiles count]; ++index)
+  for(; index < [paths count]; ++index)
     {
     NSString * path =
-      [[deletedFiles objectAtIndex: index]
+      [[paths objectAtIndex: index]
         stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
     
     NSString * name = [path lastPathComponent];
@@ -245,7 +154,7 @@
 
   [Utilities execute: @"/usr/bin/curl" arguments: args];
 
-  /* NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
+  NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
 
   if(result)
     {
@@ -253,10 +162,13 @@
       [[NSString alloc]
         initWithData: result encoding: NSUTF8StringEncoding];
       
-    NSLog(status);
+    if([status isEqualToString: @"OK"])
+      [self thanksForAdware];
+    else
+      [self uploadAdwareFallbackToEmail];
       
     [status release];
-    } */
+    }
   }
 
 // Contact Etresoft to add to whitelist.
@@ -288,7 +200,7 @@
         [NSString
           stringWithFormat:
             @"{\"deleted\": %@, \"known\": %@, \"path\":\"%@\"}",
-            [self.deleteIndicators objectAtIndex: index],
+            [self.adwareIndicators objectAtIndex: index],
             [self.whitelistIndicators objectAtIndex: index],
             name]];
     }
@@ -347,6 +259,7 @@
   [alert release];
   }
 
+// Allow the user to submit an update via e-mail.
 - (void) uploadWhitelistFallbackToEmail
   {
   NSAlert * alert = [[NSAlert alloc] init];
@@ -382,9 +295,7 @@
         appendString:
           [NSString
             stringWithFormat:
-              @"%@ %@ %@\n",
-              [[self.deleteIndicators objectAtIndex: index] boolValue]
-                ? @"Deleted" : @"Kept",
+              @"%@ %@\n",
               [[self.whitelistIndicators objectAtIndex: index] boolValue]
                 ? @"Known" : @"Unknown",
               [self.unknownFiles objectAtIndex: index]]];
@@ -397,6 +308,78 @@
     [self
       sendEmailTo: @"info@etresoft.com"
       withSubject: @"Add to whitelist"
+      content: content];
+    }
+
+  [alert release];
+  }
+
+// Thank the user for their adware submission.
+- (void) thanksForAdware
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"Thanks for your submission", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert
+    setInformativeText: NSLocalizedString(@"thanksforadware", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+
+  [alert runModal];
+
+  [alert release];
+  }
+
+// Allow the user to submit an update via e-mail.
+- (void) uploadAdwareFallbackToEmail
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"Adware upload failed", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert
+    setInformativeText: NSLocalizedString(@"adwareuploadfailed", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert
+    addButtonWithTitle: NSLocalizedString(@"Yes - Send via e-mail", NULL)];
+
+  [alert addButtonWithTitle: NSLocalizedString(@"No", NULL)];
+
+  NSInteger result = [alert runModal];
+
+  if(result == NSAlertFirstButtonReturn)
+    {
+    NSMutableString * content = [NSMutableString string];
+    
+    [content
+      appendString: @"EtreCheck found the following adware files:\n\n"];
+
+    NSUInteger index = 0;
+    
+    for(; index < self.adwareIndicators.count; ++index)
+      {
+      if([[self.adwareIndicators objectAtIndex: index] boolValue])
+        [content
+          appendString:
+            [NSString
+              stringWithFormat:
+                @"%@\n", [self.unknownFiles objectAtIndex: index]]];
+      }
+      
+    [content appendString: @"\n"];
+      
+    [self
+      sendEmailTo: @"info@etresoft.com"
+      withSubject: @"Add to blacklist"
       content: content];
     }
 
@@ -433,8 +416,8 @@
   objectValueForTableColumn: (NSTableColumn *) aTableColumn
   row: (NSInteger) rowIndex
   {
-  if([[aTableColumn identifier] isEqualToString: kDelete])
-    return [self.deleteIndicators objectAtIndex: rowIndex];
+  if([[aTableColumn identifier] isEqualToString: kReport])
+    return [self.adwareIndicators objectAtIndex: rowIndex];
   
   else if([[aTableColumn identifier] isEqualToString: kWhitelist])
     return [self.whitelistIndicators objectAtIndex: rowIndex];
@@ -450,11 +433,11 @@
   forTableColumn: (NSTableColumn *) tableColumn
   row: (NSInteger) row
   {
-  if([[tableColumn identifier] isEqualToString: kDelete])
+  if([[tableColumn identifier] isEqualToString: kReport])
     {
-    [self willChangeValueForKey: @"canDelete"];
+    [self willChangeValueForKey: @"canReport"];
     
-    [self.deleteIndicators replaceObjectAtIndex: row withObject: object];
+    [self.adwareIndicators replaceObjectAtIndex: row withObject: object];
     
     [self.whitelistIndicators
       replaceObjectAtIndex: row withObject: [NSNumber numberWithBool: NO]];
@@ -462,7 +445,7 @@
       reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
       columnIndexes: [NSIndexSet indexSetWithIndex: 1]];
     
-    [self didChangeValueForKey: @"canDelete"];
+    [self didChangeValueForKey: @"canReport"];
     }
     
   else if([[tableColumn identifier] isEqualToString: kWhitelist])
@@ -471,7 +454,7 @@
     
     [self.whitelistIndicators replaceObjectAtIndex: row withObject: object];
 
-    [self.deleteIndicators
+    [self.adwareIndicators
       replaceObjectAtIndex: row withObject: [NSNumber numberWithBool: NO]];
     [tableView
       reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
