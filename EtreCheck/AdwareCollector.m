@@ -17,6 +17,8 @@
 #define kGroup3Key @"group3"
 #define kGroup4Key @"group4"
 #define kBlacklistKey @"blacklist"
+#define kBlacklistSuffixKey @"blacklist_suffix"
+#define kBlacklistMatchKey @"blacklist_match"
 
 // Collect information about adware.
 @implementation AdwareCollector
@@ -129,6 +131,14 @@
       [self
         addSignatures: [plist objectForKey: @"blacklist"]
         forKey: kBlacklistKey];
+
+      [self
+        addSignatures: [plist objectForKey: @"blacklist_suffix"]
+        forKey: kBlacklistSuffixKey];
+
+      [self
+        addSignatures: [plist objectForKey: @"blacklist_match"]
+        forKey: kBlacklistMatchKey];
       }
     }
   }
@@ -154,6 +164,12 @@
         setObject: [self expandBlacklist: signatures]
         forKey: localizedKey];
       
+    else if([key isEqualToString: kBlacklistSuffixKey])
+      [[Model model] appendToBlacklistSuffixes: signatures];
+
+    else if([key isEqualToString: kBlacklistMatchKey])
+      [[Model model] appendToBlacklistMatches: signatures];
+
     else
       [myAdwareSignatures
         setObject: [self expandSignatures: signatures]

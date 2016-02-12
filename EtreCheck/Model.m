@@ -29,6 +29,8 @@
 @synthesize whitelistFiles = myWhitelistFiles;
 @synthesize whitelistPrefixes = myWhitelistPrefixes;
 @synthesize blacklistFiles = myBlacklistFiles;
+@synthesize blacklistMatches = myBlacklistMatches;
+@synthesize blacklistSuffixes = myBlacklistSuffixes;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
 @synthesize adwareFound = myAdwareFound;
@@ -83,6 +85,8 @@
     myWhitelistFiles = [NSMutableSet new];
     myWhitelistPrefixes = [NSMutableSet new];
     myBlacklistFiles = [NSMutableSet new];
+    myBlacklistSuffixes = [NSMutableSet new];
+    myBlacklistMatches = [NSMutableSet new];
     }
     
   return self;
@@ -91,6 +95,8 @@
 // Destructor.
 - (void) dealloc
   {
+  [myBlacklistSuffixes release];
+  [myBlacklistMatches release];
   [myBlacklistFiles release];
   [myWhitelistFiles release];
   [myWhitelistPrefixes release];
@@ -220,9 +226,84 @@
 - (bool) isAdware: (NSString *) path
   {
   if(path)
-    return [self.adwareFiles objectForKey: path];
+    if([self.adwareFiles objectForKey: path])
+      return YES;
   
-  return NO;
+  bool adware = NO;
+  
+  for(NSString * suffix in self.blacklistSuffixes)
+    if([path hasSuffix: suffix])
+      {
+      [self.adwareFiles setObject: @"blacklist_suffix" forKey: path];
+      adware = YES;
+      }
+    
+  for(NSString * match in self.blacklistMatches)
+    if([path rangeOfString: match].location != NSNotFound)
+      {
+      [self.adwareFiles setObject: @"blacklist_match" forKey: path];
+      adware = YES;
+      }
+    
+  if([self isAdwareTrio: path])
+    {
+    [self.adwareFiles setObject: @"blacklist_trio" forKey: path];
+    adware = YES;
+    }
+    
+  return adware;
+  }
+
+// Is this an adware suffix file?
+- (bool) isAdwareTrio: (NSString *) path
+  {
+  NSString * prefix = path;
+  
+  bool trio = NO;
+  
+  if([path hasSuffix: @".daemon.plist"])
+    {
+    prefix = [path substringToIndex: [path length] - 13];
+    
+    trio = YES;
+    }
+    
+  if([path hasSuffix: @".agent.plist"])
+    {
+    prefix = [path substringToIndex: [path length] - 12];
+    
+    trio = YES;
+    }
+    
+  if([path hasSuffix: @".helper.plist"])
+    {
+    prefix = [path substringToIndex: [path length] - 13];
+    
+    trio = YES;
+    }
+    
+  int count = 0;
+  
+  if([self adwareTrioExists: prefix suffix: @".daemon.plist"])
+    ++count;
+
+  if([self adwareTrioExists: prefix suffix: @".agent.plist"])
+    ++count;
+
+  if([self adwareTrioExists: prefix suffix: @".helper.plist"])
+    ++count;
+
+  return count == 3;
+  }
+
+// Does an AdwareTrio file exist?
+- (bool) adwareTrioExists: (NSString *) prefix suffix: (NSString *) suffix
+  {
+  bool exists =
+    [[NSFileManager defaultManager]
+      fileExistsAtPath: [prefix stringByAppendingString: suffix]];
+    
+  return exists;
   }
 
 // Is this file an adware extension?
@@ -253,6 +334,18 @@
 - (void) appendToBlacklist: (NSArray *) names
   {
   [self.blacklistFiles addObjectsFromArray: names];
+  }
+
+// Set the blacklist suffixes.
+- (void) appendToBlacklistSuffixes: (NSArray *) names
+  {
+  [self.blacklistSuffixes addObjectsFromArray: names];
+  }
+
+// Set the blacklist matches.
+- (void) appendToBlacklistMatches: (NSArray *) names
+  {
+  [self.blacklistMatches addObjectsFromArray: names];
   }
 
 // Check the file against the whitelist.

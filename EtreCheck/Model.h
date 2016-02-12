@@ -49,6 +49,8 @@
   NSMutableSet * myWhitelistFiles;
   NSMutableSet * myWhitelistPrefixes;
   NSMutableSet * myBlacklistFiles;
+  NSMutableSet * myBlacklistSuffixes;
+  NSMutableSet * myBlacklistMatches;
   NSString * myComputerName;
   NSString * myHostName;
   bool myAdwareFound;
@@ -114,6 +116,12 @@
 // Blacklist files.
 @property (readonly) NSMutableSet * blacklistFiles;
 
+// Blacklist suffixes.
+@property (readonly) NSMutableSet * blacklistSuffixes;
+
+// Blacklist matches.
+@property (readonly) NSMutableSet * blacklistMatches;
+
 // Localized host name.
 @property (retain) NSString * computerName;
 
@@ -173,6 +181,12 @@
 
 // Add files to the blacklist.
 - (void) appendToBlacklist: (NSArray *) names;
+
+// Set the blacklist suffixes.
+- (void) appendToBlacklistSuffixes: (NSArray *) names;
+
+// Set the blacklist matches.
+- (void) appendToBlacklistMatches: (NSArray *) names;
 
 // Check the file against the whitelist.
 - (bool) checkWhitelistFile: (NSString *) name path: (NSString *) path;

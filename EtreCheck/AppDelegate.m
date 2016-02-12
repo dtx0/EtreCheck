@@ -462,7 +462,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   NSURL * url =
     [NSURL
       URLWithString:
-        @"http://etrecheck.com/download/ApplicationUpdates.plist"];
+        @"http://etrecheck.com/download/ApplicationUpdatesNO.plist"];
 
   /* NSURL * url =
     [NSURL

@@ -317,8 +317,9 @@
   // In order to find adware in Safari extensions, the Adware collector has
   // to be created first, but then the Safari extension collection has to
   // run fist. Such is life.
+  AdwareCollector * adwareCollector = [[AdwareCollector new] autorelease];
+  
   [collectors addObject: [[SafariExtensionsCollector new] autorelease]];
-  [collectors addObject: [[AdwareCollector new] autorelease]];
   
   // Run the rest of the collectors.
   [collectors addObject: [[StartupItemsCollector new] autorelease]];
@@ -336,6 +337,7 @@
   [collectors addObject: [[ITunesPlugInsCollector new] autorelease]];
   [collectors addObject: [[UserITunesPlugInsCollector new] autorelease]];
 
+  [collectors addObject: adwareCollector];
   [collectors addObject: [[UnknownFilesCollector new] autorelease]];
 
   // Start the agents and daemons animation.
