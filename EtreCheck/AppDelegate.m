@@ -462,7 +462,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   NSURL * url =
     [NSURL
       URLWithString:
-        @"http://etrecheck.com/download/ApplicationUpdatesNO.plist"];
+        @"http://etrecheck.com/download/ApplicationUpdates.plist"];
 
   /* NSURL * url =
     [NSURL
@@ -1611,7 +1611,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       ask = NO;
     }
     
-  NSLog(@"Run count %d, ask = %d", runCount, ask);
   if(ask)
     [self showDonate: self];
   }
