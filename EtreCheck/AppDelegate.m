@@ -763,7 +763,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[NSApplication sharedApplication] endSheet: self.donatePanel];
 
   [[NSUserDefaults standardUserDefaults]
-    setObject: [NSNumber numberWithInt: 4] forKey: @"reportcount"];
+    setObject: @"later" forKey: @"donate"];
   }
 
 // Donate now.
@@ -775,7 +775,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[NSApplication sharedApplication] endSheet: self.donatePanel];
 
   [[NSUserDefaults standardUserDefaults]
-    removeObjectForKey: @"reportcount"];
+    setObject: @"yes" forKey: @"donate"];
   }
 
 // Start the report.
@@ -1572,12 +1572,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   bool ask = NO;
   
-  NSUInteger justCheckingIndex =
-    (self.chooseAProblemButton.menu.itemArray.count - 1);
-    
-  if(self.problemIndex == justCheckingIndex)
-    ask = YES;
-    
   NSNumber * count =
     [[NSUserDefaults standardUserDefaults]
       objectForKey: @"reportcount"];
@@ -1587,12 +1581,37 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if([count respondsToSelector: @selector(intValue)])
     runCount = [count intValue];
   
-  if(runCount > 5)
-    ask = YES;
+  // If the user has donated before, try to avoid annoying them.
+  NSString * donate =
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"donate"];
+  
+  if([donate isEqualToString: @"yes"])
+    {
+    if(!(runCount % 20))
+      ask = YES;
+    }
+  else if([donate isEqualToString: @"later"])
+    {
+    if(!(runCount % 5))
+      ask = YES;
+    }
+  else
+    {
+    NSUInteger justCheckingIndex =
+      (self.chooseAProblemButton.menu.itemArray.count - 1);
+      
+    if(self.problemIndex == justCheckingIndex)
+      ask = YES;
+      
+    if(runCount > 5)
+      ask = YES;
+      
+    if(runCount > 100)
+      ask = NO;
+    }
     
-  if(runCount > 100)
-    ask = NO;
-    
+  NSLog(@"Run count %d, ask = %d", runCount, ask);
   if(ask)
     [self showDonate: self];
   }
