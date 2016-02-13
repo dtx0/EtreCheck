@@ -37,6 +37,9 @@
 // Signature checking is expensive.
 @synthesize signatureCache = mySignatureCache;
 
+// Date formatters are expensive.
+@synthesize dateFormatters = myDateFormatters;
+
 // Return the singeton of shared values.
 + (Utilities *) shared
   {
@@ -66,6 +69,7 @@
     [self loadEnglishStrings];
     
     mySignatureCache = [NSMutableDictionary new];
+    myDateFormatters = [NSMutableDictionary new];
     }
     
   return self;
@@ -74,6 +78,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myDateFormatters release];
   [mySignatureCache release];
   [myEnglishBundle release];
   
@@ -1125,6 +1130,58 @@
     return [path stringByAppendingString: @"/"];
     
   return path;
+  }
+
+// Return a date string.
++ (NSString *) dateAsString: (NSDate *) date
+  {
+  return [Utilities dateAsString: date format: @"yyyy-MM-dd HH:mm:ss"];
+  }
+  
+// Return a date string in a format.
++ (NSString *) dateAsString: (NSDate *) date format: (NSString *) format
+  {
+  NSDateFormatter * dateFormatter = [Utilities formatter: format];
+    
+  return [dateFormatter stringFromDate: date];
+  }
+
+// Return a string as a date.
++ (NSDate *) stringAsDate: (NSString *) dateString
+  {
+  return
+    [Utilities stringAsDate: dateString format: @"yyyy-MM-dd HH:mm:ss"];
+  }
+
+// Return a date string in a format.
++ (NSDate *) stringAsDate: (NSString *) dateString
+  format: (NSString *) format
+  {
+  NSDateFormatter * dateFormatter = [Utilities formatter: format];
+    
+  return [dateFormatter dateFromString: dateString];
+  }
+
+// Return a date formatter.
++ (NSDateFormatter *) formatter: (NSString *) format
+  {
+  NSDateFormatter * dateFormatter =
+    [[[Utilities shared] dateFormatters] objectForKey: format];
+    
+  if(!dateFormatter)
+    {
+    dateFormatter = [[NSDateFormatter alloc] init];
+    
+    [dateFormatter setDateFormat: format];
+    [dateFormatter setTimeZone: [NSTimeZone localTimeZone]];
+    [dateFormatter
+      setLocale: [NSLocale localeWithLocaleIdentifier: @"en_US"]];
+
+    [[[Utilities shared] dateFormatters]
+      setObject: dateFormatter forKey: format];
+    }
+    
+  return dateFormatter;
   }
 
 @end

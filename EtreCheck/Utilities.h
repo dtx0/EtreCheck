@@ -47,6 +47,8 @@
   NSBundle * myEnglishBundle;
   
   NSMutableDictionary * mySignatureCache;
+  
+  NSMutableDictionary * myDateFormatters;
   }
 
 // Make some handy shared values available to all collectors.
@@ -71,6 +73,7 @@
 @property (readonly) NSBundle * EnglishBundle;
 
 @property (readonly) NSMutableDictionary * signatureCache;
+@property (readonly) NSMutableDictionary * dateFormatters;
 
 // Return the singeton of shared utilities.
 + (Utilities *) shared;
@@ -153,5 +156,18 @@
 
 // Make a path that is suitable for a URL by appending a / for a directory.
 + (NSString *) makeURLPath: (NSString *) path;
+
+// Return a date string.
++ (NSString *) dateAsString: (NSDate *) date;
+
+// Return a date string in a format.
++ (NSString *) dateAsString: (NSDate *) date format: (NSString *) format;
+
+// Return a string as a date.
++ (NSDate *) stringAsDate: (NSString *) dateString;
+
+// Return a date string in a format.
++ (NSDate *) stringAsDate: (NSString *) dateString
+  format: (NSString *) format;
 
 @end

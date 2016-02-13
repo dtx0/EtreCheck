@@ -11,16 +11,11 @@
   {
   bool insufficientPermissions;
   
-  NSDateFormatter * myDateFormatter;
-  NSDateFormatter * myLogDateFormatter;
-  
   BOOL hasOutput;
   
   NSMutableSet * myPaths;
   }
 
-@property (retain) NSDateFormatter * dateFormatter;
-@property (retain) NSDateFormatter * logDateFormatter;
 @property (retain) NSMutableSet * paths;
 
 @end

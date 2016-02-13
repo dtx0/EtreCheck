@@ -8,9 +8,5 @@
 
 // Collect information from log files.
 @interface LogCollector : Collector
-  {
-  NSDateFormatter * aslLogDateFormatter;
-  NSDateFormatter * systemLogDateFormatter;
-  }
 
 @end

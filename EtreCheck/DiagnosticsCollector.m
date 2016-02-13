@@ -15,8 +15,6 @@
 // Collect diagnostics information.
 @implementation DiagnosticsCollector
 
-@synthesize dateFormatter = myDateFormatter;
-@synthesize logDateFormatter = myLogDateFormatter;
 @synthesize paths = myPaths;
 
 // Constructor.
@@ -28,18 +26,6 @@
     {
     self.name = @"diagnostics";
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-
-    myDateFormatter = [[NSDateFormatter alloc] init];
-   
-    [myDateFormatter setDateFormat: @"yyyy-MM-dd-HHmmss"];
-    [myDateFormatter setLocale: [NSLocale systemLocale]];
-
-    myLogDateFormatter = [[NSDateFormatter alloc] init];
-   
-    [myLogDateFormatter setDateFormat: @"MMM d, yyyy, hh:mm:ss a"];
-    [myLogDateFormatter setTimeZone: [NSTimeZone localTimeZone]];
-    [myLogDateFormatter
-      setLocale: [NSLocale localeWithLocaleIdentifier: @"en_US"]];
       
     myPaths = [NSMutableSet new];
     }
@@ -51,8 +37,6 @@
 - (void) dealloc
   {
   self.paths = nil;
-  self.dateFormatter = nil;
-  self.logDateFormatter = nil;
   
   [super dealloc];
   }
@@ -324,8 +308,9 @@
   if(count > 1)
     if(date)
       *date =
-        [self.dateFormatter
-          dateFromString: [parts objectAtIndex: count - 2]];
+        [Utilities
+          stringAsDate: [parts objectAtIndex: count - 2]
+          format: @"yyyy-MM-dd-HHmmss"];
 
   // Now construct a safe file name.
   NSMutableArray * safeParts = [NSMutableArray arrayWithArray: parts];
@@ -454,7 +439,8 @@
         [NSString
           stringWithFormat:
             @"    %@     - %@",
-            [self.logDateFormatter stringFromDate: event.date],
+            [Utilities
+              dateAsString: event.date format: @"MMM d, yyyy, hh:mm:ss a"],
             event.name]
       attributes:
         @{
@@ -468,7 +454,8 @@
         [NSString
           stringWithFormat:
             @"    %@    %@",
-            [self.logDateFormatter stringFromDate: event.date],
+            [Utilities
+              dateAsString: event.date format: @"MMM d, yyyy, hh:mm:ss a"],
             event.name]];
   
   if([event.details length])

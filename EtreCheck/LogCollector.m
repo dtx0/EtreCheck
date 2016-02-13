@@ -22,32 +22,9 @@
     {
     self.name = @"log";
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
-
-    aslLogDateFormatter = [[NSDateFormatter alloc] init];
-   
-    [aslLogDateFormatter setDateFormat: @"MMM d, yyyy, hh:mm:ss a"];
-    [aslLogDateFormatter setTimeZone: [NSTimeZone localTimeZone]];
-    [aslLogDateFormatter
-      setLocale: [NSLocale localeWithLocaleIdentifier: @"en_US"]];
-
-    systemLogDateFormatter = [[NSDateFormatter alloc] init];
-   
-    [systemLogDateFormatter setDateFormat: @"MMM d HH:mm:ss"];
-    [systemLogDateFormatter setTimeZone: [NSTimeZone localTimeZone]];
-    [systemLogDateFormatter
-      setLocale: [NSLocale localeWithLocaleIdentifier: @"en_US"]];
     }
     
   return self;
-  }
-
-// Destructor.
-- (void) dealloc
-  {
-  [systemLogDateFormatter release];
-  [aslLogDateFormatter release];
-  
-  [super dealloc];
   }
 
 // Perform the collection.
@@ -175,8 +152,9 @@
         if([line length] >= 24)
           {
           NSDate * logDate =
-            [aslLogDateFormatter
-              dateFromString: [line substringToIndex: 24]];
+            [Utilities
+              stringAsDate: [line substringToIndex: 24]
+              format: @"MMM d, yyyy, hh:mm:ss a"];
         
           if(logDate)
             {
@@ -232,8 +210,9 @@
         if([line length] >= 15)
           {
           NSDate * logDate =
-            [systemLogDateFormatter
-              dateFromString: [line substringToIndex: 15]];
+            [Utilities
+              stringAsDate: [line substringToIndex: 15]
+              format: @"MMM d HH:mm:ss"];
         
           if(logDate)
             {

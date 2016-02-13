@@ -1167,31 +1167,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Get the current date as a string.
 - (NSString *) currentDate
   {
-  NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-
-  [dateFormatter setDateFormat: @"yyyy-MM-dd HH:mm:ss"];
-  [dateFormatter setLocale: [NSLocale systemLocale]];
-
-  NSString * dateString = [dateFormatter stringFromDate: [NSDate date]];
-  
-  [dateFormatter release];
-
-  return dateString;
+  return [Utilities dateAsString: [NSDate date]];
   }
 
 // Get the current file name as a string.
 - (NSString *) currentFilename
   {
-  NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
-
-  [dateFormatter setDateFormat: @"yyyy-MM-dd HHmmss"];
-  [dateFormatter setLocale: [NSLocale systemLocale]];
-
-  NSString * dateString = [dateFormatter stringFromDate: [NSDate date]];
-  
-  [dateFormatter release];
-
-  return dateString;
+  return
+    [Utilities dateAsString: [NSDate date] format: @"yyyy-MM-dd HHmmss"];
   }
 
 // Get the elapsed time as a number of seconds.
