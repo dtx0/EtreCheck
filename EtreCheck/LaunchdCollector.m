@@ -464,8 +464,9 @@
     progress += increment;
     }
     
-  if([self formatAppleCounts: formattedOutput])
-    haveOutput = YES;
+  if([[Model model] hideAppleTasks])
+    if([self formatAppleCounts: formattedOutput])
+      haveOutput = YES;
   
   if(!haveOutput)
     return nil;
