@@ -98,8 +98,6 @@
 "Hidden" = "Caché";
 "    There was a problem retrieving launchd job status.\n" = "    Impossible de trouver le status des taches launchd\n";
 "[Support]" = "[L’aide]";
-"Version: %@" = "Version : %@";
-"    %@:    Version: %@%@" = "    %@ :    Version : %@%@";
 "    %@ - %@: %@\n" = "    %@ - %@ : %@\n";
 "    %@ %@ %@ CPU: %@-core\n" = "    %@ %@ %@ CPU : %@-core\n";
 "    %@: %@Path: %@\n" = "    %@ : %@Chemin : %@\n";
@@ -109,10 +107,9 @@
 "%@%@ (%@) %@ [Startup]: %@ %@ (%@)\n" = "%@%@ (%@) %@ [Démarrage]: %@ %@ (%@)\n";
 "%@%@ (%@) %@ [Startup]: %@ %@\n" = "%@%@ (%@) %@ [Démarrage]: %@ %@\n";
 "%@:\n" = "%@ :\n";
-": (Version: %@%@)" = " : (Version : %@%@)";
 "B KB MB GB TB" = "o Ko Mo Go To";
 "(Last used)" = "(Utilisé en dernier)";
-"    %@: Version: %@%@" = "    %@ : Version : %@%@";
+"    %@: %@%@" = "    %@ : %@%@";
 "linkstyle" = "<head><style>a { font-family: sans-serif; } a:active { color: blue; } a:hover { color: blue; } </style></head>";
 "Update Failed" = "Mise à jour échouée";
 "updatefailed" = "La mise à jour d’EtreCheck a échoué. Vous pouvez continuer, mais peut-être il y a une nouvelle version d’EtreCheck disponible.";

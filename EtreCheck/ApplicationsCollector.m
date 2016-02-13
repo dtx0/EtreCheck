@@ -284,12 +284,7 @@
   if(!OSVersion)
     OSVersion = @"";
     
-  return
-    [NSString
-      stringWithFormat:
-        NSLocalizedString(@": (Version: %@%@)", NULL),
-        version,
-        OSVersion];
+  return [NSString stringWithFormat: @": %@%@", version, OSVersion];
   }
 
 @end

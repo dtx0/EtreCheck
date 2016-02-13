@@ -45,7 +45,7 @@
         appendString:
           [NSString
             stringWithFormat:
-              NSLocalizedString(@"    %@: Version: %@%@", NULL),
+              NSLocalizedString(@"    %@: %@%@", NULL),
               name, version, OSVersion]];
  
       // Some plug-ins are special.

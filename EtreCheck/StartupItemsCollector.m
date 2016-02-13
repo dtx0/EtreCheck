@@ -134,10 +134,7 @@
               : @"",
             [OSVersion length] ? OSVersion : @""];
           
-        version =
-          [NSString
-            stringWithFormat:
-              NSLocalizedString(@"Version: %@", NULL), compositeVersion];
+        version = compositeVersion;
         }
       }
     
