@@ -717,7 +717,7 @@
   {
   NSNumber * cycleCount = nil;
   NSString * health = nil;
-  NSString * serialNumber = @"";
+//  NSString * serialNumber = @"";
   
   for(NSDictionary * info in infos)
     {
@@ -731,12 +731,12 @@
       health = [healthInfo objectForKey: @"sppower_battery_health"];
       }
 
-    NSDictionary * modelInfo =
-      [info objectForKey: @"sppower_battery_model_info"];
-      
-    if(modelInfo)
-      serialNumber =
-        [modelInfo objectForKey: @"sppower_battery_serial_number"];
+//    NSDictionary * modelInfo =
+//      [info objectForKey: @"sppower_battery_model_info"];
+//      
+//    if(modelInfo)
+//      serialNumber =
+//        [modelInfo objectForKey: @"sppower_battery_serial_number"];
     }
     
   if(cycleCount && [health length])
@@ -745,9 +745,9 @@
           [NSString
             stringWithFormat:
               NSLocalizedString(
-                @"    Battery: Health = %@ - Cycle count = %@ - SN = %@\n",
+                @"    Battery: Health = %@ - Cycle count = %@\n",
                 NULL),
-              NSLocalizedString(health, NULL), cycleCount, serialNumber]];
+              NSLocalizedString(health, NULL), cycleCount]];
   }
 
 @end
