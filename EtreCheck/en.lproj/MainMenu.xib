@@ -58,6 +58,7 @@
                 <outlet property="textSizeToolbarItemView" destination="JdO-Ik-I8L" id="zv3-iV-4oP"/>
                 <outlet property="toolbar" destination="HAH-8D-CvP" id="Spo-sd-EYf"/>
                 <outlet property="unknownFilesManager" destination="iUq-Rw-Zgh" id="vhI-kN-mpN"/>
+                <outlet property="updateManager" destination="bfz-hP-xHF" id="O74-PC-PeG"/>
                 <outlet property="userParametersPanel" destination="J2g-N6-sDu" id="TNU-ac-Cz5"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
             </connections>
@@ -121,6 +122,12 @@
                 <outlet property="tableView" destination="TNz-uC-Z0v" id="nar-o9-9DH"/>
                 <outlet property="textView" destination="5D9-us-RSB" id="hLj-FU-R2e"/>
                 <outlet property="window" destination="F5c-hN-DcS" id="crJ-Et-Ssa"/>
+            </connections>
+        </customObject>
+        <customObject id="bfz-hP-xHF" userLabel="Update Manager" customClass="UpdateManager">
+            <connections>
+                <outlet property="textView" destination="IHl-5r-XxW" id="W81-9l-ZiI"/>
+                <outlet property="window" destination="gjM-qW-zLi" id="kEP-nm-w0M"/>
             </connections>
         </customObject>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
@@ -1615,6 +1622,86 @@ Gw
                 </subviews>
             </view>
             <point key="canvasLocation" x="178" y="1988"/>
+        </window>
+        <window title="Update available" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="gjM-qW-zLi" userLabel="Update Window">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="152" y="158" width="568" height="250"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="Qyl-m9-O1R">
+                <rect key="frame" x="0.0" y="0.0" width="568" height="250"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="JmD-TL-KmC">
+                        <rect key="frame" x="20" y="61" width="528" height="124"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <clipView key="contentView" id="aA3-fg-DCT">
+                            <rect key="frame" x="1" y="1" width="526" height="122"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="IHl-5r-XxW">
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="122"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
+                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="EBE-qi-7b0">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="O1a-D6-VFw">
+                            <rect key="frame" x="224" y="1" width="15" height="133"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                    <button verticalHuggingPriority="750" id="uHS-SL-O9E">
+                        <rect key="frame" x="382" y="13" width="172" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Quit and go to update" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7dr-CV-5Fd">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <accessibility description="Close the adware window"/>
+                        <connections>
+                            <action selector="quitAndUpdate:" target="bfz-hP-xHF" id="vcr-jD-xJ6"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="Ngx-vF-efn">
+                        <rect key="frame" x="14" y="13" width="67" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Skip" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JBr-Ui-8qv">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="continueWithoutUpdate:" target="bfz-hP-xHF" id="zGd-Ig-oen"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="nUF-9K-mgf">
+                        <rect key="frame" x="18" y="187" width="532" height="43"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="There is a new version of EtreCheck available. Do you want to quit now and download the new version?" id="EHD-pu-5o0">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="80" y="1708"/>
         </window>
     </objects>
     <resources>

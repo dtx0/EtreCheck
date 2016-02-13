@@ -114,11 +114,8 @@
 "(Last used)" = "(Utilisé en dernier)";
 "    %@: Version: %@%@" = "    %@ : Version : %@%@";
 "linkstyle" = "<head><style>a { font-family: sans-serif; } a:active { color: blue; } a:hover { color: blue; } </style></head>";
-"Update Available" = "Mise à jour disponible";
-"updateavailable" = "Une nouvelle version d’EtreCheck est maintenant disponible. Voulez-vous quitter maintenant et télécharger la nouvelle version ?";
 "Update Failed" = "Mise à jour échouée";
 "updatefailed" = "La mise à jour d’EtreCheck a échoué. Vous pouvez continuer, mais peut-être il y a une nouvelle version d’EtreCheck disponible.";
-"Skip" = "Ignorer";
 "Invalid" = "Non-valide";
 "EtreCheck Report" = "Rapport d’EtreCheck"; 
 "Continue" = "Continuer";
@@ -145,7 +142,6 @@
 " [Recovery]" = " [Restauration]";
 "info" = "ⓘ";
 "startupitemsdeprecated" = "    Les éléments de démarrage sont obsolètes avec OS X Yosemite\n";
-"Quit and go to update" = "Quitter et mettre à jour";
 "Quit" = "Quitter";
 "EtreCheck Report" = "Rapport EtreCheck";
 "Problem: " = "Problème :";
@@ -283,3 +279,5 @@
 "thanksforadware" = "Nous vous remercions de votre soumission à la liste noire d’adware pour EtreCheck. Il peut prendre quelques jours pour vérifier votre soumission et mettre à jour nos données. Nous vous serions reconnaissants de votre patience.";
 "Adware upload failed" = "Échec de téléchargement";
 "adwareuploadfailed" = "Votre téléchargement adware au serveur EtreCheck a échoué. Voulez-vous utiliser le courriel à la place?";
+"nocontenthtml" = "<strong>Aucune information sur la mise à jour n’est disponible.</strong>";
+"changes" = "changes_fr";

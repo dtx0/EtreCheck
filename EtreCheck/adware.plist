@@ -833,6 +833,7 @@
     <string>com.logos.VerbumIndexer.plist</string>
     <string>com.lsreset.plist</string>
     <string>com.luomat.loginhook.plist</string>
+    <string>com.luomat.loginhook-2.plist</string>
     <string>com.lytro.Lytro.agent.plist</string>
     <string>com.lytro.Lytro.InstallHelper.plist</string>
     <string>com.m-audio.fasttrackpro.helper.plist</string>

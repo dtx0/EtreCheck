@@ -11,6 +11,7 @@
 @class HelpManager;
 @class AdwareManager;
 @class UnknownFilesManager;
+@class UpdateManager;
 
 @interface AppDelegate : NSObject
   <NSApplicationDelegate,
@@ -80,6 +81,7 @@
   HelpManager * myHelpManager;
   AdwareManager * myAdwareManager;
   UnknownFilesManager * myUnknownFilesManager;
+  UpdateManager * myUpdateManager;
   
   BOOL myReportAvailable;
   NSDate * myReportStartTime;
@@ -148,6 +150,7 @@
 @property (retain) IBOutlet HelpManager * helpManager;
 @property (retain) IBOutlet AdwareManager * adwareManager;
 @property (retain) IBOutlet UnknownFilesManager * unknownFilesManager;
+@property (retain) IBOutlet UpdateManager * updateManager;
 @property (assign) BOOL reportAvailable;
 @property (retain) NSDate * reportStartTime;
 @property (retain) IBOutlet NSWindow * TOUPanel;

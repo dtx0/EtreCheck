@@ -58,6 +58,7 @@
                 <outlet property="textSizeToolbarItemView" destination="YS5-4a-2MZ" id="5d7-vU-BSR"/>
                 <outlet property="toolbar" destination="em7-XY-ghW" id="kS5-WD-SLt"/>
                 <outlet property="unknownFilesManager" destination="co3-N1-xdH" id="eQ2-YC-Gna"/>
+                <outlet property="updateManager" destination="HDE-zp-fvw" id="T7J-ic-Ove"/>
                 <outlet property="userParametersPanel" destination="2ST-Xw-QIL" id="ccY-Yj-EP9"/>
                 <outlet property="window" destination="HCb-1A-LX1" id="Sh9-U5-3Gs"/>
             </connections>
@@ -121,6 +122,12 @@
                 <outlet property="tableView" destination="eq8-ku-8TT" id="kDL-95-4rp"/>
                 <outlet property="textView" destination="I31-Ch-mPs" id="OaW-Ai-8p0"/>
                 <outlet property="window" destination="xrD-Uw-hrd" id="etE-80-nof"/>
+            </connections>
+        </customObject>
+        <customObject id="HDE-zp-fvw" customClass="UpdateManager">
+            <connections>
+                <outlet property="textView" destination="XPC-kr-qJS" id="1e8-IS-nXO"/>
+                <outlet property="window" destination="NOA-VB-1Ir" id="Qxa-Op-5fu"/>
             </connections>
         </customObject>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
@@ -1593,6 +1600,86 @@ DQ
                 </subviews>
             </view>
             <point key="canvasLocation" x="183" y="2787"/>
+        </window>
+        <window title="Mise à jour disponible" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="NOA-VB-1Ir" userLabel="Update Window">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="152" y="158" width="568" height="250"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="Dtt-VM-7UJ">
+                <rect key="frame" x="0.0" y="0.0" width="568" height="250"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="dnF-hE-nmm">
+                        <rect key="frame" x="20" y="61" width="528" height="124"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <clipView key="contentView" id="QNC-U9-pbW">
+                            <rect key="frame" x="1" y="1" width="526" height="122"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" linkDetection="YES" spellingCorrection="YES" id="XPC-kr-qJS">
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="122"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
+                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="minSize" width="526" height="122"/>
+                                    <size key="maxSize" width="528" height="10000000"/>
+                                </textView>
+                            </subviews>
+                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </clipView>
+                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="W3e-bl-SfL">
+                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="3Ja-x4-A8b">
+                            <rect key="frame" x="224" y="1" width="15" height="133"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </scroller>
+                    </scrollView>
+                    <button verticalHuggingPriority="750" id="aGD-sk-MQd">
+                        <rect key="frame" x="375" y="13" width="179" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Quitter et mettre à jour" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yTd-gn-pAz">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <accessibility description="Close the adware window"/>
+                        <connections>
+                            <action selector="quitAndUpdate:" target="HDE-zp-fvw" id="oT7-e4-VwM"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="tNy-fi-tA5">
+                        <rect key="frame" x="18" y="187" width="532" height="43"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Une nouvelle version d’EtreCheck est maintenant disponible. Voulez-vous quitter maintenant et télécharger la nouvelle version ?" id="6UX-Nr-CjQ">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" id="G7s-qp-lJb">
+                        <rect key="frame" x="14" y="13" width="84" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Ignorer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RdH-vg-RgS">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="continueWithoutUpdate:" target="HDE-zp-fvw" id="7o9-en-ppL"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="80" y="1708"/>
         </window>
     </objects>
     <resources>

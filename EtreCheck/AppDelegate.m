@@ -25,6 +25,7 @@
 #import "EtreCheckToolbarItem.h"
 #import "AdwareManager.h"
 #import "UnknownFilesManager.h"
+#import "UpdateManager.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -101,6 +102,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize helpManager = myHelpManager;
 @synthesize adwareManager = myAdwareManager;
 @synthesize unknownFilesManager = myUnknownFilesManager;
+@synthesize updateManager = myUpdateManager;
 @synthesize reportAvailable = myReportAvailable;
 @synthesize reportStartTime = myReportStartTime;
 @synthesize TOUPanel = myTOUPanel;
@@ -464,10 +466,10 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       URLWithString:
         @"http://etrecheck.com/download/ApplicationUpdates.plist"];
 
-  /* NSURL * url =
-    [NSURL
-      URLWithString:
-        @"http://etrecheck.com/download/ApplicationUpdatesTest.plist"]; */
+//  url =
+//    [NSURL
+//      URLWithString:
+//        @"http://etrecheck.com/download/ApplicationUpdatesTest.plist"];
 
   __block NSData * data = nil;
   
@@ -536,6 +538,9 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           if([version intValue] > [appVersion intValue])
             [self
               presentUpdate:
+                [attributes
+                  objectForKey: NSLocalizedString(@"changes", NULL)]
+              url:
                 [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
             
           NSArray * whitelist = [attributes objectForKey: @"whitelist"];
@@ -560,32 +565,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   }
 
 // Show the update dialog.
-- (void) presentUpdate: (NSURL *) url
+- (void) presentUpdate: (NSString *) changes url: (NSURL *) url
   {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert setMessageText: NSLocalizedString(@"Update Available", NULL)];
-    
-  [alert setAlertStyle: NSInformationalAlertStyle];
-
-  [alert setInformativeText: NSLocalizedString(@"updateavailable", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert
-    addButtonWithTitle: NSLocalizedString(@"Quit and go to update", NULL)];
-
-  [alert addButtonWithTitle: NSLocalizedString(@"Skip", NULL)];
-
-  NSInteger result = [alert runModal];
-
-  if(result == NSAlertFirstButtonReturn)
-    {
-    [[NSWorkspace sharedWorkspace] openURL: url];
-    
-    [[NSApplication sharedApplication] terminate: self];
-    }
-    
-  [alert release];
+  self.updateManager.content = changes;
+  self.updateManager.updateURL = url;
+  
+  [self.updateManager show];
   }
 
 // Show the update failed dialog.
