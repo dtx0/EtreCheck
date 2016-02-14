@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
 #import "TTTLocalizedPluralString.h"
+#import "NSDate+Etresoft.h"
 
 @implementation LaunchdCollector
 
@@ -499,6 +500,9 @@
   if(!status)
     return NO;
     
+  [status
+    setObject: [self modificationDate: path] forKey: kModificationDate];
+
   NSString * filename = [status objectForKey: kFilename];
   bool hideAppleTasks = [[Model model] hideAppleTasks];
   NSNumber * ignore = [NSNumber numberWithBool: hideAppleTasks];
@@ -871,7 +875,51 @@
     else if([trimmedLine hasPrefix: @"bundle id = "])
       [status
         setObject: [trimmedLine substringFromIndex: 12] forKey: kBundleID];
+    else if([trimmedLine hasPrefix: @"program = "])
+      [self
+        updateModificationDate: status
+        path: [trimmedLine substringFromIndex: 10]];
+    else if([trimmedLine hasPrefix: @"parent bundle identifier = "])
+      [self
+        updateModificationDate: status
+        bundleID: [trimmedLine substringFromIndex: 27]];
     }
+  }
+
+// Update the modification date.
+- (void) updateModificationDate: (NSMutableDictionary *) status
+  path: (NSString *) path
+  {
+  NSDate * currentModificationDate =
+    [status objectForKey: kModificationDate];
+  
+  NSDate * modificationDate = [self modificationDate: path];
+  
+  if([modificationDate isLaterThan: currentModificationDate])
+    [status setObject: modificationDate forKey: kModificationDate];
+  }
+
+// Update the modification date.
+- (void) updateModificationDate: (NSMutableDictionary *) status
+  bundleID: (NSString *) bundleID
+  {
+  NSURL * url =
+    [[NSWorkspace sharedWorkspace]
+      URLForApplicationWithBundleIdentifier: bundleID];
+    
+  if(url)
+    [self updateModificationDate: status path: [url path]];
+  }
+
+// Get the modification date of a file.
+- (NSDate *) modificationDate: (NSString *) path
+  {
+  NSRange appRange = [path rangeOfString: @".app/Contents/MacOS/"];
+  
+  if(appRange.location != NSNotFound)
+    path = [path substringToIndex: appRange.location + 4];
+
+  return [Utilities modificationDate: path];
   }
 
 // Format a codesign response.
@@ -1067,52 +1115,103 @@
   for: (NSString *) path
   {
   if([[Model model] isAdware: path])
+    return [self formatAdware: status for: path];
+    
+  else if([[status objectForKey: kApple] boolValue])
+    return [self formatApple: status for: path];
+    
+  NSMutableAttributedString * extra =
+    [[NSMutableAttributedString alloc] init];
+
+  NSDate * modificationDate =
+    [status objectForKey: kModificationDate];
+
+  NSString * modificationDateString =
+    [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+  
+  if(modificationDateString)
+    [extra
+      appendString:
+        [NSString stringWithFormat: @" (%@)", modificationDateString]];
+
+  [extra appendAttributedString: [self formatSupportLink: status]];
+  
+  return [extra autorelease];
+  }
+
+// Format adware.
+- (NSAttributedString *) formatAdware: (NSDictionary *) status
+  for: (NSString *) path
+  {
+  NSMutableAttributedString * extra =
+    [[NSMutableAttributedString alloc] init];
+
+  NSDate * modificationDate =
+    [status objectForKey: kModificationDate];
+
+  NSString * modificationDateString =
+    [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+  
+  if(modificationDateString)
+    [extra
+      appendString:
+        [NSString stringWithFormat: @" (%@)", modificationDateString]];
+
+  [extra appendString: @" "];
+
+  [extra
+    appendString: NSLocalizedString(@"Adware!", NULL)
+    attributes:
+      @{
+        NSForegroundColorAttributeName : [[Utilities shared] red],
+        NSFontAttributeName : [[Utilities shared] boldFont]
+      }];
+    
+  NSAttributedString * removeLink = [self generateRemoveAdwareLink];
+
+  if(removeLink)
+    {
+    [extra appendString: @" "];
+    
+    [extra appendAttributedString: removeLink];
+    }
+    
+  return [extra autorelease];
+  }
+
+// Format Apple software.
+- (NSAttributedString *) formatApple: (NSDictionary *) status
+  for: (NSString *) path
+  {
+  NSString * signatureStatus = [status objectForKey: kSignature];
+  
+  if(![signatureStatus isEqualToString: kSignatureValid])
     {
     NSMutableAttributedString * extra =
       [[NSMutableAttributedString alloc] init];
 
-    [extra appendString: @" "];
+    NSDate * modificationDate =
+      [status objectForKey: kModificationDate];
 
+    NSString * modificationDateString =
+      [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+    
+    if(modificationDateString)
+      [extra
+        appendString:
+          [NSString stringWithFormat: @" (%@)", modificationDateString]];
+
+    NSString * message = [self formatAppleSignature: status];
+      
     [extra
-      appendString: NSLocalizedString(@"Adware!", NULL)
+      appendString: message
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red],
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
-      
-    NSAttributedString * removeLink = [self generateRemoveAdwareLink];
-
-    if(removeLink)
-      {
-      [extra appendString: @" "];
-      
-      [extra appendAttributedString: removeLink];
-      }
-      
-    return [extra autorelease];
-    }
-  else if([[status objectForKey: kApple] boolValue])
-    {
-    NSString * signatureStatus = [status objectForKey: kSignature];
     
-    if(![signatureStatus isEqualToString: kSignatureValid])
-      {
-      NSMutableAttributedString * extra =
-        [[NSMutableAttributedString alloc] init];
-
-      NSString * message = [self formatAppleSignature: status];
-        
-      [extra
-        appendString: message
-        attributes:
-          @{
-            NSForegroundColorAttributeName : [[Utilities shared] red],
-            NSFontAttributeName : [[Utilities shared] boldFont]
-          }];
-      
-      return [extra autorelease];
-      }
+    return [extra autorelease];
     }
     
   return [self formatSupportLink: status];

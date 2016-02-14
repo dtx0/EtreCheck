@@ -109,7 +109,7 @@
 "%@:\n" = "%@ :\n";
 "B KB MB GB TB" = "o Ko Mo Go To";
 "(Last used)" = "(Utilisé en dernier)";
-"    %@: %@%@" = "    %@ : %@%@";
+"    %@: %@%@%@" = "    %@ : %@%@%@";
 "linkstyle" = "<head><style>a { font-family: sans-serif; } a:active { color: blue; } a:hover { color: blue; } </style></head>";
 "Update Failed" = "Mise à jour échouée";
 "updatefailed" = "La mise à jour d’EtreCheck a échoué. Vous pouvez continuer, mais peut-être il y a une nouvelle version d’EtreCheck disponible.";

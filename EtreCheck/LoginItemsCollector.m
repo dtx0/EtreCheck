@@ -123,15 +123,45 @@
 
   bool isHidden = [hidden isEqualToString: @"true"];
   
+  NSString * modificationDateString =
+    [self modificationDateString: path];
+    
   [self.result
     appendString:
       [NSString
         stringWithFormat:
-          @"    %@    %@ %@ (%@)\n",
+          @"    %@    %@ %@ (%@)%@\n",
           name,
           kind,
           isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
-          path]];
+          path,
+          modificationDateString]];
+  }
+
+// Get the modification date string of a path.
+- (NSString *) modificationDateString: (NSString *) path
+  {
+  NSDate * modificationDate = [self modificationDate: path];
+  
+  if(modificationDate)
+    return
+      [NSString
+        stringWithFormat:
+          @" (%@)",
+          [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"]];
+    
+  return @"";
+  }
+
+// Get the modification date of a file.
+- (NSDate *) modificationDate: (NSString *) path
+  {
+  NSRange appRange = [path rangeOfString: @".app/Contents/MacOS/"];
+  
+  if(appRange.location != NSNotFound)
+    path = [path substringToIndex: appRange.location + 4];
+
+  return [Utilities modificationDate: path];
   }
 
 // Parse a key/value from a login item result.

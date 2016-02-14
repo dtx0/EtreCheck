@@ -170,4 +170,8 @@
 + (NSDate *) stringAsDate: (NSString *) dateString
   format: (NSString *) format;
 
+// Try to find the modification date for a path. This will be the most
+// recent creation or modification date for any file in the hierarchy.
++ (NSDate *) modificationDate: (NSString *) path;
+
 @end

@@ -152,6 +152,8 @@
     appendString:
       [NSString stringWithFormat: @"    %@", humanReadableName]];
     
+  [self appendModificationDate: extension];
+  
   NSString * path = [extension objectForKey: kFilePath];
   
   bool adware =
@@ -192,6 +194,24 @@
     }
 
   [self.result appendString: @"\n"];
+  }
+
+// Append the modification date.
+- (void) appendModificationDate: (NSDictionary *) extension
+  {
+  NSDate * modificationDate =
+    [Utilities modificationDate: [extension objectForKey: kFilePath]];
+    
+  if(modificationDate)
+    {
+    NSString * modificationDateString =
+      [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+    
+    if(modificationDateString)
+      [self.result
+        appendString:
+          [NSString stringWithFormat: @" (%@)", modificationDateString]];
+    }
   }
 
 // Read the extension plist dictionary.

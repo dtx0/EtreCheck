@@ -243,6 +243,17 @@
       NSMutableAttributedString * extra =
         [[NSMutableAttributedString alloc] init];
       
+      NSDate * modificationDate =
+        [status objectForKey: kModificationDate];
+
+      NSString * modificationDateString =
+        [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+      
+      if(modificationDateString)
+        [extra
+          appendString:
+            [NSString stringWithFormat: @" (%@)", modificationDateString]];
+
       NSString * message = [self formatAppleSignature: status];
     
       [extra
@@ -257,7 +268,23 @@
       }
     }
     
-  return [self formatSupportLink: status];
+  NSMutableAttributedString * extra =
+    [[NSMutableAttributedString alloc] init];
+
+  NSDate * modificationDate =
+    [status objectForKey: kModificationDate];
+
+  NSString * modificationDateString =
+    [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+  
+  if(modificationDateString)
+    [extra
+      appendString:
+        [NSString stringWithFormat: @" (%@)", modificationDateString]];
+
+  [extra appendAttributedString: [self formatSupportLink: status]];
+
+  return [extra autorelease];
   }
 
 @end

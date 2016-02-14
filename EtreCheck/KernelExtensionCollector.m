@@ -692,15 +692,34 @@
         dictionaryWithObjectsAndKeys:
           color, NSForegroundColorAttributeName, nil]];
 
+  NSString * date = [self modificationDate: [bundle objectForKey: @"path"]];
+  
   [formattedOutput
     appendString:
       [NSString
-        stringWithFormat: @"%@ (%@%@)", label, version, OSVersion]];
+        stringWithFormat: @"%@ (%@%@%@)", label, version, OSVersion, date]];
     
   [formattedOutput
     appendAttributedString: [self getSupportLink: bundle]];
     
   return [formattedOutput autorelease];
+  }
+
+// Append the modification date.
+- (NSString *) modificationDate: (NSString *) path
+  {
+  NSDate * modificationDate = [Utilities modificationDate: path];
+    
+  if(modificationDate)
+    {
+    NSString * modificationDateString =
+      [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+    
+    if(modificationDateString)
+      return [NSString stringWithFormat: @" - %@", modificationDateString];
+    }
+    
+  return @"";
   }
 
 @end

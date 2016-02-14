@@ -41,12 +41,14 @@
       
       NSString * OSVersion = [self getOSVersion: plugin age: & age];
       
+      NSString * date = [self modificationDate: path];
+      
       [self.result
         appendString:
           [NSString
             stringWithFormat:
-              NSLocalizedString(@"    %@: %@%@", NULL),
-              name, version, OSVersion]];
+              NSLocalizedString(@"    %@: %@%@%@", NULL),
+              name, version, OSVersion, date]];
  
       // Some plug-ins are special.
       if([name isEqualToString: @"JavaAppletPlugin"])
@@ -67,6 +69,23 @@
 
     [self.result appendString: @"\n"];
     }
+  }
+
+// Append the modification date.
+- (NSString *) modificationDate: (NSString *) path
+  {
+  NSDate * modificationDate = [Utilities modificationDate: path];
+    
+  if(modificationDate)
+    {
+    NSString * modificationDateString =
+      [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+    
+    if(modificationDateString)
+      return [NSString stringWithFormat: @" (%@)", modificationDateString];
+    }
+    
+  return @"";
   }
 
 // Find all the plug-in bundles in the given path.

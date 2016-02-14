@@ -9,6 +9,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import <CoreServices/CoreServices.h>
 #import <Carbon/Carbon.h>
+#import "NSDate+Etresoft.h"
 
 // Assorted utilities.
 @implementation Utilities
@@ -1141,9 +1142,14 @@
 // Return a date string in a format.
 + (NSString *) dateAsString: (NSDate *) date format: (NSString *) format
   {
-  NSDateFormatter * dateFormatter = [Utilities formatter: format];
+  if(date)
+    {
+    NSDateFormatter * dateFormatter = [Utilities formatter: format];
     
-  return [dateFormatter stringFromDate: date];
+    return [dateFormatter stringFromDate: date];
+    }
+    
+  return nil;
   }
 
 // Return a string as a date.
@@ -1157,9 +1163,14 @@
 + (NSDate *) stringAsDate: (NSString *) dateString
   format: (NSString *) format
   {
-  NSDateFormatter * dateFormatter = [Utilities formatter: format];
+  if(dateString)
+    {
+    NSDateFormatter * dateFormatter = [Utilities formatter: format];
     
-  return [dateFormatter dateFromString: dateString];
+    return [dateFormatter dateFromString: dateString];
+    }
+    
+  return nil;
   }
 
 // Return a date formatter.
@@ -1182,6 +1193,98 @@
     }
     
   return dateFormatter;
+  }
+
+// Try to find the modification date for a path. This will be the most
+// recent creation or modification date for any file in the hierarchy.
++ (NSDate *) modificationDate: (NSString *) path
+  {
+  BOOL isDirectory = NO;
+  
+  BOOL exists =
+    [[NSFileManager defaultManager]
+      fileExistsAtPath: path isDirectory: & isDirectory];
+  
+  if(exists)
+    {
+    if(!isDirectory)
+      return [Utilities fileModificationDate: path];
+      
+    return [Utilities directoryModificationDate: path];
+    }
+    
+  return nil;
+  }
+
+// Try to find the modification date for a file. This will be the most
+// recent creation or modification date for the file.
++ (NSDate *) fileModificationDate: (NSString *) path
+  {
+  NSDictionary * attributes =
+    [[NSFileManager defaultManager]
+      attributesOfItemAtPath: path error: NULL];
+  
+  NSDate * modificationDate = [attributes fileModificationDate];
+  NSDate * creationDate = [attributes fileCreationDate];
+  
+  if(creationDate)
+    {
+    if(modificationDate)
+      if([modificationDate isLaterThan: creationDate])
+        return modificationDate;
+    
+    return creationDate;
+    }
+  
+  return nil;
+  }
+
+// Try to find the modification date for a path. This will be the most
+// recent creation or modification date for any file in the hierarchy.
++ (NSDate *) directoryModificationDate: (NSString *) path
+  {
+  NSURL * directoryURL = [NSURL fileURLWithPath: path];
+  
+  NSFileManager * localFileManager= [[NSFileManager alloc] init];
+  
+  NSArray * keys =
+    [NSArray
+      arrayWithObjects:
+        NSURLContentModificationDateKey, NSURLCreationDateKey, nil];
+  
+  NSDirectoryEnumerator * directoryEnumerator =
+   [localFileManager
+     enumeratorAtURL: directoryURL
+       includingPropertiesForKeys: keys
+       options: 0
+       errorHandler: nil];
+ 
+  NSDate * date = [Utilities fileModificationDate: path];
+  
+  if(date)
+    for(NSURL * fileURL in directoryEnumerator)
+      {
+      NSDate * modificationDate = nil;
+      NSDate * creationDate = nil;
+      
+      [fileURL
+        getResourceValue: & modificationDate
+        forKey: NSURLContentModificationDateKey
+        error: NULL];
+      
+      [fileURL
+        getResourceValue: & creationDate
+        forKey: NSURLCreationDateKey
+        error: NULL];
+
+      if([creationDate isLaterThan: date])
+        date = creationDate;
+        
+      if([modificationDate isLaterThan: date])
+        date = modificationDate;
+      }
+    
+  return date;
   }
 
 @end

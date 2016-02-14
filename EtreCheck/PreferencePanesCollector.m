@@ -80,6 +80,7 @@
   NSString * support = [item objectForKey: @"spprefpane_support"];
   NSString * bundleID =
     [item objectForKey: @"spprefpane_identifier"];
+  NSString * path = [item objectForKey: @"spprefpane_bundlePath"];
 
   if([support isEqualToString: @"spprefpane_support_3rdParty"])
     {
@@ -88,7 +89,9 @@
       
     NSAttributedString * supportLink =
       [self getSupportURL: name bundleID: bundleID];
-      
+    
+    [self appendModificationDate: path];
+    
     if(supportLink)
       [self.result appendAttributedString: supportLink];
       
@@ -98,6 +101,23 @@
     }
     
   return NO;
+  }
+
+// Append the modification date.
+- (void) appendModificationDate: (NSString *) path
+  {
+  NSDate * modificationDate = [Utilities modificationDate: path];
+    
+  if(modificationDate)
+    {
+    NSString * modificationDateString =
+      [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
+    
+    if(modificationDateString)
+      [self.result
+        appendString:
+          [NSString stringWithFormat: @"(%@)", modificationDateString]];
+    }
   }
 
 @end

@@ -22,6 +22,7 @@
 #define kSupportURL @"supporturl"
 #define kDetailsURL @"detailsurl"
 #define kPlist @"plist"
+#define kModificationDate @"modificationdate"
 
 #define kStatusUnknown @"unknown"
 #define kStatusNotLoaded @"notloaded"
