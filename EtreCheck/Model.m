@@ -225,47 +225,66 @@
 // Is this file an adware file?
 - (bool) isAdware: (NSString *) path
   {
-  if(path)
-    if([self.adwareFiles objectForKey: path])
-      return YES;
+  if([path length] == 0)
+    return NO;
+    
+  if([self.adwareFiles objectForKey: path])
+    return YES;
   
   bool adware = NO;
   
-  for(NSString * suffix in self.blacklistSuffixes)
-    if([path hasSuffix: suffix])
-      {
-      [self.adwareFiles setObject: @"blacklist_suffix" forKey: path];
-      adware = YES;
-      }
+  if([self isAdwareSuffix: path])
+    adware = YES;
     
-  if([self isAdwareExecutable: path])
+  if([self isAdwareMatch: path])
     adware = YES;
     
   if([self isAdwareTrio: path])
-    {
-    [self.adwareFiles setObject: @"blacklist_trio" forKey: path];
     adware = YES;
-    }
-    
-  return adware;
-  }
-
-// Is this an adware match?
-- (bool) isAdwareExecutable: (NSString *) path
-  {
-  bool adware = NO;
-  
-  for(NSString * match in self.blacklistMatches)
-    if([path rangeOfString: match].location != NSNotFound)
-      {
-      [self.adwareFiles setObject: @"blacklist_match" forKey: path];
-      adware = YES;
-      }
     
   return adware;
   }
 
 // Is this an adware suffix file?
+- (bool) isAdwareSuffix: (NSString *) path
+  {
+  for(NSString * suffix in self.blacklistSuffixes)
+    if([path hasSuffix: suffix])
+      {
+      NSString * name = [path lastPathComponent];
+      
+      NSString * tag =
+        [name substringToIndex: [name length] - [suffix length]];
+      
+      [self.adwareFiles setObject: [tag lowercaseString] forKey: path];
+      
+      return YES;
+      }
+    
+  return NO;
+  }
+
+// Is this an adware match file?
+- (bool) isAdwareMatch: (NSString *) path
+  {
+  for(NSString * match in self.blacklistMatches)
+    {
+    NSRange range = [path rangeOfString: match];
+    
+    if(range.location != NSNotFound)
+      {
+      NSString * tag = [path substringWithRange: range];
+      
+      [self.adwareFiles setObject: [tag lowercaseString] forKey: path];
+      
+      return YES;
+      }
+    }
+    
+  return NO;
+  }
+
+// Is this an adware trio of daemon/agent/helper?
 - (bool) isAdwareTrio: (NSString *) path
   {
   NSString * prefix = path;
@@ -304,7 +323,19 @@
   if([self adwareTrioExists: prefix suffix: @".helper.plist"])
     ++count;
 
-  return count == 3;
+  if(count == 3)
+    {
+    NSArray * parts = [prefix componentsSeparatedByString: @"."];
+    
+    if([parts count] > 1)
+      prefix = [parts objectAtIndex: 1];
+      
+    [self.adwareFiles setObject: [prefix lowercaseString] forKey: path];
+
+    return YES;
+    }
+    
+  return NO;
   }
 
 // Does an AdwareTrio file exist?
@@ -315,6 +346,92 @@
       fileExistsAtPath: [prefix stringByAppendingString: suffix]];
     
   return exists;
+  }
+
+// Is this an adware match?
+- (bool) isAdwareExecutable: (NSString *) path
+  {
+  BOOL exists =
+    [[NSFileManager defaultManager] fileExistsAtPath: path];
+    
+  if(!exists)
+    return NO;
+    
+  for(NSString * adwarePath in self.adwareFiles)
+    {
+    NSString * tag = [self.adwareFiles objectForKey: adwarePath];
+
+    if(!tag)
+      continue;
+      
+    NSRange range =
+      [path rangeOfString: tag options: NSCaseInsensitiveSearch];
+    
+    if(range.location != NSNotFound)
+      {
+      NSArray * parts = [path componentsSeparatedByString: @"/"];
+      
+      NSMutableArray * adwareExecutableParts = [NSMutableArray array];
+      
+      for(NSString * part in parts)
+        {
+        if(![self isSystemName: part])
+          {
+          range =
+            [part rangeOfString: tag options: NSCaseInsensitiveSearch];
+            
+          if(range.location != NSNotFound)
+            {
+            [adwareExecutableParts addObject: part];
+           
+            NSString * adwareExecutablePath =
+              [adwareExecutableParts componentsJoinedByString: @"/"];
+            
+            [self.adwareFiles setObject: tag forKey: adwareExecutablePath];
+          
+            return YES;
+            }
+          }
+        
+        [adwareExecutableParts addObject: part];
+        }
+      }
+    }
+    
+  return NO;
+  }
+
+// Is this name possibly a system path name?
+- (bool) isSystemName: (NSString *) name
+  {
+  if([name isEqualToString: @"System"])
+    return YES;
+    
+  if([name isEqualToString: @"Library"])
+    return YES;
+
+  if([name isEqualToString: @"Frameworks"])
+    return YES;
+
+  if([name isEqualToString: @"PrivateFrameworks"])
+    return YES;
+
+  if([name isEqualToString: @"LaunchAgents"])
+    return YES;
+
+  if([name isEqualToString: @"LaunchDaemons"])
+    return YES;
+
+  if([name isEqualToString: @"Application Support"])
+    return YES;
+
+  if([name isEqualToString: @"Preferences"])
+    return YES;
+
+  if([name isEqualToString: @"Containers"])
+    return YES;
+    
+  return NO;
   }
 
 // Is this file an adware extension?

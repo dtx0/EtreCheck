@@ -1989,6 +1989,7 @@
 	</array>
 	<key>blacklist_match</key>
 	<array>
+		<string>genieo</string>
 		<string>Asistents</string>
 		<string>Beardpond</string>
 		<string>Celipsow</string>

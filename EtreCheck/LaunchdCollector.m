@@ -1196,10 +1196,11 @@
   NSString * executable = [status objectForKey: kExecutable];
   
   if([executable length] > 0)
-    {
-    [extra appendString: @"\n        "];
-    [extra appendString: [Utilities cleanPath: executable]];
-    }
+    if([[NSFileManager defaultManager] fileExistsAtPath: executable])
+      {
+      [extra appendString: @"\n        "];
+      [extra appendString: [Utilities cleanPath: executable]];
+      }
     
   return [extra autorelease];
   }
