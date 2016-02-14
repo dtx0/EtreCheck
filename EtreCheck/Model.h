@@ -170,6 +170,9 @@
 // Is this file an adware file?
 - (bool) isAdware: (NSString *) path;
 
+// Is this an adware match?
+- (bool) isAdwareExecutable: (NSString *) path;
+
 // Is this file an adware extension?
 - (bool) isAdwareExtension: (NSString *) name path: (NSString *) path;
 

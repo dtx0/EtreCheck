@@ -238,18 +238,29 @@
       adware = YES;
       }
     
-  for(NSString * match in self.blacklistMatches)
-    if([path rangeOfString: match].location != NSNotFound)
-      {
-      [self.adwareFiles setObject: @"blacklist_match" forKey: path];
-      adware = YES;
-      }
+  if([self isAdwareExecutable: path])
+    adware = YES;
     
   if([self isAdwareTrio: path])
     {
     [self.adwareFiles setObject: @"blacklist_trio" forKey: path];
     adware = YES;
     }
+    
+  return adware;
+  }
+
+// Is this an adware match?
+- (bool) isAdwareExecutable: (NSString *) path
+  {
+  bool adware = NO;
+  
+  for(NSString * match in self.blacklistMatches)
+    if([path rangeOfString: match].location != NSNotFound)
+      {
+      [self.adwareFiles setObject: @"blacklist_match" forKey: path];
+      adware = YES;
+      }
     
   return adware;
   }

@@ -1115,7 +1115,11 @@
   for: (NSString *) path
   {
   if([[Model model] isAdware: path])
+    {
+    [self findMoreAdware: status];
+    
     return [self formatAdware: status for: path];
+    }
     
   else if([[status objectForKey: kApple] boolValue])
     return [self formatApple: status for: path];
@@ -1137,6 +1141,19 @@
   [extra appendAttributedString: [self formatSupportLink: status]];
   
   return [extra autorelease];
+  }
+
+// Find more adware.
+- (void) findMoreAdware: (NSDictionary *) status
+  {
+  NSString * path = [status objectForKey: kExecutable];
+  
+  NSRange appRange = [path rangeOfString: @".app/Contents/MacOS/"];
+  
+  if(appRange.location != NSNotFound)
+    path = [path substringToIndex: appRange.location + 4];
+    
+  [[Model model] isAdwareExecutable: path];
   }
 
 // Format adware.
@@ -1174,6 +1191,14 @@
     [extra appendString: @" "];
     
     [extra appendAttributedString: removeLink];
+    }
+    
+  NSString * executable = [status objectForKey: kExecutable];
+  
+  if([executable length] > 0)
+    {
+    [extra appendString: @"\n        "];
+    [extra appendString: [Utilities cleanPath: executable]];
     }
     
   return [extra autorelease];
