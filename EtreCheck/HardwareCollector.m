@@ -717,7 +717,8 @@
   {
   NSNumber * cycleCount = nil;
   NSString * health = nil;
-//  NSString * serialNumber = @"";
+  NSString * serialNumber = @"";
+  BOOL serialNumberInvalid = NO;
   
   for(NSDictionary * info in infos)
     {
@@ -731,23 +732,44 @@
       health = [healthInfo objectForKey: @"sppower_battery_health"];
       }
 
-//    NSDictionary * modelInfo =
-//      [info objectForKey: @"sppower_battery_model_info"];
-//      
-//    if(modelInfo)
-//      serialNumber =
-//        [modelInfo objectForKey: @"sppower_battery_serial_number"];
+    NSDictionary * modelInfo =
+      [info objectForKey: @"sppower_battery_model_info"];
+      
+    if(modelInfo)
+      {
+      serialNumber =
+        [modelInfo objectForKey: @"sppower_battery_serial_number"];
+      
+      if([serialNumber isEqualToString: @"0123456789ABC"])
+      //if([serialNumber isEqualToString: @"D865033Y2CXF9CPAW"])
+        serialNumberInvalid = YES;
+      }
     }
     
   if(cycleCount && [health length])
+    {
     [self.result
       appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(
+              @"    Battery: Health = %@ - Cycle count = %@\n",
+              NULL),
+            NSLocalizedString(health, NULL), cycleCount]];
+      
+    if(serialNumberInvalid)
+      [self.result
+        appendString:
           [NSString
             stringWithFormat:
               NSLocalizedString(
-                @"    Battery: Health = %@ - Cycle count = %@\n",
-                NULL),
-              NSLocalizedString(health, NULL), cycleCount]];
+                @"        Battery serial number %@ invalid\n", NULL),
+                serialNumber]
+        attributes:
+          [NSDictionary
+            dictionaryWithObjectsAndKeys:
+              [NSColor redColor], NSForegroundColorAttributeName, nil]];
+    }
   }
 
 @end

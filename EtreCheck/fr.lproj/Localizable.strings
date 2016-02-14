@@ -207,6 +207,7 @@
 "downloadetrecheck" = "Télécharger EtreCheck chez ";
 "Display" = "Écran";
 "    Battery: Health = %@ - Cycle count = %@\n" = "    La batterie : Santé = %@ - Comptage de cycles = %@\n";
+"        Battery serial number %@ invalid\n" = "        Numéro de série de la batterie %@ invalide\n";
 "Good" = "Normal";
 "Fair" = "Remplacer bientôt";
 "Poor" = "Remplacer maintenant";
