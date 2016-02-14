@@ -301,7 +301,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           error: NULL];
 
       NSURL * reportsDirectory =
-        [applicationSupportURL URLByAppendingPathComponent: @"Reports"];
+        [applicationSupportURL
+          URLByAppendingPathComponent: @"EtreCheck/Reports"];
         
       [[NSFileManager defaultManager]
         createDirectoryAtURL: reportsDirectory
@@ -343,6 +344,45 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     }
     
   return NO;
+  }
+
+// Clear the recents menu.
+- (IBAction) clearRecentDocuments: (id) sender
+  {
+  [[NSDocumentController sharedDocumentController]
+    clearRecentDocuments: sender];
+
+  NSURL * applicationSupportURL =
+    [[NSFileManager defaultManager]
+      URLForDirectory: NSApplicationSupportDirectory
+      inDomain: NSUserDomainMask
+      appropriateForURL: nil
+      create: YES
+      error: NULL];
+
+  NSURL * reportsDirectory =
+    [applicationSupportURL
+      URLByAppendingPathComponent: @"EtreCheck/Reports"];
+    
+  NSArray * paths =
+    [[NSFileManager defaultManager]
+      contentsOfDirectoryAtPath: [reportsDirectory path] error: NULL];
+  
+  NSMutableArray * urls = [NSMutableArray array];
+  
+  for(NSString * path in paths)
+    {
+    NSURL * url = [reportsDirectory URLByAppendingPathComponent: path];
+    
+    [urls addObject: url];
+    }
+    
+  [[NSWorkspace sharedWorkspace]
+    recycleURLs: urls
+    completionHandler:
+      ^(NSDictionary * newURLs, NSError * error)
+        {
+        }];
   }
 
 // Dim the display on deactivate.
