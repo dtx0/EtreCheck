@@ -123,7 +123,9 @@
 
   bool isHidden = [hidden isEqualToString: @"true"];
   
-  NSString * modificationDateString =
+  NSString * modificationDateString = @"";
+  
+  if([kind isEqualToString: @"Application"])
     [self modificationDateString: path];
     
   [self.result
