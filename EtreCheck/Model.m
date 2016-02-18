@@ -25,6 +25,7 @@
 @synthesize serialCode = mySerialCode;
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize adwareFiles = myAdwareFiles;
+@synthesize potentialAdwareTrioFiles = myPotentialAdwareTrioFiles;
 @synthesize adwareExtensions = myAdwareExtensions;
 @synthesize whitelistFiles = myWhitelistFiles;
 @synthesize whitelistPrefixes = myWhitelistPrefixes;
@@ -77,6 +78,7 @@
     myDiskErrors = [NSMutableDictionary new];
     myDiagnosticEvents = [NSMutableDictionary new];
     myAdwareFiles = [NSMutableDictionary new];
+    myPotentialAdwareTrioFiles = [NSMutableDictionary new];
     myTerminatedTasks = [NSMutableArray new];
     mySeriousProblems = [NSMutableSet new];
     myIgnoreKnownAppleFailures = YES;
@@ -104,6 +106,7 @@
   self.unknownFiles = nil;
   self.seriousProblems = nil;
   self.terminatedTasks = nil;
+  self.potentialAdwareTrioFiles = nil;
   self.adwareFiles = nil;
   self.diagnosticEvents = nil;
   self.diskErrors = nil;
@@ -287,50 +290,56 @@
 // Is this an adware trio of daemon/agent/helper?
 - (bool) isAdwareTrio: (NSString *) path
   {
-  NSString * prefix = path;
+  NSString * name = [path lastPathComponent];
+  
+  NSString * prefix = name;
   
   bool trio = NO;
   
-  if([path hasSuffix: @".daemon.plist"])
+  if([name hasSuffix: @".daemon.plist"])
     {
-    prefix = [path substringToIndex: [path length] - 13];
+    prefix = [name substringToIndex: [name length] - 13];
     
     trio = YES;
+    
+    [self addPotentialAdwareTrioFile: path prefix: prefix];
     }
     
-  if([path hasSuffix: @".agent.plist"])
+  if([name hasSuffix: @".agent.plist"])
     {
-    prefix = [path substringToIndex: [path length] - 12];
+    prefix = [name substringToIndex: [name length] - 12];
     
     trio = YES;
+
+    [self addPotentialAdwareTrioFile: path prefix: prefix];
     }
     
-  if([path hasSuffix: @".helper.plist"])
+  if([name hasSuffix: @".helper.plist"])
     {
-    prefix = [path substringToIndex: [path length] - 13];
+    prefix = [name substringToIndex: [name length] - 13];
     
     trio = YES;
+
+    [self addPotentialAdwareTrioFile: path prefix: prefix];
     }
     
-  int count = 0;
-  
-  if([self adwareTrioExists: prefix suffix: @".daemon.plist"])
-    ++count;
+  NSMutableSet * trioFiles =
+    [self.potentialAdwareTrioFiles objectForKey: prefix];
 
-  if([self adwareTrioExists: prefix suffix: @".agent.plist"])
-    ++count;
-
-  if([self adwareTrioExists: prefix suffix: @".helper.plist"])
-    ++count;
-
-  if(count == 3)
+  if([trioFiles count] == 3)
     {
     NSArray * parts = [prefix componentsSeparatedByString: @"."];
     
     if([parts count] > 1)
       prefix = [parts objectAtIndex: 1];
       
-    [self.adwareFiles setObject: [prefix lowercaseString] forKey: path];
+    for(NSString * trioPath in trioFiles)
+      {
+      [self.adwareFiles
+        setObject: [prefix lowercaseString] forKey: trioPath];
+        
+      [self.unknownFiles removeObject: trioPath];
+      }
 
     return YES;
     }
@@ -338,14 +347,21 @@
   return NO;
   }
 
-// Does an AdwareTrio file exist?
-- (bool) adwareTrioExists: (NSString *) prefix suffix: (NSString *) suffix
+// Add a potential adware trio file.
+- (void) addPotentialAdwareTrioFile: (NSString *) path
+  prefix: (NSString *) prefix
   {
-  bool exists =
-    [[NSFileManager defaultManager]
-      fileExistsAtPath: [prefix stringByAppendingString: suffix]];
+  NSMutableSet * trioFiles =
+    [self.potentialAdwareTrioFiles objectForKey: prefix];
     
-  return exists;
+  if(!trioFiles)
+    {
+    trioFiles = [NSMutableSet set];
+    
+    [self.potentialAdwareTrioFiles setObject: trioFiles forKey: prefix];
+    }
+  
+  [trioFiles addObject: path];
   }
 
 // Is this an adware match?

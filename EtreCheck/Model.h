@@ -45,6 +45,7 @@
   NSString * mySerialCode;
   NSMutableDictionary * myDiagnosticEvents;
   NSMutableDictionary * myAdwareFiles;
+  NSMutableDictionary * myPotentialAdwareTrioFiles;
   NSArray * myAdwareExtensions;
   NSMutableSet * myWhitelistFiles;
   NSMutableSet * myWhitelistPrefixes;
@@ -103,6 +104,9 @@
 
 // Adware files.
 @property (retain) NSMutableDictionary * adwareFiles;
+
+// Adware files.
+@property (retain) NSMutableDictionary * potentialAdwareTrioFiles;
 
 // Adware extensions.
 @property (retain) NSArray * adwareExtensions;
