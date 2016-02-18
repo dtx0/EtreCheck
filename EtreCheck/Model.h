@@ -63,6 +63,8 @@
   bool myIgnoreKnownAppleFailures;
   bool myCheckAppleSignatures;
   bool myHideAppleTasks;
+  bool myOldEtreCheckVersion;
+  bool myVerifiedEtreCheckVersion;
   }
 
 // Keep track of the OS version.
@@ -158,6 +160,12 @@
 
 // Do I have unknown files?
 @property (readonly) bool haveUnknownFiles;
+
+// Is this version outdated?
+@property (assign) bool oldEtreCheckVersion;
+
+// Do I have a verified EtreCheck version?
+@property (assign) bool verifiedEtreCheckVersion;
 
 // Return the singeton of shared values.
 + (Model *) model;

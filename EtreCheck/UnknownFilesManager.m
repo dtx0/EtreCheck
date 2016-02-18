@@ -109,6 +109,18 @@
 // Report the adware.
 - (IBAction) reportAdware: (id) sender
   {
+  if([[Model model] oldEtreCheckVersion])
+    {
+    [self reportOldEtreCheckVersion];
+    return;
+    }
+    
+  if(![[Model model] verifiedEtreCheckVersion])
+    {
+    [self reportUnverifiedEtreCheckVersion];
+    return;
+    }
+    
   NSUInteger count = [self.unknownFiles count];
   
   NSMutableArray * paths = [NSMutableArray array];
@@ -174,6 +186,18 @@
 // Contact Etresoft to add to whitelist.
 - (IBAction) addToWhitelist: (id) sender
   {
+  if([[Model model] oldEtreCheckVersion])
+    {
+    [self reportOldEtreCheckVersion];
+    return;
+    }
+    
+  if(![[Model model] verifiedEtreCheckVersion])
+    {
+    [self reportUnverifiedEtreCheckVersion];
+    return;
+    }
+    
   NSMutableString * json = [NSMutableString string];
   
   [json appendString: @"{\"files\":["];

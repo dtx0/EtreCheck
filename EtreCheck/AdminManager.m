@@ -56,4 +56,53 @@
   [self.window close];
   }
 
+// Tell the user that EtreCheck is too old.
+- (BOOL) reportOldEtreCheckVersion
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText:
+      NSLocalizedString(@"Outdated EtreCheck version!", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert
+    setInformativeText: NSLocalizedString(@"oldetrecheckversion", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+
+  [alert runModal];
+
+  [alert release];
+
+  return NO;
+  }
+
+// Tell the user that the EtreCheck version is unverified.
+- (BOOL) reportUnverifiedEtreCheckVersion
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText:
+      NSLocalizedString(@"Unverified EtreCheck version!", NULL)];
+    
+  [alert setAlertStyle: NSWarningAlertStyle];
+
+  [alert
+    setInformativeText:
+      NSLocalizedString(@"unverifiedetrecheckversion", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
+
+  [alert runModal];
+
+  [alert release];
+
+  return NO;
+  }
+
 @end

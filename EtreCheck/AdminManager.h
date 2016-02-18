@@ -29,4 +29,10 @@
 // Close the window.
 - (IBAction) close: (id) sender;
 
+// Tell the user that EtreCheck is too old.
+- (BOOL) reportOldEtreCheckVersion;
+
+// Tell the user that the EtreCheck version is unverified.
+- (BOOL) reportUnverifiedEtreCheckVersion;
+
 @end

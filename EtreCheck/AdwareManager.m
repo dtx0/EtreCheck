@@ -103,6 +103,12 @@
 // Can I remove adware?
 - (BOOL) canRemoveAdware
   {
+  if([[Model model] oldEtreCheckVersion])
+    return [self reportOldEtreCheckVersion];
+    
+  if(![[Model model] verifiedEtreCheckVersion])
+    return [self reportUnverifiedEtreCheckVersion];
+
   if([[Model model] majorOSVersion] < kMountainLion)
     return [self warnBackup];
     

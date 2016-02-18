@@ -602,6 +602,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
                   objectForKey: NSLocalizedString(@"changes", NULL)]
               url:
                 [NSURL URLWithString: [attributes objectForKey: @"URL"]]];
+          else
+            [[Model model] setVerifiedEtreCheckVersion: YES];
             
           NSArray * whitelist = [attributes objectForKey: @"whitelist"];
           
@@ -627,6 +629,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Show the update dialog.
 - (void) presentUpdate: (NSString *) changes url: (NSURL *) url
   {
+  [[Model model] setOldEtreCheckVersion: YES];
+  
   self.updateManager.content = changes;
   self.updateManager.updateURL = url;
   

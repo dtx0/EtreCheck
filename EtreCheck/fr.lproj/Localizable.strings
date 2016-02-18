@@ -287,3 +287,7 @@
 "Donation not found" = "Don pas trouvé";
 "donationnotfound" = "Nous sommes désolés, mais votre don n’a pas été trouvé. S’il vous plaît, utilisez la recherche par courriel.";
 "Close" = "Fermer";
+"Outdated EtreCheck version!" = "Vieille version d’EtreCheck !";
+"oldetrecheckversion" = "Votre version de EtreCheck est vielle. Cette opération nécessite une version actuelle d’EtreCheck.";
+"Unverified EtreCheck version!" = "La version d’EtreCheck pas vérifiée !";
+"unverifiedetrecheckversion" = "Impossible de vérifier votre version d’EtreCheck. Cette opération nécessite une version actuelle d’EtreCheck. Si vous utilisez un pare-feu, s’il vous plaît, permettez l’accès à des serveurs EtreCheck.";

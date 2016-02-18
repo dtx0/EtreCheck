@@ -42,6 +42,8 @@
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize checkAppleSignatures = myCheckAppleSignatures;
 @synthesize hideAppleTasks = myHideAppleTasks;
+@synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
+@synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
 @dynamic haveUnknownFiles;
 
 - (bool) haveUnknownFiles
