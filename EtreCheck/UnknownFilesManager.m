@@ -131,7 +131,8 @@
     
   NSMutableString * json = [NSMutableString string];
   
-  [json appendString: @"{\"files\":["];
+  [json appendString: @"{\"action\":\"addtoblacklist\","];
+  [json appendString: @"\"files\":["];
   
   bool first = YES;
   
@@ -144,18 +145,25 @@
         stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
     
     NSString * name = [path lastPathComponent];
+    NSString * cmd = @"";
     
     if(!first)
       [json appendString: @","];
       
     first = NO;
     
-    [json appendString: [NSString stringWithFormat: @"\"%@\"", name]];
+    [json appendString: @"{"];
+    
+    [json appendFormat: @"\"name\":\"%@\",", name];
+    [json appendFormat: @"\"path\":\"%@\",", path];
+    [json appendFormat: @"\"cmd\":\"%@\"", cmd];
+    
+    [json appendString: @"}"];
     }
     
   [json appendString: @"]}"];
   
-  NSString * server = @"http://etrecheck.com/server/addtoblacklist.php";
+  NSString * server = @"http://etrecheck.com/server/adware_detection.php";
   
   NSArray * args =
     @[
@@ -200,7 +208,8 @@
     
   NSMutableString * json = [NSMutableString string];
   
-  [json appendString: @"{\"files\":["];
+  [json appendString: @"{\"action\":\"addtowhitelist\","];
+  [json appendString: @"\"files\":["];
   
   bool first = YES;
   
@@ -213,20 +222,30 @@
         stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
     
     NSString * name = [path lastPathComponent];
+    NSString * cmd = @"";
     
     if(!first)
       [json appendString: @","];
       
     first = NO;
     
+    [json appendString: @"{"];
+    
     [json
-      appendString:
-        [NSString
-          stringWithFormat:
-            @"{\"deleted\": %@, \"known\": %@, \"path\":\"%@\"}",
-            [self.adwareIndicators objectAtIndex: index],
-            [self.whitelistIndicators objectAtIndex: index],
-            name]];
+      appendFormat:
+        @"\"adware\":\"%@\",",
+        [self.adwareIndicators objectAtIndex: index]];
+      
+    [json
+      appendFormat:
+        @"\"known\":\"%@\",",
+        [self.whitelistIndicators objectAtIndex: index]];
+    
+    [json appendFormat: @"\"name\":\"%@\",", name];
+    [json appendFormat: @"\"path\":\"%@\",", path];
+    [json appendFormat: @"\"cmd\":\"%@\"", cmd];
+      
+    [json appendString: @"}"];
     }
     
   [json appendString: @"],"];
@@ -236,7 +255,7 @@
       [[self.whitelistDescription string]
         stringByReplacingOccurrencesOfString: @"\"" withString: @"'"]];
   
-  NSString * server = @"http://etrecheck.com/server/addtowhitelist.php";
+  NSString * server = @"http://etrecheck.com/server/adware_detection.php";
   
   NSArray * args =
     @[

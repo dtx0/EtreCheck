@@ -62,6 +62,8 @@
   if(![self canRemoveAdware])
     return;
     
+  [self reportAdware];
+  
   [Utilities
     removeFiles: self.adwareFiles
       completionHandler:
@@ -98,6 +100,83 @@
           else
             [self reportDeletedFiles: deletedFiles];
           }];
+  }
+
+// Report the adware.
+- (void) reportAdware
+  {
+  if([[Model model] oldEtreCheckVersion])
+    {
+    [self reportOldEtreCheckVersion];
+    return;
+    }
+    
+  if(![[Model model] verifiedEtreCheckVersion])
+    {
+    [self reportUnverifiedEtreCheckVersion];
+    return;
+    }
+    
+  NSMutableString * json = [NSMutableString string];
+  
+  [json appendString: @"{\"action\":\"addtoblacklist\","];
+  [json appendString: @"\"files\":["];
+  
+  bool first = YES;
+  
+  NSUInteger index = 0;
+  
+  for(; index < [self.adwareFiles count]; ++index)
+    {
+    NSString * path =
+      [[self.adwareFiles objectAtIndex: index]
+        stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+    
+    NSString * name = [path lastPathComponent];
+    NSString * cmd = @"";
+    
+    if(!first)
+      [json appendString: @","];
+      
+    first = NO;
+    
+    [json appendString: @"{"];
+    
+    [json appendFormat: @"\"name\":\"%@\",", name];
+    [json appendFormat: @"\"path\":\"%@\",", path];
+    [json appendFormat: @"\"cmd\":\"%@\"", cmd];
+    
+    [json appendString: @"}"];
+    }
+    
+  [json appendString: @"]}"];
+  
+  NSString * server = @"http://etrecheck.com/server/adware_detection.php";
+  
+  NSArray * args =
+    @[
+      @"--data",
+      json,
+      server
+    ];
+
+  [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  if(result)
+    {
+    NSString * status =
+      [[NSString alloc]
+        initWithData: result encoding: NSUTF8StringEncoding];
+      
+    if([status isEqualToString: @"OK"])
+      NSLog(@"adware report successful");
+    else
+      NSLog(@"adware report failed");
+      
+    [status release];
+    }
   }
 
 // Can I remove adware?
