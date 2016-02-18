@@ -156,8 +156,8 @@
 // Hide Apple tasks.
 @property (assign) bool hideAppleTasks;
 
-// Is adware possible?
-@property (readonly) bool adwarePossible;
+// Do I have unknown files?
+@property (readonly) bool haveUnknownFiles;
 
 // Return the singeton of shared values.
 + (Model *) model;

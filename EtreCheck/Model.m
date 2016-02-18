@@ -42,9 +42,9 @@
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize checkAppleSignatures = myCheckAppleSignatures;
 @synthesize hideAppleTasks = myHideAppleTasks;
-@dynamic adwarePossible;
+@dynamic haveUnknownFiles;
 
-- (bool) adwarePossible
+- (bool) haveUnknownFiles
   {
   return self.unknownFiles.count > 0;
   }

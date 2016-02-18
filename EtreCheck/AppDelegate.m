@@ -1213,7 +1213,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
             [[NSBundle mainBundle]
               pathForResource: @"adwarehelp" ofType: @"rtf"]]];
     
-  if([[Model model] adwarePossible])
+  if([[Model model] haveUnknownFiles])
     [self.log
       appendRTFData:
         [NSData
