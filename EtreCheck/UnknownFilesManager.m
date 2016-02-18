@@ -305,7 +305,7 @@
     [content appendString: [self.whitelistDescription string]];
     [content appendString: @"\n"];
       
-    [self
+    [Utilities
       sendEmailTo: @"info@etresoft.com"
       withSubject: @"Add to whitelist"
       content: content];
@@ -377,32 +377,13 @@
       
     [content appendString: @"\n"];
       
-    [self
+    [Utilities
       sendEmailTo: @"info@etresoft.com"
       withSubject: @"Add to blacklist"
       content: content];
     }
 
   [alert release];
-  }
-
-// Send an e-mail.
-- (void) sendEmailTo: (NSString *) toAddress
-  withSubject: (NSString *) subject
-  content: (NSString *) bodyText
-  {
-  NSString * emailString =
-    [NSString
-      stringWithFormat:
-        NSLocalizedString(@"addtowhitelistemail", NULL),
-        subject, bodyText, @"Etresoft support", toAddress ];
-
-
-  NSAppleScript * emailScript =
-    [[NSAppleScript alloc] initWithSource: emailString];
-
-  [emailScript executeAndReturnError: nil];
-  [emailScript release];
   }
 
 #pragma mark - NSTableViewDataSource
