@@ -72,3 +72,7 @@
 "adwareuploadfailed" = "Your adware upload to the EtreCheck server failed. Would you like to use e-mail instead?";
 "nocontenthtml" = "<strong>No update information available.</strong>";
 "changes" = "changes_en";
+"manualdonationlookup" = "If you are unsure about this information, please include any additional information such as your name and/or donation amount or date of donation. Thanks for your donation!";
+"donationfound" = "Thanks for your donation! You will no longer be asked to donate.";
+"Donation not found" = "Donation not found";
+"donationnotfound" = "Sorry, your donation could not be found. Please use the e-mail lookup option.";

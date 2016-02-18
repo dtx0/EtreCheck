@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9532"/>
         <capability name="box content view" minToolsVersion="7.0"/>
     </dependencies>
     <objects>
@@ -34,6 +34,7 @@
                 <outlet property="donatePanel" destination="JnU-dB-S5j" id="hD4-L1-qIC"/>
                 <outlet property="donateToolbarItemView" destination="N7f-kv-4aH" id="V6d-So-1t1"/>
                 <outlet property="donateView" destination="VAZ-3F-fRB" id="8Sk-nG-jXF"/>
+                <outlet property="donationLookupPanel" destination="y18-vs-IAN" id="UeB-lT-zE3"/>
                 <outlet property="finderIcon" destination="YNi-t0-nyG" id="VwO-Jj-e1b"/>
                 <outlet property="helpButton" destination="vd5-kg-IdS" id="Atc-kB-9hT"/>
                 <outlet property="helpManager" destination="OAP-T5-MR2" id="xX9-71-M4r"/>
@@ -874,7 +875,7 @@ DQ
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="JnU-dB-S5j" userLabel="Window - Donate">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <rect key="contentRect" x="109" y="132" width="486" height="282"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1600" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="XM8-Qc-j3F">
                 <rect key="frame" x="0.0" y="0.0" width="486" height="282"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -936,9 +937,112 @@ DQ
                             <action selector="donate:" target="Voe-Tx-rLC" id="G9l-Hz-KSk"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" id="UUE-tT-OcM">
+                        <rect key="frame" x="225" y="13" width="163" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="I've already donated" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eKA-Jb-iTE">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="lookupDonation:" target="Voe-Tx-rLC" id="gUg-QG-uWC"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="289" y="1788"/>
+        </window>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="y18-vs-IAN" userLabel="Window - Already donated">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+            <rect key="contentRect" x="109" y="132" width="409" height="203"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="0n9-Dz-LSe">
+                <rect key="frame" x="0.0" y="0.0" width="409" height="203"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField verticalHuggingPriority="750" id="7bA-jQ-VV8">
+                        <rect key="frame" x="79" y="59" width="310" height="22"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Hrt-WM-Azp">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.donationLookupEmail" id="3HT-Q7-1sq">
+                                <dictionary key="options">
+                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="21d-Ke-ZPj">
+                        <rect key="frame" x="18" y="62" width="55" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="E-mail:" id="nmK-SA-if9">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="E9x-eY-jVF">
+                        <rect key="frame" x="18" y="89" width="373" height="94"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="8c8-Jx-r9b">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">Please enter the e-mail address you used to make your donation. This information will be securely hashed and used to verify against Etresoft, Inc.'s records. Neither your e-mail address or any personal information will be transmitted. If the automated lookup fails, please use the manual option.</string>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" id="KAZ-sp-vx5">
+                        <rect key="frame" x="312" y="13" width="83" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Submit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZGW-Su-Gmf">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="automaticDonationLookup:" target="Voe-Tx-rLC" id="P8Q-l4-P0N"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="lP5-dL-ZIl">
+                        <rect key="frame" x="14" y="13" width="82" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GTq-ag-vYM">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancelDonationLookup:" target="Voe-Tx-rLC" id="dSE-6E-chb"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="1xm-yv-PhD">
+                        <rect key="frame" x="228" y="13" width="84" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Manual" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SfU-Bg-k8C">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="manualDonationLookup:" target="Voe-Tx-rLC" id="uc4-Ym-NE1"/>
+                        </connections>
+                    </button>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="159.5" y="1446.5"/>
         </window>
         <window title="EtreCheck" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="HCb-1A-LX1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>

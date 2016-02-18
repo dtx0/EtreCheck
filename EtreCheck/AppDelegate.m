@@ -111,14 +111,24 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize TOSAccepted = myTOSAccepted;
 @synthesize donatePanel = myDonatePanel;
 @synthesize donateView = myDonateView;
+@synthesize donationLookupPanel = myDonationLookupPanel;
+@synthesize donationLookupEmail = myDonationLookupEmail;
 
 @dynamic ignoreKnownAppleFailures;
 @dynamic checkAppleSignatures;
 @dynamic hideAppleTasks;
+@dynamic canSubmitDonationLookup;
 
 + (NSSet *) keyPathsForValuesAffectingProblemSelected
   {
   return [NSSet setWithObject: @"problemIndex"];
+  }
+
++ (NSSet *) keyPathsForValuesAffectingCanSubmitDonationLookup
+  {
+  return
+    [NSSet
+      setWithObjects: @"donationLookupName", @"donationLookupEmail", nil];
   }
 
 - (bool) problemSelected
@@ -173,6 +183,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
     [self didChangeValueForKey: @"textSize"];
     }
+  }
+
+- (BOOL) canSubmitDonationLookup
+  {
+  NSString * email =
+    [self.donationLookupEmail
+      stringByTrimmingCharactersInSet:
+        [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+  return ([email length] > 0);
   }
 
 // Destructor.
@@ -801,6 +821,141 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
   [[NSUserDefaults standardUserDefaults]
     setObject: @"yes" forKey: @"donate"];
+  }
+
+// Lookup a donation.
+- (IBAction) lookupDonation: (id) sender
+  {
+  [[NSApplication sharedApplication] endSheet: self.donatePanel];
+
+  [[NSApplication sharedApplication]
+    beginSheet: self.donationLookupPanel
+    modalForWindow: self.window
+    modalDelegate: self
+    didEndSelector: @selector(didEndSheet:returnCode:contextInfo:)
+    contextInfo: nil];
+  }
+
+// Perform an automatic donation lookup.
+- (IBAction) automaticDonationLookup: (id) sender
+  {
+  NSString * email =
+    [self.donationLookupEmail
+      stringByTrimmingCharactersInSet:
+        [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+  if(![email length])
+    {
+    [self donationNotFound];
+    
+    return;
+    }
+
+  NSString * emailHash = [Utilities MD5: email];
+  
+  NSMutableString * json = [NSMutableString string];
+  
+  [json appendFormat: @"{\"emailkey\": \"%@\"}", emailHash];
+    
+  NSString * server = @"http://etrecheck.com/server/lookupdonation.php";
+  
+  NSArray * args =
+    @[
+      @"--data",
+      json,
+      server
+    ];
+
+  NSLog(@"json = %@", json);
+  [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  if(result)
+    {
+    NSString * donationKey =
+      [[NSString alloc]
+        initWithData: result encoding: NSUTF8StringEncoding];
+      
+    [donationKey autorelease];
+    
+    NSLog(@"donation key = %@", donationKey);
+    if([donationKey length])
+      {
+      [[NSUserDefaults standardUserDefaults]
+        setObject: donationKey forKey: @"donationkey"];
+
+      [self donationFound];
+    
+      return;
+      }
+    }
+  
+  [self donationNotFound];
+  }
+
+- (void) donationNotFound
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"Donation not found", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert setInformativeText: NSLocalizedString(@"donationnotfound", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"Close", NULL)];
+
+  [alert runModal];
+  }
+
+- (void) donationFound
+  {
+  NSAlert * alert = [[NSAlert alloc] init];
+
+  [alert
+    setMessageText: NSLocalizedString(@"Donation Found!", NULL)];
+    
+  [alert setAlertStyle: NSInformationalAlertStyle];
+
+  [alert setInformativeText: NSLocalizedString(@"donationfound", NULL)];
+
+  // This is the rightmost, first, default button.
+  [alert addButtonWithTitle: NSLocalizedString(@"Close", NULL)];
+
+  [alert runModal];
+
+  [self cancelDonationLookup: self];
+  }
+
+// Lookup a donation via e-mail.
+- (IBAction) manualDonationLookup: (id) sender
+  {
+  NSMutableString * content = [NSMutableString string];
+  
+  [content
+    appendFormat:
+      NSLocalizedString(@"Email: %@\n", NULL), self.donationLookupEmail];
+  
+  [content appendString: @"\n"];
+  [content appendString: NSLocalizedString(@"manualdonationlookup", NULL)];
+  
+  [Utilities
+    sendEmailTo: @"info@etresoft.com"
+    withSubject: NSLocalizedString(@"Please lookup donation", NULL)
+    content: content];
+    
+  [self cancelDonationLookup: sender];
+  }
+
+// Cancel a donation lookup.
+- (IBAction) cancelDonationLookup: (id) sender
+  {
+  self.donationLookupEmail = nil;
+  
+  [[NSApplication sharedApplication] endSheet: self.donationLookupPanel];
   }
 
 // Start the report.
@@ -1580,6 +1735,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   bool ask = NO;
   
+  NSString * donationKey =
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"donationkey"];
+    
+  if([self verifyDonationKey: donationKey])
+    return;
+    
   NSNumber * count =
     [[NSUserDefaults standardUserDefaults]
       objectForKey: @"reportcount"];
@@ -1621,6 +1783,46 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
   if(ask)
     [self showDonate: self];
+  }
+
+- (BOOL) verifyDonationKey: (NSString *) donationKey
+  {
+  if([donationKey length] == 0)
+    return NO;
+    
+  NSMutableString * json = [NSMutableString string];
+  
+  [json appendFormat: @"{\"donationkey\": \"%@\"}", donationKey];
+    
+  NSString * server = @"http://etrecheck.com/server/verifydonation.php";
+  
+  NSArray * args =
+    @[
+      @"--data",
+      json,
+      server
+    ];
+
+  [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
+
+  if(result)
+    {
+    NSString * status =
+      [[NSString alloc]
+        initWithData: result encoding: NSUTF8StringEncoding];
+      
+    [status autorelease];
+    
+    if([status isEqualToString: @"OK"])
+      {
+      NSLog(@"Donation key verified");
+      return YES;
+      }
+    }
+  
+  return NO;
   }
 
 // Handle a scroll change in the report view.

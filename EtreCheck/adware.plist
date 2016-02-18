@@ -2057,10 +2057,6 @@
 		<string>cinemas-+-plus-+_updater.plist</string>
 		<string>com.cinemapro1-2.agent.plist</string>
 		<string>com.codecm.uploader.plist</string>
-		<string>com.conduit.loader.agent.plist</string>
-		<string>com.crossrider.wss002450.agent.plist</string>
-		<string>com.crossrider.wss002455.agent.plist</string>
-		<string>com.crossrider.wss002498.agent.plist</string>
 		<string>com.e777e3897002b122.daemon.plist</string>
 		<string>com.e777e3897002b122.helper.plist</string>
 		<string>com.extensions.updater60094.agent.plist</string>
@@ -2086,6 +2082,8 @@
 		<string>shopper-helper-pro_updater.plist</string>
 		<string>shopy-mate_updater.plist</string>
 		<string>SngyBb9iL.plist</string>
+		<string>com.updater.watch.mcy.plist</string>
+		<string>com.updater.mcy.plist</string>
 	</array>
 	<key>blacklist_suffix</key>
 	<array>
@@ -2112,7 +2110,6 @@
 		<string>Hollyarrow</string>
 		<string>InKeepr</string>
 		<string>InstallMac</string>
-		<string>InstallMacApp</string>
 		<string>Jakecares</string>
 		<string>Javeview</string>
 		<string>Jimbrie</string>
@@ -2201,8 +2198,8 @@
 		<string>unduplicablemichoacan</string>
 		<string>unite</string>
 		<string>vsearch</string>
-		<string>westtoxone</string>
-		<string>writhed</string>
+		<string>conduit</string>
+		<string>crossrider</string>
 	</array>
 </dict>
 </plist>

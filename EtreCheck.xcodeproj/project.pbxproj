@@ -36,6 +36,7 @@
 		A5409E9B186F271500B1727E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5409E9A186F271500B1727E /* SystemConfiguration.framework */; };
 		A540C6FE1873D5F800497BDE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A540C7001873D5F800497BDE /* Localizable.strings */; };
 		A546BFB71A5348880032C354 /* linkhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A546BFB91A5348880032C354 /* linkhelp.rtf */; };
+		A549C6761C75198700283F7F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A549C6751C75198700283F7F /* Security.framework */; };
 		A54B87351A1D4F1900F25213 /* HelpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87341A1D4F1900F25213 /* HelpManager.m */; };
 		A54B87381A1D4FED00F25213 /* DetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A54B87371A1D4FED00F25213 /* DetailManager.m */; };
 		A54DF6591BD70A3C00753E87 /* TOU.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A54DF6561BD70A3C00753E87 /* TOU.rtf */; };
@@ -151,6 +152,8 @@
 		A540C7011873D5FC00497BDE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A546BFB81A5348880032C354 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/linkhelp.rtf; sourceTree = "<group>"; };
 		A546BFBA1A5348890032C354 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/linkhelp.rtf; sourceTree = "<group>"; };
+		A549C6731C7513F800283F7F /* libcommonCrypto.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcommonCrypto.tbd; path = usr/lib/system/libcommonCrypto.tbd; sourceTree = SDKROOT; };
+		A549C6751C75198700283F7F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A54B87331A1D4F1900F25213 /* HelpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpManager.h; sourceTree = "<group>"; };
 		A54B87341A1D4F1900F25213 /* HelpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpManager.m; sourceTree = "<group>"; };
 		A54B87361A1D4FED00F25213 /* DetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailManager.h; sourceTree = "<group>"; };
@@ -270,6 +273,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A549C6761C75198700283F7F /* Security.framework in Frameworks */,
 				A5D69B271C6139AC007F6894 /* Carbon.framework in Frameworks */,
 				A55BC16E15BF987D00D42EF1 /* Cocoa.framework in Frameworks */,
 				A5C1492719B88625002890F1 /* Quartz.framework in Frameworks */,
@@ -430,6 +434,8 @@
 		A55BC16C15BF987D00D42EF1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A549C6751C75198700283F7F /* Security.framework */,
+				A549C6731C7513F800283F7F /* libcommonCrypto.tbd */,
 				A5C1492619B88625002890F1 /* Quartz.framework */,
 				A5CC608C19B4BF52006D7E94 /* Carbon.framework */,
 				A5409E9A186F271500B1727E /* SystemConfiguration.framework */,
@@ -882,6 +888,10 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "EtreCheck/EtreCheck-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 			};
 			name = Debug;
 		};
@@ -892,6 +902,10 @@
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "EtreCheck/EtreCheck-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/system",
+				);
 			};
 			name = Release;
 		};

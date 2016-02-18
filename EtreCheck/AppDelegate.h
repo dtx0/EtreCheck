@@ -93,6 +93,8 @@
 
   NSWindow * myDonatePanel;
   NSTextView * myDonateView;
+  NSWindow * myDonationLookupPanel;
+  NSString * myDonationLookupEmail;
   }
   
 @property (retain) IBOutlet NSWindow * window;
@@ -159,6 +161,9 @@
 @property (assign) BOOL TOSAccepted;
 @property (retain) IBOutlet NSWindow * donatePanel;
 @property (retain) IBOutlet NSTextView * donateView;
+@property (retain) IBOutlet NSWindow * donationLookupPanel;
+@property (retain) NSString * donationLookupEmail;
+@property (readonly) BOOL canSubmitDonationLookup;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
@@ -228,5 +233,17 @@
 
 // Donate now.
 - (IBAction) donate: (id) sender;
+
+// Lookup a donation.
+- (IBAction) lookupDonation: (id) sender;
+
+// Perform an automatic donation lookup.
+- (IBAction) automaticDonationLookup: (id) sender;
+
+// Lookup a donation via e-mail.
+- (IBAction) manualDonationLookup: (id) sender;
+
+// Cancel a donation lookup.
+- (IBAction) cancelDonationLookup: (id) sender;
 
 @end
