@@ -1733,8 +1733,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Ask for a donation under certain circumstances.
 - (void) askForDonation
   {
-  bool ask = NO;
-  
   NSString * donationKey =
     [[NSUserDefaults standardUserDefaults]
       objectForKey: @"donationkey"];
@@ -1751,35 +1749,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if([count respondsToSelector: @selector(intValue)])
     runCount = [count intValue];
   
-  // If the user has donated before, try to avoid annoying them.
-  NSString * donate =
-    [[NSUserDefaults standardUserDefaults]
-      objectForKey: @"donate"];
+  NSUInteger justCheckingIndex =
+    (self.chooseAProblemButton.menu.itemArray.count - 1);
+    
+  bool ask = NO;
   
-  if([donate isEqualToString: @"yes"])
-    {
-    if(!(runCount % 20))
-      ask = YES;
-    }
-  else if([donate isEqualToString: @"later"])
-    {
-    if(!(runCount % 5))
-      ask = YES;
-    }
-  else
-    {
-    NSUInteger justCheckingIndex =
-      (self.chooseAProblemButton.menu.itemArray.count - 1);
-      
-    if(self.problemIndex == justCheckingIndex)
-      ask = YES;
-      
-    if(runCount > 5)
-      ask = YES;
-      
-    if(runCount > 100)
-      ask = NO;
-    }
+  if(self.problemIndex == justCheckingIndex)
+    ask = YES;
+    
+  if(runCount > 5)
+    ask = YES;
     
   if(ask)
     [self showDonate: self];
