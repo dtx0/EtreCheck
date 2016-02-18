@@ -245,9 +245,16 @@
     [self.adwareFound setObject: foundFiles forKey: adware];
     
     for(NSString * path in foundFiles)
+      {
+      NSString * urlPath = [Utilities makeURLPath: path];
+      
       [[[Model model] adwareFiles]
         setObject: [adware lowercaseString]
-        forKey: [Utilities makeURLPath: path]];
+        forKey: urlPath];
+        
+      [[[Model model] unknownFiles] removeObject: urlPath];
+      [[[Model model] unknownFiles] removeObject: path];
+      }
     }
   }
 
