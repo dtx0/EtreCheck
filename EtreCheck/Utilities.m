@@ -10,6 +10,7 @@
 #import <CoreServices/CoreServices.h>
 #import <Carbon/Carbon.h>
 #import "NSDate+Etresoft.h"
+#import <CommonCrypto/CommonDigest.h>
 
 // Assorted utilities.
 @implementation Utilities
@@ -1285,6 +1286,40 @@
       }
     
   return date;
+  }
+
+// Send an e-mail.
++ (void) sendEmailTo: (NSString *) toAddress
+  withSubject: (NSString *) subject
+  content: (NSString *) bodyText
+  {
+  NSString * emailString =
+    [NSString
+      stringWithFormat:
+        NSLocalizedString(@"addtowhitelistemail", NULL),
+        subject, bodyText, @"Etresoft support", toAddress ];
+
+
+  NSAppleScript * emailScript =
+    [[NSAppleScript alloc] initWithSource: emailString];
+
+  [emailScript executeAndReturnError: nil];
+  [emailScript release];
+  }
+
++ (NSString *) MD5: (NSString *) string
+  {
+  const char * cstr = [string UTF8String];
+  unsigned char md5[16];
+  
+  CC_MD5(cstr, (CC_LONG)strlen(cstr), md5);
+
+  NSMutableString * result = [NSMutableString string];
+  
+  for(int i = 0; i < 16; ++i)
+    [result appendFormat: @"%02x", md5[i]];
+  
+  return result;
   }
 
 @end

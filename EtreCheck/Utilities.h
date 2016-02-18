@@ -174,4 +174,11 @@
 // recent creation or modification date for any file in the hierarchy.
 + (NSDate *) modificationDate: (NSString *) path;
 
+// Send an e-mail.
++ (void) sendEmailTo: (NSString *) toAddress
+  withSubject: (NSString *) subject
+  content: (NSString *) bodyText;
+
++ (NSString *) MD5: (NSString *) string;
+
 @end
