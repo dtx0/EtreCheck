@@ -956,6 +956,13 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [content appendString: @"\n"];
   [content appendString: NSLocalizedString(@"manualdonationlookup", NULL)];
   
+  NSString * donationKey = [Utilities UUID];
+  
+  [[NSUserDefaults standardUserDefaults]
+    setObject: donationKey forKey: @"donationkey"];
+
+  [content appendString: donationKey];
+
   [Utilities
     sendEmailTo: @"info@etresoft.com"
     withSubject: NSLocalizedString(@"Please lookup donation", NULL)
