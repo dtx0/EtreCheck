@@ -75,7 +75,7 @@
 "manualdonationlookup" = "If you are unsure about this information, please include any additional information such as your name and/or donation amount or date of donation. Thanks for your donation!\n\nPlease do not change the following lines: \n";
 "donationfound" = "Thanks for your donation! You will no longer be asked to donate.";
 "Donation not found" = "Donation not found";
-"donationnotfound" = "Sorry, your donation could not be found. Please use the e-mail lookup option.";
+"donationnotfound" = "Sorry, your donation could not be found. Please use the Manual lookup option.";
 "oldetrecheckversion" = "Your version of EtreCheck is outdated. This operation requires a current version of EtreCheck.";
 "unverifiedetrecheckversion" = "Could not verify your version of EtreCheck. This operation requires a current version of EtreCheck. If you are using a firewall, please all EtreCheck to access its servers.";
 "donateurl" = "http://etrecheck.com/donate_en.php?invoice=%@";
