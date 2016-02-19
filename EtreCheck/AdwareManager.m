@@ -64,8 +64,6 @@
     
   [self reportAdware];
   
-  return;
-  
   [Utilities
     removeFiles: self.adwareFiles
       completionHandler:
