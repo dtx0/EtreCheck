@@ -20,3 +20,5 @@ com.zoologic.net-preferences.plist
 com.hornless.net-preferences.plist
 com.marquis.net-preferences.plist
 com.Sclerostoma.net-preferences.plist
+com.lappet.net-preferences.plist                            
+com.paranephritic.net-preferences.plist                     
