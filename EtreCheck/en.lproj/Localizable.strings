@@ -78,3 +78,4 @@
 "donationnotfound" = "Sorry, your donation could not be found. Please use the e-mail lookup option.";
 "oldetrecheckversion" = "Your version of EtreCheck is outdated. This operation requires a current version of EtreCheck.";
 "unverifiedetrecheckversion" = "Could not verify your version of EtreCheck. This operation requires a current version of EtreCheck. If you are using a firewall, please all EtreCheck to access its servers.";
+"donateurl" = "http://etrecheck.com/donate_en.php?invoice=%@";

@@ -179,6 +179,10 @@
   withSubject: (NSString *) subject
   content: (NSString *) bodyText;
 
+// Generate an MD5 hash.
 + (NSString *) MD5: (NSString *) string;
+
+// Generate a UUID.
++ (NSString *) UUID;
 
 @end

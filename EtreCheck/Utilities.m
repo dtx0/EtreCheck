@@ -1329,4 +1329,23 @@
   return result;
   }
 
+// Generate a UUID.
++ (NSString *) UUID
+  {
+  CFUUIDRef uuid = CFUUIDCreate(NULL);
+
+  NSString * result = nil;
+
+  if(uuid)
+    {
+    result = (NSString *)CFUUIDCreateString(NULL, uuid);
+
+    CFRelease(uuid);
+    
+    return [result autorelease];
+    }
+    
+  return @"";
+  }
+
 @end

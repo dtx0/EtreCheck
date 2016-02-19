@@ -818,13 +818,23 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Donate now.
 - (IBAction) donate: (id) sender
   {
+  NSString * donationKey = [Utilities UUID];
+  
+  NSString * urlString =
+    [NSString
+      stringWithFormat:
+        NSLocalizedString(@"donateurl", nULL), donationKey];
+  
   [[NSWorkspace sharedWorkspace]
-    openURL: [NSURL URLWithString: @"http://etrecheck.com/donate"]];
+    openURL: [NSURL URLWithString: urlString]];
 
   [[NSApplication sharedApplication] endSheet: self.donatePanel];
 
   [[NSUserDefaults standardUserDefaults]
     setObject: @"yes" forKey: @"donate"];
+
+  [[NSUserDefaults standardUserDefaults]
+    setObject: donationKey forKey: @"donationkey"];
   }
 
 // Lookup a donation.
