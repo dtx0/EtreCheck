@@ -17,8 +17,6 @@
 @synthesize result = myResult;
 @synthesize complete = myComplete;
 @dynamic done;
-@synthesize progressStart = myProgressStart;
-@synthesize progressEnd = myProgressEnd;
 
 // Is this collector complete?
 - (bool) done
@@ -49,17 +47,6 @@
   [myResult release];
   
   [super dealloc];
-  }
-
-// Setup the progress.
-- (void) progressStart: (double) from end: (double) to
-  {
-  self.progressStart = from;
-  self.progressEnd = to;
-  
-  [[NSNotificationCenter defaultCenter]
-    postNotificationName: kProgressUpdate
-    object: [NSNumber numberWithDouble: self.progressEnd]];      
   }
 
 // Perform the collection.

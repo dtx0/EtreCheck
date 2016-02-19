@@ -66,7 +66,7 @@
     object: NSLocalizedString(@"Checking hardware", NULL)];
 
   // Run stage 1.
-  [self checkStage1From: 0.0 to: 30.0];
+  [self checkStage1To: 30.0];
     
   dispatch_barrier_sync(
     queue,
@@ -78,7 +78,7 @@
     });
   
   // Now do stage 2.
-  [self checkStage2From: 30.0 to: 60.0];
+  [self checkStage2To: 50.0];
   
   dispatch_barrier_sync(
     queue,
@@ -89,7 +89,7 @@
     });
 
   // Finally do stage 3.
-  [self checkStage3From: 60.0 to: 100.0];
+  [self checkStage3To: 100.0];
   
   dispatch_release(queue);
   
@@ -97,7 +97,7 @@
   }
 
 // Check stage 1.
-- (void) checkStage1From: (double) from to: (double) to
+- (void) checkStage1To: (double) to
   {
   NSMutableArray * collectors = [NSMutableArray array];
   
@@ -120,7 +120,7 @@
   // Start the machine animation.
   [self runMachineAnimation: hardwareCollector];
   
-  [self performCollections: collectors from: from to: to];
+  [self performCollections: collectors to: to];
   }
 
 // Run the machine animation.
@@ -215,7 +215,7 @@
   }
 
 // Check stage 2.
-- (void) checkStage2From: (double) from to: (double) to
+- (void) checkStage2To: (double) to
   {
   NSMutableArray * collectors = [NSMutableArray array];
   
@@ -238,7 +238,7 @@
   // Start the machine animation.
   [self runApplicationsAnimation: lastCollector];
   
-  [self performCollections: collectors from: from to: to];
+  [self performCollections: collectors to: to];
   }
 
 // Run the applications animation.
@@ -310,7 +310,7 @@
   }
 
 // Check stage 3.
-- (void) checkStage3From: (double) from to: (double) to
+- (void) checkStage3To: (double) to
   {
   NSMutableArray * collectors = [NSMutableArray array];
   
@@ -343,7 +343,7 @@
   // Start the agents and daemons animation.
   dispatch_semaphore_t semaphore = [self runAgentsAndDaemonsAnimation];
     
-  [self performCollections: collectors from: from to: to];
+  [self performCollections: collectors to: to];
 
   // Wait for the animation to finish.
   dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
@@ -372,18 +372,15 @@
   }
 
 // Perform some collections.
-- (void) performCollections: (NSArray *) collectors
-  from: (double) from to: (double) to
+- (void) performCollections: (NSArray *) collectors to: (double) to
   {
-  double increment = (to - from) / collectors.count;
-  
-  double progress = from;
+  [[NSNotificationCenter defaultCenter]
+    postNotificationName: kProgressUpdate
+    object: [NSNumber numberWithDouble: to]];
   
   for(Collector * collector in collectors)
     {
     NSAutoreleasePool * pool = [NSAutoreleasePool new];
-    
-    [collector progressStart: progress end: progress + increment];
     
     [collector collect];
     
@@ -393,8 +390,6 @@
     [completed setObject: collector forKey: collector.name];
     
     [pool drain];
-    
-    progress += increment;
     }
   }
 
