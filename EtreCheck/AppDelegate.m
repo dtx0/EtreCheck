@@ -1061,6 +1061,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Cancel the report.
 - (IBAction) cancel: (id) sender
   {
+  [[NSApplication sharedApplication] endSheet: self.donationLookupPanel];
   [[NSApplication sharedApplication] endSheet: self.donatePanel];
   [[NSApplication sharedApplication] endSheet: self.TOUPanel];
   [[NSApplication sharedApplication] endSheet: self.startPanel];
