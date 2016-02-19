@@ -143,7 +143,7 @@
 "EtreCheck Report" = "Rapport EtreCheck";
 "Problem: " = "Problème :";
 "Description:\n" = "Description :\n";
-"Confirm cancellation" = "Confirmer l'annulation";
+"Confirm cancellation" = "Confirmer l’annulation";
 "Are you sure you want to cancel this EtreCheck report?" = "Êtes-vous sûr de vouloir annuler ce rapport EtreCheck ?";
 "No, continue" = "Non, continuer";
 "Yes, cancel" = "Oui, annuler";
@@ -177,7 +177,7 @@
 "    Skip System Files: " = "    Ignorer les fichiers du système : ";
 "NO\n" = "NON\n";
 "YES - System files not being backed up\n" = "OUI - Les fichiers du système ne sont pas sauvegardés\n";
-"/Library/Logs/DiagnosticReports permissions" = "    Les utilisateurs standard ne peuvent pas lire /Library/Logs/DiagnosticReports.\n    Lancer EtreCheck comme un utilisateur administrateur pour voir plus d'informations.";
+"/Library/Logs/DiagnosticReports permissions" = "    Les utilisateurs standard ne peuvent pas lire /Library/Logs/DiagnosticReports.\n    Lancer EtreCheck comme un utilisateur administrateur pour voir plus d’informations.";
 "[Details]" = "[Les détails]";
 "Checking information from log files" = "Vérification des informations des fichiers journaux";
 "Self test - passed" = "Examen de soi - succès";
@@ -189,7 +189,7 @@
 "%d error (plural rule: other)" = "%d erreurs\n";
 "No help available" = "Aucune aide disponible";
 "adware" = "EtreCheck a détecté que votre Macintosh est infecté par adware comme identifié par Apple (voir http://support.apple.com/HT203987), les recherches propres d’Etresoft, et les contributions des autres utilisateurs EtreCheck. Cliquez sur le bouton «Enlever» pour retirer l’adware. Les fichiers que vous enlevez seront automatiquement envoyés à Etresoft pour la liste d’adware.";
-"unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas sur la liste blanche des logiciels sûrs. C’est possible qu’il soit adware ou malware. Mais aussi, c’est possible qu’il soit quelque chose de nouveau qui a besoin d’être ajouté à la liste blanche d’EtreCheck. Choisissez les fichiers qui sont adware et cliquez sur le bouton «Identifier comme adware» pour les envoyés à Etresoft pour la liste noire d’adware. Choisissez les fichiers qui sont légitimes et cliquez sur le bouton «Ajouter à la liste blanche» pour les faire ajouter à la liste blanche d‘EtreCheck.";
+"unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas sur la liste blanche des logiciels sûrs. C’est possible qu’il soit adware ou malware. Mais aussi, c’est possible qu’il soit quelque chose de nouveau qui a besoin d’être ajouté à la liste blanche d’EtreCheck. Identifier tous les fichiers qui sont valides et décrivent pourquoi. Identifiez tous les fichiers qui sont valides et décrivez pourquoi. Ensuite, cliquez sur le bouton «Envoyer à Etresoft» pour envoyer ces fichiers à Etresoft pour un éventuel ajout à la liste noire de l’adware ou la liste blanche des logiciels légitimes.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "Un fichier adware trouvé.";
 "%d adware file (plural rule: other)" = "%d fichiers adware trouvés.";
@@ -203,7 +203,7 @@
 "%d pressurekilledcount (plural rule: one)" = "    un processus tué à cause du manque de mémoire\n";
 "%d pressurekilledcount (plural rule: other)" = "    %d processus tués à cause du manque de mémoire\n";
 "insufficientram" = "Manque de mémoire !";
-"linkhelp" = "Cliquez sur les liens [Aide] pour l’assistance avec les produits non-Apple.\nCliquez sur les liens [Détails] pour plus d'informations sur cette ligne.\nCliquez sur les liens [Adware] pour l’assistance avec la supression d’adware.\n\n";
+"linkhelp" = "Cliquez sur les liens [Aide] pour l’assistance avec les produits non-Apple.\nCliquez sur les liens [Détails] pour plus d’informations sur cette ligne.\nCliquez sur les liens [Adware] pour l’assistance avec la supression d’adware.\n\n";
 "downloadetrecheck" = "Télécharger EtreCheck chez ";
 "Display" = "Écran";
 "    Battery: Health = %@ - Cycle count = %@\n" = "    La batterie : Santé = %@ - Comptage de cycles = %@\n";
@@ -247,9 +247,9 @@
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "Donate" = "Faire un don";
 "Thanks for your submission" = "Merci";
-"thanksforwhitelist" = "Nous vous remercions de votre soumission à la liste blanche EtreCheck. Il peut prendre quelques jours pour vérifier votre soumission et mettre à jour nos données. Nous vous serions reconnaissants de votre patience.";
-"Whitelist upload failed" = "Échec de téléchargement";
-"whitelistuploadfailed" = "Votre téléchargement pour la liste blanche au serveur EtreCheck a échoué. Voulez-vous utiliser le courriel à la place?";
+"thanksforsubmission" = "Nous vous remercions de votre soumission à Etresoft. Il peut prendre quelques jours pour vérifier votre soumission et mettre à jour nos données. Nous vous serions reconnaissants de votre patience.";
+"Submission failed" = "Échec de téléchargement";
+"submissionfailed" = "Votre téléchargement au serveur EtreCheck a échoué. Voulez-vous utiliser le courriel à la place?";
 "Yes - Send via e-mail" = "Oui - Envoyer au courriel";
 "No" = "Non";
 "%d applecount (plural rule: zero)" = "";
@@ -272,7 +272,7 @@
 "continuewithpassword" = "\nVoulez-vous continuer ?";
 "Cannot verify Time Machine backup!" = "Impossible de vérifier la sauvegarde Time Machine !";
 "cannotverifytimemachinebackup" = "EtreCheck ne peut pas vérifier une sauvegarde Time Machine sur OS X 10.7 «Lion» ou plus tôt. Avez-vous une sauvegarde Time Machine ?";
-"No, I don't have a backup" = "Non. Je n’ai pas de sauvegarde";
+"No, I don’t have a backup" = "Non. Je n’ai pas de sauvegarde";
 "Yes, I have a backup" = "Oui. J’ai une sauvegarde";
 "thanksforadware" = "Nous vous remercions de votre soumission à la liste noire d’adware pour EtreCheck. Il peut prendre quelques jours pour vérifier votre soumission et mettre à jour nos données. Nous vous serions reconnaissants de votre patience.";
 "Adware upload failed" = "Échec de téléchargement";
@@ -291,3 +291,4 @@
 "oldetrecheckversion" = "Votre version de EtreCheck est vielle. Cette opération nécessite une version actuelle d’EtreCheck.";
 "Unverified EtreCheck version!" = "La version d’EtreCheck pas vérifiée !";
 "unverifiedetrecheckversion" = "Impossible de vérifier votre version d’EtreCheck. Cette opération nécessite une version actuelle d’EtreCheck. Si vous utilisez un pare-feu, s’il vous plaît, permettez l’accès à des serveurs EtreCheck.";
+" (cache only)" = " (seulement en cache)";

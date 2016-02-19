@@ -455,11 +455,14 @@
 // Is this file an adware extension?
 - (bool) isAdwareExtension: (NSString *) name path: (NSString *) path
   {
-  NSString * search = [path lowercaseString];
-  
-  for(NSString * extension in self.adwareExtensions)
-    if([search rangeOfString: extension].location != NSNotFound)
-      return YES;
+  if(([name length] > 0) && ([path length] > 0))
+    {
+    NSString * search = [path lowercaseString];
+    
+    for(NSString * extension in self.adwareExtensions)
+      if([search rangeOfString: extension].location != NSNotFound)
+        return YES;
+    }
     
   return NO;
   }

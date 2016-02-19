@@ -12,7 +12,8 @@
 #define kIdentifier @"identifier"
 #define kHumanReadableName @"humanreadablename"
 #define kFileName @"filename"
-#define kFilePath @"filepath"
+#define kArchivePath @"archivepath"
+#define kCachePath @"cachepath"
 
 // Collect Safari extensions.
 @implementation SafariExtensionsCollector
@@ -50,6 +51,7 @@
     updateStatus: NSLocalizedString(@"Checking Safari extensions", NULL)];
 
   [self collectArchives];
+  [self collectCaches];
 
   // Print the extensions.
   if([self.extensions count])
@@ -88,7 +90,41 @@
       
     NSDictionary * plist = [self readSafariExtensionPropertyList: path];
 
-    [self createExtensionsFromPlist: plist name: name path: path];
+    NSMutableDictionary * extension =
+      [self createExtensionsFromPlist: plist name: name path: path];
+      
+    [extension setObject: path forKey: kArchivePath];
+    }
+  }
+
+// Collect extension caches.
+- (void) collectCaches
+  {
+  NSString * userSafariExtensionsDir =
+    [NSHomeDirectory()
+      stringByAppendingPathComponent:
+        @"Library/Caches/com.apple.Safari/Extensions"];
+
+  NSArray * args =
+    @[
+      userSafariExtensionsDir,
+      @"-iname",
+      @"*.safariextension"];
+
+  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
+  
+  NSArray * paths = [Utilities formatLines: data];
+
+  for(NSString * path in paths)
+    {
+    NSString * name = [self extensionName: path];
+      
+    NSDictionary * plist = [self readSafariExtensionPropertyList: path];
+
+    NSMutableDictionary * extension =
+      [self createExtensionsFromPlist: plist name: name path: path];
+      
+    [extension setObject: path forKey: kCachePath];
     }
   }
 
@@ -113,7 +149,7 @@
   }
 
 // Create an extension dictionary from a plist.
-- (void) createExtensionsFromPlist: (NSDictionary *) plist
+- (NSMutableDictionary *) createExtensionsFromPlist: (NSDictionary *) plist
   name: (NSString *) name path: (NSString *) path
   {
   NSString * humanReadableName =
@@ -139,7 +175,8 @@
   [extension setObject: humanReadableName forKey: kHumanReadableName];
   [extension setObject: identifier forKey: kIdentifier];
   [extension setObject: name forKey: kFileName];
-  [extension setObject: path forKey: kFilePath];
+  
+  return extension;
   }
 
 // Print a Safari extension.
@@ -148,60 +185,90 @@
   NSString * humanReadableName =
     [extension objectForKey: kHumanReadableName];
   
-  [self.result
-    appendString:
-      [NSString stringWithFormat: @"    %@", humanReadableName]];
-    
-  [self appendModificationDate: extension];
+  NSString * archivePath = [extension objectForKey: kArchivePath];
+  NSString * cachePath = [extension objectForKey: kCachePath];
   
-  NSString * path = [extension objectForKey: kFilePath];
+  bool adware = NO;
   
-  bool adware =
-    [[Model model] isAdwareExtension: humanReadableName path: path];
+  if([[Model model] isAdwareExtension: humanReadableName path: archivePath])
+    adware = YES;
   
-  bool adwareName =
+  if([[Model model] isAdwareExtension: humanReadableName path: cachePath])
+    adware = YES;
+
+  bool adwareNameArchive =
     [[Model model]
-      isAdwareExtension: [extension objectForKey: kFileName ] path: path];
+      isAdwareExtension: [extension objectForKey: kFileName ]
+      path: archivePath];
    
-  if(adwareName)
+  bool adwareNameCache =
+    [[Model model]
+      isAdwareExtension: [extension objectForKey: kFileName ]
+      path: cachePath];
+
+  if(adwareNameArchive || adwareNameCache)
     adware = true;
     
-  if(adware)
+  // Ignore a cached extension unless it is adware.
+  if(([archivePath length] > 0) || adware)
     {
-    [self.result appendString: @" "];
-    
-    // Add this adware extension under the "extension" category so only it
-    // will be printed.
-    [[[Model model] adwareFiles] setObject: @"extension" forKey: path];
-    [[Model model] setAdwareFound: YES];
-
     [self.result
-      appendString: NSLocalizedString(@"Adware!", NULL)
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
+      appendString:
+        [NSString stringWithFormat: @"    %@", humanReadableName]];
+    
+    if(([archivePath length] == 0) && ([cachePath length] > 0))
+      [self.result appendString: NSLocalizedString(@" (cache only)", NULL)];
       
-    NSAttributedString * removeLink = [self generateRemoveAdwareLink];
-
-    if(removeLink)
+    [self appendModificationDate: extension];
+    
+    if(adware)
       {
       [self.result appendString: @" "];
       
-      [self.result appendAttributedString: removeLink];
-      }
-    }
+      // Add this adware extension under the "extension" category so only it
+      // will be printed.
+      if(archivePath)
+        [[[Model model] adwareFiles]
+          setObject: @"extension" forKey: archivePath];
+      
+      if(cachePath)
+        [[[Model model] adwareFiles]
+          setObject: @"extension" forKey: cachePath];
 
-  [self.result appendString: @"\n"];
+      [[Model model] setAdwareFound: YES];
+
+      [self.result
+        appendString: NSLocalizedString(@"Adware!", NULL)
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
+        
+      NSAttributedString * removeLink = [self generateRemoveAdwareLink];
+
+      if(removeLink)
+        {
+        [self.result appendString: @" "];
+        
+        [self.result appendAttributedString: removeLink];
+        }
+      }
+
+    [self.result appendString: @"\n"];
+    }
   }
 
 // Append the modification date.
 - (void) appendModificationDate: (NSDictionary *) extension
   {
   NSDate * modificationDate =
-    [Utilities modificationDate: [extension objectForKey: kFilePath]];
+    [Utilities modificationDate: [extension objectForKey: kArchivePath]];
     
+  if(!modificationDate)
+    modificationDate =
+      [Utilities modificationDate: [extension objectForKey: kCachePath]];
+
   if(modificationDate)
     {
     NSString * modificationDateString =

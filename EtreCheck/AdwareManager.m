@@ -64,6 +64,8 @@
     
   [self reportAdware];
   
+  return;
+  
   [Utilities
     removeFiles: self.adwareFiles
       completionHandler:
@@ -171,9 +173,13 @@
         initWithData: result encoding: NSUTF8StringEncoding];
       
     if([status isEqualToString: @"OK"])
-      NSLog(@"adware report successful");
+      {
+      //NSLog(@"adware report successful");
+      }
     else
-      NSLog(@"adware report failed");
+      {
+      //NSLog(@"adware report failed: %@", status);
+      }
       
     [status release];
     }

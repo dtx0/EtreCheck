@@ -10,7 +10,6 @@
 #import "Utilities.h"
 #import "TTTLocalizedPluralString.h"
 
-#define kReport @"report"
 #define kWhitelist @"whitelist"
 #define kPath @"path"
 
@@ -23,40 +22,9 @@
 
 @implementation UnknownFilesManager
 
-@synthesize adwareIndicators = myAdwareIndicators;
 @synthesize whitelistIndicators = myWhitelistIndicators;
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize whitelistDescription = myWhitelistDescription;
-@dynamic canReport;
-@dynamic canAddToWhitelist;
-
-// Can I report something?
-- (BOOL) canReport
-  {
-  BOOL canReport = NO;
-
-  NSUInteger count = [self.unknownFiles count];
-  
-  for(NSUInteger i = 0; i < count; ++i)
-    if([[self.adwareIndicators objectAtIndex: i] boolValue])
-      canReport = YES;
-    
-  return canReport;
-  }
-
-// Can I add something to the whitelist?
-- (BOOL) canAddToWhitelist
-  {
-  BOOL canAdd = NO;
-
-  NSUInteger count = [self.unknownFiles count];
-  
-  for(NSUInteger i = 0; i < count; ++i)
-    if([[self.whitelistIndicators objectAtIndex: i] boolValue])
-      canAdd = YES;
-    
-  return canAdd;
-  }
 
 // Constructor.
 - (id) init
@@ -74,7 +42,6 @@
   {
   [super dealloc];
   
-  self.adwareIndicators = nil;
   self.whitelistIndicators = nil;
   self.unknownFiles = nil;
   self.whitelistDescription = nil;
@@ -86,15 +53,11 @@
   [super show: NSLocalizedString(@"unknownfiles", NULL)];
   
   myWhitelistIndicators = [NSMutableArray new];
-  myAdwareIndicators = [NSMutableArray new];
   
   NSUInteger count = [[[Model model] unknownFiles] count];
   
   for(NSUInteger i = 0; i < count; ++i)
-    {
-    [myAdwareIndicators addObject: [NSNumber numberWithBool: NO]];
     [myWhitelistIndicators addObject: [NSNumber numberWithBool: NO]];
-    }
     
   myUnknownFiles = [NSMutableArray new];
   
@@ -106,93 +69,8 @@
   [self.tableView reloadData];
   }
 
-// Report the adware.
-- (IBAction) reportAdware: (id) sender
-  {
-  if([[Model model] oldEtreCheckVersion])
-    {
-    [self reportOldEtreCheckVersion];
-    return;
-    }
-    
-  if(![[Model model] verifiedEtreCheckVersion])
-    {
-    [self reportUnverifiedEtreCheckVersion];
-    return;
-    }
-    
-  NSUInteger count = [self.unknownFiles count];
-  
-  NSMutableArray * paths = [NSMutableArray array];
-  
-  for(NSUInteger i = 0; i < count; ++i)
-    if([[self.adwareIndicators objectAtIndex: i] boolValue])
-      [paths addObject: [self.unknownFiles objectAtIndex: i]];
-    
-  NSMutableString * json = [NSMutableString string];
-  
-  [json appendString: @"{\"action\":\"addtoblacklist\","];
-  [json appendString: @"\"files\":["];
-  
-  bool first = YES;
-  
-  NSUInteger index = 0;
-  
-  for(; index < [paths count]; ++index)
-    {
-    NSString * path =
-      [[paths objectAtIndex: index]
-        stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
-    
-    NSString * name = [path lastPathComponent];
-    NSString * cmd = @"";
-    
-    if(!first)
-      [json appendString: @","];
-      
-    first = NO;
-    
-    [json appendString: @"{"];
-    
-    [json appendFormat: @"\"name\":\"%@\",", name];
-    [json appendFormat: @"\"path\":\"%@\",", path];
-    [json appendFormat: @"\"cmd\":\"%@\"", cmd];
-    
-    [json appendString: @"}"];
-    }
-    
-  [json appendString: @"]}"];
-  
-  NSString * server = @"http://etrecheck.com/server/adware_detection.php";
-  
-  NSArray * args =
-    @[
-      @"--data",
-      json,
-      server
-    ];
-
-  [Utilities execute: @"/usr/bin/curl" arguments: args];
-
-  NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
-
-  if(result)
-    {
-    NSString * status =
-      [[NSString alloc]
-        initWithData: result encoding: NSUTF8StringEncoding];
-      
-    if([status isEqualToString: @"OK"])
-      [self thanksForAdware];
-    else
-      [self uploadAdwareFallbackToEmail];
-      
-    [status release];
-    }
-  }
-
 // Contact Etresoft to add to whitelist.
-- (IBAction) addToWhitelist: (id) sender
+- (IBAction) report: (id) sender
   {
   if([[Model model] oldEtreCheckVersion])
     {
@@ -208,7 +86,7 @@
     
   NSMutableString * json = [NSMutableString string];
   
-  [json appendString: @"{\"action\":\"addtowhitelist\","];
+  [json appendString: @"{\"action\":\"report\","];
   [json appendString: @"\"files\":["];
   
   bool first = YES;
@@ -231,11 +109,6 @@
     
     [json appendString: @"{"];
     
-    [json
-      appendFormat:
-        @"\"adware\":\"%@\",",
-        [self.adwareIndicators objectAtIndex: index]];
-      
     [json
       appendFormat:
         @"\"known\":\"%@\",",
@@ -273,16 +146,16 @@
         initWithData: result encoding: NSUTF8StringEncoding];
       
     if([status isEqualToString: @"OK"])
-      [self thanksForWhitelist];
+      [self thanksForSubmission];
     else
-      [self uploadWhitelistFallbackToEmail];
+      [self submissionFallbackToEmail];
       
     [status release];
     }
   }
 
-// Thank the user for their whitelist submission.
-- (void) thanksForWhitelist
+// Thank the user for their submission.
+- (void) thanksForSubmission
   {
   NSAlert * alert = [[NSAlert alloc] init];
 
@@ -292,7 +165,7 @@
   [alert setAlertStyle: NSInformationalAlertStyle];
 
   [alert
-    setInformativeText: NSLocalizedString(@"thanksforwhitelist", NULL)];
+    setInformativeText: NSLocalizedString(@"thanksforsubmission", NULL)];
 
   // This is the rightmost, first, default button.
   [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
@@ -303,17 +176,17 @@
   }
 
 // Allow the user to submit an update via e-mail.
-- (void) uploadWhitelistFallbackToEmail
+- (void) submissionFallbackToEmail
   {
   NSAlert * alert = [[NSAlert alloc] init];
 
   [alert
-    setMessageText: NSLocalizedString(@"Whitelist upload failed", NULL)];
+    setMessageText: NSLocalizedString(@"Submission failed", NULL)];
     
   [alert setAlertStyle: NSInformationalAlertStyle];
 
   [alert
-    setInformativeText: NSLocalizedString(@"whitelistuploadfailed", NULL)];
+    setInformativeText: NSLocalizedString(@"submissionfailed", NULL)];
 
   // This is the rightmost, first, default button.
   [alert
@@ -350,79 +223,7 @@
       
     [Utilities
       sendEmailTo: @"info@etresoft.com"
-      withSubject: @"Add to whitelist"
-      content: content];
-    }
-
-  [alert release];
-  }
-
-// Thank the user for their adware submission.
-- (void) thanksForAdware
-  {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert
-    setMessageText: NSLocalizedString(@"Thanks for your submission", NULL)];
-    
-  [alert setAlertStyle: NSInformationalAlertStyle];
-
-  [alert
-    setInformativeText: NSLocalizedString(@"thanksforadware", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert addButtonWithTitle: NSLocalizedString(@"OK", NULL)];
-
-  [alert runModal];
-
-  [alert release];
-  }
-
-// Allow the user to submit an update via e-mail.
-- (void) uploadAdwareFallbackToEmail
-  {
-  NSAlert * alert = [[NSAlert alloc] init];
-
-  [alert
-    setMessageText: NSLocalizedString(@"Adware upload failed", NULL)];
-    
-  [alert setAlertStyle: NSInformationalAlertStyle];
-
-  [alert
-    setInformativeText: NSLocalizedString(@"adwareuploadfailed", NULL)];
-
-  // This is the rightmost, first, default button.
-  [alert
-    addButtonWithTitle: NSLocalizedString(@"Yes - Send via e-mail", NULL)];
-
-  [alert addButtonWithTitle: NSLocalizedString(@"No", NULL)];
-
-  NSInteger result = [alert runModal];
-
-  if(result == NSAlertFirstButtonReturn)
-    {
-    NSMutableString * content = [NSMutableString string];
-    
-    [content
-      appendString: @"EtreCheck found the following adware files:\n\n"];
-
-    NSUInteger index = 0;
-    
-    for(; index < self.adwareIndicators.count; ++index)
-      {
-      if([[self.adwareIndicators objectAtIndex: index] boolValue])
-        [content
-          appendString:
-            [NSString
-              stringWithFormat:
-                @"%@\n", [self.unknownFiles objectAtIndex: index]]];
-      }
-      
-    [content appendString: @"\n"];
-      
-    [Utilities
-      sendEmailTo: @"info@etresoft.com"
-      withSubject: @"Add to blacklist"
+      withSubject: @"Unknown files report"
       content: content];
     }
 
@@ -440,10 +241,7 @@
   objectValueForTableColumn: (NSTableColumn *) aTableColumn
   row: (NSInteger) rowIndex
   {
-  if([[aTableColumn identifier] isEqualToString: kReport])
-    return [self.adwareIndicators objectAtIndex: rowIndex];
-  
-  else if([[aTableColumn identifier] isEqualToString: kWhitelist])
+  if([[aTableColumn identifier] isEqualToString: kWhitelist])
     return [self.whitelistIndicators objectAtIndex: rowIndex];
 
   else if([[aTableColumn identifier] isEqualToString: kPath])
@@ -457,34 +255,13 @@
   forTableColumn: (NSTableColumn *) tableColumn
   row: (NSInteger) row
   {
-  if([[tableColumn identifier] isEqualToString: kReport])
+  if([[tableColumn identifier] isEqualToString: kWhitelist])
     {
-    [self willChangeValueForKey: @"canReport"];
-    
-    [self.adwareIndicators replaceObjectAtIndex: row withObject: object];
-    
-    [self.whitelistIndicators
-      replaceObjectAtIndex: row withObject: [NSNumber numberWithBool: NO]];
-    [tableView
-      reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
-      columnIndexes: [NSIndexSet indexSetWithIndex: 1]];
-    
-    [self didChangeValueForKey: @"canReport"];
-    }
-    
-  else if([[tableColumn identifier] isEqualToString: kWhitelist])
-    {
-    [self willChangeValueForKey: @"canAddToWhitelist"];
-    
     [self.whitelistIndicators replaceObjectAtIndex: row withObject: object];
 
-    [self.adwareIndicators
-      replaceObjectAtIndex: row withObject: [NSNumber numberWithBool: NO]];
     [tableView
       reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
       columnIndexes: [NSIndexSet indexSetWithIndex: 0]];
-
-    [self didChangeValueForKey: @"canAddToWhitelist"];
     }
   }
 

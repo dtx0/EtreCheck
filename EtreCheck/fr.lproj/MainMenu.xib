@@ -1435,18 +1435,6 @@ DQ
                             <action selector="close:" target="co3-N1-xdH" id="OU3-hy-rCt"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" id="Is7-Bm-9KA">
-                        <rect key="frame" x="14" y="13" width="190" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Identifier comme adware" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kbt-Ie-n1n">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="reportAdware:" target="co3-N1-xdH" id="IsI-QM-4zB"/>
-                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canReport" id="JCd-lc-AR9"/>
-                        </connections>
-                    </button>
                     <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="wVf-Ia-oPd">
                         <rect key="frame" x="20" y="61" width="528" height="72"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -1500,24 +1488,12 @@ DQ
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="qrf-DP-hp6" id="eq8-ku-8TT">
-                                    <rect key="frame" x="0.0" y="0.0" width="615" height="19"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="554" height="114"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="report" width="57.83203125" minWidth="10" maxWidth="3.4028234663852886e+38" id="gGN-k1-g6E">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Adware ?">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="overlaps" inset="2" id="yO4-Kw-6wT">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                        </tableColumn>
                                         <tableColumn identifier="whitelist" width="146" minWidth="40" maxWidth="1000" id="Ifg-0y-pp5">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Ajouter à la liste blanche ?">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1561,20 +1537,19 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="qrf-DP-hp6">
-                            <rect key="frame" x="0.0" y="0.0" width="615" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="554" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="928-Rk-LBh">
-                        <rect key="frame" x="204" y="13" width="189" height="32"/>
+                        <rect key="frame" x="14" y="13" width="151" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Ajouter à la liste blanche" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dtH-FC-58T">
+                        <buttonCell key="cell" type="push" title="Envoyer à Etresoft" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dtH-FC-58T">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="addToWhitelist:" target="co3-N1-xdH" id="8jY-PO-ZBv"/>
-                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canAddToWhitelist" id="SWt-h0-LSM"/>
+                            <action selector="report:" target="co3-N1-xdH" id="FD2-eV-L2z"/>
                         </connections>
                     </button>
                 </subviews>

@@ -1425,18 +1425,6 @@ Gw
                 <rect key="frame" x="0.0" y="0.0" width="568" height="445"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" id="m2C-hl-sCC">
-                        <rect key="frame" x="14" y="13" width="130" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Report Adware" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8Fe-aZ-JbM">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="reportAdware:" target="iUq-Rw-Zgh" id="VGY-M4-Qpo"/>
-                            <binding destination="iUq-Rw-Zgh" name="enabled" keyPath="self.canReport" id="S1d-Tf-sFl"/>
-                        </connections>
-                    </button>
                     <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="6JN-HU-XNa">
                         <rect key="frame" x="20" y="61" width="528" height="69"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -1528,18 +1516,6 @@ Gw
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="report" width="54.625" minWidth="10" maxWidth="3.4028234663852886e+38" id="XC8-A6-Xdx">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Adware?">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="check" bezelStyle="regularSquare" imagePosition="overlaps" inset="2" id="rJl-r9-z2f">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                        </tableColumn>
                                         <tableColumn identifier="whitelist" width="96.8984375" minWidth="40" maxWidth="1000" id="SJi-Kt-K6R">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Add to whitelist?">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1552,7 +1528,7 @@ Gw
                                             </buttonCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="path" editable="NO" width="365.5" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
+                                        <tableColumn identifier="path" editable="NO" width="422.5" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Unknown file">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1597,15 +1573,14 @@ Gw
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" id="Tnm-72-P6l">
-                        <rect key="frame" x="144" y="13" width="134" height="32"/>
+                        <rect key="frame" x="14" y="13" width="139" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Add to whitelist" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o1t-3N-Txy">
+                        <buttonCell key="cell" type="push" title="Send to Etresoft" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o1t-3N-Txy">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="addToWhitelist:" target="iUq-Rw-Zgh" id="7q1-j5-xVF"/>
-                            <binding destination="iUq-Rw-Zgh" name="enabled" keyPath="self.canAddToWhitelist" id="8ZB-uV-csB"/>
+                            <action selector="report:" target="iUq-Rw-Zgh" id="nD2-Dj-K4g"/>
                         </connections>
                     </button>
                 </subviews>

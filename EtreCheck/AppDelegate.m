@@ -870,7 +870,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       server
     ];
 
-  NSLog(@"json = %@", json);
+  //NSLog(@"json = %@", json);
   [Utilities execute: @"/usr/bin/curl" arguments: args];
 
   NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
@@ -883,7 +883,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       
     [donationKey autorelease];
     
-    NSLog(@"donation key = %@", donationKey);
+    //NSLog(@"donation key = %@", donationKey);
     if([donationKey length])
       {
       [[NSUserDefaults standardUserDefaults]
@@ -1472,8 +1472,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   dispatch_async(
     dispatch_get_main_queue(),
     ^{
-      //[self updateProgress: self.nextProgressIncrement];
-      
       self.nextProgressIncrement = [[notification object] doubleValue];
     });
   }
@@ -1800,7 +1798,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     
     if([status isEqualToString: @"OK"])
       {
-      NSLog(@"Donation key verified");
+      //NSLog(@"Donation key verified");
       return YES;
       }
     }
