@@ -95,12 +95,17 @@
   
   for(; index < self.whitelistIndicators.count; ++index)
     {
-    NSString * path =
-      [[self.unknownFiles objectAtIndex: index]
-        stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+    NSString * path = [self.unknownFiles objectAtIndex: index];
     
+    NSString * cmd =
+      [path length] > 0
+        ? [[[Model model] launchdCommands] objectForKey: path]
+        : @"";
+    
+    path =
+      [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+      
     NSString * name = [path lastPathComponent];
-    NSString * cmd = @"";
     
     if(!first)
       [json appendString: @","];

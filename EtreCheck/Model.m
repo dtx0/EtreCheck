@@ -39,6 +39,8 @@
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize seriousProblems = mySeriousProblems;
 @synthesize backupExists = myBackupExists;
+@synthesize launchdCommands = myLaunchdCommands;
+@synthesize launchdContents = myLaunchdContents;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize checkAppleSignatures = myCheckAppleSignatures;
 @synthesize hideAppleTasks = myHideAppleTasks;
@@ -91,6 +93,8 @@
     myBlacklistFiles = [NSMutableSet new];
     myBlacklistSuffixes = [NSMutableSet new];
     myBlacklistMatches = [NSMutableSet new];
+    myLaunchdCommands = [NSMutableDictionary new];
+    myLaunchdContents = [NSMutableDictionary new];
     }
     
   return self;
@@ -99,6 +103,8 @@
 // Destructor.
 - (void) dealloc
   {
+  [myLaunchdCommands release];
+  [myLaunchdContents release];
   [myBlacklistSuffixes release];
   [myBlacklistMatches release];
   [myBlacklistFiles release];

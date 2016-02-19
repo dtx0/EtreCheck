@@ -348,9 +348,16 @@
   {
   NSString * resolvedPath = [path stringByResolvingSymlinksInPath];
   
-  return
-    [self
-      readPropertyListData: [NSData dataWithContentsOfFile: resolvedPath]];
+  NSData * data = [NSData dataWithContentsOfFile: resolvedPath];
+  
+  if(([path length] > 0) && ([data length] > 0))
+    {
+    [[[Model model] launchdContents] setObject: data forKey: path];
+    
+    return [self readPropertyListData: data];
+    }
+    
+  return nil;
   }
   
 // Read a property list.

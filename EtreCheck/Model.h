@@ -59,6 +59,8 @@
   NSMutableSet * myUnknownFiles;
   NSMutableSet * mySeriousProblems;
   bool myBackupExists;
+  NSMutableDictionary * myLaunchdCommands;
+  NSMutableDictionary * myLaunchdContents;
   
   bool myIgnoreKnownAppleFailures;
   bool myCheckAppleSignatures;
@@ -148,6 +150,12 @@
 
 // Do I have a Time Machine backup?
 @property (assign) bool backupExists;
+
+// Keep track of all launchd commands.
+@property (retain) NSMutableDictionary * launchdCommands;
+
+// Keep track of all launchd contents.
+@property (retain) NSMutableDictionary * launchdContents;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;

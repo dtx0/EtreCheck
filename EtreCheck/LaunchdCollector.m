@@ -539,8 +539,16 @@
       }
     }
   else
+    {
     whitelist = [[Model model] checkWhitelistFile: filename path: path];
-
+    
+    NSArray * command = [status objectForKey: kCommand];
+    NSString * commandString = [command componentsJoinedByString: @" "];
+    
+    [[[Model model] launchdCommands]
+      setObject: commandString  forKey: path];
+    }
+    
   if(!whitelist)
     [self handleWhitelistExceptions: status path: path];
     

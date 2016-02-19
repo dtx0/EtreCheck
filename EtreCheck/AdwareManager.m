@@ -128,12 +128,17 @@
   
   for(; index < [self.adwareFiles count]; ++index)
     {
-    NSString * path =
-      [[self.adwareFiles objectAtIndex: index]
-        stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+    NSString * path = [self.adwareFiles objectAtIndex: index];
     
+    NSString * cmd =
+      [path length] > 0
+        ? [[[Model model] launchdCommands] objectForKey: path]
+        : @"";
+      
+    path =
+      [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+      
     NSString * name = [path lastPathComponent];
-    NSString * cmd = @"";
     
     if(!first)
       [json appendString: @","];
