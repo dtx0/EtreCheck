@@ -1324,7 +1324,7 @@
   NSMutableString * result = [NSMutableString string];
   
   for(int i = 0; i < 16; ++i)
-    [result appendFormat: @"%02x", md5[i]];
+    [result appendFormat: @"%02X", md5[i]];
   
   return result;
   }
