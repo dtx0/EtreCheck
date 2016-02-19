@@ -962,6 +962,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     setObject: donationKey forKey: @"donationkey"];
 
   [content appendString: donationKey];
+  [content appendString: @"\n"];
+  [content appendString: [Utilities MD5: self.donationLookupEmail]];
 
   [Utilities
     sendEmailTo: @"info@etresoft.com"
