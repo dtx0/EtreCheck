@@ -452,7 +452,8 @@
   
   for(NSString * path in sortedPaths)
     if([self formatPropertyListFile: path output: formattedOutput])
-    
+      haveOutput = YES;
+      
   if([[Model model] hideAppleTasks])
     if([self formatAppleCounts: formattedOutput])
       haveOutput = YES;
