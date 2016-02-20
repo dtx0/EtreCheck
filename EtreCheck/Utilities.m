@@ -1198,6 +1198,8 @@
 
     [[[Utilities shared] dateFormatters]
       setObject: dateFormatter forKey: format];
+      
+    [dateFormatter release];
     }
     
   return dateFormatter;
@@ -1253,15 +1255,13 @@
   {
   NSURL * directoryURL = [NSURL fileURLWithPath: path];
   
-  NSFileManager * localFileManager= [[NSFileManager alloc] init];
-  
   NSArray * keys =
     [NSArray
       arrayWithObjects:
         NSURLContentModificationDateKey, NSURLCreationDateKey, nil];
   
   NSDirectoryEnumerator * directoryEnumerator =
-   [localFileManager
+   [[NSFileManager defaultManager]
      enumeratorAtURL: directoryURL
        includingPropertiesForKeys: keys
        options: 0

@@ -302,13 +302,9 @@
   
   NSString * prefix = name;
   
-  bool trio = NO;
-  
   if([name hasSuffix: @".daemon.plist"])
     {
     prefix = [name substringToIndex: [name length] - 13];
-    
-    trio = YES;
     
     [self addPotentialAdwareTrioFile: path prefix: prefix];
     }
@@ -317,8 +313,6 @@
     {
     prefix = [name substringToIndex: [name length] - 12];
     
-    trio = YES;
-
     [self addPotentialAdwareTrioFile: path prefix: prefix];
     }
     
@@ -326,8 +320,6 @@
     {
     prefix = [name substringToIndex: [name length] - 13];
     
-    trio = YES;
-
     [self addPotentialAdwareTrioFile: path prefix: prefix];
     }
     

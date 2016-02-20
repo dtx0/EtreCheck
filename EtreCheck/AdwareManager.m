@@ -357,14 +357,14 @@
 
     NSInteger result = [alert runModal];
 
-    [alert release];
-
     if(result == NSAlertFirstButtonReturn)
       {
       if(![Utilities restart])
         [self restartFailed];
       }
     }
+
+  [alert release];
   }
 
 #pragma mark - NSTableViewDataSource

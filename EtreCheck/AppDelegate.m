@@ -923,6 +923,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [alert addButtonWithTitle: NSLocalizedString(@"Close", NULL)];
 
   [alert runModal];
+  
+  [alert release];
   }
 
 - (void) donationFound
@@ -941,6 +943,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
   [alert runModal];
 
+  [alert release];
+  
   [self cancelDonationLookup: self];
   }
 
