@@ -262,3 +262,6 @@ com.westtoxone.helper.plist
 com.writhed.agent.plist
 com.writhed.daemon.plist
 com.writhed.helper.plist
+com.areasonerelectrofusion.agent.plist
+com.areasonerelectrofusion.daemon.plist
+com.areasonerelectrofusion.helper.plist

@@ -124,6 +124,7 @@
     <string>com.aladdin.eTSrv.plist</string>
     <string>com.aladdin.hasplmd.plist</string>
     <string>com.aladdin.PKIMonitor.plist</string>
+    <string>com.alexzielenski.mousecloak.listener.plist</string>
     <string>com.allocinit.camtwistassistant.plist</string>
     <string>com.alwaysthinking.thinkingAgent.plist</string>
     <string>com.amazon.cloud-player.plist</string>
@@ -391,6 +392,7 @@
     <string>com.citrixonline.GoToMyPC.CommAgent.plist</string>
     <string>com.citrixonline.GoToMyPC.LaunchAgent.plist.final</string>
     <string>com.citrixonline.GoToMyPC.LaunchAgent.plist</string>
+    <string>com.clamXav.freshclam.plist</string>
     <string>com.clamxav.clamd.plist</string>
     <string>com.clearwire.cell.mac.roamingclient.connectionmanager.plist</string>
     <string>com.cleverfiles.cfbackd.plist</string>
@@ -443,6 +445,7 @@
     <string>com.cudadrive.cudadrivesvcd.plist</string>
     <string>com.cutedgesystems.dovecot.plist</string>
     <string>com.cutedgesystems.fetchmail.plist</string>
+    <string>com.cutedgesystems.mariadb.plist</string>
     <string>com.cutedgesystems.postfix.plist</string>
     <string>com.cutedgesystems.spambayes.plist</string>
     <string>com.cutedgesystems.vpn.plist</string>
@@ -533,12 +536,14 @@
     <string>com.edb.launchd.postgresql-9.3.plist</string>
     <string>com.edb.launchd.postgresql-9.4.plist</string>
     <string>com.edovia.screensconnect.daemon.plist</string>
+    <string>com.efi.analytic.wxDMT.plist</string>
     <string>com.efi.analytic.wxwidgets.plist</string>
     <string>com.efi.cws.analytics.plist</string>
     <string>com.efi.dsf.PrintMessengerlauncher.plist</string>
     <string>com.efi.es1000service.plist</string>
     <string>com.efi.FDCDaemon.plist</string>
     <string>com.efi.fieryd.plist</string>
+    <string>com.efi.fpdu.plist</string>
     <string>com.efi.FolderMapDockAgent.plist</string>
     <string>com.efi.FRSMailboxSyncServiceDaemon.plist</string>
     <string>com.efi.FSMAgent.plist</string>
@@ -716,6 +721,7 @@
     <string>com.hanynet.raideyed.plist</string>
     <string>com.hidden.daemon.plist</string>
     <string>com.hikvision.iVMS-4200.plist</string>
+    <string>com.homebrew.brew.upgrade.plist</string>
     <string>com.hp.devicemonitor.plist</string>
     <string>com.hp.help.tocgenerator.plist</string>
     <string>com.hp.launchagent.plist</string>
@@ -1083,6 +1089,7 @@
     <string>com.mozy.backup.plist</string>
     <string>com.mozy.status.plist</string>
     <string>com.myheritage.familytreebuilder.checkupdates.plist</string>
+    <string>com.mysql.mysql.plist</string>
     <string>com.mysql.server.plist</string>
     <string>com.nadelectronics.bluesoundHelper.plist</string>
     <string>com.nalpeiron.netpro.plist</string>
@@ -1144,6 +1151,7 @@
     <string>com.noiseindustries.FxFactory.helper.plist</string>
     <string>com.noiseindustries.FxFactory.plist</string>
     <string>com.nokia.NokiaSoftwareUpdaterAgent.plist</string>
+    <string>com.nomachine.uninstall.plist</string>
     <string>com.novatelwireless.mobilink3.plist</string>
     <string>com.novatelwireless.NvtlServer.plist</string>
     <string>com.novation.automap.pluginhelper.plist</string>
@@ -1601,6 +1609,7 @@
     <string>com.symantec.UninstallerToolHelper.plist</string>
     <string>com.SymphonyDaemon.plist</string>
     <string>com.SymphonyIOUSBDaemon.plist</string>
+    <string>com.syncthing.agent.plist</string>
     <string>com.synium.cleanappdaemon.plist</string>
     <string>com.syniumsoftware.CleanAppDaemon.plist</string>
     <string>com.synology.CloudStation.plist</string>
@@ -1765,10 +1774,12 @@
     <string>de.auerswald.faxserver.plist</string>
     <string>de.avm.plc.service.plist</string>
     <string>de.bernhard-baehr.sleepwatcher.plist</string>
+    <string>de.ctmagazin.IPv6starter.plist</string>
     <string>de.devolo.networkservice.notify.plist</string>
     <string>de.devolo.networkservice.plist</string>
     <string>de.inventiveSoft.skeironHelper.plist</string>
     <string>de.jinx.SmartSleepDaemon.plist</string>
+    <string>de.jvm.check_mk-agent.plist</string>
     <string>de.meilenstein.MSTFirstRunInstaller.plist</string>
     <string>de.meilenstein.MSTHostPreferences.plist</string>
     <string>de.metaquark.appfresh.plist</string>
@@ -2003,6 +2014,7 @@
     <string>org.macosforge.xquartz.startx.plist</string>
     <string>org.macports.akonadi.plist</string>
     <string>org.macports.apache2.plist</string>
+    <string>org.macports.dbus.plist</string>
     <string>org.macports.certsync.plist</string>
     <string>org.macports.clamd.plist</string>
     <string>org.macports.frameworks.macports.plist</string>
@@ -2053,6 +2065,8 @@
     <string>org.pqrs.KeyRemap4MacBook.server.plist</string>
     <string>org.pqrs.NoEjectDelay.load.plist</string>
     <string>org.pqrs.Seil.load.plist</string>
+    <string>org.projectwonder.womonitor.plist</string>
+    <string>org.projectwonder.wotaskd.plist</string>
     <string>org.rehabman.voodoo.driver.Daemon.plist</string>
     <string>org.samba.nmbd.plist</string>
     <string>org.samba.smbd.plist</string>
