@@ -26,7 +26,9 @@
 // Collect system launch agents.
 - (void) collect
   {
-  [self updateStatus: NSLocalizedString(@"Checking launch agents", NULL)];
+  [self
+    updateStatus:
+      NSLocalizedString(@"Checking system launch agents", NULL)];
  
   // Make sure the base class is setup.
   [super collect];

@@ -26,7 +26,9 @@
 // Collect system launch daemons.
 - (void) collect
   {
-  [self updateStatus: NSLocalizedString(@"Checking launch daemons", NULL)];
+  [self
+    updateStatus:
+      NSLocalizedString(@"Checking system launch daemons", NULL)];
 
   // Make sure the base class is setup.
   [super collect];
