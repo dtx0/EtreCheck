@@ -620,6 +620,18 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
           
           if([blacklist respondsToSelector: @selector(addObject:)])
             [[Model model] appendToBlacklist: blacklist];
+
+          NSArray * blacklistSuffix =
+            [attributes objectForKey: @"blacklist_suffix"];
+          
+          if([blacklist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToBlacklistSuffixes: blacklistSuffix];
+
+          NSArray * blacklistMatch =
+            [attributes objectForKey: @"blacklist_match"];
+          
+          if([blacklist respondsToSelector: @selector(addObject:)])
+            [[Model model] appendToBlacklistMatches: blacklistMatch];
           }
       }
     
