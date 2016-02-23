@@ -278,6 +278,18 @@
 // Is this an adware match file?
 - (bool) isAdwareMatch: (NSString *) path
   {
+  for(NSString * match in self.blacklistFiles)
+    {
+    NSRange range = [path rangeOfString: match];
+    
+    if(range.location != NSNotFound)
+      {
+      [self.adwareFiles setObject: @"blacklist" forKey: path];
+      
+      return YES;
+      }
+    }
+    
   for(NSString * match in self.blacklistMatches)
     {
     NSRange range = [path rangeOfString: match];

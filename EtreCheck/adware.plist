@@ -21,9 +21,8 @@
 		<string>net.decimus.Synk.script.</string>
 		<string>net.tunnelblick.tunnelblick.startup.vpnbook</string>
 		<string>com.blackmagic-design.DaVinciResolveDPDecoder.</string>
-		<string>com.blackmagic-design.DaVinciResolveDPDecoder.</string>
 		<string>com.logmein.rescue.sa.</string>
-		<string>com.logmein.rescue.sa.</string>
+		<string>com.facebook.videochat.</string>
 	</array>
 	<key>whitelist</key>
 	<array>
@@ -2148,6 +2147,53 @@
     <string>XSManager.plist</string>
     <string>xxx.qnation.PeerGuardian.locum.plist</string>
     <string>yeti.notification.plist</string>
+    <string>jp.co.nikon.NktPostLauncher.plist</string>
+    <string>NkPtpEnumWT3.plist</string>
+    <string>com.iccir.ColorFakerHelper.plist</string>
+    <string>hiGB7Gz.plist</string>
+    <string>ltcm.plist</string>
+    <string>com.polyvision.dts.PreLoginAgentCarbon.plist</string>
+    <string>com.polyvision.dts.PreLoginAgentCarbonv2.plist</string>
+    <string>de.novamedia.NMDeviceObserver.plist</string>
+    <string>jp.co.canon.iREnlargementCopy.plist</string>
+    <string>com.xrite.ninjad.plist</string>
+    <string>com.SimpleTech.ButtonPoller.plist</string>
+    <string>com.xrx.faxdb.plist</string>
+    <string>com.kaspersky.klif_loader.plist</string>
+    <string>com.kingart-games.bout2.LauncherHelper.plist</string>
+    <string>com.avid.sibelius7.plist</string>
+    <string>us.theWoodwards.CAPSWarn.plist</string>
+    <string>com.alipay.DispatcherService.plist</string>
+    <string>com.alipay.refresher.plist</string>
+    <string>com.kpn.BackupFP.plist</string>
+    <string>com.kpn.kpnBackupOnline.AutoUpdate.plist</string>
+    <string>Safe.Connect.plist</string>
+    <string>Safe.Connect.client.plist</string>
+    <string>hackintosh.zone.voodooloader.plist</string>
+    <string>com.quest.QuestAgent.plist</string>
+    <string>de.novamedia.launch2net.deviceobserver.plist</string>
+    <string>com.OneDaemon.plist</string>
+    <string>de.novamedia.launch2net.nmnetmgrd.plist</string>
+    <string>com.hmip.LaunchAtLogin.plist</string>
+    <string>SBA_ListenerAgent.plist</string>
+    <string>com.mozy.mozysync.plist</string>
+    <string>com.shoebox.launched.plist</string>
+    <string>com.avast.MacAvast.plist</string>
+    <string>org.dnsupdate.daemon.plist</string>
+    <string>com.dll.faxdb.plist</string>
+    <string>com.starfield.backupservice.plist</string>
+    <string>com.marketcircle.billingspro.accessd.plist</string>
+    <string>com.marketcircle.billingspro.backupd.plist</string>
+    <string>com.marketcircle.billingspro.configd.plist</string>
+    <string>com.marketcircle.billingspro.httpd.plist</string>
+    <string>com.marketcircle.billingspro.portsd.plist</string>
+    <string>com.kaspersky.klif_loader.plist</string>
+    <string>net.syncthing.syncthing.plist</string>
+    <string>com.macserve.ivpn.plist</string>
+    <string>com.macvector.MacVectorHelper.plist</string>
+    <string>com.macserve.ppp.l2tp.plist</string>
+    <string>com.macserve.ppp.pptp.plist</string>
+    <string>nilxid.plist</string>
 	</array>
 	<key>item1</key>
 	<array>
@@ -2284,6 +2330,9 @@
     <string>shopper-helper-pro_updater.plist</string>
     <string>shopy-mate_updater.plist</string>
     <string>SngyBb9iL.plist</string>
+		<string>com.onlineapplicationnotice.AppNotice.plist</string>  
+    <string>com.veoh.webplayer.startup.plist</string>
+    <string>palmall-1-2_enabler.plist</string>
 	</array>
 	<key>blacklist_suffix</key>
 	<array>
@@ -2342,6 +2391,13 @@
 		<string>Totiteck</string>
 		<string>Wolfnknite</string>
 		<string>Youppes</string>
+		<string>Yourforth</string>
+		<string>Boydubed</string>
+		<string>Cateorg</string>
+		<string>Logicwhatever</string>
+		<string>StrtPoint</string>
+		<string>Arcahol</string>
+		<string>SearchMoose</string>
 		<string>2b631d5c1dd65354</string>
 		<string>2e4697b92e2d541c</string>
 		<string>347d5015ea877e68</string>
