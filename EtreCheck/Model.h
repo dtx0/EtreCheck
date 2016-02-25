@@ -211,8 +211,8 @@
 // Set the blacklist matches.
 - (void) appendToBlacklistMatches: (NSArray *) names;
 
-// Check the file against the whitelist.
-- (bool) checkWhitelistFile: (NSString *) name path: (NSString *) path;
+// Is this file known?
+- (bool) isKnownFile: (NSString *) name path: (NSString *) path;
 
 // Is this file in the whitelist?
 - (bool) isWhitelistFile: (NSString *) name;

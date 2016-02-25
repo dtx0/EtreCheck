@@ -278,13 +278,13 @@
 // Is this an adware match file?
 - (bool) isAdwareMatch: (NSString *) path
   {
+  NSString * name = [path lastPathComponent];
+  
   for(NSString * match in self.blacklistFiles)
     {
-    NSRange range = [path rangeOfString: match];
-    
-    if(range.location != NSNotFound)
+    if([name isEqualToString: match])
       {
-      [self.adwareFiles setObject: @"blacklist" forKey: path];
+      [self.adwareFiles setObject: name forKey: path];
       
       return YES;
       }
@@ -415,6 +415,15 @@
             NSString * adwareExecutablePath =
               [adwareExecutableParts componentsJoinedByString: @"/"];
             
+            // Failsafe to prevent deletion of anything signed. This may
+            // prevent adware from being deleted, but I don't want to be
+            // responsible for deleting any legitimate software.
+            NSString * signatureStatus =
+              [Utilities forceCheckAppleExecutable: adwareExecutablePath];
+              
+            if([signatureStatus isEqualToString: kSignatureValid])
+              return NO;
+            
             [self.adwareFiles setObject: tag forKey: adwareExecutablePath];
           
             return YES;
@@ -507,8 +516,8 @@
   [self.blacklistMatches addObjectsFromArray: names];
   }
 
-// Check the file against the whitelist.
-- (bool) checkWhitelistFile: (NSString *) name path: (NSString *) path
+// Is this file known?
+- (bool) isKnownFile: (NSString *) name path: (NSString *) path
   {
   if([self isWhitelistFile: name])
     return YES;

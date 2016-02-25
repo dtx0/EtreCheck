@@ -12,12 +12,15 @@
 #define kHidden @"hidden"
 #define kPrinted @"printed"
 #define kIgnored @"ignored"
+#define kUnknown @"unknown"
+#define kAdware @"adware"
 #define kSignature @"signature"
 #define kApple @"apple"
+#define kPath @"path"
 #define kFilename @"filename"
 #define kExecutable @"executable"
 #define kCommand @"command"
-#define kBundleID @"bundleid"
+#define kLabel @"Label"
 #define kApp @"app"
 #define kSupportURL @"supporturl"
 #define kDetailsURL @"detailsurl"
@@ -40,6 +43,7 @@
   NSUInteger myAppleNotLoadedCount;
   NSUInteger myAppleLoadedCount;
   NSUInteger myAppleRunningCount;
+  NSUInteger myAppleKilledCount;
   }
 
 // These need to be shared by all launchd collector objects.
@@ -50,17 +54,25 @@
 @property (assign) NSUInteger AppleNotLoadedCount;
 @property (assign) NSUInteger AppleLoadedCount;
 @property (assign) NSUInteger AppleRunningCount;
+@property (assign) NSUInteger AppleKilledCount;
 @property (retain) NSMutableSet * knownAppleFailures;
 @property (retain) NSMutableSet * knownAppleSignatureFailures;
 
-// Print a list of files.
-- (void) printPropertyListFiles: (NSArray *) paths;
+// Collect property list files.
+// Returns an array of plists for printing.
+- (NSArray *) collectPropertyListFiles: (NSArray *) paths;
 
-// Format a status string.
+// Print property lists files.
+- (void) printPropertyLists: (NSArray *) plists;
+
+// Format a status into a string.
 - (NSAttributedString *) formatPropertyListStatus: (NSDictionary *) status;
 
 // Get the job status.
-- (NSMutableDictionary *) collectJobStatus: (NSDictionary *) plist;
+- (NSMutableDictionary *) collectJobStatus: (NSString *) path;
+
+// Collect the job status for a label.
+- (NSMutableDictionary *) collectJobStatusForLabel: (NSString *) label;
 
 // Collect the command of the launchd item.
 - (NSArray *) collectLaunchdItemCommand: (NSDictionary *) plist;
@@ -69,7 +81,8 @@
 - (NSString *) collectLaunchdItemExecutable: (NSArray *) command;
 
 // Update a funky new dynamic task.
-- (void) updateDynamicTask: (NSMutableDictionary *) status;
+- (void) updateDynamicTask: (NSMutableDictionary *) info
+  domain: (NSString *) domain;
 
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) file;
@@ -77,11 +90,18 @@
 // Should I ignore these invalid signatures?
 - (bool) ignoreInvalidSignatures: (NSString *) file;
 
+// Handle whitelist exceptions.
+- (void) updateAppleCounts: (NSDictionary *) info;
+
+// Format Apple counts.
+// Return YES if there was any output.
+- (bool) formatAppleCounts: (NSMutableAttributedString *) output;
+
 // Format a codesign response.
-- (NSString *) formatAppleSignature: (NSDictionary *) status;
+- (NSString *) formatAppleSignature: (NSDictionary *) info;
 
 // Create a support link for a plist dictionary.
-- (NSAttributedString *) formatSupportLink: (NSDictionary *) status;
+- (NSAttributedString *) formatSupportLink: (NSDictionary *) info;
 
 // Release memory.
 + (void) cleanup;

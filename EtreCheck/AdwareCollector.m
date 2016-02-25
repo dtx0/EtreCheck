@@ -160,9 +160,7 @@
       [[Model model] setAdwareExtensions: signatures];
       
     else if([key isEqualToString: kBlacklistKey])
-      [myAdwareSignatures
-        setObject: [self expandBlacklist: signatures]
-        forKey: localizedKey];
+      [[Model model] appendToBlacklist: signatures];
       
     else if([key isEqualToString: kBlacklistSuffixKey])
       [[Model model] appendToBlacklistSuffixes: signatures];
@@ -185,46 +183,6 @@
   for(NSString * signature in signatures)
     [expandedSignatures
       addObject: [signature stringByExpandingTildeInPath]];
-    
-  return expandedSignatures;
-  }
-
-// Expand the blacklist.
-- (NSArray *) expandBlacklist: (NSArray *) signatures
-  {
-  NSMutableArray * expandedSignatures = [NSMutableArray array];
-  
-  // Don't forget to add any live updates.
-  NSMutableArray * allSignatures =
-    [NSMutableArray arrayWithArray: signatures];
-  
-  [allSignatures
-    addObjectsFromArray: [[[Model model] blacklistFiles] allObjects]];
-  
-  for(NSString * signature in allSignatures)
-    {
-    [expandedSignatures
-      addObject:
-        [@"/System/Library/LaunchDaemons"
-          stringByAppendingPathComponent: signature]];
-    [expandedSignatures
-      addObject:
-        [@"/System/Library/LaunchAgents"
-          stringByAppendingPathComponent: signature]];
-    [expandedSignatures
-      addObject:
-        [@"/Library/LaunchDaemons"
-          stringByAppendingPathComponent: signature]];
-    [expandedSignatures
-      addObject:
-        [@"/Library/LaunchAgents"
-          stringByAppendingPathComponent: signature]];
-    [expandedSignatures
-      addObject:
-        [[@"~/Library/LaunchAgents"
-          stringByAppendingPathComponent: signature]
-            stringByExpandingTildeInPath]];
-    }
     
   return expandedSignatures;
   }

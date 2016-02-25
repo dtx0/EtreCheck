@@ -143,6 +143,9 @@
 // Check the signature of an Apple executable.
 + (NSString *) checkAppleExecutable: (NSString *) path;
 
+// Force verification of an Apple executable.
++ (NSString *) forceCheckAppleExecutable: (NSString *) path;
+
 // Create a temporary directory.
 + (NSString *) createTemporaryDirectory;
 

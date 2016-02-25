@@ -43,7 +43,9 @@
   
   NSArray * files = [Utilities formatLines: result];
   
-  [self printPropertyListFiles: files];
+  NSArray * plists = [self collectPropertyListFiles: files];
+  
+  [self printPropertyLists: plists];
     
   dispatch_semaphore_signal(self.complete);
   }

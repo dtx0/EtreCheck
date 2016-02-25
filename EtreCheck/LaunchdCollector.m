@@ -23,8 +23,11 @@
 @synthesize AppleNotLoadedCount = myAppleNotLoadedCount;
 @synthesize AppleLoadedCount = myAppleLoadedCount;
 @synthesize AppleRunningCount = myAppleRunningCount;
+@synthesize AppleKilledCount = myAppleKilledCount;
 @dynamic knownAppleFailures;
 @dynamic knownAppleSignatureFailures;
+
+#pragma mark - Properties
 
 // Property accessors to route through a singleton.
 - (NSMutableDictionary *) launchdStatus
@@ -118,15 +121,19 @@
   [[LaunchdCollector appleLaunchd] release];
   }
 
+#pragma mark - Launchd routines
+
 // Collect the status of all launchd items.
 - (void) collect
   {
+  // Don't do this more than once.
   if([self.launchdStatus count])
     return;
     
   [self
     updateStatus: NSLocalizedString(@"Checking launchd information", NULL)];
   
+  // Collect all launchd items.
   [self collectLaunchdStatus: kSMDomainSystemLaunchd];
 
   [self collectLaunchdStatus: kSMDomainUserLaunchd];
@@ -150,18 +157,40 @@
     {
     NSString * label = [job objectForKey: @"Label"];
     
-    NSMutableDictionary * jobData =
-      [NSMutableDictionary dictionaryWithDictionary: job];
-    
-    [jobData setObject: [NSNumber numberWithBool: NO] forKey: kPrinted];
-    [jobData setObject: [NSNumber numberWithBool: NO] forKey: kHidden];
-    
     if(label)
-      [self.launchdStatus setObject: jobData forKey: label];
+      if(![self.launchdStatus objectForKey: label])
+        {
+        NSMutableDictionary * jobData =
+          [NSMutableDictionary dictionaryWithDictionary: job];
+        
+        // I don't want all of the keys, only a few.
+        NSNumber * lastExitStatus =
+          [jobData objectForKey: @"LastExitStatus"];
+        NSNumber * PID =
+          [jobData objectForKey: @"PID"];
+        
+        NSMutableDictionary * status = [NSMutableDictionary new];
+        
+        [status setObject: label forKey: kLabel];
+        [status setObject: [NSNumber numberWithBool: NO] forKey: kPrinted];
+        [status setObject: [NSNumber numberWithBool: NO] forKey: kIgnored];
+        
+        if(lastExitStatus)
+          [status setObject: lastExitStatus forKey: @"LastExitStatus"];
+    
+        if(PID)
+          [status setObject: PID forKey: @"PID"];
+
+        [self.launchdStatus setObject: status forKey: label];
+        
+        [status release];
+        }
     }
     
   CFRelease(jobs);
   }
+
+#pragma mark - Expected items
 
 // Setup launchd items that are expected because they ship with the OS.
 - (void) setupExpectedItems
@@ -400,11 +429,436 @@
   return failures;
   }
 
-// Format a list of files.
-- (void) printPropertyListFiles: (NSArray *) paths
+#pragma mark - Collection
+
+// Collect property list files.
+// Returns an array of labels for printing.
+- (NSArray *) collectPropertyListFiles: (NSArray *) paths
+  {
+  NSMutableArray * plists = [NSMutableArray array];
+  
+  for(NSString * path in paths)
+    {
+    NSMutableDictionary * plist = [self collectPropertyListFile: path];
+    
+    if(plist)
+      [plists addObject: plist];
+    }
+    
+  return plists;
+  }
+
+// Collect a single property list file.
+- (NSMutableDictionary *) collectPropertyListFile: (NSString *) path
+  {
+  NSString * file = [path lastPathComponent];
+  
+  // Ignore .DS_Store files.
+  if([file isEqualToString: @".DS_Store"])
+    return nil;
+    
+  // Ignore zero-byte files.
+  NSDictionary * attributes =
+    [[NSFileManager defaultManager]
+      attributesOfItemAtPath: path error: NULL];
+  
+  if([attributes fileSize] == 0)
+    return nil;
+    
+  // Collect the info.
+  return [self collectLaunchdItemInfo: path];
+  }
+
+// Collect the status of a launchd item.
+- (NSMutableDictionary *) collectLaunchdItemInfo: (NSString *) path
+  {
+  // I need this.
+  NSString * filename = [path lastPathComponent];
+  
+  // Get the status and plist and use them to seed the info.
+  NSMutableDictionary * info =
+    [NSMutableDictionary
+      dictionaryWithDictionary: [self collectJobStatus: path]];
+    
+  // See if the executable is valid.
+  // Don't bother with this.
+  //if(![self isValidExecutable: executable])
+  //  jobStatus = kStatusInvalid;
+    
+  // Set attributes.
+  [info setObject: path forKey: kPath];
+  
+  [info
+    setObject: [NSNumber numberWithBool: [self isAppleFile: filename]]
+    forKey: kApple];
+  
+  [info
+    setObject: [Utilities sanitizeFilename: filename] forKey: kFilename];
+  
+  [info
+    setObject: [self getSupportURL: nil bundleID: path]
+    forKey: kSupportURL];
+  
+  if([filename hasPrefix: @"."])
+    [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
+    
+  [self setDetailsURL: info];
+  [self setExecutable: info];
+  
+  // For now, don't bother checking Apple files for unknown or adware
+  // status.
+  if([[info objectForKey: kApple] boolValue])
+    return [self collectAppleLaunchdItemInfo: info];
+    
+  [self setUnknownForPath: path info: info];
+  [self setAdwareForPath: path info: info];
+
+  return info;
+  }
+
+// Get the job status.
+- (NSMutableDictionary *) collectJobStatus: (NSString *) path
+  {
+  // Get the properties.
+  NSDictionary * plist = [NSDictionary readPropertyList: path];
+
+  if(plist)
+    {
+    NSMutableDictionary * info =
+      [NSMutableDictionary dictionaryWithDictionary: plist];
+    
+    NSString * label = [plist objectForKey: @"Label"];
+      
+    if(label)
+      {
+      NSMutableDictionary * status =
+        [self collectJobStatusForLabel: label];
+      
+      [info addEntriesFromDictionary: status];
+      
+      return info;
+      }
+    }
+    
+  return nil;
+  }
+
+// Collect the job status for a label.
+- (NSMutableDictionary *) collectJobStatusForLabel: (NSString *) label
+  {
+  NSMutableDictionary * status =
+    [self.launchdStatus objectForKey: label];
+
+  NSNumber * pid = [status objectForKey: @"PID"];
+  NSNumber * lastExitStatus = [status objectForKey: @"LastExitStatus"];
+
+  long exitStatus = [lastExitStatus intValue];
+  
+  NSString * jobStatus = kStatusUnknown;
+
+  if(pid)
+    jobStatus = kStatusRunning;
+  else if(exitStatus == 172)
+    {
+    jobStatus = kStatusKilled;
+    
+    self.pressureKilledCount = self.pressureKilledCount + 1;
+    }
+  else if(exitStatus != 0)
+    jobStatus = kStatusFailed;
+  else if(status)
+    jobStatus = kStatusLoaded;
+  else
+    jobStatus = kStatusNotLoaded;
+    
+  // I need to check for status == nil for "not loaded", so I have
+  // to wait to create a new status in that case.
+  if(!status)
+    {
+    status = [NSMutableDictionary new];
+    [self.launchdStatus setObject: status forKey: label];
+    [status release];
+    }
+    
+  [status setObject: jobStatus forKey: kStatus];
+  [status setObject: label forKey: kLabel];
+  
+  return status;
+  }
+
+// Is this an Apple file that I expect to see?
+- (bool) isAppleFile: (NSString *) bundleID
+  {
+  if([bundleID hasPrefix: @"com.apple."])
+    return YES;
+    
+  if([self.appleLaunchd containsObject: bundleID])
+    return YES;
+    
+  if([[Model model] majorOSVersion] < kYosemite)
+    {
+    if([bundleID hasPrefix: @"0x"])
+      {
+      if([bundleID rangeOfString: @".anonymous."].location != NSNotFound)
+        return YES;
+      }
+    else if([bundleID hasPrefix: @"[0x"])
+      {
+      if([bundleID rangeOfString: @".com.apple."].location != NSNotFound)
+        return YES;
+      }
+    }
+    
+  if([[Model model] majorOSVersion] < kLion)
+    {
+    if([bundleID hasPrefix: @"0x"])
+      if([bundleID rangeOfString: @".mach_init."].location != NSNotFound)
+        return YES;
+    }
+
+  return NO;
+  }
+
+// Try to construct a support URL.
+- (NSString *) getSupportURL: (NSString *) name bundleID: (NSString *) path
+  {
+  NSString * bundleID = [path lastPathComponent];
+  
+  // If the file is from Apple, the user is already on ASC.
+  if([self isAppleFile: bundleID])
+    return @"";
+    
+  // See if I can construct a real web host.
+  NSString * host = [self convertBundleIdToHost: bundleID];
+  
+  if(host)
+    {
+    // If I seem to have a web host, construct a support URL just for that
+    // site.
+    NSString * nameParameter =
+      [name length]
+        ? name
+        : bundleID;
+
+    return
+      [NSString
+        stringWithFormat:
+          @"http://www.google.com/search?q=%@+support+site:%@",
+          nameParameter, host];
+    }
+  
+  // This file isn't following standard conventions. Look for uninstall
+  // instructions.
+  return
+    [NSString
+      stringWithFormat:
+        @"http://www.google.com/search?q=%@+uninstall+support", bundleID];
+  }
+
+// Set the details URL.
+- (void) setDetailsURL: (NSMutableDictionary *) info
+  {
+  NSAttributedString * detailsURL = nil;
+  
+  NSString * jobStatus = [info objectForKey: kStatus];
+  
+  if([jobStatus isEqualToString: kStatusFailed])
+    {
+    NSString * executableName =
+      [[info objectForKey: kExecutable] lastPathComponent];
+
+    if([[Model model] hasLogEntries: executableName])
+      detailsURL = [[Model model] getDetailsURLFor: executableName];
+    }
+    
+  if(detailsURL)
+    [info setObject: detailsURL forKey: kDetailsURL];
+  }
+
+// Set command and executable information.
+- (void) setExecutable: (NSMutableDictionary *) info
+  {
+  // Get the command.
+  NSArray * command = [self collectLaunchdItemCommand: info];
+  
+  if([command count])
+    {
+    // Get the executable.
+    NSString * executable = [self collectLaunchdItemExecutable: command];
+  
+    [info setObject: command forKey: kCommand];
+    [info setObject: executable forKey: kExecutable];
+    }
+  }
+
+// Collect the command of the launchd item.
+- (NSArray *) collectLaunchdItemCommand: (NSDictionary *) info
+  {
+  NSMutableArray * command = [NSMutableArray array];
+  
+  if(info)
+    {
+    NSString * program = [info objectForKey: @"Program"];
+    
+    if(program)
+      [command addObject: program];
+      
+    NSArray * arguments = [info objectForKey: @"ProgramArguments"];
+    
+    if([arguments respondsToSelector: @selector(isEqualToArray:)])
+      if(arguments.count > 0)
+        {
+        NSString * argument = [arguments objectAtIndex: 0];
+        
+        if(![argument isEqualToString: [program lastPathComponent]])
+          [command addObject: argument];
+          
+        for(int i = 1; i < arguments.count; ++i)
+          [command addObject: [arguments objectAtIndex: i]];
+      }
+    }
+    
+  return command;
+  }
+
+// Collect the actual executable from a command.
+- (NSString *) collectLaunchdItemExecutable: (NSArray *) command
+  {
+  NSString * executable = [command firstObject];
+  
+  BOOL sandboxExec = NO;
+  
+  if([executable isEqualToString: @"sandbox-exec"])
+    sandboxExec = YES;
+
+  if([executable isEqualToString: @"/usr/bin/sandbox-exec"])
+    sandboxExec = YES;
+    
+  if(sandboxExec)
+    {
+    NSUInteger argumentCount = command.count;
+    
+    for(NSUInteger i = 1; i < argumentCount; ++i)
+      {
+      NSString * argument = [command objectAtIndex: i];
+      
+      if([argument isEqualToString: @"-f"])
+        ++i;
+      else if([argument isEqualToString: @"-n"])
+        ++i;
+      else if([argument isEqualToString: @"-p"])
+        ++i;
+      else if([argument isEqualToString: @"-D"])
+        ++i;
+      else
+        {
+        executable = argument;
+        break;
+        }
+      }
+    }
+    
+  return executable;
+  }
+
+// Collect the status of an Apple launchd item.
+- (NSMutableDictionary *) collectAppleLaunchdItemInfo:
+  (NSMutableDictionary *) info
+  {
+  if(![info objectForKey: kSignature])
+    {
+    NSString * executable = [info objectForKey: kExecutable];
+
+    [info
+      setObject: [Utilities checkAppleExecutable: executable]
+      forKey: kSignature];
+    }
+    
+  return info;
+  }
+
+// Set the unknown flag for a file.
+- (void) setUnknownForPath: (NSString *) path
+  info: (NSMutableDictionary *) info
+  {
+  // I need this.
+  NSString * filename = [path lastPathComponent];
+  
+  // See if this file is known (whitelist or adware). If not, double-check
+  // to see if it should be exempted from unknown files.
+  // This will record adware as a side effect.
+  bool knownFile = [[Model model] isKnownFile: filename path: path];
+  
+  if(!knownFile)
+    if([self isWhitelistException: info path: path])
+      knownFile = YES;
+    
+  [info
+    setObject: [NSNumber numberWithBool: !knownFile] forKey: kUnknown];
+  }
+
+// Remove any files from the list of unknown files if they match certain
+// criteria.
+- (bool) isWhitelistException: (NSDictionary *) info
+  path: (NSString *) path
+  {
+  bool whitelist = NO;
+  
+  // Special case for Folder Actions Dispatcher.
+  NSArray * command = [info objectForKey: kCommand];
+
+  for(NSString * part in command)
+    {
+    NSRange foundRange = [part rangeOfString: @"Folder Actions Dispatcher"];
+    
+    if(foundRange.location != NSNotFound)
+      whitelist = true;
+    }
+    
+  if(whitelist)
+    [[[Model model] unknownFiles] removeObject: path];
+    
+  return whitelist;
+  }
+
+// Set adware status for a file.
+- (void) setAdwareForPath: (NSString *) path
+  info: (NSMutableDictionary *) info
+  {
+  BOOL adware = [[Model model] isAdware: path];
+  
+  NSString * executable = [info objectForKey: kExecutable];
+  
+  if([[Model model] isAdware: executable])
+    {
+    NSString * appPath = executable;
+    
+    NSRange appRange = [executable rangeOfString: @".app/Contents/MacOS/"];
+    
+    if(appRange.location != NSNotFound)
+      appPath = [executable substringToIndex: appRange.location + 4];
+      
+    if([[Model model] isAdwareExecutable: appPath])
+      {
+      [[[Model model] adwareFiles] removeObjectForKey: executable];
+      [[[Model model] adwareFiles] setObject: @"blacklist" forKey: path];
+      [[[Model model] unknownFiles] removeObject: path];
+      
+      adware = YES;
+      }
+    }
+    
+  [info
+    setObject: [NSNumber numberWithBool: adware] forKey: kAdware];
+  }
+
+#pragma mark - Print property lists
+
+// Print property lists files.
+- (void) printPropertyLists: (NSArray *) plists
   {
   NSMutableAttributedString * formattedOutput =
-    [self formatPropertyListFiles: paths];
+    [self formatPropertyLists: plists];
 
   if(formattedOutput)
     {
@@ -438,7 +892,7 @@
   }
 
 // Format a list of files.
-- (NSMutableAttributedString *) formatPropertyListFiles: (NSArray *) paths
+- (NSMutableAttributedString *) formatPropertyLists: (NSArray *) plists
   {
   NSMutableAttributedString * formattedOutput =
     [NSMutableAttributedString new];
@@ -447,11 +901,19 @@
   
   bool haveOutput = NO;
   
-  NSArray * sortedPaths =
-    [paths sortedArrayUsingSelector: @selector(compare:)];
-  
-  for(NSString * path in sortedPaths)
-    if([self formatPropertyListFile: path output: formattedOutput])
+  NSArray * sortedPlists =
+    [plists
+      sortedArrayUsingComparator:
+        ^NSComparisonResult(id obj1, id obj2)
+          {
+          NSString * name1 = [obj1 objectForKey: kPath];
+          NSString * name2 = [obj2 objectForKey: kPath];
+
+          return [name1 compare: name2];
+          }];
+    
+  for(NSMutableDictionary * plist in sortedPlists)
+    if([self formatPropertyList: plist output: formattedOutput])
       haveOutput = YES;
       
   if([[Model model] hideAppleTasks])
@@ -466,9 +928,11 @@
 
 // Format property list file.
 // Return YES if there was any output.
-- (bool) formatPropertyListFile: (NSString *) path
+- (bool) formatPropertyList: (NSMutableDictionary *) info
   output: (NSMutableAttributedString *) output
   {
+  NSString * path = [info objectForKey: kPath];
+
   NSString * file = [path lastPathComponent];
   
   // Ignore .DS_Store files.
@@ -483,87 +947,112 @@
   if([attributes fileSize] == 0)
     return NO;
     
-  // Get the status.
-  NSMutableDictionary * status = [self collectLaunchdItemStatus: path];
-    
-  if(!status)
-    return NO;
-    
-  [status
+  // It is a plist file at least.
+  return
+    [self
+      formatValidPropertyListFile: path
+      info: (NSMutableDictionary *) info
+      output: output];
+  }
+
+// Format a valid property list file.
+- (bool) formatValidPropertyListFile: (NSString *) path
+  info: (NSMutableDictionary *) info
+  output: (NSMutableAttributedString *) output
+  {
+  [info
     setObject: [self modificationDate: path] forKey: kModificationDate];
 
-  NSString * filename = [status objectForKey: kFilename];
-  bool hideAppleTasks = [[Model model] hideAppleTasks];
-  NSNumber * ignore = [NSNumber numberWithBool: hideAppleTasks];
+  // Apples file get special treatment.
+  if([[info objectForKey: kApple] boolValue])
+    if(![self formatApplePropertyListFile: path info: info])
+      return NO;
+    
+  NSString * filename = [info objectForKey: kFilename];
 
-  bool whitelist = YES;
+  // Save the command.
+  NSArray * command = [info objectForKey: kCommand];
   
-  // Apple file get special treatment.
-  if([[status objectForKey: kApple] boolValue])
-    {
-    [self updateAppleCounts: status];
-    
-    NSString * signatureStatus = [status objectForKey: kSignature];
-      
-    // I may want to report a failure.
-    if([[status objectForKey: kStatus] isEqualToString: kStatusFailed])
-      {
-      // Should I ignore this failure?
-      if([self ignoreFailuresOnFile: file])
-        {
-        [status setObject: ignore forKey: kIgnored];
-
-        if(hideAppleTasks)
-          return NO;
-        }
-      }
-      
-    else if([[status objectForKey: kStatus] isEqualToString: kStatusKilled])
-      {
-      }
-      
-    else if([signatureStatus isEqualToString: kSignatureValid])
-      {
-      [status setObject: ignore forKey: kIgnored];
-      
-      if(hideAppleTasks)
-        return NO;
-      }
-      
-    // Should I ignore this failure?
-    else if([self ignoreInvalidSignatures: file])
-      {
-      [status setObject: ignore forKey: kIgnored];
-
-      if(hideAppleTasks)
-        return NO;
-      }
-    }
-  else
-    {
-    whitelist = [[Model model] checkWhitelistFile: filename path: path];
-    
-    NSArray * command = [status objectForKey: kCommand];
-    NSString * commandString = [command componentsJoinedByString: @" "];
-    
+  if([command count])
     [[[Model model] launchdCommands]
-      setObject: commandString  forKey: path];
-    }
+      setObject: [command componentsJoinedByString: @" "] forKey: path];
     
-  if(!whitelist)
-    [self handleWhitelistExceptions: status path: path];
-    
-  [output appendAttributedString: [self formatPropertyListStatus: status]];
+  // Format the status.
+  [output appendAttributedString: [self formatPropertyListStatus: info]];
   
+  // Add the name.
   [output appendString: filename];
   
+  // Add any extra content.
   [output
-    appendAttributedString: [self formatExtraContent: status for: path]];
+    appendAttributedString: [self formatExtraContent: info for: path]];
   
   [output appendString: @"\n"];
-    
+  
+  NSString * label = [info objectForKey: kLabel];
+  
+  NSMutableDictionary * status = [self.launchdStatus objectForKey: label];
+  
   [status setObject: [NSNumber numberWithBool: YES] forKey: kPrinted];
   
+  return YES;
+  }
+
+// Format an Apple property list file.
+// Returns NO if the Apple task should be hidden.
+- (bool) formatApplePropertyListFile: (NSString *) path
+  info: (NSMutableDictionary *) info
+  {
+  NSString * file = [path lastPathComponent];
+
+  bool hideAppleTasks = [[Model model] hideAppleTasks];
+
+  [self updateAppleCounts: info];
+  
+  NSString * signatureStatus = [info objectForKey: kSignature];
+  NSNumber * ignore = [NSNumber numberWithBool: hideAppleTasks];
+    
+  NSString * label = [info objectForKey: kLabel];
+  NSMutableDictionary * status = [self.launchdStatus objectForKey: label];
+  
+  // I may want to report a failure.
+  if([[info objectForKey: kStatus] isEqualToString: kStatusFailed])
+    {
+    // Should I ignore this failure?
+    if([self ignoreFailuresOnFile: file])
+      {
+      [status setObject: ignore forKey: kIgnored];
+
+      if(hideAppleTasks)
+        return NO;
+      }
+    }
+    
+  else if([[info objectForKey: kStatus] isEqualToString: kStatusKilled])
+    {
+    [status setObject: ignore forKey: kIgnored];
+    
+    if(hideAppleTasks)
+      return NO;
+    }
+    
+  else if([signatureStatus isEqualToString: kSignatureValid])
+    {
+    [status setObject: ignore forKey: kIgnored];
+    
+    if(hideAppleTasks)
+      return NO;
+    }
+    
+  // Should I ignore this failure?
+  else if([self ignoreInvalidSignatures: file])
+    {
+    [status setObject: ignore forKey: kIgnored];
+
+    if(hideAppleTasks)
+      return NO;
+    }
+    
   return YES;
   }
 
@@ -594,6 +1083,13 @@
       status: kStatusRunning]
       || haveOutput;
 
+  haveOutput =
+    [self
+      formatAppleCount: self.AppleKilledCount
+      output: output
+      status: kStatusKilled]
+      || haveOutput;
+
   return haveOutput;
   }
 
@@ -606,9 +1102,11 @@
   if(count)
     {
     NSDictionary * status =
-      [NSDictionary dictionaryWithObjectsAndKeys: statusString, kStatus, nil];
+      [NSDictionary
+        dictionaryWithObjectsAndKeys: statusString, kStatus, nil];
       
-    [output appendAttributedString: [self formatPropertyListStatus: status]];
+    [output
+      appendAttributedString: [self formatPropertyListStatus: status]];
     
     [output
       appendString: TTTLocalizedPluralString(count, @"applecount", nil)];
@@ -622,137 +1120,16 @@
   }
 
 // Handle whitelist exceptions.
-- (void) updateAppleCounts: (NSDictionary *) status
+- (void) updateAppleCounts: (NSDictionary *) info
   {
-  if([[status objectForKey: kStatus] isEqualToString: kStatusNotLoaded])
+  if([[info objectForKey: kStatus] isEqualToString: kStatusNotLoaded])
     self.AppleNotLoadedCount = self.AppleNotLoadedCount + 1;
-  else if([[status objectForKey: kStatus] isEqualToString: kStatusLoaded])
+  else if([[info objectForKey: kStatus] isEqualToString: kStatusLoaded])
     self.AppleLoadedCount = self.AppleLoadedCount + 1;
-  else if([[status objectForKey: kStatus] isEqualToString: kStatusRunning])
+  else if([[info objectForKey: kStatus] isEqualToString: kStatusRunning])
     self.AppleRunningCount = self.AppleRunningCount + 1;
-  }
-
-// Handle whitelist exceptions.
-- (void) handleWhitelistExceptions: (NSDictionary *) status
-  path: (NSString *) path
-  {
-  bool whitelist = NO;
-  
-  // Special case for Folder Actions Dispatcher.
-  NSArray * command = [status objectForKey: kCommand];
-
-  for(NSString * part in command)
-    {
-    NSRange foundRange = [part rangeOfString: @"Folder Actions Dispatcher"];
-    
-    if(foundRange.location != NSNotFound)
-      whitelist = true;
-    }
-    
-  if(whitelist)
-    [[[Model model] unknownFiles] removeObject: path];
-  }
-
-// Collect the status of a launchd item.
-- (NSMutableDictionary *) collectLaunchdItemStatus: (NSString *) path
-  {
-  // I need this.
-  NSString * file = [path lastPathComponent];
-  
-  // Get the properties.
-  NSDictionary * plist = [NSDictionary readPropertyList: path];
-
-  // Get the status.
-  NSMutableDictionary * status = [self collectJobStatus: plist];
-    
-  NSString * jobStatus = [status objectForKey: kStatus];
-  
-  // Get the command.
-  NSArray * command = [self collectLaunchdItemCommand: plist];
-  
-  // See if the executable is valid.
-  // Don't bother with this.
-  //if(![self isValidExecutable: executable])
-  //  jobStatus = kStatusInvalid;
-    
-  NSString * executable = [self collectLaunchdItemExecutable: command];
-  NSString * name = [executable lastPathComponent];
-  
-  NSAttributedString * detailsURL = nil;
-  
-  if([jobStatus isEqualToString: kStatusFailed])
-    if([[Model model] hasLogEntries: name])
-      detailsURL = [[Model model] getDetailsURLFor: name];
-  
-  bool isApple = [self isAppleFile: file];
-  
-  [status setObject: [NSNumber numberWithBool: isApple] forKey: kApple];
-  [status setObject: [Utilities sanitizeFilename: file] forKey: kFilename];
-  [status setObject: command forKey: kCommand];
-  [status setObject: executable forKey: kExecutable];
-  [status
-    setObject: [self getSupportURL: nil bundleID: path]
-    forKey: kSupportURL];
-  
-  if(detailsURL)
-    [status setObject: detailsURL forKey: kDetailsURL];
-    
-  if([file hasPrefix: @"."])
-    [status setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
-    
-  if(isApple && ![status objectForKey: kSignature])
-    [status
-      setObject: [Utilities checkAppleExecutable: executable]
-      forKey: kSignature];
-
-  return status;
-  }
-
-// Get the job status.
-- (NSMutableDictionary *) collectJobStatus: (NSDictionary *) plist
-  {
-  NSString * jobStatus = kStatusUnknown;
-
-  if(plist)
-    {
-    NSString * label = [plist objectForKey: @"Label"];
-      
-    if(label)
-      {
-      NSMutableDictionary * status =
-        [self.launchdStatus objectForKey: label];
-    
-      if(status == nil)
-        status = [NSMutableDictionary dictionary];
-        
-      NSNumber * pid = [status objectForKey: @"PID"];
-      NSNumber * lastExitStatus = [status objectForKey: @"LastExitStatus"];
-
-      long exitStatus = [lastExitStatus intValue];
-      
-      if(pid)
-        jobStatus = kStatusRunning;
-      else if(exitStatus == 172)
-        {
-        jobStatus = kStatusKilled;
-        
-        self.pressureKilledCount = self.pressureKilledCount + 1;
-        }
-      else if(exitStatus != 0)
-        jobStatus = kStatusFailed;
-      else if(status)
-        jobStatus = kStatusLoaded;
-      else
-        jobStatus = kStatusNotLoaded;
-        
-      [status setObject: jobStatus forKey: kStatus];
-      [status setObject: label forKey: kBundleID];
-      
-      return status;
-      }
-    }
-    
-  return nil;
+  else if([[info objectForKey: kStatus] isEqualToString: kStatusKilled])
+    self.AppleKilledCount = self.AppleKilledCount + 1;
   }
 
 // Should I ignore failures?
@@ -803,51 +1180,19 @@
   return [self.knownAppleSignatureFailures containsObject: file];
   }
 
-// Is this an Apple file that I expect to see?
-- (bool) isAppleFile: (NSString *) bundleID
-  {
-  if([bundleID hasPrefix: @"com.apple."])
-    return YES;
-    
-  if([self.appleLaunchd containsObject: bundleID])
-    return YES;
-    
-  if([[Model model] majorOSVersion] < kYosemite)
-    {
-    if([bundleID hasPrefix: @"0x"])
-      {
-      if([bundleID rangeOfString: @".anonymous."].location != NSNotFound)
-        return YES;
-      }
-    else if([bundleID hasPrefix: @"[0x"])
-      {
-      if([bundleID rangeOfString: @".com.apple."].location != NSNotFound)
-        return YES;
-      }
-    }
-    
-  if([[Model model] majorOSVersion] < kLion)
-    {
-    if([bundleID hasPrefix: @"0x"])
-      if([bundleID rangeOfString: @".mach_init."].location != NSNotFound)
-        return YES;
-    }
-
-  return NO;
-  }
-
 // Update a funky new dynamic task.
-- (void) updateDynamicTask: (NSMutableDictionary *) status
+- (void) updateDynamicTask: (NSMutableDictionary *) info
+  domain: (NSString *) domain
   {
   if([[Model model] majorOSVersion] < kYosemite)
     return;
     
-  NSString * bundleID = [status objectForKey: kBundleID];
+  NSString * label = [info objectForKey: kLabel];
   
   unsigned int UID = getuid();
 
   NSString * serviceName =
-    [NSString stringWithFormat: @"gui/%d/%@", UID, bundleID];
+    [NSString stringWithFormat: @"%@/%d/%@", domain, UID, label];
   
   NSArray * args =
     @[
@@ -868,18 +1213,22 @@
           [NSCharacterSet whitespaceAndNewlineCharacterSet]];
       
     if([trimmedLine isEqualToString: @"app = 1"])
-      [status setObject: [NSNumber numberWithBool: YES] forKey: kApp];
-    else if([trimmedLine hasPrefix: @"bundle id = "])
-      [status
-        setObject: [trimmedLine substringFromIndex: 12] forKey: kBundleID];
+      [info setObject: [NSNumber numberWithBool: YES] forKey: kApp];
     else if([trimmedLine hasPrefix: @"program = "])
-      [self
-        updateModificationDate: status
-        path: [trimmedLine substringFromIndex: 10]];
+      {
+      NSString * executable = [trimmedLine substringFromIndex: 10];
+      
+      [info setObject: executable forKey: kExecutable];
+      
+      [self updateModificationDate: info path: executable];
+      }
     else if([trimmedLine hasPrefix: @"parent bundle identifier = "])
       [self
-        updateModificationDate: status
+        updateModificationDate: info
         bundleID: [trimmedLine substringFromIndex: 27]];
+    else if([trimmedLine hasPrefix: @"pid = "])
+      [[self.launchdStatus objectForKey: label]
+        setObject: kStatusRunning forKey: label];
     }
   }
 
@@ -897,7 +1246,7 @@
   }
 
 // Update the modification date.
-- (void) updateModificationDate: (NSMutableDictionary *) status
+- (void) updateModificationDate: (NSMutableDictionary *) info
   bundleID: (NSString *) bundleID
   {
   NSURL * url =
@@ -905,7 +1254,7 @@
       URLForApplicationWithBundleIdentifier: bundleID];
     
   if(url)
-    [self updateModificationDate: status path: [url path]];
+    [self updateModificationDate: info path: [url path]];
   }
 
 // Get the modification date of a file.
@@ -920,13 +1269,13 @@
   }
 
 // Format a codesign response.
-- (NSString *) formatAppleSignature: (NSDictionary *) status
+- (NSString *) formatAppleSignature: (NSDictionary *) info
   {
   NSString * message = @"";
   
-  NSString * signature = [status objectForKey: kSignature];
+  NSString * signature = [info objectForKey: kSignature];
   
-  NSString * path = [status objectForKey: kExecutable];
+  NSString * path = [info objectForKey: kExecutable];
   
   if(![signature isEqualToString: kSignatureValid])
     {
@@ -951,79 +1300,6 @@
     }
     
   return message;
-  }
-
-// Collect the command of the launchd item.
-- (NSArray *) collectLaunchdItemCommand: (NSDictionary *) plist
-  {
-  NSMutableArray * command = [NSMutableArray array];
-  
-  if(plist)
-    {
-    NSString * program = [plist objectForKey: @"Program"];
-    
-    if(program)
-      [command addObject: program];
-      
-    NSArray * arguments = [plist objectForKey: @"ProgramArguments"];
-    
-    if([arguments respondsToSelector: @selector(isEqualToArray:)])
-      if(arguments.count > 0)
-        {
-        NSString * argument = [arguments objectAtIndex: 0];
-        
-        if(![argument isEqualToString: [program lastPathComponent]])
-          [command addObject: argument];
-          
-        for(int i = 1; i < arguments.count; ++i)
-          [command addObject: [arguments objectAtIndex: i]];
-      }
-    }
-    
-  if(![command count])
-    [command addObject: @""];
-    
-  return command;
-  }
-
-// Collect the actual executable from a command.
-- (NSString *) collectLaunchdItemExecutable: (NSArray *) command
-  {
-  NSString * executable = [command firstObject];
-  
-  BOOL sandboxExec = NO;
-  
-  if([executable isEqualToString: @"sandbox-exec"])
-    sandboxExec = YES;
-
-  if([executable isEqualToString: @"/usr/bin/sandbox-exec"])
-    sandboxExec = YES;
-    
-  if(sandboxExec)
-    {
-    NSUInteger argumentCount = command.count;
-    
-    for(NSUInteger i = 1; i < argumentCount; ++i)
-      {
-      NSString * argument = [command objectAtIndex: i];
-      
-      if([argument isEqualToString: @"-f"])
-        ++i;
-      else if([argument isEqualToString: @"-n"])
-        ++i;
-      else if([argument isEqualToString: @"-p"])
-        ++i;
-      else if([argument isEqualToString: @"-D"])
-        ++i;
-      else
-        {
-        executable = argument;
-        break;
-        }
-      }
-    }
-    
-  return executable;
   }
 
 // Is the executable valid?
@@ -1056,12 +1332,12 @@
   }
 
 // Format a status string.
-- (NSAttributedString *) formatPropertyListStatus: (NSDictionary *) status
+- (NSAttributedString *) formatPropertyListStatus: (NSDictionary *) info
   {
   NSString * statusString = NSLocalizedString(@"[not loaded]", NULL);
   NSColor * color = [[Utilities shared] gray];
   
-  NSString * statusCode = [status objectForKey: kStatus];
+  NSString * statusCode = [info objectForKey: kStatus];
   
   if([statusCode isEqualToString: kStatusLoaded])
     {
@@ -1108,24 +1384,25 @@
   }
 
 // Include any extra content that may be useful.
-- (NSAttributedString *) formatExtraContent: (NSDictionary *) status
+- (NSAttributedString *) formatExtraContent: (NSMutableDictionary *) info
   for: (NSString *) path
   {
+  // I need to check again for adware due to the agent/daemon/helper adware
+  // trio.
   if([[Model model] isAdware: path])
-    {
-    [self findMoreAdware: status];
+    [info setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
     
-    return [self formatAdware: status for: path];
-    }
+  if([[info objectForKey: kApple] boolValue])
+    return [self formatApple: info for: path];
     
-  else if([[status objectForKey: kApple] boolValue])
-    return [self formatApple: status for: path];
+  else if([[info objectForKey: kAdware] boolValue])
+    return [self formatAdware: info for: path];
     
   NSMutableAttributedString * extra =
     [[NSMutableAttributedString alloc] init];
 
   NSDate * modificationDate =
-    [status objectForKey: kModificationDate];
+    [info objectForKey: kModificationDate];
 
   NSString * modificationDateString =
     [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
@@ -1135,33 +1412,20 @@
       appendString:
         [NSString stringWithFormat: @" (%@)", modificationDateString]];
 
-  [extra appendAttributedString: [self formatSupportLink: status]];
+  [extra appendAttributedString: [self formatSupportLink: info]];
   
   return [extra autorelease];
   }
 
-// Find more adware.
-- (void) findMoreAdware: (NSDictionary *) status
-  {
-  NSString * path = [status objectForKey: kExecutable];
-  
-  NSRange appRange = [path rangeOfString: @".app/Contents/MacOS/"];
-  
-  if(appRange.location != NSNotFound)
-    path = [path substringToIndex: appRange.location + 4];
-    
-  [[Model model] isAdwareExecutable: path];
-  }
-
 // Format adware.
-- (NSAttributedString *) formatAdware: (NSDictionary *) status
+- (NSAttributedString *) formatAdware: (NSDictionary *) info
   for: (NSString *) path
   {
   NSMutableAttributedString * extra =
     [[NSMutableAttributedString alloc] init];
 
   NSDate * modificationDate =
-    [status objectForKey: kModificationDate];
+    [info objectForKey: kModificationDate];
 
   NSString * modificationDateString =
     [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
@@ -1190,7 +1454,7 @@
     [extra appendAttributedString: removeLink];
     }
     
-  NSString * executable = [status objectForKey: kExecutable];
+  NSString * executable = [info objectForKey: kExecutable];
   
   if([executable length] > 0)
     if([[NSFileManager defaultManager] fileExistsAtPath: executable])
@@ -1203,10 +1467,10 @@
   }
 
 // Format Apple software.
-- (NSAttributedString *) formatApple: (NSDictionary *) status
+- (NSAttributedString *) formatApple: (NSDictionary *) info
   for: (NSString *) path
   {
-  NSString * signatureStatus = [status objectForKey: kSignature];
+  NSString * signatureStatus = [info objectForKey: kSignature];
   
   if(![signatureStatus isEqualToString: kSignatureValid])
     {
@@ -1214,7 +1478,7 @@
       [[NSMutableAttributedString alloc] init];
 
     NSDate * modificationDate =
-      [status objectForKey: kModificationDate];
+      [info objectForKey: kModificationDate];
 
     NSString * modificationDateString =
       [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
@@ -1224,7 +1488,7 @@
         appendString:
           [NSString stringWithFormat: @" (%@)", modificationDateString]];
 
-    NSString * message = [self formatAppleSignature: status];
+    NSString * message = [self formatAppleSignature: info];
       
     [extra
       appendString: message
@@ -1237,17 +1501,17 @@
     return [extra autorelease];
     }
     
-  return [self formatSupportLink: status];
+  return [self formatSupportLink: info];
   }
 
 // Create a support link for a plist dictionary.
-- (NSAttributedString *) formatSupportLink: (NSDictionary *) status
+- (NSAttributedString *) formatSupportLink: (NSDictionary *) info
   {
   NSMutableAttributedString * extra =
     [[NSMutableAttributedString alloc] init];
 
   // Get the support link.
-  if([[status objectForKey: kSupportURL] length])
+  if([[info objectForKey: kSupportURL] length])
     {
     [extra appendString: @" "];
 
@@ -1257,12 +1521,12 @@
         @{
           NSFontAttributeName : [[Utilities shared] boldFont],
           NSForegroundColorAttributeName : [[Utilities shared] blue],
-          NSLinkAttributeName : [status objectForKey: kSupportURL]
+          NSLinkAttributeName : [info objectForKey: kSupportURL]
         }];
     }
     
   // Get the details link.
-  NSAttributedString * detailsURL = [status objectForKey: kDetailsURL];
+  NSAttributedString * detailsURL = [info objectForKey: kDetailsURL];
   
   if([detailsURL length])
     {
@@ -1272,51 +1536,15 @@
     }
 
   // Show what is being hidden.
-  if([[status objectForKey: kHidden] boolValue] || self.showExecutable)
+  if([[info objectForKey: kHidden] boolValue] || self.showExecutable)
     [extra appendString:
       [NSString
         stringWithFormat:
           @"\n        %@",
           [Utilities
-            formatExecutable: [status objectForKey: kCommand]]]];
+            formatExecutable: [info objectForKey: kCommand]]]];
     
   return [extra autorelease];
-  }
-
-// Try to construct a support URL.
-- (NSString *) getSupportURL: (NSString *) name bundleID: (NSString *) path
-  {
-  NSString * bundleID = [path lastPathComponent];
-  
-  // If the file is from Apple, the user is already on ASC.
-  if([self isAppleFile: bundleID])
-    return @"";
-    
-  // See if I can construct a real web host.
-  NSString * host = [self convertBundleIdToHost: bundleID];
-  
-  if(host)
-    {
-    // If I seem to have a web host, construct a support URL just for that
-    // site.
-    NSString * nameParameter =
-      [name length]
-        ? name
-        : bundleID;
-
-    return
-      [NSString
-        stringWithFormat:
-          @"http://www.google.com/search?q=%@+support+site:%@",
-          nameParameter, host];
-    }
-  
-  // This file isn't following standard conventions. Look for uninstall
-  // instructions.
-  return
-    [NSString
-      stringWithFormat:
-        @"http://www.google.com/search?q=%@+uninstall+support", bundleID];
   }
 
 @end

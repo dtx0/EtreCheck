@@ -137,24 +137,6 @@
   return [url autorelease];
   }
 
-// Get a support link from a bundle.
-- (NSAttributedString *) getSupportLink: (NSDictionary *) bundle
-  {
-  NSString * name = [bundle objectForKey: @"CFBundleName"];
-  NSString * bundleID = [bundle objectForKey: @"CFBundleIdentifier"];
-
-  if(bundleID)
-    {
-    NSAttributedString * supportLink =
-      [self getSupportURL: name bundleID: bundleID];
-        
-    if(supportLink)
-      return supportLink;
-    }
-    
-  return [[[NSAttributedString alloc] initWithString: @""] autorelease];
-  }
-
 // Extract the (possible) host from a bundle ID.
 - (NSString *) convertBundleIdToHost: (NSString *) bundleID
   {
@@ -173,6 +155,24 @@
     }
   
   return nil;
+  }
+
+// Get a support link from a bundle.
+- (NSAttributedString *) getSupportLink: (NSDictionary *) bundle
+  {
+  NSString * name = [bundle objectForKey: @"CFBundleName"];
+  NSString * bundleID = [bundle objectForKey: @"CFBundleIdentifier"];
+
+  if(bundleID)
+    {
+    NSAttributedString * supportLink =
+      [self getSupportURL: name bundleID: bundleID];
+        
+    if(supportLink)
+      return supportLink;
+    }
+    
+  return [[[NSAttributedString alloc] initWithString: @""] autorelease];
   }
 
 // Try to determine the OS version associated with a bundle.

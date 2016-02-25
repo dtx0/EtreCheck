@@ -814,6 +814,12 @@
   if(![[Model model] checkAppleSignatures])
     return kSignatureValid;
     
+  return [Utilities forceCheckAppleExecutable: path];
+  }
+
+// Force verification of the signature of an Apple executable.
++ (NSString *) forceCheckAppleExecutable: (NSString *) path
+  {
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
   

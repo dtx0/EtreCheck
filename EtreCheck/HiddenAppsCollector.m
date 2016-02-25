@@ -47,8 +47,10 @@
 
   [self collectProcesses];
   
-  [self printHiddenApps];
+  [self collectHiddenApps];
   
+  [self printHiddenApps];
+
   dispatch_semaphore_signal(self.complete);
   }
 
@@ -99,6 +101,20 @@
   [scanner scanUpToString: @"\n" intoString: command];
   }
 
+// Collect apps that weren't printed elsewhere.
+- (void) collectHiddenApps
+  {
+  for(NSString * bundleID in [self.launchdStatus allKeys])
+    {
+    NSMutableDictionary * status =
+      [self collectJobStatusForLabel: bundleID];
+    
+    [self updateDynamicStatus: status];
+    
+    [self updateAppleCounts: status];
+    }
+  }
+
 // Print apps that weren't printed elsewhere.
 - (void) printHiddenApps
   {
@@ -112,7 +128,7 @@
   for(NSString * bundleID in sortedBundleIDs)
     {
     NSMutableDictionary * status =
-      [self collectJobStatus: [self.launchdStatus objectForKey: bundleID]];
+      [self collectJobStatusForLabel: bundleID];
     
     if([[status objectForKey: kPrinted] boolValue])
       continue;
@@ -136,14 +152,15 @@
     
     [self.result appendString: bundleID];
     
-    [self.result
-      appendAttributedString: [self formatExtraContent: status]];
-    
     [self.result appendString: @"\n"];
   
     unprintedItems = YES;
     }
     
+  if([[Model model] hideAppleTasks])
+    if([self formatAppleCounts: self.result])
+      unprintedItems = YES;
+
   if(unprintedItems)
     [self.result appendCR];
   }
@@ -151,14 +168,17 @@
 // Get a status and expand with all the information I can find.
 - (void) updateDynamicStatus: (NSMutableDictionary *) status
   {
-  [self updateDynamicTask: status];
+  [self updateDynamicTask: status domain: @"user"];
+  [self updateDynamicTask: status domain: @"gui"];
   
-  NSString * bundleID = [status objectForKey: kBundleID];
+  // I'm only guaranteed of having a Label here, not necessarily a
+  // bundle ID.
+  NSString * label = [status objectForKey: @"Label"];
   
   NSNumber * ignore =
     [NSNumber numberWithBool: [[Model model] hideAppleTasks]];
   
-  bool isApple = [self isAppleFile: bundleID];
+  bool isApple = [self isAppleFile: label];
   
   [status setObject: [NSNumber numberWithBool: isApple] forKey: kApple];
 
@@ -169,10 +189,18 @@
     }
     
   NSString * executable =
-    [self getExecutableForBundle: bundleID status: status];
+    [self getExecutableForBundle: label status: status];
     
-  if(isApple && executable)
+  if(isApple)
     {
+    // Sometimes these don't have executables.
+    if(!executable)
+      {
+      [status setObject: ignore forKey: kIgnored];
+      
+      return;
+      }
+      
     [status
       setObject: [Utilities checkAppleExecutable: executable]
       forKey: kSignature];
@@ -181,7 +209,7 @@
       [status setObject: ignore forKey: kIgnored];
       
     // Should I ignore this failure?
-    if([self ignoreInvalidSignatures: bundleID])
+    if([self ignoreInvalidSignatures: label])
       [status setObject: ignore forKey: kIgnored];
     }
   }
@@ -197,7 +225,7 @@
     {
     command = [self collectLaunchdItemCommand: status];
     
-    if(command)
+    if([command count])
       {
       executable = [self collectLaunchdItemExecutable: command];
 
@@ -229,62 +257,6 @@
     }
     
   return executable;
-  }
-
-// Include any extra content that may be useful.
-- (NSAttributedString *) formatExtraContent: (NSDictionary *) status
-  {
-  if([[status objectForKey: kApple] boolValue])
-    {
-    NSString * signatureStatus = [status objectForKey: kSignature];
-    
-    if(![signatureStatus isEqualToString: kSignatureValid])
-      {
-      NSMutableAttributedString * extra =
-        [[NSMutableAttributedString alloc] init];
-      
-      NSDate * modificationDate =
-        [status objectForKey: kModificationDate];
-
-      NSString * modificationDateString =
-        [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
-      
-      if(modificationDateString)
-        [extra
-          appendString:
-            [NSString stringWithFormat: @" (%@)", modificationDateString]];
-
-      NSString * message = [self formatAppleSignature: status];
-    
-      [extra
-        appendString: message
-        attributes:
-          @{
-            NSForegroundColorAttributeName : [[Utilities shared] red],
-            NSFontAttributeName : [[Utilities shared] boldFont]
-          }];
-      
-      return [extra autorelease];
-      }
-    }
-    
-  NSMutableAttributedString * extra =
-    [[NSMutableAttributedString alloc] init];
-
-  NSDate * modificationDate =
-    [status objectForKey: kModificationDate];
-
-  NSString * modificationDateString =
-    [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
-  
-  if(modificationDateString)
-    [extra
-      appendString:
-        [NSString stringWithFormat: @" (%@)", modificationDateString]];
-
-  [extra appendAttributedString: [self formatSupportLink: status]];
-
-  return [extra autorelease];
   }
 
 @end
