@@ -292,11 +292,11 @@
     
   for(NSString * match in self.blacklistMatches)
     {
-    NSRange range = [path rangeOfString: match];
+    NSRange range = [name rangeOfString: match];
     
     if(range.location != NSNotFound)
       {
-      NSString * tag = [path substringWithRange: range];
+      NSString * tag = [name substringWithRange: range];
       
       [self.adwareFiles setObject: [tag lowercaseString] forKey: path];
       
