@@ -826,30 +826,8 @@
   info: (NSMutableDictionary *) info
   {
   BOOL adware = [[Model model] isAdware: path];
-  
-  NSString * executable = [info objectForKey: kExecutable];
-  
-  if([[Model model] isAdware: executable])
-    {
-    NSString * appPath = executable;
     
-    NSRange appRange = [executable rangeOfString: @".app/Contents/MacOS/"];
-    
-    if(appRange.location != NSNotFound)
-      appPath = [executable substringToIndex: appRange.location + 4];
-      
-    if([[Model model] isAdwareExecutable: appPath])
-      {
-      [[[Model model] adwareFiles] removeObjectForKey: executable];
-      [[[Model model] adwareFiles] setObject: @"blacklist" forKey: path];
-      [[[Model model] unknownFiles] removeObject: path];
-      
-      adware = YES;
-      }
-    }
-    
-  [info
-    setObject: [NSNumber numberWithBool: adware] forKey: kAdware];
+  [info setObject: [NSNumber numberWithBool: adware] forKey: kAdware];
   }
 
 #pragma mark - Print property lists

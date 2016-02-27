@@ -96,7 +96,7 @@
           [self didChangeValueForKey: @"canDelete"];
           
           if([self.adwareFiles count] > 0)
-            [self reportDeletedFilesFailed: deletedFiles];
+            [self reportDeletedFilesFailed: deletedFiles error: error];
           else
             [self reportDeletedFiles: deletedFiles];
           }];
@@ -202,6 +202,13 @@
     
   if(![[Model model] backupExists])
     {
+    NSNumber * override =
+      [[NSUserDefaults standardUserDefaults]
+        objectForKey: @"timemachineoverride"];
+      
+    if([override boolValue])
+      return YES;
+      
     [self reportNoBackup];
     
     return NO;
@@ -319,6 +326,7 @@
 
 // Report which files were deleted.
 - (void) reportDeletedFilesFailed: (NSArray *) paths
+  error: (NSError *) error
   {
   NSUInteger count = [paths count];
   
@@ -333,6 +341,11 @@
   
   if([paths count] == 0)
     {
+    NSString * reason = [error description];
+    
+    if([reason length])
+      NSLog(@"Failed to delete files: %@", reason);
+    
     [message appendString: NSLocalizedString(@"nofilesdeleted", NULL)];
 
     [alert setInformativeText: message];

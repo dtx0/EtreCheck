@@ -239,20 +239,20 @@
   if([path length] == 0)
     return NO;
     
-  if([self.adwareFiles objectForKey: path])
-    return YES;
-  
   bool adware = NO;
   
-  if([self isAdwareSuffix: path])
+  if([self.adwareFiles objectForKey: path])
+    adware = YES;
+  else if([self isAdwareSuffix: path])
+    adware = YES;
+  else if([self isAdwareMatch: path])
+    adware = YES;
+  else if([self isAdwareTrio: path])
     adware = YES;
     
-  if([self isAdwareMatch: path])
-    adware = YES;
-    
-  if([self isAdwareTrio: path])
-    adware = YES;
-    
+  if(adware)
+    self.adwareFound = YES;
+  
   return adware;
   }
 
@@ -376,101 +376,6 @@
   [trioFiles addObject: path];
   }
 
-// Is this an adware match?
-- (bool) isAdwareExecutable: (NSString *) path
-  {
-  BOOL exists =
-    [[NSFileManager defaultManager] fileExistsAtPath: path];
-    
-  if(!exists)
-    return NO;
-    
-  for(NSString * adwarePath in self.adwareFiles)
-    {
-    NSString * tag = [self.adwareFiles objectForKey: adwarePath];
-
-    if(!tag)
-      continue;
-      
-    NSRange range =
-      [path rangeOfString: tag options: NSCaseInsensitiveSearch];
-    
-    if(range.location != NSNotFound)
-      {
-      NSArray * parts = [path componentsSeparatedByString: @"/"];
-      
-      NSMutableArray * adwareExecutableParts = [NSMutableArray array];
-      
-      for(NSString * part in parts)
-        {
-        if(![self isSystemName: part])
-          {
-          range =
-            [part rangeOfString: tag options: NSCaseInsensitiveSearch];
-            
-          if(range.location != NSNotFound)
-            {
-            [adwareExecutableParts addObject: part];
-           
-            NSString * adwareExecutablePath =
-              [adwareExecutableParts componentsJoinedByString: @"/"];
-            
-            // Failsafe to prevent deletion of anything signed. This may
-            // prevent adware from being deleted, but I don't want to be
-            // responsible for deleting any legitimate software.
-            NSString * signatureStatus =
-              [Utilities forceCheckAppleExecutable: adwareExecutablePath];
-              
-            if([signatureStatus isEqualToString: kSignatureValid])
-              return NO;
-            
-            [self.adwareFiles setObject: tag forKey: adwareExecutablePath];
-          
-            return YES;
-            }
-          }
-        
-        [adwareExecutableParts addObject: part];
-        }
-      }
-    }
-    
-  return NO;
-  }
-
-// Is this name possibly a system path name?
-- (bool) isSystemName: (NSString *) name
-  {
-  if([name isEqualToString: @"System"])
-    return YES;
-    
-  if([name isEqualToString: @"Library"])
-    return YES;
-
-  if([name isEqualToString: @"Frameworks"])
-    return YES;
-
-  if([name isEqualToString: @"PrivateFrameworks"])
-    return YES;
-
-  if([name isEqualToString: @"LaunchAgents"])
-    return YES;
-
-  if([name isEqualToString: @"LaunchDaemons"])
-    return YES;
-
-  if([name isEqualToString: @"Application Support"])
-    return YES;
-
-  if([name isEqualToString: @"Preferences"])
-    return YES;
-
-  if([name isEqualToString: @"Containers"])
-    return YES;
-    
-  return NO;
-  }
-
 // Is this file an adware extension?
 - (bool) isAdwareExtension: (NSString *) name path: (NSString *) path
   {
@@ -481,6 +386,19 @@
     for(NSString * extension in self.adwareExtensions)
       if([search rangeOfString: extension].location != NSNotFound)
         return YES;
+
+    for(NSString * match in self.blacklistMatches)
+      {
+      NSRange range = [path rangeOfString: match];
+      
+      if(range.location != NSNotFound)
+        return YES;
+
+      range = [name rangeOfString: match];
+      
+      if(range.location != NSNotFound)
+        return YES;
+      }
     }
     
   return NO;

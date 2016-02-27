@@ -955,6 +955,13 @@
     
     [urls addObject: url];
     [urlsToRemove addObject: url];
+    
+    [[NSFileManager defaultManager]
+      setAttributes:
+        [NSDictionary
+          dictionaryWithObject: [NSNumber numberWithBool: NO]
+          forKey: NSFileImmutable]
+      ofItemAtPath: path error: NULL];
     }
     
   [[NSWorkspace sharedWorkspace]
@@ -1046,6 +1053,13 @@
 
   [source appendString: @"}\n"];
 
+  /* Investigate whether this is needed at some point.
+	repeat with posixFile in posixFiles
+		set f to posixFile as alias
+		set locked of f to false
+	end repeat
+  */
+  
   [source appendString: @"tell application \"Finder\"\n"];
   [source appendString: @"activate\n"];
   [source appendString: @"move posixFiles to the trash\n"];

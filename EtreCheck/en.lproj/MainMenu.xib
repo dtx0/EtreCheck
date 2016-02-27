@@ -1528,7 +1528,7 @@ Gw
                                             </buttonCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="path" editable="NO" width="422.5" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
+                                        <tableColumn identifier="path" editable="NO" width="423" minWidth="40" maxWidth="1000" id="VQ0-kU-F3A">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Unknown file">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1651,7 +1651,7 @@ Gw
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="path" editable="NO" width="365.5" minWidth="40" maxWidth="1000" id="Y49-vH-Fpu">
+                                        <tableColumn identifier="path" editable="NO" width="522.5" minWidth="40" maxWidth="1000" id="Y49-vH-Fpu">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Adware file">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
