@@ -938,8 +938,10 @@
   info: (NSMutableDictionary *) info
   output: (NSMutableAttributedString *) output
   {
-  [info
-    setObject: [self modificationDate: path] forKey: kModificationDate];
+  NSDate * modificationDate = [self modificationDate: path];
+  
+  if(modificationDate)
+    [info setObject: modificationDate forKey: kModificationDate];
 
   // Apples file get special treatment.
   if([[info objectForKey: kApple] boolValue])
