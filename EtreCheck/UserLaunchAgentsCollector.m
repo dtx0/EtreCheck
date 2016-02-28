@@ -58,4 +58,16 @@
   dispatch_semaphore_signal(self.complete);
   }
 
+// There shouldn't be any Apple files here. So, if there are, print them.
+- (bool) isAppleFile: (NSString *) bundleID
+  {
+  return NO;
+  }
+
+// Since I am printing all Apple items, no need for counts.
+- (bool) formatAppleCounts: (NSMutableAttributedString *) output
+  {
+  return NO;
+  }
+
 @end
