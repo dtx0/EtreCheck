@@ -516,12 +516,12 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   NSURL * url =
     [NSURL
       URLWithString:
-        @"http://etrecheck.com/download/ApplicationUpdates.plist"];
+        @"https://etrecheck.com/download/ApplicationUpdates.plist"];
 
 //  url =
 //    [NSURL
 //      URLWithString:
-//        @"http://etrecheck.com/download/ApplicationUpdatesTest.plist"];
+//        @"https://etrecheck.com/download/ApplicationUpdatesTest.plist"];
 
   __block NSData * data = nil;
   
@@ -875,7 +875,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [json appendFormat: @"{\"emailkey\": \"%@\"}", emailHash];
     
-  NSString * server = @"http://etrecheck.com/server/lookupdonation.php";
+  NSString * server = @"https://etrecheck.com/server/lookupdonation.php";
   
   NSArray * args =
     @[
@@ -1148,8 +1148,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [self.log
     appendAttributedString:
       [Utilities
-        buildURL: @"http://etrecheck.com"
-        title: @"http://etrecheck.com"]];
+        buildURL: @"https://etrecheck.com"
+        title: @"https://etrecheck.com"]];
     
   [self.log appendString: @"\n"];
   
@@ -1803,7 +1803,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   [json appendFormat: @"{\"donationkey\": \"%@\"}", donationKey];
     
-  NSString * server = @"http://etrecheck.com/server/verifydonation.php";
+  NSString * server = @"https://etrecheck.com/server/verifydonation.php";
   
   NSArray * args =
     @[
@@ -1934,7 +1934,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 - (IBAction) gotoEtresoft: (id) sender
   {
   [[NSWorkspace sharedWorkspace]
-    openURL: [NSURL URLWithString: @"http://www.etresoft.com"]];
+    openURL: [NSURL URLWithString: @"https://www.etresoft.com"]];
   }
 
 // Display help.

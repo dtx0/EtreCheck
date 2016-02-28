@@ -27,7 +27,7 @@
 "%d error (plural rule: zero)" = "no errors\n";
 "%d error (plural rule: one)" = "one error";
 "%d error (plural rule: other)" = "%d errors\n";
-"adware" = "EtreCheck has detected that your Macintosh is infected with adware as defined by Apple (see http://support.apple.com/HT203987), Etresoft’s own research, and the contributions of other EtreCheck users. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft and added to the list of known adware.";
+"adware" = "EtreCheck has detected that your Macintosh is infected with adware as defined by Apple (see https://support.apple.com/HT203987), Etresoft’s own research, and the contributions of other EtreCheck users. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft and added to the list of known adware.";
 "unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. Identify any files that are valid and describe why. Then, click the “Send to Etresoft” button to report these files to Etresoft for possible addition to the blacklist of adware or whitelist of legitimate software.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "One adware file found.";
@@ -44,8 +44,8 @@
 "Fair" = "Replace Soon";
 "Poor" = "Replace Now";
 "    %@ - Uptime: %@%@\n" = "    %@ - Time since boot: %@%@\n";
-"service_desktop" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
-"service_notebook" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
+"service_desktop" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
+"service_notebook" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
 "excellentperformance" = "Excellent";
 "goodperformance" = "Good";
 "belowaverageperformance" = "Below Average";
@@ -78,4 +78,4 @@
 "donationnotfound" = "Sorry, your donation could not be found. Please use the Manual lookup option.";
 "oldetrecheckversion" = "Your version of EtreCheck is outdated. This operation requires a current version of EtreCheck.";
 "unverifiedetrecheckversion" = "Could not verify your version of EtreCheck. This operation requires a current version of EtreCheck. If you are using a firewall, please all EtreCheck to access its servers.";
-"donateurl" = "http://etrecheck.com/donate_en.php?invoice=%@";
+"donateurl" = "https://etrecheck.com/donate_en.php?invoice=%@";

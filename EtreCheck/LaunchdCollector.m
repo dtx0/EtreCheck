@@ -643,7 +643,7 @@
     return
       [NSString
         stringWithFormat:
-          @"http://www.google.com/search?q=%@+support+site:%@",
+          @"https://www.google.com/search?q=%@+support+site:%@",
           nameParameter, host];
     }
   
@@ -652,7 +652,7 @@
   return
     [NSString
       stringWithFormat:
-        @"http://www.google.com/search?q=%@+uninstall+support", bundleID];
+        @"https://www.google.com/search?q=%@+uninstall+support", bundleID];
   }
 
 // Set the details URL.

@@ -156,7 +156,7 @@
     
   [json appendString: @"]}"];
   
-  NSString * server = @"http://etrecheck.com/server/adware_detection.php";
+  NSString * server = @"https://etrecheck.com/server/adware_detection.php";
   
   NSArray * args =
     @[

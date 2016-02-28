@@ -82,7 +82,7 @@
 "    Time Machine not configured!\n\n" = "    Time Machine n’est pas configuré !\n\n";
 " Cannot contact Oracle" = " Oracle inacessible";
 "Outdated!" = "Vieux !";
-"http://www.java.com/en/download/installed.jsp" = "http://www.java.com/fr/download/installed.jsp";
+"https://www.java.com/en/download/installed.jsp" = "https://www.java.com/fr/download/installed.jsp";
 "Update" = "Mettre à jour";
 "Check version" = "Vérifier la version";
 " Cannot contact Adobe" = " Adobe inacessible";
@@ -188,7 +188,7 @@
 "%d error (plural rule: one)" = "une erreur";
 "%d error (plural rule: other)" = "%d erreurs\n";
 "No help available" = "Aucune aide disponible";
-"adware" = "EtreCheck a détecté que votre Macintosh est infecté par adware comme identifié par Apple (voir http://support.apple.com/HT203987), les recherches propres d’Etresoft, et les contributions des autres utilisateurs EtreCheck. Cliquez sur le bouton «Enlever» pour retirer l’adware. Les fichiers que vous enlevez seront automatiquement envoyés à Etresoft pour la liste d’adware.";
+"adware" = "EtreCheck a détecté que votre Macintosh est infecté par adware comme identifié par Apple (voir https://support.apple.com/HT203987), les recherches propres d’Etresoft, et les contributions des autres utilisateurs EtreCheck. Cliquez sur le bouton «Enlever» pour retirer l’adware. Les fichiers que vous enlevez seront automatiquement envoyés à Etresoft pour la liste d’adware.";
 "unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas sur la liste blanche des logiciels sûrs. C’est possible qu’il soit adware ou malware. Mais aussi, c’est possible qu’il soit quelque chose de nouveau qui a besoin d’être ajouté à la liste blanche d’EtreCheck. Identifier tous les fichiers qui sont valides et décrivent pourquoi. Identifiez tous les fichiers qui sont valides et décrivez pourquoi. Ensuite, cliquez sur le bouton «Envoyer à Etresoft» pour envoyer ces fichiers à Etresoft pour un éventuel ajout à la liste noire de l’adware ou la liste blanche des logiciels légitimes.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "Un fichier adware trouvé.";
@@ -241,8 +241,8 @@
 "belowaverageperformance" = "Sous la moyenne";
 "poorperformance" = "Pire";
 "[Warranty & Service]" = "[Garantie & service]";
-"service_desktop" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
-"service_notebook" = "http://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
+"service_desktop" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macdesktops";
+"service_notebook" = "https://support.apple.com/kb/index?page=servicefaq&geo=United_States&product=Macnotebooks";
 "Text Size" = "La taille du texte";
 "addtowhitelistemail" = "tell application \"Mail\"\nset newMessage to make new outgoing message with properties {subject:\"%@\", content:\"%@\" & return & return}\ntell newMessage\nset visible to true\nmake new to recipient at end of to recipients with properties {name:\"%@\", address:\"%@\"}\nend tell\nactivate\nend tell";
 "Donate" = "Faire un don";
@@ -292,4 +292,4 @@
 "Unverified EtreCheck version!" = "La version d’EtreCheck pas vérifiée !";
 "unverifiedetrecheckversion" = "Impossible de vérifier votre version d’EtreCheck. Cette opération nécessite une version actuelle d’EtreCheck. Si vous utilisez un pare-feu, s’il vous plaît, permettez l’accès à des serveurs EtreCheck.";
 " (cache only)" = " (seulement en cache)";
-"donateurl" = "http://etrecheck.com/donate_fr.php?invoice=%@";
+"donateurl" = "https://etrecheck.com/donate_fr.php?invoice=%@";

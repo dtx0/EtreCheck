@@ -134,10 +134,10 @@
 
   NSString * url =
     NSLocalizedString(
-      @"http://www.java.com/en/download/installed.jsp", NULL);
+      @"https://www.java.com/en/download/installed.jsp", NULL);
   
   if([[Model model] majorOSVersion] < 11)
-    url = NSLocalizedString(@"http://support.apple.com/kb/dl1572", NULL);
+    url = NSLocalizedString(@"https://support.apple.com/kb/dl1572", NULL);
 
   [string appendString: @" "];
 
@@ -186,7 +186,7 @@
   NSString * version = nil;
   
   NSURL * url =
-    [NSURL URLWithString: @"http://www.adobe.com/software/flash/about/"];
+    [NSURL URLWithString: @"https://www.adobe.com/software/flash/about/"];
   
   NSData * data = [NSData dataWithContentsOfURL: url];
   
@@ -242,7 +242,7 @@
       @{
         NSFontAttributeName : [[Utilities shared] boldFont],
         NSForegroundColorAttributeName : [[Utilities shared] red],
-        NSLinkAttributeName : @"http://get.adobe.com/flashplayer/"
+        NSLinkAttributeName : @"https://get.adobe.com/flashplayer/"
       }];
   
   [outdated release];

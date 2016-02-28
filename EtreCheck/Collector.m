@@ -119,7 +119,7 @@
     NSString * query =
       [NSString
         stringWithFormat:
-          @"http://www.google.com/search?q=%@support+site:%@",
+          @"https://www.google.com/search?q=%@support+site:%@",
           nameParameter, host];
     
     [url appendString: @" "];
