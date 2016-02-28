@@ -421,33 +421,29 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [CIColor colorWithRed: 0.3f green: 0.3f blue: 0.3f alpha: 1.0f]
     forKey: @"inputColor"];
     
-  CIFilter * gamma = [CIFilter filterWithName:@"CIGammaAdjust"];
+  CIFilter * gamma = [CIFilter filterWithName: @"CIGammaAdjust"];
   [gamma setDefaults];
   [gamma setValue: [NSNumber numberWithDouble: 0.3] forKey: @"inputPower"];
     
-  dispatch_async(
-    dispatch_get_main_queue(),
-    ^{
-      self.helpButton.image = self.helpButtonInactiveImage;
-      self.donateButton.image = self.donateButtonInactiveImage;
-      
-      [self.reportView setContentFilters: @[grayscale, gamma]];
-      
-      if(self.animationView)
-        {
-        [self.animationView setContentFilters: @[grayscale, gamma]];
+  self.helpButton.image = self.helpButtonInactiveImage;
+  self.donateButton.image = self.donateButtonInactiveImage;
+  
+  [self.reportView setContentFilters: @[grayscale, gamma]];
+  
+  if(self.animationView)
+    {
+    [self.animationView setContentFilters: @[grayscale, gamma]];
 
-        CIFilter * grayscale =
-          [CIFilter filterWithName: @"CIColorMonochrome"];
-        [grayscale setDefaults];
-        [grayscale
-          setValue:
-            [CIColor colorWithRed: 0.6f green: 0.6f blue: 0.6f alpha: 1.0f]
-          forKey: @"inputColor"];
-          
-        [self.magnifyingGlassShade setContentFilters: @[grayscale]];
-        }
-    });
+    CIFilter * grayscale =
+      [CIFilter filterWithName: @"CIColorMonochrome"];
+    [grayscale setDefaults];
+    [grayscale
+      setValue:
+        [CIColor colorWithRed: 0.6f green: 0.6f blue: 0.6f alpha: 1.0f]
+      forKey: @"inputColor"];
+      
+    [self.magnifyingGlassShade setContentFilters: @[grayscale]];
+    }
   }
 
 // Un-dim the display on activate.
@@ -459,21 +455,17 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   if(!CGDisplayUsesOpenGLAcceleration(curScreenNum.unsignedIntValue))
     return;
 
-  dispatch_async(
-    dispatch_get_main_queue(),
-    ^{
-      self.helpButton.image = self.helpButtonImage;
-      self.donateButton.image = self.donateButtonImage;
-      
-      [self.reportView setContentFilters: @[]];
+  self.helpButton.image = self.helpButtonImage;
+  self.donateButton.image = self.donateButtonImage;
+  
+  [self.reportView setContentFilters: @[]];
 
-      if(self.animationView)
-        {
-        [self.animationView setContentFilters: @[]];
-        [self.magnifyingGlassShade setContentFilters: @[]];
-        [self.progress setNeedsDisplay: YES];
-        }
-    });
+  if(self.animationView)
+    {
+    [self.animationView setContentFilters: @[]];
+    [self.magnifyingGlassShade setContentFilters: @[]];
+    [self.progress setNeedsDisplay: YES];
+    }
   }
 
 - (void) windowDidResignKey: (NSNotification *) notification
