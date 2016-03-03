@@ -49,9 +49,9 @@
     
   dispatch_semaphore_signal(self.complete);
   }
-  
-// There shouldn't be any Apple files here. So, if there are, print them.
-- (bool) isAppleFile: (NSString *) bundleID
+
+// Should I hide Apple tasks?
+- (bool) hideAppleTasks
   {
   return NO;
   }

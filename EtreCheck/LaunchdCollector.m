@@ -619,6 +619,12 @@
   return NO;
   }
 
+// Should I hide Apple tasks?
+- (bool) hideAppleTasks
+  {
+  return [[Model model] hideAppleTasks];
+  }
+
 // Try to construct a support URL.
 - (NSString *) getSupportURL: (NSString *) name bundleID: (NSString *) path
   {
@@ -985,7 +991,7 @@
   {
   NSString * file = [path lastPathComponent];
 
-  bool hideAppleTasks = [[Model model] hideAppleTasks];
+  bool hideAppleTasks = [self hideAppleTasks];
 
   [self updateAppleCounts: info];
   

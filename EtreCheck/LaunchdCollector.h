@@ -87,6 +87,9 @@
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) file;
 
+// Should I hide Apple tasks?
+- (bool) hideAppleTasks;
+
 // Should I ignore these invalid signatures?
 - (bool) ignoreInvalidSignatures: (NSString *) file;
 
