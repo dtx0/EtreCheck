@@ -249,8 +249,6 @@
 
   @try
     {
-    [task launch];
-    
     int64_t timeout = 60 * 5 * NSEC_PER_SEC;
     
     NSNumber * timeoutValue = [options objectForKey: kExecutableTimeout];
@@ -260,28 +258,23 @@
       
     //NSLog(@"Running %@ %@ with timeout %lld", program, args, timeout);
     
-    // Timeout after 5 minutes.
-    dispatch_after(
-      dispatch_time(DISPATCH_TIME_NOW, timeout),
-      dispatch_get_main_queue(),
-      ^{
-        if([task isRunning])
-          {
-          [task terminate];
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    dispatch_async(
+      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+        ^{
+          [Utilities runTask: task wait: timeout];
           
-          [[Model model] taskTerminated: program arguments: args];
-          }
-      });
+          dispatch_semaphore_signal(semaphore);
+        });
       
     result =
       [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
     
     errorData =
       [[[task standardError] fileHandleForReading] readDataToEndOfFile];
-
-    [task release];
-    [errorPipe release];
-    [outputPipe release];
+      
+    dispatch_semaphore_wait(semaphore, timeout);
     }
   @catch(NSException * exception)
     {
@@ -293,6 +286,12 @@
     if(error)
       *error = @"Unknown exception";
     }
+  @finally
+    {
+    [task release];
+    [errorPipe release];
+    [outputPipe release];
+    }
     
   if(![result length] && error && [errorData length])
     *error =
@@ -301,6 +300,35 @@
         autorelease];
     
   return result;
+  }
+
+// Run a task and wait for it. Return YES if the task completed or NO if
+// the task had to be killed.
++ (BOOL) runTask: (NSTask *) task wait: (int64_t) timeout
+  {
+  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
+  dispatch_async(
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+      ^{
+        [task launch];
+      
+        dispatch_semaphore_signal(semaphore);
+      });
+    
+  long timedout = dispatch_semaphore_wait(semaphore, timeout);
+    
+  // If I timed out, I'm not ready. Signal the sync semaphore to prevent
+  // the update from ever being handled if it ever does happen.
+  if(timedout)
+    {
+    if([task isRunning])
+      [task terminate];
+
+    return NO;
+    }
+    
+  return YES;
   }
 
 /* TODO: I could log long-running tasks with this:
