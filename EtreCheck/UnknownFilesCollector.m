@@ -64,7 +64,20 @@
             appendString:
               [NSString
                 stringWithFormat:
-                  @"    %@\n", [Utilities sanitizeFilename: obj]]];
+                  @"    %@", [Utilities sanitizeFilename: obj]]];
+
+          NSString * cmd =
+            [obj length] > 0
+              ? [[[Model model] launchdCommands] objectForKey: obj]
+              : nil;
+          
+          if([cmd length] > 0)
+            {
+            [self.result appendString: @"\n        "];
+            [self.result appendString: cmd];
+            }
+
+          [self.result appendString: @"\n"];
           }];
       
     NSString * message =

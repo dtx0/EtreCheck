@@ -58,8 +58,16 @@
     {
     [self.result appendAttributedString: [self buildTitle]];
 
+    // There could be a situation where cached-only, non-adware extensions
+    // show up as valid extensions but aren't printed.
+    int count = 0;
+    
     for(NSString * name in self.extensions)
-      [self printExtension: [self.extensions objectForKey: name]];
+      if([self printExtension: [self.extensions objectForKey: name]])
+        ++count;
+    
+    if(!count)
+      [self.result appendString: NSLocalizedString(@"    None\n", NULL)];
     
     [self.result appendCR];
     }
@@ -180,7 +188,7 @@
   }
 
 // Print a Safari extension.
-- (void) printExtension: (NSDictionary *) extension
+- (bool) printExtension: (NSDictionary *) extension
   {
   NSString * humanReadableName =
     [extension objectForKey: kHumanReadableName];
@@ -256,7 +264,11 @@
       }
 
     [self.result appendString: @"\n"];
+    
+    return YES;
     }
+    
+  return NO;
   }
 
 // Append the modification date.

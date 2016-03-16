@@ -960,8 +960,12 @@
   NSArray * command = [info objectForKey: kCommand];
   
   if([command count])
-    [[[Model model] launchdCommands]
-      setObject: [command componentsJoinedByString: @" "] forKey: path];
+    {
+    NSString * cmd = [Utilities formatExecutable: command];
+    
+    if(cmd)
+      [[[Model model] launchdCommands] setObject: cmd forKey: path];
+    }
     
   // Format the status.
   [output appendAttributedString: [self formatPropertyListStatus: info]];

@@ -1050,6 +1050,9 @@ Gw
 DQ
 </string>
                         </buttonCell>
+                        <connections>
+                            <action selector="automaticDonationLookup:" target="Voe-Tx-rLC" id="avM-mh-7Vf"/>
+                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="piw-BJ-3po">
                         <rect key="frame" x="14" y="13" width="87" height="32"/>
@@ -1061,6 +1064,9 @@ DQ
 Gw
 </string>
                         </buttonCell>
+                        <connections>
+                            <action selector="cancelDonationLookup:" target="Voe-Tx-rLC" id="uJB-fC-6Bx"/>
+                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="dBT-7v-aPx">
                         <rect key="frame" x="215" y="13" width="96" height="32"/>
@@ -1072,6 +1078,9 @@ Gw
 Gw
 </string>
                         </buttonCell>
+                        <connections>
+                            <action selector="manualDonationLookup:" target="Voe-Tx-rLC" id="mcr-zK-m3w"/>
+                        </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="3a8-cO-raY">
                         <rect key="frame" x="18" y="91" width="377" height="123"/>

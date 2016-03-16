@@ -1364,6 +1364,9 @@
 
 + (NSString *) MD5: (NSString *) string
   {
+  if(![string length])
+    string = @"";
+    
   const char * cstr = [string UTF8String];
   unsigned char md5[16];
   

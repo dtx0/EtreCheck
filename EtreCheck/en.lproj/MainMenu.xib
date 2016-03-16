@@ -1645,7 +1645,7 @@ Gw
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="zla-Dm-aep" id="bhT-PM-Mux">
-                                    <rect key="frame" x="0.0" y="0.0" width="368.5" height="19"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="526" height="114"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1780,7 +1780,7 @@ Gw
                     </textField>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="80" y="1708"/>
+            <point key="canvasLocation" x="134" y="1873"/>
         </window>
     </objects>
     <resources>
