@@ -158,9 +158,14 @@
     }
     
   if([[Model model] hideAppleTasks])
+    {
+    if(!titlePrinted)
+      [self.result appendAttributedString: [self buildTitle]];
+     
     if([self formatAppleCounts: self.result])
       unprintedItems = YES;
-
+    }
+    
   if(unprintedItems)
     [self.result appendCR];
   }
