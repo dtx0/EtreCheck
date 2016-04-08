@@ -915,18 +915,6 @@
     <string>com.jamfsoftware.startupItem.plist</string>
     <string>com.jamfsoftware.task.1.plist</string>
     <string>com.jamfsoftware.task.checkForTasks.plist</string>
-    <string>com.jdibackup.JustCloud.autostart.plist</string>
-    <string>com.jdibackup.JustCloud.backupstart.plist</string>
-    <string>com.jdibackup.JustCloud.notify.plist</string>
-    <string>com.jdibackup.JustCloud.signup.plist</string>
-    <string>com.jdibackup.MyPCBackup.autostart.plist</string>
-    <string>com.jdibackup.MyPCBackup.notify.plist</string>
-    <string>com.jdibackup.OnlineBackup.autostart.plist</string>
-    <string>com.jdibackup.OnlineBackup.notify.plist</string>
-    <string>com.jdibackup.ZipCloud.autostart.plist</string>
-    <string>com.jdibackup.ZipCloud.backupstart.plist</string>
-    <string>com.jdibackup.ZipCloud.notify.plist</string>
-    <string>com.jdibackup.ZipCloud.signup.plist</string>
     <string>com.jeppesen.JDMPrivHelper.plist</string>
     <string>com.jeppesen.jsum.agent.plist</string>
     <string>com.jetico.BCWipe.helper.plist</string>
@@ -2576,6 +2564,18 @@
 		<string>com.extensions.updater60094.agent.plist</string>
 		<string>com.extensions.updater67619.agent.plist</string>
 		<string>com.extensions.updater69337.agent.plist</string>
+    <string>com.jdibackup.JustCloud.autostart.plist</string>
+    <string>com.jdibackup.JustCloud.backupstart.plist</string>
+    <string>com.jdibackup.JustCloud.notify.plist</string>
+    <string>com.jdibackup.JustCloud.signup.plist</string>
+    <string>com.jdibackup.MyPCBackup.autostart.plist</string>
+    <string>com.jdibackup.MyPCBackup.notify.plist</string>
+    <string>com.jdibackup.OnlineBackup.autostart.plist</string>
+    <string>com.jdibackup.OnlineBackup.notify.plist</string>
+    <string>com.jdibackup.ZipCloud.autostart.plist</string>
+    <string>com.jdibackup.ZipCloud.backupstart.plist</string>
+    <string>com.jdibackup.ZipCloud.notify.plist</string>
+    <string>com.jdibackup.ZipCloud.signup.plist</string>
 		<string>com.goacemjobhmmbdlbbfjgifjcojdfnjfm.updater.plist</string>
 		<string>com.mediahm.operator.update.plist</string>
 		<string>com.moeppfdpoohhdcaefbfpmabjipnohiif.updater.plist</string>
