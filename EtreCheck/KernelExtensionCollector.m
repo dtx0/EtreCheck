@@ -676,7 +676,10 @@
     
   NSDictionary * bundle = [self.extensions objectForKey: label];
   
-  NSString * version = [bundle objectForKey: @"CFBundleVersion"];
+  NSString * version = [bundle objectForKey: @"CFBundleShortVersionString"];
+  
+  if([version length] == 0)
+    version = [bundle objectForKey: @"CFBundleVersion"];
 
   int age = 0;
   
