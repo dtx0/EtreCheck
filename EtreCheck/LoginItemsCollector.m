@@ -30,8 +30,6 @@
   {
   [self updateStatus: NSLocalizedString(@"Checking login items", NULL)];
 
-  [self.result appendAttributedString: [self buildTitle]];
-    
   NSArray * args =
     @[
       @"-e",
@@ -46,15 +44,9 @@
   NSUInteger count = 0;
   
   for(NSDictionary * loginItem in loginItems)
-    {
-    [self printLoginItem: loginItem];
+    if([self printLoginItem: loginItem count: count])
+      ++count;
     
-    ++count;
-    }
-    
-  if(!count)
-    [self.result appendString: NSLocalizedString(@"    None\n", NULL)];
-  
   [self.result appendCR];
     
   dispatch_semaphore_signal(self.complete);
@@ -105,7 +97,8 @@
   }
 
 // Print a login item.
-- (void) printLoginItem: (NSDictionary *) loginItem
+- (bool) printLoginItem: (NSDictionary *) loginItem
+  count: (NSUInteger) count
   {
   NSString * name = [loginItem objectForKey: @"name"];
   NSString * path = [loginItem objectForKey: @"path"];
@@ -116,17 +109,24 @@
     name = @"-";
     
   if(![path length])
-    path = NSLocalizedString(@"Unknown", NULL);
+    return NO;
     
   if(![kind length])
-    kind = NSLocalizedString(@"Unknown", NULL);
+    return NO;
 
+  if([kind isEqualToString: @"UNKNOWN"])
+    if([path isEqualToString: @"missing value"])
+      return NO;
+    
   bool isHidden = [hidden isEqualToString: @"true"];
   
   NSString * modificationDateString = @"";
   
   if([kind isEqualToString: @"Application"])
     [self modificationDateString: path];
+    
+  if(count == 0)
+    [self.result appendAttributedString: [self buildTitle]];
     
   [self.result
     appendString:
@@ -138,6 +138,8 @@
           isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
           path,
           modificationDateString]];
+    
+  return YES;
   }
 
 // Get the modification date string of a path.
