@@ -14,6 +14,8 @@
 #define kFileName @"filename"
 #define kArchivePath @"archivepath"
 #define kCachePath @"cachepath"
+#define kAuthor @"Author"
+#define kWebsite @"Website"
 
 // Collect Safari extensions.
 @implementation SafariExtensionsCollector
@@ -184,6 +186,16 @@
   [extension setObject: identifier forKey: kIdentifier];
   [extension setObject: name forKey: kFileName];
   
+  NSString * author = [plist objectForKey: kAuthor];
+
+  if([author length] > 0)
+    [extension setObject: author forKey: kAuthor];
+    
+  NSString * website = [plist objectForKey: kWebsite];
+
+  if([website length] > 0)
+    [extension setObject: website forKey: kWebsite];
+
   return extension;
   }
 
@@ -220,9 +232,7 @@
   // Ignore a cached extension unless it is adware.
   if(([archivePath length] > 0) || adware)
     {
-    [self.result
-      appendString:
-        [NSString stringWithFormat: @"    %@", humanReadableName]];
+    [self printExtensionDetails: extension];
     
     if(([archivePath length] == 0) && ([cachePath length] > 0))
       [self.result appendString: NSLocalizedString(@" (cache only)", NULL)];
@@ -269,6 +279,40 @@
     }
     
   return NO;
+  }
+
+// Print extension details
+- (void) printExtensionDetails: (NSDictionary *) extension
+  {
+  NSString * humanReadableName =
+    [extension objectForKey: kHumanReadableName];
+
+  NSString * author = [extension objectForKey: kAuthor];
+
+  NSString * website = [extension objectForKey: kWebsite];
+
+  [self.result
+    appendString:
+      [NSString stringWithFormat: @"    %@", humanReadableName]];
+    
+  if([author length] > 0)
+    [self.result
+      appendString:
+        [NSString stringWithFormat: @" - %@", author]];
+  
+  if([website length] > 0)
+    {
+    [self.result appendString: @" - "];
+    
+    [self.result
+      appendString: website
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont],
+          NSForegroundColorAttributeName : [[Utilities shared] blue],
+          NSLinkAttributeName : website
+        }];
+    }
   }
 
 // Append the modification date.
