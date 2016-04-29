@@ -16,6 +16,7 @@
 @synthesize volumes = myVolumes;
 @synthesize coreStorageVolumes = myCoreStorageVolumes;
 @synthesize diskErrors = myDiskErrors;
+@synthesize gpuErrors = myGPUErrors;
 @synthesize logEntries = myLogEntries;
 @synthesize applications = myApplications;
 @synthesize physicalRAM = myPhysicalRAM;

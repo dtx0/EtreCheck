@@ -36,6 +36,7 @@
   NSMutableDictionary * myVolumes;
   NSMutableDictionary * myCoreStorageVolumes;
   NSMutableDictionary * myDiskErrors;
+  NSNumber * myGPUErrors;
   NSArray * myLogEntries;
   NSDictionary * myApplications;
   int myPhysicalRAM;
@@ -81,6 +82,9 @@
 
 // Keep track of disk errors.
 @property (retain) NSMutableDictionary * diskErrors;
+
+// Keep track of gpu errors.
+@property (retain) NSNumber * gpuErrors;
 
 // Keep track of log content.
 @property (retain) NSArray * logEntries;

@@ -134,6 +134,46 @@
     }
   }
 
+// Collect GPU errors.
+// 01/01/14 19:59:49,000 kernel[0]: Trying restart GPU ...
+// 01/01/14 19:59:50,000 kernel[0]: GPU Hang State = 0x00000000
+// 01/01/14 19:59:50,000 kernel[0]: GPU hang:
+- (void) collectGPUError: (NSString *) line
+  {
+  BOOL errorFound = NO;
+  
+  NSRange tryingRange = [line rangeOfString: @": Trying restart GPU ..."];
+  
+  if(tryingRange.location != NSNotFound)
+    errorFound = YES;
+    
+  NSRange hangStateRange = [line rangeOfString: @": GPU Hang State"];
+  
+  if(hangStateRange.location != NSNotFound)
+    errorFound = YES;
+    
+  NSRange hangRange = [line rangeOfString: @": GPU hang:"];
+
+  if(hangRange.location != NSNotFound)
+    errorFound = YES;
+    
+  if(errorFound)
+    {
+    NSNumber * errorCount =
+      [[Model model] gpuErrors];
+      
+    if(!errorCount)
+      errorCount = [NSNumber numberWithUnsignedInteger: 0];
+      
+    errorCount =
+      [NSNumber
+        numberWithUnsignedInteger:
+          [errorCount unsignedIntegerValue] + 1];
+      
+    [[Model model] setGpuErrors: errorCount];
+    }
+  }
+
 // Collect results from the asl log entry.
 - (void) collectASLLogContent: (NSString *) content
   {

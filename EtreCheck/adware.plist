@@ -2928,6 +2928,10 @@
     <string>shopy-mate.ver</string>
     <string>SngyBb9iL.plist</string>
     <string>yeti.notification.plist</string>
+    <string>cinema-+-hd.ver</string>
+    <string>cinema-+-hd_updater.sh</string>
+    <string>cinemas-+-plus-+_enabler.plist</string>
+    <string>cinemas-+-plus-+_enabler.sh</string>
 	</array>
 	<key>blacklist_suffix</key>
 	<array>
@@ -3060,6 +3064,10 @@
     <string>volleyingly</string>
     <string>idiomorphism</string>
     <string>Cucumberhead</string>
+    <string>Brasshour</string>
+    <string>Cazeoffice</string>
+    <string>Cazeoffice</string>
+    <string>Fleecompliment</string>
 	</array>
 </dict>
 </plist>

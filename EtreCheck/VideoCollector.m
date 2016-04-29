@@ -8,6 +8,8 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "Model.h"
+#import "TTTLocalizedPluralString.h"
 
 @implementation VideoCollector
 
@@ -92,6 +94,23 @@
     for(NSDictionary * display in displays)
       [self printDisplayInfo: display];
     }
+    
+  NSNumber * errors = [[Model model] gpuErrors];
+    
+  int errorCount = [errors intValue];
+  
+  if(errorCount)
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@"GPU failure! - %@\n", NULL),
+            TTTLocalizedPluralString(errorCount, @"error", NULL)]
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
     
   [self.result appendCR];
   }

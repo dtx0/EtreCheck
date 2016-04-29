@@ -218,6 +218,7 @@
 "More adware files" = "Plus de fichiers adwares";
 "The following internal tasks failed to complete:" = "Les tâches internes ci-dessous ont faillis d’atteindre leur fin.";
 " - %@ Drive failure!" = " - %@ Échec du disque !";
+"GPU failure! - %@\n" = "Échec du GPU ! - @\n";
 "[Technical Specifications]" = "[Les caractéristiques techniques]";
 "[User Guide]" = "[Le guide de l’utilisateur]";
 "[Instructions]\n" = "[Instruction]\n";
