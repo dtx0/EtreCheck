@@ -318,35 +318,41 @@
     {
     prefix = [name substringToIndex: [name length] - 13];
     
-    [self addPotentialAdwareTrioFile: path prefix: prefix];
+    [self addPotentialAdwareTrioFile: path prefix: prefix type: @"daemon"];
     }
     
   if([name hasSuffix: @".agent.plist"])
     {
     prefix = [name substringToIndex: [name length] - 12];
     
-    [self addPotentialAdwareTrioFile: path prefix: prefix];
+    [self addPotentialAdwareTrioFile: path prefix: prefix type: @"agent"];
     }
     
   if([name hasSuffix: @".helper.plist"])
     {
     prefix = [name substringToIndex: [name length] - 13];
     
-    [self addPotentialAdwareTrioFile: path prefix: prefix];
+    [self addPotentialAdwareTrioFile: path prefix: prefix type: @"helper"];
     }
     
-  NSMutableSet * trioFiles =
+  NSDictionary * trioFiles =
     [self.potentialAdwareTrioFiles objectForKey: prefix];
 
-  if([trioFiles count] == 3)
+  BOOL hasDaemon = [trioFiles objectForKey: @"daemon"] != nil;
+  BOOL hasAgent = [trioFiles objectForKey: @"agent"] != nil;
+  BOOL hasHelper = [trioFiles objectForKey: @"helper"] != nil;
+  
+  if(hasDaemon && hasAgent && hasHelper)
     {
     NSArray * parts = [prefix componentsSeparatedByString: @"."];
     
     if([parts count] > 1)
       prefix = [parts objectAtIndex: 1];
       
-    for(NSString * trioPath in trioFiles)
+    for(NSString * type in trioFiles)
       {
+      NSString * trioPath = [trioFiles objectForKey: type];
+      
       [self.adwareFiles
         setObject: [prefix lowercaseString] forKey: trioPath];
         
@@ -361,19 +367,19 @@
 
 // Add a potential adware trio file.
 - (void) addPotentialAdwareTrioFile: (NSString *) path
-  prefix: (NSString *) prefix
+  prefix: (NSString *) prefix type: (NSString *) type
   {
-  NSMutableSet * trioFiles =
+  NSMutableDictionary * trioFiles =
     [self.potentialAdwareTrioFiles objectForKey: prefix];
     
   if(!trioFiles)
     {
-    trioFiles = [NSMutableSet set];
+    trioFiles = [NSMutableDictionary dictionary];
     
     [self.potentialAdwareTrioFiles setObject: trioFiles forKey: prefix];
     }
   
-  [trioFiles addObject: path];
+  [trioFiles setObject: path forKey: type];
   }
 
 // Is this file an adware extension?

@@ -311,6 +311,7 @@
   dispatch_async(
     dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
       ^{
+        // TODO: This can throw an exception.
         [task launch];
       
         dispatch_semaphore_signal(semaphore);
