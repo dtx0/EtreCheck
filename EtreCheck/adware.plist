@@ -25,6 +25,7 @@
 		<string>com.logmein.rescue.sa.</string>
 		<string>com.facebook.videochat.</string>
 		<string>net.jonstovell.keep</string>
+    <string>screenconnect-</string>
 	</array>
 	<key>whitelist</key>
 	<array>
@@ -3058,6 +3059,8 @@
     <string>papercut.plist</string>
     <string>papercut-web-print.plist</string>
     <string>us.zoom.rooms.tool.plist</string>
+    <string>com.bitdefender.FirstRun_avod.05.qss.plist</string>
+    <string>com.bitdefender.FirstRun_avod.18.fullsystem.plist</string>
 	</array>
 	<key>item1</key>
 	<array>
