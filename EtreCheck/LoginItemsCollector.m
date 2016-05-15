@@ -128,16 +128,35 @@
   if(count == 0)
     [self.result appendAttributedString: [self buildTitle]];
     
-  [self.result
-    appendString:
-      [NSString
-        stringWithFormat:
-          @"    %@    %@ %@ (%@)%@\n",
-          name,
-          kind,
-          isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
-          path,
-          modificationDateString]];
+  BOOL trashed = [path rangeOfString: @"/.Trash/"].location != NSNotFound;
+  
+  // Flag a login item if it is in the trash.
+  if(trashed)
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            @"    %@    %@ %@ (%@)%@\n",
+            name,
+            kind,
+            isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
+            path,
+            modificationDateString]
+      attributes:
+        [NSDictionary
+          dictionaryWithObjectsAndKeys:
+            [NSColor redColor], NSForegroundColorAttributeName, nil]];
+  else
+    [self.result
+      appendString:
+        [NSString
+          stringWithFormat:
+            @"    %@    %@ %@ (%@)%@\n",
+            name,
+            kind,
+            isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
+            path,
+            modificationDateString]];
     
   return YES;
   }
