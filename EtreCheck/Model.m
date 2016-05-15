@@ -87,7 +87,7 @@
     myTerminatedTasks = [NSMutableArray new];
     mySeriousProblems = [NSMutableSet new];
     myIgnoreKnownAppleFailures = YES;
-    myCheckAppleSignatures = NO;
+    myCheckAppleSignatures = YES;
     myHideAppleTasks = YES;
     myWhitelistFiles = [NSMutableSet new];
     myWhitelistPrefixes = [NSMutableSet new];

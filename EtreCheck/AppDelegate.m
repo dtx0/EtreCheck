@@ -1261,20 +1261,6 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   bool options = NO;
   
-  if([[Model model] checkAppleSignatures])
-    {
-    [self.log
-      appendString:
-        NSLocalizedString(
-          @"Check Apple signatures: Enabled\n", NULL)
-      attributes:
-        @{
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
-      
-    options = YES;
-    }
-
   if(![[Model model] ignoreKnownAppleFailures])
     {
     [self.log

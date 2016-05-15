@@ -129,7 +129,7 @@
     {
     NSString * name = [self extensionName: path];
       
-    NSDictionary * plist = [self readSafariExtensionPropertyList: path];
+    NSDictionary * plist = [self findExtensionPlist: path];
 
     NSMutableDictionary * extension =
       [self createExtensionsFromPlist: plist name: name path: path];

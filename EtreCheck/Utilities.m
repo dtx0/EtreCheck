@@ -246,6 +246,8 @@
   
   NSData * result = nil;  
   NSData * errorData = nil;
+  NSMutableString * errorResult = [NSMutableString string];
+  BOOL exceptionThrown = NO;
 
   @try
     {
@@ -258,15 +260,20 @@
       
     //NSLog(@"Running %@ %@ with timeout %lld", program, args, timeout);
     
+    __block NSException * thrownException = nil;
+
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
     dispatch_async(
       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
         ^{
-          [Utilities runTask: task wait: timeout];
+          thrownException = [Utilities runTask: task wait: timeout];
           
           dispatch_semaphore_signal(semaphore);
         });
+     
+    if(thrownException != nil)
+      @throw thrownException;
       
     result =
       [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
@@ -278,13 +285,13 @@
     }
   @catch(NSException * exception)
     {
-    if(error)
-      *error = [exception description];
+    [errorResult appendString: [exception description]];
+    exceptionThrown = YES;
     }
   @catch(...)
     {
-    if(error)
-      *error = @"Unknown exception";
+    [errorResult appendString: @"Unknown exception"];
+    exceptionThrown = YES;
     }
   @finally
     {
@@ -293,27 +300,49 @@
     [outputPipe release];
     }
     
-  if(![result length] && error && [errorData length])
-    *error =
+  if([errorData length] > 0)
+    {
+    if([errorResult length] > 0)
+      [errorResult appendString: @" - "];
+      
+    NSString * errorDataString =
       [[[NSString alloc]
         initWithData: errorData encoding: NSUTF8StringEncoding]
         autorelease];
+      
+    [errorResult appendString: errorDataString];
+    }
     
+  if(error && ([errorResult length] > 0))
+    *error = [errorResult copy];
+    
+  if(exceptionThrown && ([errorResult length] > 0))
+    NSLog(@"%@", errorResult);
+  
   return result;
   }
 
 // Run a task and wait for it. Return YES if the task completed or NO if
 // the task had to be killed.
-+ (BOOL) runTask: (NSTask *) task wait: (int64_t) timeout
++ (NSException *) runTask: (NSTask *) task wait: (int64_t) timeout
   {
+  __block NSException * thrownException = nil;
+  
   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
 
   dispatch_async(
     dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
       ^{
-        // TODO: This can throw an exception.
-        [task launch];
-      
+        @try
+          {
+          // TODO: This can throw an exception.
+          [task launch];
+          }
+        @catch(NSException * exception)
+          {
+          thrownException = exception;
+          }
+        
         dispatch_semaphore_signal(semaphore);
       });
     
@@ -322,14 +351,10 @@
   // If I timed out, I'm not ready. Signal the sync semaphore to prevent
   // the update from ever being handled if it ever does happen.
   if(timedout)
-    {
     if([task isRunning])
       [task terminate];
-
-    return NO;
-    }
     
-  return YES;
+  return thrownException;
   }
 
 /* TODO: I could log long-running tasks with this:
@@ -863,7 +888,7 @@
   NSMutableArray * args = [NSMutableArray array];
   
   [args addObject: @"-vv"];
-  [args addObject: @"-R=anchor apple generic"];
+  [args addObject: @"-R=anchor apple"];
   
   switch([[Model model] majorOSVersion])
     {
