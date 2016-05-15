@@ -285,6 +285,20 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
     selector: @selector(windowDidBecomeKey:)
     name: NSWindowDidBecomeKeyNotification
     object: nil];
+
+  // Install the custom quit event handler
+  [appleEventManager
+    setEventHandler: self
+    andSelector: @selector(handleQuitEvent:withReplyEvent:)
+    forEventClass: kCoreEventClass
+    andEventID: kAEQuitApplication];
+  }
+
+//handler for the quit apple event
+- (void) handleQuitEvent: (NSAppleEventDescriptor *) event
+  withReplyEvent: (NSAppleEventDescriptor *) replyEvent
+  {
+  [self cancel: self];
   }
 
 // The application will terminate.
