@@ -62,4 +62,10 @@
   return NO;
   }
 
+// Apple files shouldn't be here.
+- (bool) isAppleFile: (NSString *) path
+  {
+  return NO;
+  }
+
 @end

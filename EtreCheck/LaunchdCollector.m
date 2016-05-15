@@ -489,7 +489,7 @@
   [info setObject: path forKey: kPath];
   
   [info
-    setObject: [NSNumber numberWithBool: [self isAppleFile: filename]]
+    setObject: [NSNumber numberWithBool: [self isAppleFile: path]]
     forKey: kApple];
   
   [info
@@ -587,8 +587,10 @@
   }
 
 // Is this an Apple file that I expect to see?
-- (bool) isAppleFile: (NSString *) bundleID
+- (bool) isAppleFile: (NSString *) path
   {
+  NSString * bundleID = [path lastPathComponent];
+  
   if([bundleID hasPrefix: @"com.apple."])
     return YES;
     

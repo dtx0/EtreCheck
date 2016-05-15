@@ -85,7 +85,7 @@
   domain: (NSString *) domain;
 
 // Is this an Apple file that I expect to see?
-- (bool) isAppleFile: (NSString *) file;
+- (bool) isAppleFile: (NSString *) path;
 
 // Should I hide Apple tasks?
 - (bool) hideAppleTasks;
