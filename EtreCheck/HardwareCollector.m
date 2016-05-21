@@ -25,6 +25,9 @@
 @synthesize genericDocumentIcon = myGenericDocumentIcon;
 @synthesize marketingName = myMarketingName;
 @synthesize EnglishMarketingName = myEnglishMarketingName;
+@synthesize supportsHandoff = mySupportsHandoff;
+@synthesize supportsInstantHotspot = mySupportsInstantHotspot;
+@synthesize supportsLowEnergy = mySupportsLowEnergy;
 
 // Constructor.
 - (id) init
@@ -89,6 +92,66 @@
     updateStatus:
       NSLocalizedString(@"Checking hardware information", NULL)];
 
+  [self collectBluetooth];
+  [self collectHardware];
+    
+  dispatch_semaphore_signal(self.complete);
+  }
+
+// Collect bluetooth information.
+- (void) collectBluetooth
+  {
+  NSArray * args =
+    @[
+      @"-xml",
+      @"SPBluetoothDataType"
+    ];
+  
+  NSData * result =
+    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  
+  if(result)
+    {
+    NSArray * plist = [NSArray readPropertyListData: result];
+  
+    if(plist && [plist count])
+      {
+      NSArray * infos =
+        [[plist objectAtIndex: 0] objectForKey: @"_items"];
+        
+      if([infos respondsToSelector: @selector(objectAtIndex:)])
+        if([infos count])
+          for(NSDictionary * info in infos)
+            {
+            if([info respondsToSelector: @selector(objectForKey:)])
+              {
+              NSDictionary * localInfo =
+                [info objectForKey: @"local_device_title"];
+              
+              NSString * generalSupportsHandoff =
+                [localInfo objectForKey: @"general_supports_handoff"];
+              NSString * generalSupportsInstantHotspot =
+                [localInfo
+                  objectForKey: @"general_supports_instantHotspot"];
+              NSString * generalSupportsLowEnergy =
+                [localInfo objectForKey: @"general_supports_lowEnergy"];
+                
+              self.supportsHandoff =
+                [generalSupportsHandoff isEqualToString: @"attrib_Yes"];
+              self.supportsInstantHotspot =
+                [generalSupportsInstantHotspot
+                  isEqualToString: @"attrib_Yes"];
+              self.supportsLowEnergy =
+                [generalSupportsLowEnergy isEqualToString: @"attrib_Yes"];
+              }
+            }
+      }
+    }
+  }
+
+// Collect hardware information.
+- (void) collectHardware
+  {
   NSArray * args =
     @[
       @"-xml",
@@ -122,8 +185,6 @@
         }
       }
     }
-    
-  dispatch_semaphore_signal(self.complete);
   }
 
 // Print informaiton for the machine.
@@ -572,6 +633,9 @@
 // Is continuity supported?
 - (bool) supportsContinuity
   {
+  if(self.supportsHandoff)
+    return YES;
+    
   NSString * model = [[Model model] model];
   
   NSString * specificModel = nil;
@@ -615,10 +679,11 @@
     
     if([scanner scanString: specificModel intoString: NULL])
       if([scanner scanInt: & number])
-        return number >= target;
+        if(number >= target)
+          self.supportsHandoff = YES;
     }
     
-  return NO;
+  return self.supportsHandoff;
   }
 
 // Print wireless information.

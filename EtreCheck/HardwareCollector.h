@@ -14,6 +14,9 @@
   NSImage * myGenericDocumentIcon;
   NSString * myMarketingName;
   NSString * myEnglishMarketingName;
+  BOOL mySupportsHandoff;
+  BOOL mySupportsInstantHotspot;
+  BOOL mySupportsLowEnergy;
   }
 
 // Machine properties.
@@ -31,6 +34,15 @@
 // English version of Apple Marketing name for the technical specifications
 // fallback.
 @property (retain) NSString * EnglishMarketingName;
+
+// Does the machine support handoff?
+@property (assign) BOOL supportsHandoff;
+
+// Does the machien support instant hotspot?
+@property (assign) BOOL supportsInstantHotspot;
+
+// Does the machien support low energy?
+@property (assign) BOOL supportsLowEnergy;
 
 // Find a machine icon.
 - (NSImage *) findMachineIcon: (NSString *) code;
