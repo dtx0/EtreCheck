@@ -836,6 +836,16 @@
   BOOL adware = [[Model model] isAdware: path];
     
   [info setObject: [NSNumber numberWithBool: adware] forKey: kAdware];
+  
+  if(adware)
+    {
+    [[[Model model] adwareLaunchdFiles] addObject: path];
+    
+    NSNumber * pid = [info objectForKey: @"PID"];
+    
+    if(pid)
+      [[[Model model] adwareProcesses] addObject: pid];
+    }
   }
 
 #pragma mark - Print property lists
@@ -1282,7 +1292,7 @@
           [NSString
             stringWithFormat:
               NSLocalizedString(@" - %@: Executable not found!", NULL),
-              path];
+              [Utilities sanitizeFilename: path]];
       else
         message =
           [NSString
@@ -1382,7 +1392,16 @@
   // I need to check again for adware due to the agent/daemon/helper adware
   // trio.
   if([[Model model] isAdware: path])
+    {
     [info setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
+
+    [[[Model model] adwareLaunchdFiles] addObject: path];
+    
+    NSNumber * pid = [info objectForKey: @"PID"];
+    
+    if(pid)
+      [[[Model model] adwareProcesses] addObject: pid];
+    }
     
   if([[info objectForKey: kApple] boolValue])
     return [self formatApple: info for: path];
