@@ -25,7 +25,7 @@
 		<string>com.logmein.rescue.sa.</string>
 		<string>com.facebook.videochat.</string>
 		<string>net.jonstovell.keep</string>
-    <string>screenconnect-</string>
+		<string>screenconnect-</string>
 	</array>
 	<key>whitelist</key>
 	<array>
@@ -228,7 +228,7 @@
 		<string>com.audinate.dante.DanteVirtualSoundcard.plist</string>
 		<string>com.audiofile.Backline.plist</string>
 		<string>com.audirvana.Audirvana-Plus.plist</string>
-    <string>com.aunsoft.LaunchFinalMate.plist</string>
+		<string>com.aunsoft.LaunchFinalMate.plist</string>
 		<string>com.autodesk.adlm.plist</string>
 		<string>com.autodesk.backburner_manager.plist</string>
 		<string>com.autodesk.backburner_server.plist</string>
@@ -469,7 +469,7 @@
 		<string>com.checkpoint.usercheck.plist</string>
 		<string>com.chickenbyte.IconBoxHelper.plist</string>
 		<string>com.chrometa.chrometa.plist</string>
-    <string>com.chrometa.ChrometaMonitor.plist</string>
+		<string>com.chrometa.ChrometaMonitor.plist</string>
 		<string>com.chronos.CHBackupAgent.plist</string>
 		<string>com.chungwasoft.shimo.helper.plist</string>
 		<string>com.chungwasoft.Shimo.plist</string>
@@ -2176,7 +2176,7 @@
 		<string>com.synology.CloudStationDrive.plist</string>
 		<string>com.synology.SynoSIMBL_RefreshFinder.plist</string>
 		<string>com.synology.SynoSIMBL.plist</string>
-	  <string>com.tanium.taniumclient.plist</string>
+		<string>com.tanium.taniumclient.plist</string>
 		<string>com.taoeffect.EspionageHelper.plist</string>
 		<string>com.taoeffect.ispyd.plist</string>
 		<string>com.tappin.agent.plist</string>
@@ -2462,14 +2462,14 @@
 		<string>edu.stanford.qcn.qcnusb.plist</string>
 		<string>edu.ucsf.itfs.ddpe_activate.plist</string>
 		<string>edu.umich.izzy.ManagedSoftwareUpdate-trigger.plist</string>
-    <string>edu.umich.izzy.mpo-direct.downloader.plist</string>
-    <string>edu.umich.izzy.mpo-direct.system.plist</string>
-    <string>edu.umich.izzy.mpo-direct.user.plist</string>
-    <string>edu.umich.izzy.mpo.system.plist</string>
-    <string>edu.umich.izzy.mpo.user.plist</string>
-    <string>edu.umich.lsa.iss.time-resetter.plist</string>
-    <string>edu.umich.usageagreement.logouthelper.plist</string>
-    <string>edu.umich.usageagreement.plist</string>
+		<string>edu.umich.izzy.mpo-direct.downloader.plist</string>
+		<string>edu.umich.izzy.mpo-direct.system.plist</string>
+		<string>edu.umich.izzy.mpo-direct.user.plist</string>
+		<string>edu.umich.izzy.mpo.system.plist</string>
+		<string>edu.umich.izzy.mpo.user.plist</string>
+		<string>edu.umich.lsa.iss.time-resetter.plist</string>
+		<string>edu.umich.usageagreement.logouthelper.plist</string>
+		<string>edu.umich.usageagreement.plist</string>
 		<string>edu.utexas.ClamXav.clamdLauncher.plist</string>
 		<string>edu.utexas.ClamXav.ScanLauncher.plist</string>
 		<string>edu.utexas.ClamXav.SentryLauncher.plist</string>
@@ -2597,8 +2597,8 @@
 		<string>jp.monokakido.Kawasemi2.Enabler.plist</string>
 		<string>jp.monokakido.Kawasemi2.Update.helper.plist</string>
 		<string>keybase.Helper.plist</string>
-    <string>keybase.kbfs.plist</string>
-    <string>keybase.service.plist</string>
+		<string>keybase.kbfs.plist</string>
+		<string>keybase.service.plist</string>
 		<string>KodakAiOBonjourAgent</string>
 		<string>labstatsgo.plist</string>
 		<string>limit.maxfiles.plist</string>
@@ -2705,9 +2705,9 @@
 		<string>net.syncthing.syncthing.plist</string>
 		<string>net.talkingmoose.LyncSetup.plist</string>
 		<string>net.telestream.episode.adobe.plugin.IOServer.plist</string>
-    <string>net.telestream.EpisodeAssistant.plist</string>
-    <string>net.telestream.EpisodeIOServer.plist</string>
-    <string>net.telestream.EpisodeNode.plist</string>
+		<string>net.telestream.EpisodeAssistant.plist</string>
+		<string>net.telestream.EpisodeIOServer.plist</string>
+		<string>net.telestream.EpisodeNode.plist</string>
 		<string>net.tomsick.antipop.plist</string>
 		<string>net.tunnelblick.tunnelblick.LaunchAtLogin.plist</string>
 		<string>net.tunnelblick.tunnelblick.tunnelblickd.plist</string>
@@ -2724,7 +2724,7 @@
 		<string>noip2.plist</string>
 		<string>Nomadesk.app.plist</string>
 		<string>nothrottle.plist</string>
-	  <string>octane_daemon.plist</string>
+		<string>octane_daemon.plist</string>
 		<string>OmnisDataBridge.plist</string>
 		<string>openbase.plist</string>
 		<string>openlaunch.plist</string>
@@ -2820,9 +2820,9 @@
 		<string>org.macports.spawn-fcgi-php.plist</string>
 		<string>org.macports.startx.plist</string>
 		<string>org.macports.unbound.plist</string>
-    <string>org.macports.mysql5.plist</string>
-    <string>org.macports.tuntaposx.plist</string>
-    <string>org.macports.xymon-client.plist</string>
+		<string>org.macports.mysql5.plist</string>
+		<string>org.macports.tuntaposx.plist</string>
+		<string>org.macports.xymon-client.plist</string>
 		<string>org.marchrius.TRIMEnablerHelperTool.plist</string>
 		<string>org.mlti.ClamXav.daily.plist</string>
 		<string>org.mlti.ClamXav.freshclam.plist</string>
@@ -2999,69 +2999,87 @@
 		<string>YandexDiskInstaller.plist</string>
 		<string>[Mathusalem] FTP-Auftragsbearbeitung.plist</string>
 		<string>[Mathusalem] FTP-Calendar.plist</string>
-    <string>com.bearisdriving.BGM.XPCHelper.plist</string>
-    <string>com.clementineapp.ClementineHelper.plist</string>
-    <string>homebrew.mxcl.jack.plist</string>
-    <string>syncthing.plist</string>
-    <string>com.absolute.installease.helper.plist</string>
-    <string>com.aglilebits.1password.helper.plist</string>
-    <string>com.asustor.UninstallHelper.plist</string>
-    <string>com.drweb.drwebd.plist</string>
-    <string>com.drweb.FileD.plist</string>
-    <string>com.drweb.kextload.plist</string>
-    <string>com.drweb.scanTask.plist</string>
-    <string>com.drweb.UpdateD.plist</string>
-    <string>com.funkensturm.LinkHelper.plist</string>
-    <string>com.heatsoftware.LANrevMDMServer.lighttpd.plist</string>
-    <string>com.hockeyapp.MacHelper.plist</string>
-    <string>com.macsdesign.WebHelpDesk.plist</string>
-    <string>com.macsdesign.WebHelpDeskAutoRestart.plist</string>
-    <string>com.macsdesign.WebHelpDeskEmbeddedDatabase.plist</string>
-    <string>com.MadCatz.RATTeSmartTechnology.plist</string>
-    <string>com.mysql.mysqld.plist</string>
-    <string>com.nprotect.kext.nProtectFW.plist</string>
-    <string>com.nprotect.nosintgdmn.plist</string>
-    <string>com.razer.mambaIIdaemon.plist</string>
-    <string>fr.sudre.iceberg.icebergcontroltower.plist</string>
-    <string>inSyncDecommission.plist</string>
-    <string>com.7thdomain.OMAT.Scheduler.plist</string>
-    <string>com.coolmuster.AndroidDataRecoveryHelper.plist</string>
-    <string>com.dell.Dell_Recovery_Utility_1.plist</string>
-    <string>com.ds.adp.caspercheck.plist</string>
-    <string>com.epiphan.FrmGrabAssistant.plist</string>
-    <string>com.filemaker.odbcdriver.fmodbc.plist</string>
-    <string>com.intego.VirusBarrier.alert.plist</string>
-    <string>com.intego.VirusBarrier.daemon.plist</string>
-    <string>com.interface-inspector.InterfaceInspectorInjector.plist</string>
-    <string>com.interface-inspector.InterfaceInspectorInjector32.plist</string>
-    <string>com.justsystems.launchd.Atok28.AlBg.plist</string>
-    <string>com.justsystems.launchd.UpdateChecker.plist</string>
-    <string>com.justsystems.OnlineUpdate.plist</string>
-    <string>com.lg.TrueColorPro.plist</string>
-    <string>com.novell.iprintstartup.plist</string>
-    <string>com.papercut.client.plist</string>
-    <string>com.poleposition-sw.LANrevServer.plist</string>
-    <string>com.pritunl.client.plist</string>
-    <string>com.pritunl.service.plist</string>
-    <string>com.safenet.SACSrv.plist</string>
-    <string>com.splashtop.filefly-daemon.plist</string>
-    <string>com.studionetworksolutions.sanmp.daemon.plist</string>
-    <string>com.tiger-technology.cleanup.plist</string>
-    <string>com.tiger-technology.daily.plist</string>
-    <string>com.tiger-technology.metaSAN_iSCSI.plist</string>
-    <string>com.tiger-technology.scv.plist</string>
-    <string>com.zoom.R16DeviceManager.plist.svn-base</string>
-    <string>de.verbi.SMJobBlessHelper.plist</string>
-    <string>edu.reed.assetTools.reedHardwareReport.plist</string>
-    <string>edu.reed.geektoolhelperagent.plist</string>
-    <string>edu.reed.startupscripts.plist</string>
-    <string>no.scsc.FolderGlanceLoader.plist</string>
-    <string>papercut.plist</string>
-    <string>papercut-web-print.plist</string>
-    <string>us.zoom.rooms.tool.plist</string>
-    <string>com.bitdefender.FirstRun_avod.05.qss.plist</string>
-    <string>com.bitdefender.FirstRun_avod.18.fullsystem.plist</string>
-	</array>
+		<string>com.bearisdriving.BGM.XPCHelper.plist</string>
+		<string>com.clementineapp.ClementineHelper.plist</string>
+		<string>homebrew.mxcl.jack.plist</string>
+		<string>syncthing.plist</string>
+		<string>com.absolute.installease.helper.plist</string>
+		<string>com.aglilebits.1password.helper.plist</string>
+		<string>com.asustor.UninstallHelper.plist</string>
+		<string>com.drweb.drwebd.plist</string>
+		<string>com.drweb.FileD.plist</string>
+		<string>com.drweb.kextload.plist</string>
+		<string>com.drweb.scanTask.plist</string>
+		<string>com.drweb.UpdateD.plist</string>
+		<string>com.funkensturm.LinkHelper.plist</string>
+		<string>com.heatsoftware.LANrevMDMServer.lighttpd.plist</string>
+		<string>com.hockeyapp.MacHelper.plist</string>
+		<string>com.macsdesign.WebHelpDesk.plist</string>
+		<string>com.macsdesign.WebHelpDeskAutoRestart.plist</string>
+		<string>com.macsdesign.WebHelpDeskEmbeddedDatabase.plist</string>
+		<string>com.MadCatz.RATTeSmartTechnology.plist</string>
+		<string>com.mysql.mysqld.plist</string>
+		<string>com.nprotect.kext.nProtectFW.plist</string>
+		<string>com.nprotect.nosintgdmn.plist</string>
+		<string>com.razer.mambaIIdaemon.plist</string>
+		<string>fr.sudre.iceberg.icebergcontroltower.plist</string>
+		<string>inSyncDecommission.plist</string>
+		<string>com.7thdomain.OMAT.Scheduler.plist</string>
+		<string>com.coolmuster.AndroidDataRecoveryHelper.plist</string>
+		<string>com.dell.Dell_Recovery_Utility_1.plist</string>
+		<string>com.ds.adp.caspercheck.plist</string>
+		<string>com.epiphan.FrmGrabAssistant.plist</string>
+		<string>com.filemaker.odbcdriver.fmodbc.plist</string>
+		<string>com.intego.VirusBarrier.alert.plist</string>
+		<string>com.intego.VirusBarrier.daemon.plist</string>
+		<string>com.interface-inspector.InterfaceInspectorInjector.plist</string>
+		<string>com.interface-inspector.InterfaceInspectorInjector32.plist</string>
+		<string>com.justsystems.launchd.Atok28.AlBg.plist</string>
+		<string>com.justsystems.launchd.UpdateChecker.plist</string>
+		<string>com.justsystems.OnlineUpdate.plist</string>
+		<string>com.lg.TrueColorPro.plist</string>
+		<string>com.novell.iprintstartup.plist</string>
+		<string>com.papercut.client.plist</string>
+		<string>com.poleposition-sw.LANrevServer.plist</string>
+		<string>com.pritunl.client.plist</string>
+		<string>com.pritunl.service.plist</string>
+		<string>com.safenet.SACSrv.plist</string>
+		<string>com.splashtop.filefly-daemon.plist</string>
+		<string>com.studionetworksolutions.sanmp.daemon.plist</string>
+		<string>com.tiger-technology.cleanup.plist</string>
+		<string>com.tiger-technology.daily.plist</string>
+		<string>com.tiger-technology.metaSAN_iSCSI.plist</string>
+		<string>com.tiger-technology.scv.plist</string>
+		<string>com.zoom.R16DeviceManager.plist.svn-base</string>
+		<string>de.verbi.SMJobBlessHelper.plist</string>
+		<string>edu.reed.assetTools.reedHardwareReport.plist</string>
+		<string>edu.reed.geektoolhelperagent.plist</string>
+		<string>edu.reed.startupscripts.plist</string>
+		<string>no.scsc.FolderGlanceLoader.plist</string>
+		<string>papercut.plist</string>
+		<string>papercut-web-print.plist</string>
+		<string>us.zoom.rooms.tool.plist</string>
+		<string>com.bitdefender.FirstRun_avod.05.qss.plist</string>
+		<string>com.bitdefender.FirstRun_avod.18.fullsystem.plist</string>
+    <string>com.livevol.lvx.restarter.plist</string>
+    <string>com.livevol.lvx.purge_log.plist</string>
+    <string>com.livevol.lvx.restart.dir.plist</string>
+    <string>com.livevol.lvx.service.plist</string>
+    <string>com.filewave.scanner.plist</string>
+    <string>com.deploystudio.lkdc_fix.plist</string>
+    <string>com.symantec.Sched503-1.plist</string>
+    <string>com.symantec.Sched504-2.plist</string>
+    <string>com.symantec.Sched504-4.plist</string>
+    <string>com.symantec.Sched504-5.plist</string>
+    <string>name.ridgewell.unlock</string>
+    <string>name.ridgewell.unlock.plist</string>
+    <string>com.marvell.RaidService.plist</string>
+    <string>com.marvell.WebService.plist</string>
+    <string>nz.ac.auckland.LyncSetup.plist</string>
+    <string>com.thinkecoinc.daemon.plist</string>
+    <string>com.malwarebytes.HelperTool.plist</string>
+    <string>com.micromat.MacCheckWorkerDaemon.plist</string>
+    <string>com.objective-see.ransomwhere.plist</string>	</array>
 	<key>item1</key>
 	<array>
 		<string>shopping assistant</string>
@@ -3268,7 +3286,8 @@
 		<string>cinemas-+-plus-+_enabler.sh</string>
 		<string>com.LiveShoppers.agent.plist</string>
 		<string>com.Software-Updater.agent.plist</string>
-    <string>com.unnoble.preferences.plist</string>
+		<string>com.unnoble.preferences.plist</string>
+		<string>com.malwarebytes.MBAMHelperTool.plist</string>
 	</array>
 	<key>blacklist_suffix</key>
 	<array>
@@ -3408,15 +3427,15 @@
 		<string>oxychromatin</string>
 		<string>Smokyashan</string>
 		<string>Buildupstage</string>
-    <string>uathechyer</string>
-    <string>udannalmos</string>
-    <string>uschiwarkin</string>
-    <string>susurrationreputableness</string>
-    <string>ucereng</string>
-    <string>unysgar</string>
-    <string>upertino</string>
-    <string>uquoroden</string>
-    <string>uvayt</string>
-  </array>
+		<string>uathechyer</string>
+		<string>udannalmos</string>
+		<string>uschiwarkin</string>
+		<string>susurrationreputableness</string>
+		<string>ucereng</string>
+		<string>unysgar</string>
+		<string>upertino</string>
+		<string>uquoroden</string>
+		<string>uvayt</string>
+	</array>
 </dict>
 </plist>
