@@ -74,7 +74,7 @@
           if([cmd length] > 0)
             {
             [self.result appendString: @"\n        "];
-            [self.result appendString: cmd];
+            [self.result appendString: [Utilities sanitizeFilename: cmd]];
             }
 
           [self.result appendString: @"\n"];
