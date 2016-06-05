@@ -1107,7 +1107,8 @@
 
   [source appendString: @"}\n"];
 
-  /* Investigate whether this is needed at some point.
+  /* Investigate whether this is needed at some point. Hopefully, turning
+  off the NSFileImmutable attribute will be enough.
 	repeat with posixFile in posixFiles
 		set f to posixFile as alias
 		set locked of f to false
@@ -1143,6 +1144,18 @@
       }
     
   return [NSArray array];
+  }
+
+// Unload a launchd file.
++ (void) unloadLaunchdFile: (NSString *) path
+  {
+  //NSLog(@"/bin/launchctl -w unload \"%@\"", path);
+  }
+
+// Kill a process.
++ (void) killProcess: (NSNumber *) pid
+  {
+  //NSLog(@"/bin/kill -9 \"%@\"", pid);
   }
 
 // Restart the machine.

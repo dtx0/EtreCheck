@@ -154,6 +154,12 @@
   completionHandler:
     (void (^)(NSDictionary * newURLs, NSError *error)) handler;
 
+// Unload a launchd file.
++ (void) unloadLaunchdFile: (NSString *) path;
+
+// Kill a process.
++ (void) killProcess: (NSNumber *) pid;
+
 // Restart the machine.
 + (BOOL) restart;
 

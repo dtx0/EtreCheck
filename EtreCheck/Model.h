@@ -46,6 +46,8 @@
   NSString * mySerialCode;
   NSMutableDictionary * myDiagnosticEvents;
   NSMutableDictionary * myAdwareFiles;
+  NSMutableSet * myAdwareLaunchdFiles;
+  NSMutableSet * myAdwareProcesses;
   NSMutableDictionary * myPotentialAdwareTrioFiles;
   NSArray * myAdwareExtensions;
   NSMutableSet * myWhitelistFiles;
@@ -113,7 +115,13 @@
 // Adware files.
 @property (retain) NSMutableDictionary * adwareFiles;
 
-// Adware files.
+// Adware launchd files that need to be unloaded.
+@property (retain) NSMutableSet * adwareLaunchdFiles;
+
+// Adware processes that need to be killed.
+@property (retain) NSMutableSet * adwareProcesses;
+
+// Potential adware files.
 @property (retain) NSMutableDictionary * potentialAdwareTrioFiles;
 
 // Adware extensions.

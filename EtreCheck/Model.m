@@ -26,6 +26,8 @@
 @synthesize serialCode = mySerialCode;
 @synthesize diagnosticEvents = myDiagnosticEvents;
 @synthesize adwareFiles = myAdwareFiles;
+@synthesize adwareLaunchdFiles = myAdwareLaunchdFiles;
+@synthesize adwareProcesses = myAdwareProcesses;
 @synthesize potentialAdwareTrioFiles = myPotentialAdwareTrioFiles;
 @synthesize adwareExtensions = myAdwareExtensions;
 @synthesize whitelistFiles = myWhitelistFiles;
@@ -83,6 +85,8 @@
     myDiskErrors = [NSMutableDictionary new];
     myDiagnosticEvents = [NSMutableDictionary new];
     myAdwareFiles = [NSMutableDictionary new];
+    myAdwareLaunchdFiles = [NSMutableSet new];
+    myAdwareProcesses = [NSMutableSet new];
     myPotentialAdwareTrioFiles = [NSMutableDictionary new];
     myTerminatedTasks = [NSMutableArray new];
     mySeriousProblems = [NSMutableSet new];
@@ -116,6 +120,8 @@
   self.seriousProblems = nil;
   self.terminatedTasks = nil;
   self.potentialAdwareTrioFiles = nil;
+  self.adwareProcesses = nil;
+  self.adwareLaunchdFiles = nil;
   self.adwareFiles = nil;
   self.diagnosticEvents = nil;
   self.diskErrors = nil;

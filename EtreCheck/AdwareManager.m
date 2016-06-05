@@ -20,6 +20,8 @@
 @implementation AdwareManager
 
 @synthesize adwareFiles = myAdwareFiles;
+@synthesize adwareLaunchdFiles = myAdwareLaunchdFiles;
+@synthesize adwareProcesses = myAdwareProcesses;
 
 @dynamic canDelete;
 
@@ -34,6 +36,8 @@
   {
   [super dealloc];
   
+  self.adwareProcesses = nil;
+  self.adwareLaunchdFiles = nil;
   self.adwareFiles = nil;
   }
 
@@ -45,10 +49,19 @@
   [self willChangeValueForKey: @"canDelete"];
   
   myAdwareFiles = [NSMutableArray new];
+  myAdwareLaunchdFiles = [NSMutableArray new];
+  myAdwareProcesses = [NSMutableArray new];
   
   for(NSString * adware in [[Model model] adwareFiles])
     [myAdwareFiles addObject: [Utilities makeURLPath: adware]];
     
+  for(NSString * adwareLaunchdFile in [[Model model] adwareLaunchdFiles])
+    [myAdwareLaunchdFiles
+      addObject: [Utilities makeURLPath: adwareLaunchdFile]];
+
+  for(NSNumber * pid in [[Model model] adwareProcesses])
+    [myAdwareProcesses addObject: pid];
+
   [myAdwareFiles sortUsingSelector: @selector(compare:)];
 
   [self.tableView reloadData];
@@ -63,7 +76,54 @@
     return;
     
   [self reportAdware];
+  [self unloadAdwareFiles];
+  [self killAdwareProcesses];
+  [self removeAdwareFiles];
+  }
+
+// Unload the adware files.
+- (void) unloadAdwareFiles
+  {
+  NSMutableIndexSet * indexSet = [NSMutableIndexSet indexSet];
   
+  NSUInteger count = [self.adwareLaunchdFiles count];
+  
+  for(NSUInteger i = 0; i < count; ++i)
+    {
+    NSString * path = [self.adwareLaunchdFiles objectAtIndex: i];
+
+    [Utilities unloadLaunchdFile: path];
+    
+    [[[Model model] adwareLaunchdFiles] removeObject: path];
+    [indexSet addIndex: i];
+    }
+    
+  [self.adwareLaunchdFiles removeObjectsAtIndexes: indexSet];
+  }
+  
+// Kill adware processes.
+- (void) killAdwareProcesses
+  {
+  NSMutableIndexSet * indexSet = [NSMutableIndexSet indexSet];
+  
+  NSUInteger count = [self.adwareProcesses count];
+  
+  for(NSUInteger i = 0; i < count; ++i)
+    {
+    NSNumber * pid = [self.adwareProcesses objectAtIndex: i];
+
+    [Utilities killProcess: pid];
+    
+    [[[Model model] adwareProcesses] removeObject: pid];
+    [indexSet addIndex: i];
+    }
+    
+  [self.adwareProcesses removeObjectsAtIndexes: indexSet];
+  }
+
+// Remove the adware files.
+- (void) removeAdwareFiles
+  {
   [Utilities
     removeFiles: self.adwareFiles
       completionHandler:
