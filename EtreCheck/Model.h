@@ -64,6 +64,7 @@
   bool myBackupExists;
   NSMutableDictionary * myLaunchdCommands;
   NSMutableDictionary * myLaunchdContents;
+  NSMutableDictionary * myModernLoginItems;
   
   bool myIgnoreKnownAppleFailures;
   bool myCheckAppleSignatures;
@@ -168,6 +169,9 @@
 
 // Keep track of all launchd contents.
 @property (retain) NSMutableDictionary * launchdContents;
+
+// Keep track of modern login items.
+@property (retain) NSMutableDictionary * modernLoginItems;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;

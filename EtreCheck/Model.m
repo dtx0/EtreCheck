@@ -44,6 +44,7 @@
 @synthesize backupExists = myBackupExists;
 @synthesize launchdCommands = myLaunchdCommands;
 @synthesize launchdContents = myLaunchdContents;
+@synthesize modernLoginItems = myModernLoginItems;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize checkAppleSignatures = myCheckAppleSignatures;
 @synthesize hideAppleTasks = myHideAppleTasks;
@@ -100,6 +101,7 @@
     myBlacklistMatches = [NSMutableSet new];
     myLaunchdCommands = [NSMutableDictionary new];
     myLaunchdContents = [NSMutableDictionary new];
+    myModernLoginItems = [NSMutableDictionary new];
     }
     
   return self;
@@ -108,6 +110,7 @@
 // Destructor.
 - (void) dealloc
   {
+  [myModernLoginItems release];
   [myLaunchdCommands release];
   [myLaunchdContents release];
   [myBlacklistSuffixes release];
