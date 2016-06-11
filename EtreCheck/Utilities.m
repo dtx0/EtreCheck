@@ -1155,7 +1155,25 @@
 // Kill a process.
 + (void) killProcess: (NSNumber *) pid
   {
+  // do shell script ("/usr/bin/osascript -e 'do shell script(\"/bin/kill -9 21090\") with administrator privileges'")
+
   //NSLog(@"/bin/kill -9 \"%@\"", pid);
+  NSMutableString * source = [NSMutableString string];
+  
+  [source appendString: @"tell application \"Finder\"\n"];
+  [source appendString:
+    [NSString stringWithFormat: @"do shell script (\"/bin/kill -9 %@\") with administrator privileges\n", pid]];
+  [source appendString: @"do shell script (\"/bin/date > /tmp/date.txt\") with administrator privileges\n"];
+  [source appendString: @"end tell\n"];
+
+  NSAppleScript * scriptObject =
+    [[NSAppleScript alloc] initWithSource: source];
+
+  NSDictionary * errorDict;
+  
+  [scriptObject executeAndReturnError: & errorDict];
+    
+  [scriptObject release];
   }
 
 // Restart the machine.
