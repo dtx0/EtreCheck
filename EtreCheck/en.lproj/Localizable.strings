@@ -66,7 +66,7 @@
 "restartrecommended" = "Some files were deleted. Etresoft recommends you restart and run another EtreCheck report to verify that these files remain deleted.";
 "restartfailed" = "EtreCheck failed to restart your machine. Please restart your machine manually.";
 "notimemachinebackup" = "EtreCheck could not find a Time Machine backup. The delete files operation is disabled.";
-"passwordrequired" = "Some of these files may require an administrator password to remove. Do you want to proceed?";
+"passwordrequired" = "An administrator password will be requires to remove these files. Do you want to proceed?";
 "cannotverifytimemachinebackup" = "EtreCheck cannot verify a Time Machine backup on OS X 10.7 “Lion” and earlier. Do you have a Time Machine backup?";
 "thanksforadware" = "Thank you for your submission to the EtreCheck adware blacklist. It may take a couple of days to verify your submission and update our data. We appreciate your patience.";
 "adwareuploadfailed" = "Your adware upload to the EtreCheck server failed. Would you like to use e-mail instead?";

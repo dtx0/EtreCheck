@@ -16,9 +16,8 @@
 // Show the window with content.
 - (void) show: (NSString *) content;
 
-// Handle removal of files.
-- (void) handleFileRemoval: (NSDictionary *) newURLs
-  error: (NSError *) error;
+// Verify removal of files.
+- (void) verifyRemoveFiles;
 
 // Suggest a restart.
 - (void) suggestRestart;
@@ -28,15 +27,6 @@
 @implementation AdwareManager
 
 @synthesize adwareFiles = myAdwareFiles;
-
-// Can I remove files?
-- (BOOL) canRemoveFiles
-  {
-  if([self.adwareFiles count] == 0)
-    return NO;
-    
-  return [super canRemoveFiles];
-  }
 
 // Destructor.
 - (void) dealloc
@@ -57,6 +47,8 @@
   
   myAdwareFiles = [NSMutableArray new];
 
+  NSMutableSet * filesToRemove = [NSMutableSet new];
+  
   for(NSString * path in [[Model model] adwareLaunchdFiles])
     {
     NSDictionary * info = [[[Model model] launchdFiles] objectForKey: path];
@@ -64,11 +56,9 @@
     NSNumber * PID = [info objectForKey: kPID];
       
     if(PID)
-      {
       [self.launchdTasksToUnload addObject: path];
-    
-      [self.processesToKill addObject: PID];
-      }
+    else
+      [filesToRemove addObject: path];
     }
     
   for(NSString * path in [[Model model] adwareFiles])
@@ -80,11 +70,13 @@
       {
       NSString * pathToRemove = [Utilities makeURLPath: path];
       
-      [self.filesToRemove addObject: pathToRemove];
+      [filesToRemove addObject: pathToRemove];
       [self.adwareFiles addObject: pathToRemove];
       }
     }
     
+  [self.filesToRemove addObjectsFromArray: [filesToRemove allObjects]];
+  
   [self.tableView reloadData];
   
   [self didChangeValueForKey: @"canRemoveFiles"];
@@ -104,14 +96,13 @@
   [super suggestRestart];
   }
 
-// Handle removal of files.
-- (void) handleFileRemoval: (NSDictionary *) newURLs
-  error: (NSError *) error
+// Verify removal of files.
+- (void) verifyRemoveFiles
   {
   [self willChangeValueForKey: @"canRemoveFiles"];
   
-  for(NSURL * url in newURLs)
-    [self.adwareFiles removeObject: [url path]];
+  for(NSString * path in self.filesToRemove)
+    [self.adwareFiles removeObject: path];
 
   self.filesDeleted =
     [self.adwareFiles count] != [self.filesToRemove count];
@@ -120,10 +111,10 @@
 
   [self didChangeValueForKey: @"canRemoveFiles"];
   
-  [super handleFileRemoval: newURLs error: error];
+  [super verifyRemoveFiles];
         
-  for(NSURL * url in newURLs)
-    [self.filesToRemove removeObject: [url path]];
+  for(NSString * path in self.filesToRemove)
+    [self.filesToRemove removeObject: path];
   }
 
 #pragma mark - NSTableViewDataSource

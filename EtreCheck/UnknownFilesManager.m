@@ -21,9 +21,8 @@
 // Show the window with content.
 - (void) show: (NSString *) content;
 
-// Handle removal of files.
-- (void) handleFileRemoval: (NSDictionary *) newURLs
-  error: (NSError *) error;
+// Verify removal of files.
+- (void) verifyRemoveFiles;
 
 // Suggest a restart.
 - (void) suggestRestart;
@@ -133,24 +132,18 @@
   NSNumber * PID = [info objectForKey: kPID];
     
   if(PID)
-    {
     [self.launchdTasksToUnload addObject: info];
-    [self.processesToKill addObject: PID];
-    }
-    
-  [self.filesToRemove addObject: path];
+  else
+    [self.filesToRemove addObject: path];
     
   [super removeFiles: sender];
   }
 
-// Handle removal of files.
-- (void) handleFileRemoval: (NSDictionary *) newURLs
-  error: (NSError *) error
+// Verify removal of files.
+- (void) verifyRemoveFiles
   {
-  for(NSURL * url in newURLs)
+  for(NSString * path in self.filesToRemove)
     {
-    NSString * path = [url path];
-    
     NSUInteger index = [self.unknownFiles indexOfObject: path];
     
     [self.unknownFiles removeObjectAtIndex: index];
@@ -164,7 +157,7 @@
     
   [self.tableView reloadData];
 
-  [super handleFileRemoval: newURLs error: error];
+  [super verifyRemoveFiles];
   
   [self.filesToRemove removeAllObjects];
   }
@@ -245,6 +238,7 @@
   
   NSArray * args =
     @[
+      @"-s",
       @"--data",
       json,
       server

@@ -14,7 +14,6 @@
   NSTableView * myTableView;
   
   NSMutableArray * myLaunchdTasksToUnload;
-  NSMutableArray * myProcessesToKill;
   NSMutableArray * myFilesToRemove;
   
   BOOL myFilesDeleted;
@@ -34,9 +33,6 @@
 
 // Launchd tasks to unload.
 @property (retain) NSMutableArray * launchdTasksToUnload;
-
-// Processes to kill.
-@property (retain) NSMutableArray * processesToKill;
 
 // Files to remove.
 @property (retain) NSMutableArray * filesToRemove;

@@ -893,350 +893,169 @@
   return nil;
   }
 
-// Delete an array of files.
-+ (void) removeFiles: (NSArray *) paths
-  completionHandler:
-    (void (^)(NSDictionary * newURLs, NSError *error)) handler
+// Uninstall launchd tasks.
++ (void) uninstallLaunchdTasks: (NSArray *) tasks
   {
-  // I will need an array of URLs for the NSWorkspace method.
-  NSMutableArray * urls = [NSMutableArray array];
+  NSMutableArray * appleScriptStatements = [NSMutableArray new];
   
-  // If the move to the trash fails, I will try with administrator
-  // privileges. If that happens, I may need to update the list of
-  // URLs in the trash with those that required admin rights to move.
-  // Also, I will need the original URLs.
-  NSMutableDictionary * trashURLs = [NSMutableDictionary dictionary];
-
-  // Build the array of URLs and make sure each one can be removed.
-  for(NSString * path in paths)
-    {
-    NSURL * url = [NSURL fileURLWithPath: path];
-    
-    [urls addObject: url];
-    
-    // Use the original location for now.
-    [trashURLs setObject: url forKey: url];
-    
-    NSLog(@"Clearing immutable flag on %@", path);
-    [[NSFileManager defaultManager]
-      setAttributes:
-        [NSDictionary
-          dictionaryWithObject: [NSNumber numberWithBool: NO]
-          forKey: NSFileImmutable]
-      ofItemAtPath: path error: NULL];
-    }
-    
-  // Now try to move the files to the trash.
-  NSLog(@"Sending files to recycle bin");
+  // Build the statements I will need.
+  [appleScriptStatements
+    addObjectsFromArray: [Utilities buildUnloadStatements: tasks]];
+  [appleScriptStatements addObject: [Utilities buildKillStatement: tasks]];
+  [appleScriptStatements
+    addObjectsFromArray: [Utilities buildDeleteStatements: tasks]];
   
-  [[NSWorkspace sharedWorkspace]
-    recycleURLs: urls
-    completionHandler:
-      ^(NSDictionary * newURLs, NSError * error)
-        {
-        [Utilities
-          verifyRemovalOf: urls
-          withRemovedFiles: newURLs
-          completionHandler: handler];
-        }];
+  // Execute the statements. Go ahead and require administrator to simplify
+  // the logic.
+  [Utilities executeAppleScriptStatements: appleScriptStatements];
+  
+  [appleScriptStatements release];
   }
 
-// Verify that URLs were removed.
-+ (void) verifyRemovalOf: (NSArray *) urls
-  withRemovedFiles: (NSDictionary *) trashURLs
-  completionHandler:
-    (void (^)(NSDictionary * newURLs, NSError * error)) handler
+// Delete files.
++ (void) deleteFiles: (NSArray *) files
   {
-  // If the move to the trash fails, I will try with administrator
-  // privileges. If that happens, I may need to update the list of
-  // URLs in the trash with those that required admin rights to move.
-  NSMutableSet * pathsRequiringAdminRights = [NSMutableSet set];
+  NSMutableArray * appleScriptStatements = [NSMutableArray new];
+  
+  // Build the statements I will need.
+  [appleScriptStatements
+    addObjectsFromArray: [Utilities buildDeleteStatements: files]];
+  
+  // Execute the statements. Go ahead and require administrator to simplify
+  // the logic.
+  [Utilities executeAppleScriptStatements: appleScriptStatements];
+  
+  [appleScriptStatements release];
+  }
 
-  // Build an initial array of all URLs that could have been removed.
-  for(NSURL * url in urls)
-    [pathsRequiringAdminRights addObject: url];
-    
-  // Now remove any URLs that really were removed.
-  for(NSURL * trashURL in trashURLs)
-    [pathsRequiringAdminRights removeObject: trashURL];
-    
-  // Build a set of URLs that were removed one way or another.
-  NSMutableDictionary * URLsMovedToTrash =
-    [NSMutableDictionary dictionaryWithDictionary: trashURLs];
-    
-  if([urls count] != [URLsMovedToTrash count])
+// Build one or more AppleScript statements to unload a list of
+// launchd tasks.
++ (NSArray *) buildUnloadStatements: (NSArray *) tasks
+  {
+  NSMutableArray * statements = [NSMutableArray array];
+  
+  for(NSDictionary * info in tasks)
     {
-    NSDictionary * urlsRemovedByAdmin =
-      [Utilities removeAdminFiles: [pathsRequiringAdminRights allObjects]];
-      
-    for(NSURL * url in urlsRemovedByAdmin)
+    NSString * path = [info objectForKey: kPath];
+    
+    if([path length] > 0)
       {
-      NSURL * trashURL = [urlsRemovedByAdmin objectForKey: url];
+      NSString * command =
+        [NSString stringWithFormat: @"/bin/launchctl unload -w %@", path];
       
-      [pathsRequiringAdminRights removeObject: url];
-      
-      [URLsMovedToTrash setObject: trashURL forKey: url];
+      NSString * statement =
+        [NSString
+          stringWithFormat:
+            @"do shell script(\"%@\") with administrator privileges",
+            command];
+        
+      [statements addObject: statement];
       }
     }
     
-  NSError * error = nil;
-  
-  if([urls count] != [URLsMovedToTrash count])
-    {
-    NSDictionary * userInfo =
-      [NSDictionary
-        dictionaryWithObjectsAndKeys:
-          NSLocalizedString(@"Delete failure.", nil),
-          NSLocalizedDescriptionKey,
-          NSLocalizedString(@"Failed to delete all files.", nil),
-          NSLocalizedFailureReasonErrorKey,
-          NSLocalizedString(@"Delete files manually", nil),
-          NSLocalizedRecoverySuggestionErrorKey,
-          nil];
-      
-    error =
-      [NSError
-        errorWithDomain: @"com.etresoft.etrecheck"
-        code: -1
-        userInfo: userInfo];
-    }
-    
-  handler(URLsMovedToTrash, error);
+  return statements;
   }
 
-// Remove files with administrator privileges.
-+ (NSDictionary *) removeAdminFiles: (NSArray *) urlsToRemove
+// Build an AppleScript statement to kill a list of launchd tasks.
++ (NSString *) buildKillStatement: (NSArray *) tasks
   {
+  NSMutableString * pids = [NSMutableString string];
+  
+  for(NSDictionary * info in tasks)
+    {
+    NSNumber * pid = [info objectForKey: kPID];
+    
+    if([pid integerValue] > 0)
+      [pids appendFormat: @" %@", pid];
+    }
+    
+  if([pids length] == 0)
+    return @"";
+    
+  NSString * statement =
+    [NSString
+      stringWithFormat:
+        @"do shell script(\"%@%@\") with administrator privileges",
+        @"/bin/kill -9",
+        pids];
+      
+  return statement;
+  }
+
+// Build an AppleScript statement to delete a list of launchd tasks.
++ (NSArray *) buildDeleteStatements: (NSArray *) objects
+  {
+  NSMutableArray * statements = [NSMutableArray array];
+  
   NSMutableString * source = [NSMutableString string];
   
   [source appendString: @"set posixFiles to {"];
   
   int i = 0;
   
-  for(NSURL * url in urlsToRemove)
+  for(id object in objects)
     {
-    if(i)
-      [source appendString: @","];
+    NSString * path = nil;
+    
+    if([object respondsToSelector: @selector(objectForKey:)])
+      path = [object objectForKey: kPath];
+    else if([object respondsToSelector: @selector(UTF8String)])
+      path = object;
       
-    [source
-      appendString:
-        [NSString
-          stringWithFormat:
-            @"POSIX file \"%@\"", [url path]]];
+    if([path length] > 0)
+      {
+      if(i)
+        [source appendString: @","];
+        
+      [source appendFormat: @"POSIX file \"%@\"", path];
       
-    ++i;
+      ++i;
+      }
     }
 
-  [source appendString: @"}\n"];
+  [source appendString: @"}"];
 
-  // It should be possible to collect the final, trashed paths to the
-  // deleted files with something like this:
-  //[source appendString: @"set trashedFiles to {}\n"];
-  //[source appendString: @"set trashedAliases to move posixFiles to the trash\n"];
-  //[source appendString: @"repeat with trashedAlias in trashedAliases\n"];
-  //[source appendString: @"set trashedFile to POSIX path of (trashedAlias as text)\n"];
-  //[source appendString: @"display dialog trashedFile as text\n"];
-  //[source appendString: @"copy trashedFile as text to end of trashedFiles\n"];
-  //[source appendString: @"end repeat\n"];
-  //[source appendString: @"return trashedAliases\n"];
-  // It works great from the script editor, but just returns an empty list
-  // here. <sigh> Applescript. I don't really need the trashed path, so
-  // I'll just fake it instead.
- 
-  [source appendString: @"tell application \"Finder\"\n"];
-  [source appendString: @"activate\n"];
-  [source appendString: @"repeat with posixFile in posixFiles\n"];
-  [source appendString: @"set f to posixFile as alias\n"];
-  [source appendString: @"set locked of f to false\n"];
-  [source appendString: @"end repeat\n"];
-  [source appendString: @"move posixFiles to the trash\n"];
-  [source appendString: @"end tell\n"];
-
-  NSAppleScript * scriptObject =
-    [[NSAppleScript alloc] initWithSource: source];
-
-  NSDictionary * errorDict;
-  
-  NSLog(@"Deleting files with AppleScript");
-  NSAppleEventDescriptor * returnDescriptor =
-    [scriptObject executeAndReturnError: & errorDict];
+  // Return an empty string that won't crash but can be ignored later.
+  if(i > 0)
+    {
+    [statements addObject: source];
     
-  [scriptObject release];
+    [statements addObject: @"tell application \"Finder\""];
+    [statements addObject: @"activate"];
+    [statements addObject: @"repeat with posixFile in posixFiles"];
+    [statements addObject: @"set f to posixFile as alias"];
+    [statements addObject: @"set locked of f to false"];
+    [statements addObject: @"end repeat"];
+    [statements addObject: @"move posixFiles to the trash"];
+    [statements addObject: @"end tell"];
+    }
+    
+  return statements;
+  }
 
-  if(returnDescriptor != NULL)
+// Execute a list of AppleScript statements.
++ (void) executeAppleScriptStatements: (NSArray *) statements
+  {
+  if([statements count] == 0)
+    return;
+    
+  NSMutableArray * args = [NSMutableArray new];
   
-    // Successful execution
-    if(kAENullEvent != [returnDescriptor descriptorType])
+  for(NSString * statement in statements)
+    if([statement length])
       {
-      NSMutableDictionary * trashedURLs = [NSMutableDictionary dictionary];
-  
-      // It would be cool if I could do this:
-      // NSInteger count = [returnDescriptor numberOfItems];
-      // 
-      // for(NSInteger i = 0; i < count; ++i)
-      //   {
-      //   NSAppleEventDescriptor * posixFileDescriptor =
-      //     [returnDescriptor descriptorAtIndex: i + 1];
-      //
-      //   NSURL * originalURL = [urlsToRemove objectAtIndex: i];
-      //   
-      //   NSString * path = [posixFileDescriptor stringValue];
-      //   NSURL * trashURL = [NSURL fileURLWithPath: path];
-      //
-      //   if([path length] && trashURL)
-      //     {
-      //     NSLog(@"Applescript moved file %@ to %@", originalURL, trashURL);
-      //     [trashedURLs setObject: trashURL forKey: originalURL];
-      //     }
-        
-      // Here is the proper way to get all trash directories. I don't really
-      // know which directory is really being used. Nor do I know what the
-      // resulting file name really is. In this case, I don't care, so I'll
-      // fake it all.
-      // NSArray * trashURLs =
-      //   [[NSFileManager defaultManager]
-      //     URLsForDirectory: NSTrashDirectory inDomains:NSUserDomainMask];
-      
-      // Fake it.
-      NSString * trashPath =
-        [NSHomeDirectory() stringByAppendingPathComponent: @".Trash"];
-      
-      // Let's see which of my urls is now gone.
-      for(NSURL * url in urlsToRemove)
-        {
-        NSString * path = [url path];
-        
-        BOOL exists =
-          [[NSFileManager defaultManager] fileExistsAtPath: path];
-        
-        if(!exists)
-          {
-          NSString * trashedPath =
-            [trashPath
-              stringByAppendingPathComponent: [path lastPathComponent]];
-          
-          NSLog(@"Applescript moved file %@ to %@ [fake]", path, trashPath);
-          [trashedURLs
-            setObject: [NSURL fileURLWithPath: trashedPath] forKey: url];
-          }
-        else
-          NSLog(@"Applescript filed to delete file %@", url);
-        }
-        
-      return [[trashedURLs copy] autorelease];
+      [args addObject: @"-e"];
+      [args addObject: statement];
       }
     
-  return [NSDictionary dictionary];
-  }
-
-// Unload a launchd file.
-+ (void) unloadLaunchdTask: (NSDictionary *) info
-  {
-  // First, try to list the task. If I can list it, I should be able to
-  // unload it.
-  NSString * path = [info objectForKey: kPath];
-  NSString * label = [info objectForKey: kLabel];
-  NSNumber * pid = [info objectForKey: kPID];
-  
-  if([label length] && [path length] && [pid integerValue])
-    {
-    NSString * status = [Utilities launchdTaskStatus: label];
+  if([args count] == 0)
+    return;
     
-    if([status length])
-      [Utilities unloadLaunchdFile: path withAdministratorPrivileges: NO];
-  
-    // If it still lives, try as root.
-    if([Utilities ps: pid])
-      [Utilities unloadLaunchdFile: path withAdministratorPrivileges: YES];
-    }
-  }
-  
-// Unload a launchd file.
-+ (void) unloadLaunchdFile: (NSString *) path
-  withAdministratorPrivileges: (BOOL) withAdministratorPrivileges
-  {
-  NSString * command =
-    [NSString stringWithFormat: @"/bin/launchctl unload -w %@", path];
-  
-  NSString * script =
-    [NSString
-      stringWithFormat:
-        @"do shell script(\"%@\")%@",
-        command,
-        withAdministratorPrivileges
-          ? @" with administrator privileges"
-          : @""];
-  
-  NSLog(@"%@", script);
-  
-  NSArray * args =
-    @[
-      @"-e",
-      script,
-    ];
+  SubProcess * subProcess = [[SubProcess alloc] init];
 
-  // Due to whatever funky is going on inside OS X and AppleScript, this
-  // must be run from the main thread.
-  dispatch_async(
-    dispatch_get_main_queue(),
-    ^{
-      SubProcess * subProcess = [[SubProcess alloc] init];
-  
-      [subProcess execute: @"/usr/bin/osascript" arguments: args];
+  [subProcess execute: @"/usr/bin/osascript" arguments: args];
 
-      [subProcess release];
-    });
-  }
-
-// Kill a process.
-+ (void) killProcess: (NSNumber *) pid
-  {
-  // Unloading may have killed it.
-  if([Utilities ps: pid])
-    {
-    // First try a simple kill.
-    [Utilities killProcess: pid withAdministratorPrivileges: NO];
-    
-    // If the process still looks alive, try with root.
-    if([Utilities ps: pid])
-      [Utilities killProcess: pid withAdministratorPrivileges: YES];
-    }
-  }
-
-// Kill a process.
-+ (void) killProcess: (NSNumber *) pid
-  withAdministratorPrivileges: (BOOL) withAdministratorPrivileges
-  {
-  NSString * command = [NSString stringWithFormat: @"/bin/kill -9 %@", pid];
-  
-  NSString * script =
-    [NSString
-      stringWithFormat:
-        @"do shell script(\"%@\")%@",
-        command,
-        withAdministratorPrivileges
-          ? @" with administrator privileges"
-          : @""];
-  
-  NSLog(@"%@", command);
-  
-  NSArray * args =
-    @[
-      @"-e",
-      script,
-    ];
-
-  // Due to whatever funky is going on inside OS X and AppleScript, this
-  // must be run from the main thread.
-  dispatch_async(
-    dispatch_get_main_queue(),
-    ^{
-      SubProcess * subProcess = [[SubProcess alloc] init];
-  
-      [subProcess execute: @"/usr/bin/osascript" arguments: args];
-
-      [subProcess release];
-    });
+  [subProcess release];
   }
 
 // Restart the machine.

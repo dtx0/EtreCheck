@@ -137,16 +137,11 @@
 // Query the status of a process.
 + (NSString *) ps: (NSNumber *) pid;
 
-// Delete an array of files.
-+ (void) removeFiles: (NSArray *) paths
-  completionHandler:
-    (void (^)(NSDictionary * newURLs, NSError *error)) handler;
+// Uninstall launchd tasks.
++ (void) uninstallLaunchdTasks: (NSArray *) tasks;
 
-// Unload a launchd task.
-+ (void) unloadLaunchdTask: (NSDictionary *) info;
-
-// Kill a process.
-+ (void) killProcess: (NSNumber *) pid;
+// Delete files.
++ (void) deleteFiles: (NSArray *) files;
 
 // Restart the machine.
 + (BOOL) restart;

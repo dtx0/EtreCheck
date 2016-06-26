@@ -1808,6 +1808,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   
   NSArray * args =
     @[
+      @"-s",
       @"--data",
       json,
       server

@@ -18,7 +18,6 @@
 @synthesize textView = myTextView;
 @synthesize tableView = myTableView;
 @synthesize launchdTasksToUnload = myLaunchdTasksToUnload;
-@synthesize processesToKill = myProcessesToKill;
 @synthesize filesToRemove = myFilesToRemove;
 @synthesize filesDeleted = myFilesDeleted;
 
@@ -31,7 +30,6 @@
 - (void) show: (NSString *) content
   {
   myLaunchdTasksToUnload = [NSMutableArray new];
-  myProcessesToKill = [NSMutableArray new];
   myFilesToRemove = [NSMutableArray new];
   
   [self.window makeKeyAndOrderFront: self];
@@ -67,7 +65,6 @@
     [self suggestRestart];
   
   self.filesToRemove = nil;
-  self.processesToKill = nil;
   self.launchdTasksToUnload = nil;
 
   [self.window close];
@@ -76,19 +73,28 @@
 // Remove the adware.
 - (IBAction) removeFiles: (id) sender
   {
-  if(![self canRemoveFiles])
-    return;
-    
-  [self reportFiles];
-  [self unloadFiles];
-  [self killProcesses];
-  [self removeFiles];
+  // Due to whatever funky is going on inside OS X and AppleScript, this
+  // must be run from the main thread.
+  dispatch_async(
+    dispatch_get_main_queue(),
+    ^{
+      if(![self canRemoveFiles])
+        return;
+        
+      [self reportFiles];
+      [Utilities uninstallLaunchdTasks: self.launchdTasksToUnload];
+      [Utilities deleteFiles: self.filesToRemove];
+      [self verifyRemoveFiles];
+    });
   }
 
 // Can I remove files?
 - (BOOL) canRemoveFiles
   {
-  if([self.filesToRemove count] == 0)
+  NSUInteger count =
+    [self.filesToRemove count] + [self.launchdTasksToUnload count];
+    
+  if(count == 0)
     return NO;
     
   if([[Model model] oldEtreCheckVersion])
@@ -253,63 +259,44 @@
   return (result == NSAlertFirstButtonReturn);
   }
 
-// Unload the files.
-- (void) unloadFiles
+// Verify removal of files.
+- (void) verifyRemoveFiles
   {
-  NSMutableIndexSet * indexSet = [NSMutableIndexSet indexSet];
+  BOOL failed = NO;
   
-  NSUInteger count = [self.launchdTasksToUnload count];
+  NSMutableArray * filesRemoved = [NSMutableArray new];
   
-  for(NSUInteger i = 0; i < count; ++i)
+  for(NSDictionary * info in self.launchdTasksToUnload)
     {
-    NSDictionary * info = [self.launchdTasksToUnload objectAtIndex: i];
-
-    [Utilities unloadLaunchdTask: info];
-
-    [indexSet addIndex: i];
-    }
-  }
-  
-// Kill processes.
-- (void) killProcesses
-  {
-  NSMutableIndexSet * indexSet = [NSMutableIndexSet indexSet];
-  
-  NSUInteger count = [self.processesToKill count];
-  
-  for(NSUInteger i = 0; i < count; ++i)
-    {
-    NSNumber * pid = [self.processesToKill objectAtIndex: i];
-
-    [Utilities killProcess: pid];
+    NSString * path = [info objectForKey: kPath];
     
-    [[[Model model] processes] removeObject: pid];
-    [indexSet addIndex: i];
+    if([path length])
+      {
+      BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: path];
+      
+      if(exists)
+        failed = YES;
+      else
+        [filesRemoved addObject: path];
+      }
     }
     
-  [self.processesToKill removeObjectsAtIndexes: indexSet];
-  }
-
-// Remove the files.
-- (void) removeFiles
-  {
-  [Utilities
-    removeFiles: self.filesToRemove
-    completionHandler:
-      ^(NSDictionary * newURLs, NSError * error)
-        {
-        [self handleFileRemoval: newURLs error: error];
-        }];
-  }
-
-// Handle removal of files.
-- (void) handleFileRemoval: (NSDictionary *) newURLs
-  error: (NSError *) error
-  {
-  if([self.filesToRemove count] != [newURLs count])
-    [self reportDeletedFilesFailed: newURLs error: error];
+  for(NSString * path in self.filesToRemove)
+    {
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: path];
+    
+    if(exists)
+      failed = YES;
+    else
+      [filesRemoved addObject: path];
+    }
+    
+  if(failed)
+    [self reportDeletedFilesFailed: filesRemoved];
   else
-    [self reportDeletedFiles: newURLs];
+    [self reportDeletedFiles: filesRemoved];
+
+  [filesRemoved release];
   }
 
 // Report the files.
@@ -357,6 +344,7 @@
   
   NSArray * args =
     @[
+      @"-s",
       @"--data",
       json,
       server
@@ -436,14 +424,14 @@
   }
 
 // Report which files were deleted.
-- (void) reportDeletedFiles: (NSDictionary *) newURLs
+- (void) reportDeletedFiles: (NSArray *) filesRemoved
   {
-  NSUInteger count = [newURLs count];
-  
   NSAlert * alert = [[NSAlert alloc] init];
 
   [alert
-    setMessageText: TTTLocalizedPluralString(count, @"file deleted", NULL)];
+    setMessageText:
+      TTTLocalizedPluralString(
+        [filesRemoved count], @"file deleted", NULL)];
     
   [alert setAlertStyle: NSInformationalAlertStyle];
 
@@ -451,8 +439,8 @@
   
   [message appendString: NSLocalizedString(@"filesdeleted", NULL)];
   
-  for(NSURL * url in newURLs)
-    [message appendFormat: @"%@\n", [url path]];
+  for(NSString * path in filesRemoved)
+    [message appendFormat: @"%@\n", path];
     
   [alert setInformativeText: message];
 
@@ -462,10 +450,9 @@
   }
 
 // Report which files were deleted.
-- (void) reportDeletedFilesFailed: (NSDictionary *) newURLs
-  error: (NSError *) error
+- (void) reportDeletedFilesFailed: (NSArray *) filesRemoved
   {
-  NSUInteger count = [newURLs count];
+  NSUInteger count = [filesRemoved count];
   
   NSAlert * alert = [[NSAlert alloc] init];
 
@@ -476,13 +463,8 @@
 
   NSMutableString * message = [NSMutableString string];
   
-  if([newURLs count] == 0)
+  if(count == 0)
     {
-    NSString * reason = [error description];
-    
-    if([reason length])
-      NSLog(@"Failed to delete files: %@", reason);
-    
     [message appendString: NSLocalizedString(@"nofilesdeleted", NULL)];
 
     [alert setInformativeText: message];
@@ -493,8 +475,8 @@
     {
     [message appendString: NSLocalizedString(@"filesdeleted", NULL)];
   
-    for(NSURL * url in newURLs)
-      [message appendFormat: @"%@\n", [url path]];
+    for(NSString * path in filesRemoved)
+      [message appendFormat: @"%@\n", path];
       
     [message appendString: NSLocalizedString(@"filesdeletedfailed", NULL)];
     

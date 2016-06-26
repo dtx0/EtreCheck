@@ -271,7 +271,7 @@
 "No Time Machine backup!" = "Pas de sauvegarde Time Machine";
 "notimemachinebackup" = "EtreCheck n‘a pas pu trouver une sauvegarde Time Machine. EtreCheck requit une sauvegarde Time Machine pour l’enlèvement des fichiers.";
 "Password required!" = "Mot de passe requis !";
-"passwordrequired" = "Il est possible que vous deviez utiliser votre mot de passe administrateur pour enlever certains de ces fichiers. Voulez-vous continuer ?";
+"passwordrequired" = "Il faut utiliser votre mot de passe administrateur pour enlever ces fichiers. Voulez-vous continuer ?";
 "Cannot verify Time Machine backup!" = "Impossible de vérifier la sauvegarde Time Machine !";
 "cannotverifytimemachinebackup" = "EtreCheck ne peut pas vérifier une sauvegarde Time Machine sur OS X 10.7 «Lion» ou plus tôt. Avez-vous une sauvegarde Time Machine ?";
 "No, I don’t have a backup" = "Non. Je n’ai pas de sauvegarde";
