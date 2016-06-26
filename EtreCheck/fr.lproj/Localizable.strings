@@ -188,8 +188,8 @@
 "%d error (plural rule: one)" = "une erreur";
 "%d error (plural rule: other)" = "%d erreurs\n";
 "No help available" = "Aucune aide disponible";
-"adware" = "EtreCheck a détecté que votre Macintosh est infecté par adware comme identifié par Apple (voir https://support.apple.com/HT203987), les recherches propres d’Etresoft, et les contributions des autres utilisateurs EtreCheck. Cliquez sur le bouton «Enlever» pour retirer l’adware. Les fichiers que vous enlevez seront automatiquement envoyés à Etresoft pour la liste d’adware.";
-"unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas sur la liste blanche des logiciels sûrs. C’est possible qu’il soit adware ou malware. Mais aussi, c’est possible qu’il soit quelque chose de nouveau qui a besoin d’être ajouté à la liste blanche d’EtreCheck. Identifier tous les fichiers qui sont valides et décrivent pourquoi. Identifiez tous les fichiers qui sont valides et décrivez pourquoi. Ensuite, cliquez sur le bouton «Envoyer à Etresoft» pour envoyer ces fichiers à Etresoft pour un éventuel ajout à la liste noire de l’adware ou la liste blanche des logiciels légitimes.";
+"adware" = "EtreCheck a détecté que votre Macintosh est infecté par adware comme identifié par les recherches propres d’Etresoft et les contributions des autres utilisateurs EtreCheck. Cliquez sur le bouton «Enlever» pour retirer l’adware. Les fichiers que vous enlevez seront automatiquement envoyés à Etresoft pour la vérification.";
+"unknownfiles" = "EtreCheck a détecté le logiciel qui n’est pas sur la liste blanche des logiciels sûrs. C’est possible qu’il soit adware ou malware. Mais aussi, c’est possible qu’il soit quelque chose de nouveau qui a besoin d’être ajouté à la liste blanche d’EtreCheck. Identifier tous les fichiers qui sont valides et décrivent pourquoi. Ensuite, cliquez sur le bouton «Envoyer à Etresoft» pour envoyer ces fichiers à Etresoft pour un éventuel ajout à la liste blanche des logiciels légitimes.\n\nSi certains de ces fichiers sont l‘adware ou le malware, il suffit de cliquer sur le bouton «Enlever» pour les enlever.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "Un fichier adware trouvé.";
 "%d adware file (plural rule: other)" = "%d fichiers adware trouvés.";
@@ -259,9 +259,11 @@
 "%d file deleted (plural rule: zero)" = "Aucun fichier placé dans la corbeille";
 "%d file deleted (plural rule: one)" = "Un fichier placé dans la corbeille";
 "%d file deleted (plural rule: other)" = "%d fichiers placés dans la corbeille";
-"filesdeleted" = "Les fichiers suivants ont été placés dans la corbeille. Le logiciel est peut-être toujour en cours. Vous devez faire redémarrer votre ordinateur pour finalizer le processus. Votre rapport EtreCheck actuel sera disponible dans le menu «Récent» d’EtreCheck.\n\n";
+"filesdeleted" = "Les fichiers suivants ont été placés dans la corbeille.\n\n";
 "filesdeletedfailed" = "\nQuelques fichiers ne peuvent pas être enlevés. Tous fichiers restants doivent être enlevés à la main.";
 "nofilesdeleted" = "Aucun fichier peut être supprimé. Ces fichers doivent être enlevés à la main";
+"Restart recommended" = "Il est recommandé de redémarrer";
+"restartrecommended" = "Quelques fichiers ont été enlevés. Etresoft vous recommande de redémarrer et faire un autre rapport EtreCheck pour vérifier que ces fichiers restent disparus.";
 "Restart" = "Redémarrer";
 "Restart later" = "Redémarrer plus tard";
 "Restart failed" = "Échec de redémarrer";
@@ -269,8 +271,7 @@
 "No Time Machine backup!" = "Pas de sauvegarde Time Machine";
 "notimemachinebackup" = "EtreCheck n‘a pas pu trouver une sauvegarde Time Machine. EtreCheck requit une sauvegarde Time Machine pour l’enlèvement des fichiers.";
 "Password required!" = "Mot de passe requis !";
-"passwordrequired" = "Vous devez utiliser votre mot de passe administrateur pour enlever certains de ces fichiers.\n\n";
-"continuewithpassword" = "\nVoulez-vous continuer ?";
+"passwordrequired" = "Il est possible que vous deviez utiliser votre mot de passe administrateur pour enlever certains de ces fichiers. Voulez-vous continuer ?";
 "Cannot verify Time Machine backup!" = "Impossible de vérifier la sauvegarde Time Machine !";
 "cannotverifytimemachinebackup" = "EtreCheck ne peut pas vérifier une sauvegarde Time Machine sur OS X 10.7 «Lion» ou plus tôt. Avez-vous une sauvegarde Time Machine ?";
 "No, I don’t have a backup" = "Non. Je n’ai pas de sauvegarde";
@@ -294,3 +295,4 @@
 "unverifiedetrecheckversion" = "Impossible de vérifier votre version d’EtreCheck. Cette opération nécessite une version actuelle d’EtreCheck. Si vous utilisez un pare-feu, s’il vous plaît, permettez l’accès à des serveurs EtreCheck.";
 " (cache only)" = " (seulement en cache)";
 "donateurl" = "https://etrecheck.com/donate_fr.php?invoice=%@";
+"Duplicate label!" = " - L’étiquette en double ! ";

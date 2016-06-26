@@ -7,6 +7,7 @@
 #import "LoginItemsCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
+#import "SubProcess.h"
 
 // Collect login items.
 @implementation LoginItemsCollector
@@ -36,19 +37,24 @@
       @"tell application \"System Events\" to get the properties of every login item"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/bin/osascript" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * loginItems = [self formatLoginItems: result];
-  
-  NSUInteger count = 0;
-  
-  for(NSDictionary * loginItem in loginItems)
-    if([self printLoginItem: loginItem count: count])
-      ++count;
+  if([subProcess execute: @"/usr/bin/osascript" arguments: args])
+    {
+    NSArray * loginItems =
+      [self formatLoginItems: subProcess.standardOutput];
     
-  [self.result appendCR];
+    NSUInteger count = 0;
     
+    for(NSDictionary * loginItem in loginItems)
+      if([self printLoginItem: loginItem count: count])
+        ++count;
+      
+    [self.result appendCR];
+    }
+    
+  [subProcess release];
+  
   dispatch_semaphore_signal(self.complete);
   }
 

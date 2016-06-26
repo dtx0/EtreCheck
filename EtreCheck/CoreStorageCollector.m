@@ -10,6 +10,7 @@
 #import "Utilities.h"
 #import "ByteCountFormatter.h"
 #import "NSArray+Etresoft.h"
+#import "SubProcess.h"
 
 // Some keys for an internal dictionary.
 #define kDiskType @"volumetype"
@@ -50,14 +51,14 @@
       @"SPStorageDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
-  
   // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPStorageDataType.xml"];
   
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -68,6 +69,8 @@
         [self collectCoreStorageVolume: volume];
       }
     }
+    
+  [subProcess release];
   }
 
 // Collect a Core Storage volume.

@@ -1351,6 +1351,7 @@
 		<string>com.makemusic.finale.installer.cleanup.plist</string>
 		<string>com.makerbot.conveyor.plist</string>
 		<string>com.malwarebytes.MBAMHelperTool.plist</string>
+		<string>com.malwarebytes.HelperTool.plist</string>
 		<string>com.manageegine.desktopcentral.dcnotifyservice.plist</string>
 		<string>com.manageegine.desktopcentral.peruseragent.plist</string>
 		<string>com.manageengine.desktopcentral.dcagentservice.plist</string>
@@ -3061,26 +3062,27 @@
 		<string>us.zoom.rooms.tool.plist</string>
 		<string>com.bitdefender.FirstRun_avod.05.qss.plist</string>
 		<string>com.bitdefender.FirstRun_avod.18.fullsystem.plist</string>
-    <string>com.livevol.lvx.restarter.plist</string>
-    <string>com.livevol.lvx.purge_log.plist</string>
-    <string>com.livevol.lvx.restart.dir.plist</string>
-    <string>com.livevol.lvx.service.plist</string>
-    <string>com.filewave.scanner.plist</string>
-    <string>com.deploystudio.lkdc_fix.plist</string>
-    <string>com.symantec.Sched503-1.plist</string>
-    <string>com.symantec.Sched504-2.plist</string>
-    <string>com.symantec.Sched504-4.plist</string>
-    <string>com.symantec.Sched504-5.plist</string>
-    <string>name.ridgewell.unlock</string>
-    <string>name.ridgewell.unlock.plist</string>
-    <string>com.marvell.RaidService.plist</string>
-    <string>com.marvell.WebService.plist</string>
-    <string>nz.ac.auckland.LyncSetup.plist</string>
-    <string>com.thinkecoinc.daemon.plist</string>
-    <string>com.malwarebytes.HelperTool.plist</string>
-    <string>com.micromat.MacCheckWorkerDaemon.plist</string>
-    <string>com.objective-see.ransomwhere.plist</string>	</array>
-	<key>item1</key>
+		<string>com.livevol.lvx.restarter.plist</string>
+		<string>com.livevol.lvx.purge_log.plist</string>
+		<string>com.livevol.lvx.restart.dir.plist</string>
+		<string>com.livevol.lvx.service.plist</string>
+		<string>com.filewave.scanner.plist</string>
+		<string>com.deploystudio.lkdc_fix.plist</string>
+		<string>com.symantec.Sched503-1.plist</string>
+		<string>com.symantec.Sched504-2.plist</string>
+		<string>com.symantec.Sched504-4.plist</string>
+		<string>com.symantec.Sched504-5.plist</string>
+		<string>name.ridgewell.unlock</string>
+		<string>name.ridgewell.unlock.plist</string>
+		<string>com.marvell.RaidService.plist</string>
+		<string>com.marvell.WebService.plist</string>
+		<string>nz.ac.auckland.LyncSetup.plist</string>
+		<string>com.thinkecoinc.daemon.plist</string>
+		<string>com.malwarebytes.HelperTool.plist</string>
+		<string>com.micromat.MacCheckWorkerDaemon.plist</string>
+		<string>com.objective-see.ransomwhere.plist</string>
+	</array>
+	<key>adwareextensions</key>
 	<array>
 		<string>shopping assistant</string>
 		<string>cinema-plus</string>
@@ -3094,70 +3096,6 @@
 		<string>gophoto-it</string>
 		<string>omnibar</string>
 		<string>shopy mate</string>
-	</array>
-	<key>item2</key>
-	<array>
-		<string>/System/Library/Frameworks/v.framework</string>
-		<string>/System/Library/Frameworks/VSearch.framework</string>
-		<string>/Library/PrivilegedHelperTools/Jack</string>
-		<string>/Library/InputManagers/CTLoader</string>
-		<string>/Library/Application Support/Conduit</string>
-		<string>~/Library/Internet Plug-Ins/ConduitNPAPIPlugin.plugin</string>
-		<string>~/Library/Internet Plug-Ins/TroviNPAPIPlugin.plugin</string>
-		<string>/Applications/SearchProtect.app</string>
-		<string>/Applications/WebTools.app</string>
-		<string>/Applications/cinemapro1-2.app</string>
-		<string>~/Applications/cinemapro1-2.app</string>
-	</array>
-	<key>item3</key>
-	<array>
-		<string>/Applications/Genieo</string>
-		<string>/Applications/InstallMac</string>
-		<string>/Applications/Uninstall Genieo</string>
-		<string>/Applications/Uninstall IM Completer.app</string>
-		<string>/private/etc/launchd.conf</string>
-		<string>/usr/lib/libgenkit.dylib</string>
-		<string>/usr/lib/libgenkitsa.dylib</string>
-		<string>/usr/lib/libimckit.dylib</string>
-		<string>/usr/lib/libimckitsa.dylib</string>
-		<string>/Library/PrivilegedHelperTools/com.genieoinnovation.macextension.client</string>
-		<string>~/Library/Application Support/Genieo</string>
-		<string>~/Library/Application Support/com.genieoinnovation.Installer</string>
-		<string>/Library/Frameworks/GenieoExtra.framework</string>
-	</array>
-	<key>item4</key>
-	<array>
-		<string>/Library/LaunchAgents/com.genieo.completer.update.plist</string>
-		<string>/Library/LaunchAgents/com.genieo.engine.plist</string>
-		<string>/Library/LaunchAgents/com.genieoinnovation.macextension.client.plist</string>
-		<string>/Library/LaunchAgents/com.genieoinnovation.macextension.plist</string>
-		<string>/Library/LaunchDaemons/com.genieoinnovation.macextension.client.plist</string>
-		<string>/Library/LaunchDaemons/Jack.plist</string>
-		<string>~/Library/LaunchAgents/com.genieo.completer.download.plist</string>
-		<string>~/Library/LaunchAgents/com.genieo.completer.ltvbit.plist</string>
-		<string>~/Library/LaunchAgents/com.genieo.completer.update.plist</string>
-		<string>~/Library/LaunchAgents/com.webhelper.plist</string>
-		<string>~/Library/LaunchAgents/com.webtools.uninstaller.plist</string>
-		<string>~/Library/LaunchAgents/com.webtools.update.agent.plist</string>
-	</array>
-	<key>item5</key>
-	<array>
-		<string>~/Conduit</string>
-		<string>~/Trovi</string>
-		<string>~/Library/Application Support/webHelperApp/</string>
-		<string>~/Library/Caches/com.Conduit.takeOverSearchAssetsMac</string>
-		<string>~/Library/Caches/com.VSearch.bulk.installer</string>
-		<string>~/Library/Caches/com.VSearch.VSinstaller</string>
-		<string>~/Library/cinemapro1-2/</string>
-		<string>~/Library/LaunchAgents/Safari Security</string>
-		<string>~/Library/LaunchAgents/UpdateDownloder</string>
-		<string>~/Library/LaunchAgents/WebServerSocketApp</string>
-		<string>~/Library/Preferences/com.genieo.global.settings.plist.lockfile</string>
-		<string>~/Library/Preferences/com.geneio.settings.plist.lockfile</string>
-		<string>~/Library/Preferences/com.geneio.global.settings.plist</string>
-		<string>~/Library/Saved Application State/com.genieo.RemoveGenieoMac.savedState</string>
-		<string>~/Library/Saved Application State/com.VSearch.bulk.installer.savedstate</string>
-		<string>~/Library/WebTools/</string>
 	</array>
 	<key>blacklist</key>
 	<array>
@@ -3287,7 +3225,9 @@
 		<string>com.LiveShoppers.agent.plist</string>
 		<string>com.Software-Updater.agent.plist</string>
 		<string>com.unnoble.preferences.plist</string>
-		<string>com.malwarebytes.MBAMHelperTool.plist</string>
+		<string>Jack.plist</string>
+		<string>com.webhelper.plist</string>
+		<string>com.notapple3.plist</string>
 	</array>
 	<key>blacklist_suffix</key>
 	<array>
@@ -3409,6 +3349,7 @@
 		<string>conduit</string>
 		<string>crossrider</string>
 		<string>genieo</string>
+		<string>geneio</string>
 		<string>spigot</string>
 		<string>Zabaglione</string>
 		<string>phycoerythrin</string>
@@ -3436,6 +3377,7 @@
 		<string>upertino</string>
 		<string>uquoroden</string>
 		<string>uvayt</string>
+		<string>Trovi</string>
 	</array>
 </dict>
 </plist>

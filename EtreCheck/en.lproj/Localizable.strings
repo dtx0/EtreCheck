@@ -27,8 +27,8 @@
 "%d error (plural rule: zero)" = "no errors\n";
 "%d error (plural rule: one)" = "one error";
 "%d error (plural rule: other)" = "%d errors\n";
-"adware" = "EtreCheck has detected that your Macintosh is infected with adware as defined by Apple (see https://support.apple.com/HT203987), Etresoft’s own research, and the contributions of other EtreCheck users. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft and added to the list of known adware.";
-"unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. Identify any files that are valid and describe why. Then, click the “Send to Etresoft” button to report these files to Etresoft for possible addition to the blacklist of adware or whitelist of legitimate software.";
+"adware" = "EtreCheck has detected that your Macintosh is infected with adware as defined by Etresoft’s own research and the contributions of other EtreCheck users. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft for verification.";
+"unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. Identify any files that are valid and describe why. Then, click the “Send to Etresoft” button to report these files to Etresoft for possible addition to the whitelist of legitimate software.\n\nIf any unknown files are adware or malware, just click the “Remove” button to remove them.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "One adware file found.";
 "%d adware file (plural rule: other)" = "%d adware files found.";
@@ -60,13 +60,13 @@
 "%d file deleted (plural rule: zero)" = "No files moved to the trash";
 "%d file deleted (plural rule: one)" = "One file moved to the trash";
 "%d file deleted (plural rule: other)" = "%d files moved to the trash";
-"filesdeleted" = "The following files have been moved to the trash. The software may still be running so you should restart your machine to complete the process. Your current EtreCheck report will be availble in EtreCheck’s “Recent” menu.\n\n";
+"filesdeleted" = "The following files have been moved to the trash.\n\n";
 "filesdeletedfailed" = "\nSome files could not be deleted. Any remaining files must be deleted manually.";
 "nofilesdeleted" = "No files could be deleted. They must be deleted manually.";
+"restartrecommended" = "Some files were deleted. Etresoft recommends you restart and run another EtreCheck report to verify that these files remain deleted.";
 "restartfailed" = "EtreCheck failed to restart your machine. Please restart your machine manually.";
 "notimemachinebackup" = "EtreCheck could not find a Time Machine backup. The delete files operation is disabled.";
-"passwordrequired" = "The following files will require an administrator password to remove.\n\n";
-"continuewithpassword" = "\nDo you want to proceed?";
+"passwordrequired" = "Some of these files may require an administrator password to remove. Do you want to proceed?";
 "cannotverifytimemachinebackup" = "EtreCheck cannot verify a Time Machine backup on OS X 10.7 “Lion” and earlier. Do you have a Time Machine backup?";
 "thanksforadware" = "Thank you for your submission to the EtreCheck adware blacklist. It may take a couple of days to verify your submission and update our data. We appreciate your patience.";
 "adwareuploadfailed" = "Your adware upload to the EtreCheck server failed. Would you like to use e-mail instead?";
@@ -77,5 +77,5 @@
 "Donation not found" = "Donation not found";
 "donationnotfound" = "Sorry, your donation could not be found. Please use the Manual lookup option.";
 "oldetrecheckversion" = "Your version of EtreCheck is outdated. This operation requires a current version of EtreCheck.";
-"unverifiedetrecheckversion" = "Could not verify your version of EtreCheck. This operation requires a current version of EtreCheck. If you are using a firewall, please all EtreCheck to access its servers.";
+"unverifiedetrecheckversion" = "Could not verify your version of EtreCheck. This operation requires a current version of EtreCheck. If you are using a firewall, please allow EtreCheck to access its servers.";
 "donateurl" = "https://etrecheck.com/donate_en.php?invoice=%@";

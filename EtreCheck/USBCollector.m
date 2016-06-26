@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "SubProcess.h"
 
 // Collect information about USB devices.
 @implementation USBCollector
@@ -38,14 +39,14 @@
       @"SPUSBDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
-  
   // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPUSBDataType.xml"];
   
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -64,6 +65,8 @@
   else
     [self.result appendCR];
     
+  [subProcess release];
+  
   dispatch_semaphore_signal(self.complete);
   }
 

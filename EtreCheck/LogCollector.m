@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "DiagnosticEvent.h"
+#import "SubProcess.h"
 
 // Collect information from log files.
 @implementation LogCollector
@@ -50,25 +51,30 @@
       @"SPLogsDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(!result)
-    return;
-    
-  NSArray * plist = [NSArray readPropertyListData: result];
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
+    {
+    if(!subProcess.standardOutput)
+      return;
+      
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
 
-  if(![plist count])
-    return;
-    
-  NSArray * results =
-    [[plist objectAtIndex: 0] objectForKey: @"_items"];
-    
-  if(![results count])
-    return;
+    if(![plist count])
+      return;
+      
+    NSArray * results =
+      [[plist objectAtIndex: 0] objectForKey: @"_items"];
+      
+    if(![results count])
+      return;
 
-  for(NSDictionary * result in results)
-    [self collectLogResults: result];
+    for(NSDictionary * result in results)
+      [self collectLogResults: result];
+    }
   }
 
 // Collect results from a log entry.

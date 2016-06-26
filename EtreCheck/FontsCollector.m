@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "SubProcess.h"
 
 // Collect font information.
 @implementation FontsCollector
@@ -71,14 +72,14 @@
       @"SPFontsDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
-  
   NSMutableArray * badFonts = [NSMutableArray array];
   
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -96,6 +97,8 @@
       }
     }
 
+  [subProcess release];
+  
   return badFonts;
   }
 

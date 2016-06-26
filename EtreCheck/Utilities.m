@@ -11,6 +11,8 @@
 #import <Carbon/Carbon.h>
 #import "NSDate+Etresoft.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "LaunchdCollector.h"
+#import "SubProcess.h"
 
 // Assorted utilities.
 @implementation Utilities
@@ -204,165 +206,6 @@
       initWithPath: [EnglishBundlePath stringByDeletingLastPathComponent]];
   }
 
-// Execute an external program and return the results.
-+ (NSData *) execute: (NSString *) program arguments: (NSArray *) args
-  {
-  return [self execute: program arguments: args options: nil error: NULL];
-  }
-
-// Execute an external program and return the results.
-+ (NSData *) execute: (NSString *) program
-  arguments: (NSArray *) args error: (NSString **) error
-  {
-  return [self execute: program arguments: args options: nil error: error];
-  }
-
-// Execute an external program, with options, return the results, and
-// collect any errors.
-// Supported options:
-//  kExecutableTimeout - timeout for external programs.
-+ (NSData *) execute: (NSString *) program
-  arguments: (NSArray *) args
-  options: (NSDictionary *) options
-  error: (NSString **) error
-  {
-  // Create pipes for handling communication.
-  NSPipe * outputPipe = [NSPipe new];
-  NSPipe * errorPipe = [NSPipe new];
-  
-  // Create the task itself.
-  NSTask * task = [NSTask new];
-  
-  // Send all task output to the pipe.
-  [task setStandardOutput: outputPipe];
-  [task setStandardError: errorPipe];
-  
-  [task setLaunchPath: program];
-
-  if(args)
-    [task setArguments: args];
-  
-  [task setCurrentDirectoryPath: @"/"];
-  
-  NSData * result = nil;  
-  NSData * errorData = nil;
-  NSMutableString * errorResult = [NSMutableString string];
-  BOOL exceptionThrown = NO;
-
-  @try
-    {
-    int64_t timeout = 60 * 5 * NSEC_PER_SEC;
-    
-    NSNumber * timeoutValue = [options objectForKey: kExecutableTimeout];
-    
-    if(timeoutValue)
-      timeout = [timeoutValue unsignedLongLongValue] * NSEC_PER_SEC;
-      
-    //NSLog(@"Running %@ %@ with timeout %lld", program, args, timeout);
-    
-    __block NSException * thrownException = nil;
-
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    dispatch_async(
-      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-        ^{
-          thrownException = [Utilities runTask: task wait: timeout];
-          
-          dispatch_semaphore_signal(semaphore);
-        });
-     
-    if(thrownException != nil)
-      @throw thrownException;
-      
-    result =
-      [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
-    
-    errorData =
-      [[[task standardError] fileHandleForReading] readDataToEndOfFile];
-      
-    dispatch_semaphore_wait(semaphore, timeout);
-    }
-  @catch(NSException * exception)
-    {
-    [errorResult appendString: [exception description]];
-    exceptionThrown = YES;
-    }
-  @catch(...)
-    {
-    [errorResult appendString: @"Unknown exception"];
-    exceptionThrown = YES;
-    }
-  @finally
-    {
-    [task release];
-    [errorPipe release];
-    [outputPipe release];
-    }
-    
-  if([errorData length] > 0)
-    {
-    if([errorResult length] > 0)
-      [errorResult appendString: @" - "];
-      
-    NSString * errorDataString =
-      [[[NSString alloc]
-        initWithData: errorData encoding: NSUTF8StringEncoding]
-        autorelease];
-      
-    [errorResult appendString: errorDataString];
-    }
-    
-  if(error && ([errorResult length] > 0))
-    *error = [errorResult copy];
-    
-  if(exceptionThrown && ([errorResult length] > 0))
-    NSLog(@"%@", errorResult);
-  
-  return result;
-  }
-
-// Run a task and wait for it. Return YES if the task completed or NO if
-// the task had to be killed.
-+ (NSException *) runTask: (NSTask *) task wait: (int64_t) timeout
-  {
-  __block NSException * thrownException = nil;
-  
-  dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-
-  dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-      ^{
-        @try
-          {
-          // TODO: This can throw an exception.
-          [task launch];
-          }
-        @catch(NSException * exception)
-          {
-          thrownException = exception;
-          }
-        
-        dispatch_semaphore_signal(semaphore);
-      });
-    
-  long timedout = dispatch_semaphore_wait(semaphore, timeout);
-    
-  // If I timed out, I'm not ready. Signal the sync semaphore to prevent
-  // the update from ever being handled if it ever does happen.
-  if(timedout)
-    if([task isRunning])
-      [task terminate];
-    
-  return thrownException;
-  }
-
-/* TODO: I could log long-running tasks with this:
-
-  [[NSNotificationCenter defaultCenter]
-    postNotificationName: kStatusUpdate object: status];
-*/
-
 // Format text into an array of trimmed lines separated by newlines.
 + (NSArray *) formatLines: (NSData *) data
   {
@@ -406,7 +249,10 @@
   
   if(([path length] > 0) && ([data length] > 0))
     {
-    [[[Model model] launchdContents] setObject: data forKey: path];
+    NSMutableDictionary * info =
+      [[[Model model] launchdFiles] objectForKey: path];
+      
+    [info setObject: data forKey: kLaunchdFileContents];
     
     return [self readPropertyListData: data];
     }
@@ -911,26 +757,33 @@
       setObject: [NSNumber numberWithInt: 60 * 10]
       forKey: kExecutableTimeout];
     
-  NSString * output = nil;
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  [Utilities
-    execute: @"/usr/bin/codesign"
-    arguments: args
-    options: options
-    error: & output];
+  BOOL success =
+    [subProcess
+      execute: @"/usr/bin/codesign" arguments: args options: options];
   
-  //NSLog(@"/usr/bin/codesign %@\n%@", args, output);
-  result = [Utilities parseSignature: output forPath: path];
-      
-  [[[Utilities shared] signatureCache] setObject: result forKey: path];
+  if(success)
+    {
+    //NSLog(@"/usr/bin/codesign %@\n%@", args, output);
+    result =
+      [Utilities parseSignature: subProcess.standardError forPath: path];
+        
+    [[[Utilities shared] signatureCache] setObject: result forKey: path];
+    }
+    
+  [subProcess release];
   
   return result;
   }
 
 // Parse a signature.
-+ (NSString *) parseSignature: (NSString *) output
++ (NSString *) parseSignature: (NSData *) data
   forPath: (NSString *) path
   {
+  NSString * output =
+    [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+  
   NSString * result = kSignatureNotValid;
   
   if([output length])
@@ -971,6 +824,8 @@
       }
     }
     
+  [output release];
+  
   return result;
   }
 
@@ -994,22 +849,75 @@
   return temporaryDirectory;
   }
 
+// Query the status of a launchd task.
++ (NSString *) launchdTaskStatus: (NSString *) label
+  {
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  NSArray * args =
+    @[
+      @"list",
+      label
+    ];
+
+  [subProcess autorelease];
+
+  if([subProcess execute: @"/bin/launchctl" arguments: args])
+    {
+    NSString * status =
+      [[NSString alloc]
+        initWithData: subProcess.standardOutput
+        encoding: NSUTF8StringEncoding];
+      
+    return [status autorelease];
+    }
+    
+  return nil;
+  }
+
+// Query the status of a process.
++ (NSString *) ps: (NSNumber *) pid
+  {
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+
+  if([subProcess execute: @"/bin/ps" arguments: @[ [pid stringValue] ]])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    if([lines count] > 1)
+      return [lines objectAtIndex: 1];
+    }
+    
+  return nil;
+  }
+
 // Delete an array of files.
 + (void) removeFiles: (NSArray *) paths
   completionHandler:
     (void (^)(NSDictionary * newURLs, NSError *error)) handler
   {
-  __block NSMutableSet * urlsToRemove = [[NSMutableSet alloc] init];
-  
+  // I will need an array of URLs for the NSWorkspace method.
   NSMutableArray * urls = [NSMutableArray array];
   
+  // If the move to the trash fails, I will try with administrator
+  // privileges. If that happens, I may need to update the list of
+  // URLs in the trash with those that required admin rights to move.
+  // Also, I will need the original URLs.
+  NSMutableDictionary * trashURLs = [NSMutableDictionary dictionary];
+
+  // Build the array of URLs and make sure each one can be removed.
   for(NSString * path in paths)
     {
     NSURL * url = [NSURL fileURLWithPath: path];
     
     [urls addObject: url];
-    [urlsToRemove addObject: url];
     
+    // Use the original location for now.
+    [trashURLs setObject: url forKey: url];
+    
+    NSLog(@"Clearing immutable flag on %@", path);
     [[NSFileManager defaultManager]
       setAttributes:
         [NSDictionary
@@ -1018,72 +926,86 @@
       ofItemAtPath: path error: NULL];
     }
     
+  // Now try to move the files to the trash.
+  NSLog(@"Sending files to recycle bin");
+  
   [[NSWorkspace sharedWorkspace]
     recycleURLs: urls
     completionHandler:
       ^(NSDictionary * newURLs, NSError * error)
         {
-        NSMutableDictionary * urlsRemoved =
-          [NSMutableDictionary dictionaryWithDictionary: newURLs];
-            
-        for(NSURL * url in newURLs)
-          [urlsToRemove removeObject: url];
-          
-        if([urlsToRemove count] > 0)
-          {
-          NSArray * urlsRemovedByAdmin =
-            [Utilities removeAdminFiles: urlsToRemove];
-          
-          for(NSURL * url in urlsRemovedByAdmin)
-            {
-            [urlsToRemove removeObject: url];
-            [urlsRemoved setObject: url forKey: url];
-            }
-          }
-          
-        handler(urlsRemoved, error);
-          
-        [urlsToRemove release];
+        [Utilities
+          verifyRemovalOf: urls
+          withRemovedFiles: newURLs
+          completionHandler: handler];
         }];
   }
 
-// Remove files with administrator privileges.
-+ (NSArray *) removeAdminFiles: (NSMutableSet *) urlsToRemove
+// Verify that URLs were removed.
++ (void) verifyRemovalOf: (NSArray *) urls
+  withRemovedFiles: (NSDictionary *) trashURLs
+  completionHandler:
+    (void (^)(NSDictionary * newURLs, NSError * error)) handler
   {
-  NSAlert * alert = [[NSAlert alloc] init];
+  // If the move to the trash fails, I will try with administrator
+  // privileges. If that happens, I may need to update the list of
+  // URLs in the trash with those that required admin rights to move.
+  NSMutableSet * pathsRequiringAdminRights = [NSMutableSet set];
 
-  [alert setMessageText: NSLocalizedString(@"Password required!", NULL)];
+  // Build an initial array of all URLs that could have been removed.
+  for(NSURL * url in urls)
+    [pathsRequiringAdminRights addObject: url];
     
-  [alert setAlertStyle: NSWarningAlertStyle];
-
-  NSMutableString * message = [NSMutableString string];
+  // Now remove any URLs that really were removed.
+  for(NSURL * trashURL in trashURLs)
+    [pathsRequiringAdminRights removeObject: trashURL];
+    
+  // Build a set of URLs that were removed one way or another.
+  NSMutableDictionary * URLsMovedToTrash =
+    [NSMutableDictionary dictionaryWithDictionary: trashURLs];
+    
+  if([urls count] != [URLsMovedToTrash count])
+    {
+    NSDictionary * urlsRemovedByAdmin =
+      [Utilities removeAdminFiles: [pathsRequiringAdminRights allObjects]];
+      
+    for(NSURL * url in urlsRemovedByAdmin)
+      {
+      NSURL * trashURL = [urlsRemovedByAdmin objectForKey: url];
+      
+      [pathsRequiringAdminRights removeObject: url];
+      
+      [URLsMovedToTrash setObject: trashURL forKey: url];
+      }
+    }
+    
+  NSError * error = nil;
   
-  [message appendString: NSLocalizedString(@"passwordrequired", NULL)];
-  
-  for(NSURL * url in urlsToRemove)
-    [message appendFormat: @"%@\n", [url path]];
+  if([urls count] != [URLsMovedToTrash count])
+    {
+    NSDictionary * userInfo =
+      [NSDictionary
+        dictionaryWithObjectsAndKeys:
+          NSLocalizedString(@"Delete failure.", nil),
+          NSLocalizedDescriptionKey,
+          NSLocalizedString(@"Failed to delete all files.", nil),
+          NSLocalizedFailureReasonErrorKey,
+          NSLocalizedString(@"Delete files manually", nil),
+          NSLocalizedRecoverySuggestionErrorKey,
+          nil];
+      
+    error =
+      [NSError
+        errorWithDomain: @"com.etresoft.etrecheck"
+        code: -1
+        userInfo: userInfo];
+    }
     
-  [message appendString: NSLocalizedString(@"continuewithpassword", NULL)];
-
-  [alert setInformativeText: message];
-
-  // This is the rightmost, first, default button.
-  [alert addButtonWithTitle: NSLocalizedString(@"Yes", NULL)];
-
-  [alert addButtonWithTitle: NSLocalizedString(@"No", NULL)];
-
-  NSInteger result = [alert runModal];
-
-  [alert release];
-
-  if(result == NSAlertFirstButtonReturn)
-    return [Utilities performAdminDelete: urlsToRemove];
-    
-  return [NSArray array];
+  handler(URLsMovedToTrash, error);
   }
 
-// Perform a deletion of files with administrator privileges.
-+ (NSArray *) performAdminDelete: (NSMutableSet *) urlsToRemove
+// Remove files with administrator privileges.
++ (NSDictionary *) removeAdminFiles: (NSArray *) urlsToRemove
   {
   NSMutableString * source = [NSMutableString string];
   
@@ -1107,16 +1029,26 @@
 
   [source appendString: @"}\n"];
 
-  /* Investigate whether this is needed at some point. Hopefully, turning
-  off the NSFileImmutable attribute will be enough.
-	repeat with posixFile in posixFiles
-		set f to posixFile as alias
-		set locked of f to false
-	end repeat
-  */
-  
+  // It should be possible to collect the final, trashed paths to the
+  // deleted files with something like this:
+  //[source appendString: @"set trashedFiles to {}\n"];
+  //[source appendString: @"set trashedAliases to move posixFiles to the trash\n"];
+  //[source appendString: @"repeat with trashedAlias in trashedAliases\n"];
+  //[source appendString: @"set trashedFile to POSIX path of (trashedAlias as text)\n"];
+  //[source appendString: @"display dialog trashedFile as text\n"];
+  //[source appendString: @"copy trashedFile as text to end of trashedFiles\n"];
+  //[source appendString: @"end repeat\n"];
+  //[source appendString: @"return trashedAliases\n"];
+  // It works great from the script editor, but just returns an empty list
+  // here. <sigh> Applescript. I don't really need the trashed path, so
+  // I'll just fake it instead.
+ 
   [source appendString: @"tell application \"Finder\"\n"];
   [source appendString: @"activate\n"];
+  [source appendString: @"repeat with posixFile in posixFiles\n"];
+  [source appendString: @"set f to posixFile as alias\n"];
+  [source appendString: @"set locked of f to false\n"];
+  [source appendString: @"end repeat\n"];
   [source appendString: @"move posixFiles to the trash\n"];
   [source appendString: @"end tell\n"];
 
@@ -1125,55 +1057,186 @@
 
   NSDictionary * errorDict;
   
+  NSLog(@"Deleting files with AppleScript");
   NSAppleEventDescriptor * returnDescriptor =
     [scriptObject executeAndReturnError: & errorDict];
     
   [scriptObject release];
 
   if(returnDescriptor != NULL)
+  
     // Successful execution
     if(kAENullEvent != [returnDescriptor descriptorType])
       {
-      NSMutableArray * urlsDeleted = [NSMutableArray array];
+      NSMutableDictionary * trashedURLs = [NSMutableDictionary dictionary];
   
-      for(NSURL * url in urlsToRemove)
-        if(![[NSFileManager defaultManager] fileExistsAtPath: [url path]])
-          [urlsDeleted addObject: url];
+      // It would be cool if I could do this:
+      // NSInteger count = [returnDescriptor numberOfItems];
+      // 
+      // for(NSInteger i = 0; i < count; ++i)
+      //   {
+      //   NSAppleEventDescriptor * posixFileDescriptor =
+      //     [returnDescriptor descriptorAtIndex: i + 1];
+      //
+      //   NSURL * originalURL = [urlsToRemove objectAtIndex: i];
+      //   
+      //   NSString * path = [posixFileDescriptor stringValue];
+      //   NSURL * trashURL = [NSURL fileURLWithPath: path];
+      //
+      //   if([path length] && trashURL)
+      //     {
+      //     NSLog(@"Applescript moved file %@ to %@", originalURL, trashURL);
+      //     [trashedURLs setObject: trashURL forKey: originalURL];
+      //     }
         
-      return urlsDeleted;
+      // Here is the proper way to get all trash directories. I don't really
+      // know which directory is really being used. Nor do I know what the
+      // resulting file name really is. In this case, I don't care, so I'll
+      // fake it all.
+      // NSArray * trashURLs =
+      //   [[NSFileManager defaultManager]
+      //     URLsForDirectory: NSTrashDirectory inDomains:NSUserDomainMask];
+      
+      // Fake it.
+      NSString * trashPath =
+        [NSHomeDirectory() stringByAppendingPathComponent: @".Trash"];
+      
+      // Let's see which of my urls is now gone.
+      for(NSURL * url in urlsToRemove)
+        {
+        NSString * path = [url path];
+        
+        BOOL exists =
+          [[NSFileManager defaultManager] fileExistsAtPath: path];
+        
+        if(!exists)
+          {
+          NSString * trashedPath =
+            [trashPath
+              stringByAppendingPathComponent: [path lastPathComponent]];
+          
+          NSLog(@"Applescript moved file %@ to %@ [fake]", path, trashPath);
+          [trashedURLs
+            setObject: [NSURL fileURLWithPath: trashedPath] forKey: url];
+          }
+        else
+          NSLog(@"Applescript filed to delete file %@", url);
+        }
+        
+      return [[trashedURLs copy] autorelease];
       }
     
-  return [NSArray array];
+  return [NSDictionary dictionary];
   }
 
 // Unload a launchd file.
-+ (void) unloadLaunchdFile: (NSString *) path
++ (void) unloadLaunchdTask: (NSDictionary *) info
   {
-  //NSLog(@"/bin/launchctl -w unload \"%@\"", path);
+  // First, try to list the task. If I can list it, I should be able to
+  // unload it.
+  NSString * path = [info objectForKey: kPath];
+  NSString * label = [info objectForKey: kLabel];
+  NSNumber * pid = [info objectForKey: kPID];
+  
+  if([label length] && [path length] && [pid integerValue])
+    {
+    NSString * status = [Utilities launchdTaskStatus: label];
+    
+    if([status length])
+      [Utilities unloadLaunchdFile: path withAdministratorPrivileges: NO];
+  
+    // If it still lives, try as root.
+    if([Utilities ps: pid])
+      [Utilities unloadLaunchdFile: path withAdministratorPrivileges: YES];
+    }
+  }
+  
+// Unload a launchd file.
++ (void) unloadLaunchdFile: (NSString *) path
+  withAdministratorPrivileges: (BOOL) withAdministratorPrivileges
+  {
+  NSString * command =
+    [NSString stringWithFormat: @"/bin/launchctl unload -w %@", path];
+  
+  NSString * script =
+    [NSString
+      stringWithFormat:
+        @"do shell script(\"%@\")%@",
+        command,
+        withAdministratorPrivileges
+          ? @" with administrator privileges"
+          : @""];
+  
+  NSLog(@"%@", script);
+  
+  NSArray * args =
+    @[
+      @"-e",
+      script,
+    ];
+
+  // Due to whatever funky is going on inside OS X and AppleScript, this
+  // must be run from the main thread.
+  dispatch_async(
+    dispatch_get_main_queue(),
+    ^{
+      SubProcess * subProcess = [[SubProcess alloc] init];
+  
+      [subProcess execute: @"/usr/bin/osascript" arguments: args];
+
+      [subProcess release];
+    });
   }
 
 // Kill a process.
 + (void) killProcess: (NSNumber *) pid
   {
-  // do shell script ("/usr/bin/osascript -e 'do shell script(\"/bin/kill -9 21090\") with administrator privileges'")
-
-  //NSLog(@"/bin/kill -9 \"%@\"", pid);
-  NSMutableString * source = [NSMutableString string];
-  
-  [source appendString: @"tell application \"Finder\"\n"];
-  [source appendString:
-    [NSString stringWithFormat: @"do shell script (\"/bin/kill -9 %@\") with administrator privileges\n", pid]];
-  [source appendString: @"do shell script (\"/bin/date > /tmp/date.txt\") with administrator privileges\n"];
-  [source appendString: @"end tell\n"];
-
-  NSAppleScript * scriptObject =
-    [[NSAppleScript alloc] initWithSource: source];
-
-  NSDictionary * errorDict;
-  
-  [scriptObject executeAndReturnError: & errorDict];
+  // Unloading may have killed it.
+  if([Utilities ps: pid])
+    {
+    // First try a simple kill.
+    [Utilities killProcess: pid withAdministratorPrivileges: NO];
     
-  [scriptObject release];
+    // If the process still looks alive, try with root.
+    if([Utilities ps: pid])
+      [Utilities killProcess: pid withAdministratorPrivileges: YES];
+    }
+  }
+
+// Kill a process.
++ (void) killProcess: (NSNumber *) pid
+  withAdministratorPrivileges: (BOOL) withAdministratorPrivileges
+  {
+  NSString * command = [NSString stringWithFormat: @"/bin/kill -9 %@", pid];
+  
+  NSString * script =
+    [NSString
+      stringWithFormat:
+        @"do shell script(\"%@\")%@",
+        command,
+        withAdministratorPrivileges
+          ? @" with administrator privileges"
+          : @""];
+  
+  NSLog(@"%@", command);
+  
+  NSArray * args =
+    @[
+      @"-e",
+      script,
+    ];
+
+  // Due to whatever funky is going on inside OS X and AppleScript, this
+  // must be run from the main thread.
+  dispatch_async(
+    dispatch_get_main_queue(),
+    ^{
+      SubProcess * subProcess = [[SubProcess alloc] init];
+  
+      [subProcess execute: @"/usr/bin/osascript" arguments: args];
+
+      [subProcess release];
+    });
   }
 
 // Restart the machine.

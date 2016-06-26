@@ -14,12 +14,14 @@
 #define kIgnored @"ignored"
 #define kUnknown @"unknown"
 #define kAdware @"adware"
+#define kModernLoginItem @"modernloginitem"
 #define kSignature @"signature"
 #define kApple @"apple"
 #define kPath @"path"
 #define kFilename @"filename"
 #define kExecutable @"executable"
 #define kCommand @"command"
+#define kLaunchdFileContents @"launchdfilecontents"
 #define kLabel @"Label"
 #define kApp @"app"
 #define kSupportURL @"supporturl"
@@ -34,6 +36,7 @@
 #define kStatusFailed @"failed"
 #define kStatusInvalid @"invalid"
 #define kStatusKilled @"killed"
+#define kStatusDuplicate @"duplicate"
 
 @interface LaunchdCollector : Collector
   {

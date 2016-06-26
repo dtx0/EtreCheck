@@ -26,6 +26,7 @@
 #import "AdwareManager.h"
 #import "UnknownFilesManager.h"
 #import "UpdateManager.h"
+#import "SubProcess.h"
 
 // Toolbar items.
 #define kShareToolbarItemID @"sharetoolbaritem"
@@ -898,16 +899,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       server
     ];
 
-  //NSLog(@"json = %@", json);
-  [Utilities execute: @"/usr/bin/curl" arguments: args];
-
-  NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
-
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSString * donationKey =
       [[NSString alloc]
-        initWithData: result encoding: NSUTF8StringEncoding];
+        initWithData: subProcess.standardOutput
+        encoding: NSUTF8StringEncoding];
       
     [donationKey autorelease];
     
@@ -1259,7 +1260,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
             [[NSBundle mainBundle]
               pathForResource: @"adwarehelp" ofType: @"rtf"]]];
     
-  if([[Model model] haveUnknownFiles])
+  if([[Model model] unknownFilesFound])
     [self.log
       appendRTFData:
         [NSData
@@ -1812,23 +1813,21 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       server
     ];
 
-  [Utilities execute: @"/usr/bin/curl" arguments: args];
-
-  NSData * result = [Utilities execute: @"/usr/bin/curl" arguments: args];
-
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/curl" arguments: args])
     {
     NSString * status =
       [[NSString alloc]
-        initWithData: result encoding: NSUTF8StringEncoding];
+        initWithData: subProcess.standardOutput
+        encoding: NSUTF8StringEncoding];
       
     [status autorelease];
     
     if([status isEqualToString: @"OK"])
-      {
-      //NSLog(@"Donation key verified");
       return YES;
-      }
     }
   
   return NO;

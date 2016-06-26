@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
+#import "SubProcess.h"
 
 #define kIdentifier @"identifier"
 #define kHumanReadableName @"humanreadablename"
@@ -90,21 +91,26 @@
       @"-iname",
       @"*.safariextz"];
 
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * paths = [Utilities formatLines: data];
-  
-  for(NSString * path in paths)
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    NSString * name = [self extensionName: path];
-      
-    NSDictionary * plist = [self readSafariExtensionPropertyList: path];
+    NSArray * paths = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(NSString * path in paths)
+      {
+      NSString * name = [self extensionName: path];
+        
+      NSDictionary * plist = [self readSafariExtensionPropertyList: path];
 
-    NSMutableDictionary * extension =
-      [self createExtensionsFromPlist: plist name: name path: path];
-      
-    [extension setObject: path forKey: kArchivePath];
+      NSMutableDictionary * extension =
+        [self createExtensionsFromPlist: plist name: name path: path];
+        
+      [extension setObject: path forKey: kArchivePath];
+      }
     }
+    
+  [subProcess release];
   }
 
 // Collect extension caches.
@@ -121,21 +127,26 @@
       @"-iname",
       @"*.safariextension"];
 
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * paths = [Utilities formatLines: data];
-
-  for(NSString * path in paths)
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    NSString * name = [self extensionName: path];
-      
-    NSDictionary * plist = [self findExtensionPlist: path];
+    NSArray * paths = [Utilities formatLines: subProcess.standardOutput];
 
-    NSMutableDictionary * extension =
-      [self createExtensionsFromPlist: plist name: name path: path];
-      
-    [extension setObject: path forKey: kCachePath];
+    for(NSString * path in paths)
+      {
+      NSString * name = [self extensionName: path];
+        
+      NSDictionary * plist = [self findExtensionPlist: path];
+
+      NSMutableDictionary * extension =
+        [self createExtensionsFromPlist: plist name: name path: path];
+        
+      [extension setObject: path forKey: kCachePath];
+      }
     }
+    
+  [subProcess release];
   }
 
 // Get the extension name, less the uniquifier.
@@ -387,7 +398,11 @@
       tempDirectory
     ];
   
-  [Utilities execute: @"/usr/bin/xar" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess execute: @"/usr/bin/xar" arguments: args];
+    
+  [subProcess release];
   
   return tempDirectory;
   }
@@ -401,37 +416,46 @@
       @"Info.plist"
     ];
     
-  NSData * infoPlistPathData =
-    [Utilities execute: @"/usr/bin/find" arguments: args];
-
-  NSString * infoPlistPathString =
-    [[NSString alloc]
-      initWithData: infoPlistPathData encoding: NSUTF8StringEncoding];
-  
-  NSString * infoPlistPath =
-    [infoPlistPathString stringByTrimmingCharactersInSet:
-        [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  
-  [infoPlistPathString release];
-  
-  NSData * plistData =
-    [Utilities execute: @"/bin/cat" arguments: @[infoPlistPath]];
-
   NSDictionary * plist = nil;
+    
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(plistData)
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    NSError * error;
-    NSPropertyListFormat format;
+    NSString * infoPlistPathString =
+      [[NSString alloc]
+        initWithData: subProcess.standardOutput
+        encoding: NSUTF8StringEncoding];
     
-    plist =
-      [NSPropertyListSerialization
-        propertyListWithData: plistData
-        options: NSPropertyListImmutable
-        format: & format
-        error: & error];
+    NSString * infoPlistPath =
+      [infoPlistPathString stringByTrimmingCharactersInSet:
+          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    subProcess = [[SubProcess alloc] init];
+    
+    if([subProcess execute: @"/bin/cat" arguments: @[infoPlistPath]])
+      {
+      if(subProcess.standardOutput)
+        {
+        NSError * error;
+        NSPropertyListFormat format;
+        
+        plist =
+          [NSPropertyListSerialization
+            propertyListWithData: subProcess.standardOutput
+            options: NSPropertyListImmutable
+            format: & format
+            error: & error];
+        }
+      }
+      
+    [infoPlistPathString release];
+    
+    [subProcess release];
     }
-    
+        
   return plist;
   }
 

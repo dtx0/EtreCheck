@@ -10,6 +10,7 @@
 #import "NSArray+Etresoft.h"
 #import "Model.h"
 #import "TTTLocalizedPluralString.h"
+#import "SubProcess.h"
 
 @implementation VideoCollector
 
@@ -39,12 +40,12 @@
       @"SPDisplaysDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -54,6 +55,8 @@
         [self printVideoInformation: infos];
       }
     }
+    
+  [subProcess release];
     
   dispatch_semaphore_signal(self.complete);
   }

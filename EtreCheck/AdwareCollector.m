@@ -12,19 +12,13 @@
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
-#define kExtensionsKey @"extensions"
-#define kGroup2Key @"group2"
-#define kGroup3Key @"group3"
-#define kGroup4Key @"group4"
+#define kAdwareExtensionsKey @"adwareextensions"
 #define kBlacklistKey @"blacklist"
 #define kBlacklistSuffixKey @"blacklist_suffix"
 #define kBlacklistMatchKey @"blacklist_match"
 
 // Collect information about adware.
 @implementation AdwareCollector
-
-@synthesize adwareSignatures = myAdwareSignatures;
-@synthesize adwareFound = myAdwareFound;
 
 // Constructor.
 - (id) init
@@ -36,22 +30,10 @@
     self.name = @"adware";
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
     
-    myAdwareSignatures = [NSMutableDictionary new];
-    myAdwareFound = [NSMutableDictionary new];
-  
     [self loadSignatures];
     }
     
   return self;
-  }
-
-// Destructor.
-- (void) dealloc
-  {
-  self.adwareFound = nil;
-  self.adwareSignatures = nil;
-  
-  [super dealloc];
   }
 
 // Perform the collection.
@@ -59,20 +41,9 @@
   {
   [self updateStatus: NSLocalizedString(@"Checking for adware", NULL)];
 
-  [self collectAdware];
-  
   [self printAdware];
   
   dispatch_semaphore_signal(self.complete);
-  }
-
-// Collect adware.
-- (void) collectAdware
-  {
-  [self searchForAdware: kGroup2Key];
-  [self searchForAdware: kGroup3Key];
-  [self searchForAdware: kGroup4Key];
-  [self searchForAdware: kBlacklistKey];
   }
 
 // Load signatures from an obfuscated list of signatures.
@@ -116,18 +87,9 @@
           forKey: kWhitelistPrefixKey];
 
       [self
-        addSignatures: [plist objectForKey: @"item1"]
-          forKey: kExtensionsKey];
+        addSignatures: [plist objectForKey: kAdwareExtensionsKey]
+          forKey: kAdwareExtensionsKey];
       
-      [self
-        addSignatures: [plist objectForKey: @"item2"] forKey: kGroup2Key];
-      
-      [self
-        addSignatures: [plist objectForKey: @"item3"] forKey: kGroup3Key];
-      
-      [self
-        addSignatures: [plist objectForKey: @"item4"] forKey: kGroup4Key];
-
       [self
         addSignatures: [plist objectForKey: @"blacklist"]
         forKey: kBlacklistKey];
@@ -148,15 +110,13 @@
   {
   if(signatures)
     {
-    NSString * localizedKey = NSLocalizedString(key, NULL);
-    
     if([key isEqualToString: kWhitelistKey])
       [[Model model] appendToWhitelist: signatures];
 
     else if([key isEqualToString: kWhitelistPrefixKey])
       [[Model model] appendToWhitelistPrefixes: signatures];
 
-    if([key isEqualToString: @"extensions"])
+    if([key isEqualToString: kAdwareExtensionsKey])
       [[Model model] setAdwareExtensions: signatures];
       
     else if([key isEqualToString: kBlacklistKey])
@@ -167,11 +127,6 @@
 
     else if([key isEqualToString: kBlacklistMatchKey])
       [[Model model] appendToBlacklistMatches: signatures];
-
-    else
-      [myAdwareSignatures
-        setObject: [self expandSignatures: signatures]
-        forKey: localizedKey];
     }
   }
 
@@ -185,35 +140,6 @@
       addObject: [signature stringByExpandingTildeInPath]];
     
   return expandedSignatures;
-  }
-
-// Search for existing adware files.
-- (void) searchForAdware: (NSString *) adware
-  {
-  NSArray * files = [self.adwareSignatures objectForKey: adware];
-  
-  NSMutableArray * foundFiles = [NSMutableArray array];
-  
-  [foundFiles addObjectsFromArray: [self identifyAdwareFiles: files]];
-  
-  if([foundFiles count])
-    {
-    [[Model model] setAdwareFound: YES];
-
-    [self.adwareFound setObject: foundFiles forKey: adware];
-    
-    for(NSString * path in foundFiles)
-      {
-      NSString * urlPath = [Utilities makeURLPath: path];
-      
-      [[[Model model] adwareFiles]
-        setObject: [adware lowercaseString]
-        forKey: urlPath];
-        
-      [[[Model model] unknownFiles] removeObject: urlPath];
-      [[[Model model] unknownFiles] removeObject: path];
-      }
-    }
   }
 
 // Identify adware files.

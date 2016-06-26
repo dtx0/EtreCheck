@@ -12,6 +12,7 @@
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
 #import <SystemConfiguration/SystemConfiguration.h>
+#import "SubProcess.h"
 
 // Some keys to be returned from machine lookuup.
 #define kMachineIcon @"machineicon"
@@ -107,12 +108,12 @@
       @"SPBluetoothDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -147,6 +148,8 @@
             }
       }
     }
+    
+  [subProcess release];
   }
 
 // Collect hardware information.
@@ -158,12 +161,12 @@
       @"SPHardwareDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -185,6 +188,8 @@
         }
       }
     }
+    
+  [subProcess release];
   }
 
 // Print informaiton for the machine.
@@ -533,12 +538,14 @@
       @"SPMemoryDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -695,12 +702,12 @@
       @"SPAirPortDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -732,6 +739,8 @@
         }
       }
     }
+    
+  [subProcess release];
   }
 
 // Print a single wireless interface.
@@ -759,12 +768,12 @@
       @"SPPowerDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -775,6 +784,8 @@
         [self printBatteryInformation: infos];
       }
     }
+    
+  [subProcess release];
   }
 
 // Print battery information.

@@ -6,6 +6,7 @@
 
 #import "UserLaunchAgentsCollector.h"
 #import "Utilities.h"
+#import "SubProcess.h"
 
 @implementation UserLaunchAgentsCollector
 
@@ -46,13 +47,18 @@
         @"-type", @"l"
       ];
     
-    NSData * result = [Utilities execute: @"/usr/bin/find" arguments: args];
+    SubProcess * subProcess = [[SubProcess alloc] init];
     
-    NSArray * files = [Utilities formatLines: result];
+    if([subProcess execute: @"/usr/bin/find" arguments: args])
+      {
+      NSArray * files = [Utilities formatLines: subProcess.standardOutput];
     
-    NSArray * plists = [self collectPropertyListFiles: files];
+      NSArray * plists = [self collectPropertyListFiles: files];
     
-    [self printPropertyLists: plists];
+      [self printPropertyLists: plists];
+      }
+      
+    [subProcess release];
     }
     
   dispatch_semaphore_signal(self.complete);

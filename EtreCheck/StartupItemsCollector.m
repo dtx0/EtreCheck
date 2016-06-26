@@ -9,6 +9,7 @@
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
+#import "SubProcess.h"
 
 // Collect old startup items.
 @implementation StartupItemsCollector
@@ -43,12 +44,12 @@
       @"SPStartupItemDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -73,6 +74,8 @@
       }
     }
     
+  [subProcess release];
+    
   dispatch_semaphore_signal(self.complete);
   }
 
@@ -85,20 +88,25 @@
       @"-iname",
       @"Info.plist"];
   
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
-
-  NSArray * files = [Utilities formatLines: data];
-
   NSMutableDictionary * bundles = [NSMutableDictionary dictionary];
 
-  for(NSString * file in files)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    NSDictionary * plist = [NSDictionary readPropertyList: file];
+    NSArray * files = [Utilities formatLines: subProcess.standardOutput];
 
-    if(plist)
-      [bundles setObject: plist forKey: file];
+    for(NSString * file in files)
+      {
+      NSDictionary * plist = [NSDictionary readPropertyList: file];
+
+      if(plist)
+        [bundles setObject: plist forKey: file];
+      }
     }
     
+  [subProcess release];
+  
   return bundles;
   }
 

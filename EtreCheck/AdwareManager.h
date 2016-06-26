@@ -11,20 +11,9 @@
   <NSTableViewDelegate, NSTableViewDataSource>
   {
   NSMutableArray * myAdwareFiles;
-  NSMutableArray * myAdwareLaunchdFiles;
-  NSMutableArray * myAdwareProcesses;
   }
-
-// Can I delete something?
-@property (readonly) BOOL canDelete;
 
 // Array of adware files.
 @property (retain) NSMutableArray * adwareFiles;
-
-// Array of adware launchd files.
-@property (retain) NSMutableArray * adwareLaunchdFiles;
-
-// Array of adware processes.
-@property (retain) NSMutableArray * adwareProcesses;
 
 @end

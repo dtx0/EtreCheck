@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
+#import "SubProcess.h"
 
 // Gatekeeper settings.
 typedef enum
@@ -83,35 +84,40 @@ GatekeeperSetting;
       @"--verbose"
     ];
   
-  NSData * data = [Utilities execute: @"/usr/sbin/spctl" arguments: args];
-
-  NSArray * lines = [Utilities formatLines: data];
-
   GatekeeperSetting setting = kUnknown;
+    
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  for(NSString * line in lines)
+  if([subProcess execute: @"/usr/sbin/spctl" arguments: args])
     {
-    NSString * trimmedLine =
-      [line
-        stringByTrimmingCharactersInSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-          
-    if([trimmedLine isEqualToString: @""])
-      continue;
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
 
-    if([trimmedLine isEqualToString: @"assessments disabled"])
-      setting = kDisabled;
-    else if([trimmedLine isEqualToString: @"developer id enabled"])
-      setting = kDeveloperID;
-    else if([trimmedLine isEqualToString: @"developer id disabled"])
-      setting = kMacAppStore;
+    for(NSString * line in lines)
+      {
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+      if([trimmedLine isEqualToString: @""])
+        continue;
+
+      if([trimmedLine isEqualToString: @"assessments disabled"])
+        setting = kDisabled;
+      else if([trimmedLine isEqualToString: @"developer id enabled"])
+        setting = kDeveloperID;
+      else if([trimmedLine isEqualToString: @"developer id disabled"])
+        setting = kMacAppStore;
+      }
     }
     
+  [subProcess release];
+  
   // Perhaps I am on Mountain Lion and need to check the old debug
   // command line argument.
   if(setting == kUnknown)
     setting = [self collectMountainLionGatekeeperSetting];
-      
+    
   return setting;
   }
 
@@ -120,27 +126,34 @@ GatekeeperSetting;
   {
   GatekeeperSetting setting = kUnknown;
   
-  NSData * data =
-    [Utilities
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  BOOL result =
+    [subProcess
       execute: @"/usr/sbin/spctl" arguments: @[@"--test-devid-status"]];
-
-  NSArray * lines = [Utilities formatLines: data];
-
-  for(NSString * line in lines)
+    
+  if(result)
     {
-    NSString * trimmedLine =
-      [line
-        stringByTrimmingCharactersInSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-          
-    if([trimmedLine isEqualToString: @""])
-      continue;
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
 
-    if([trimmedLine isEqualToString: @"devid enabled"])
-      setting = kDeveloperID;
-    else if([trimmedLine isEqualToString: @"devid disabled"])
-      setting = kMacAppStore;
+    for(NSString * line in lines)
+      {
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+      if([trimmedLine isEqualToString: @""])
+        continue;
+
+      if([trimmedLine isEqualToString: @"devid enabled"])
+        setting = kDeveloperID;
+      else if([trimmedLine isEqualToString: @"devid disabled"])
+        setting = kMacAppStore;
+      }
     }
+    
+  [subProcess release];
     
   return setting;
   }

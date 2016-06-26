@@ -11,6 +11,7 @@
 #import "ByteCountFormatter.h"
 #import "NSArray+Etresoft.h"
 #import "TTTLocalizedPluralString.h"
+#import "SubProcess.h"
 
 // Some keys for an internal dictionary.
 #define kDiskType @"volumetype"
@@ -75,16 +76,18 @@
       @"SPSerialATADataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
-  
   //result =
   //  [NSData
   //    dataWithContentsOfFile: @"/tmp/etrecheck/SPSerialATADataType.xml"];
   
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+     NSArray * plist =
+       [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -112,15 +115,17 @@
       @"SPNVMeDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
-  
   // result =
   //  [NSData dataWithContentsOfFile: @"/tmp/etrecheck/SPNVMeDataType.xml"];
   
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {

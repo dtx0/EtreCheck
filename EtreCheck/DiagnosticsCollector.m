@@ -11,6 +11,7 @@
 #import "DiagnosticEvent.h"
 #import "NSArray+Etresoft.h"
 #import "Model.h"
+#import "SubProcess.h"
 
 // Collect diagnostics information.
 @implementation DiagnosticsCollector
@@ -88,29 +89,34 @@
       @"SPDiagnosticsDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
-  
   //result =
   //  [NSData dataWithContentsOfFile:
   //    @"/tmp/SPDiagnosticsDataType.xml" options: 0 error: NULL];
   
-  if(![result length])
-    return;
-    
-  NSArray * plist = [NSArray readPropertyListData: result];
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
+    {
+    if(![subProcess.standardOutput length])
+      return;
+      
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
 
-  if(![plist count])
-    return;
-    
-  NSArray * results =
-    [[plist objectAtIndex: 0] objectForKey: @"_items"];
-    
-  if(![results count])
-    return;
+    if(![plist count])
+      return;
+      
+    NSArray * results =
+      [[plist objectAtIndex: 0] objectForKey: @"_items"];
+      
+    if(![results count])
+      return;
 
-  for(NSDictionary * result in results)
-    [self collectDiagnosticResult: result];
+    for(NSDictionary * result in results)
+      [self collectDiagnosticResult: result];
+    }
   }
 
 // Collect a single diagnostic result.
@@ -227,23 +233,29 @@
   
   NSString * error = nil;
   
-  NSData * data =
-    [Utilities execute: @"/usr/bin/find" arguments: args error: & error];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(![data length] && [error length])
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    NSString * permissionsError =
-      @"find: /Library/Logs/DiagnosticReports: Permission denied";
+    if(![subProcess.standardOutput length] && [error length])
+      {
+      NSString * permissionsError =
+        @"find: /Library/Logs/DiagnosticReports: Permission denied";
 
-    if([error hasPrefix: permissionsError])
-      insufficientPermissions = YES;
+      if([error hasPrefix: permissionsError])
+        insufficientPermissions = YES;
+        
+      return;
+      }
       
-    return;
-    }
+    // Parse diagnostic reports.
+    NSArray * files = [Utilities formatLines: subProcess.standardOutput];
     
-  // Parse diagnostic reports.
-  for(NSString * file in [Utilities formatLines: data])
-    [self createEventFromFile: file];
+    for(NSString * file in files)
+      [self createEventFromFile: file];
+    }
   }
 
 // Create a new diagnostic event for a file.

@@ -9,6 +9,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
+#import "SubProcess.h"
 
 // Base class that knows how to handle plug-ins of various types.
 @implementation PlugInsCollector
@@ -57,7 +58,7 @@
       else if([name isEqualToString: @"Flash Player"])
         [self.result
           appendAttributedString: [self getFlashSupportLink: plugin]];
-      else if([[Model model] isAdware: path])
+      else if([[Model model] checkForAdware: path])
         [self.result
           appendAttributedString: [self getAdwareLink: plugin]];
       else
@@ -93,36 +94,41 @@
   {
   NSArray * args = @[ path, @"-iname", @"*.plugin" ];
   
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
-  
-  NSArray * paths = [Utilities formatLines: data];
-  
   NSMutableDictionary * bundles = [NSMutableDictionary dictionary];
 
-  for(NSString * path in paths)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    NSString * filename = [path lastPathComponent];
-
-    NSString * versionPlist =
-      [path stringByAppendingPathComponent: @"Contents/Info.plist"];
-
-    NSDictionary * plist = [NSDictionary readPropertyList: versionPlist];
-
-    if(!plist)
-      plist =
-        @{
-          @"CFBundleShortVersionString" :
-            NSLocalizedString(@"Unknown", NULL)
-          };
-
-    NSMutableDictionary * bundle =
-      [NSMutableDictionary dictionaryWithDictionary: plist];
+    NSArray * paths = [Utilities formatLines: subProcess.standardOutput];
     
-    [bundle setObject: path forKey: @"path"];
-    
-    [bundles setObject: bundle forKey: filename];
+    for(NSString * path in paths)
+      {
+      NSString * filename = [path lastPathComponent];
+
+      NSString * versionPlist =
+        [path stringByAppendingPathComponent: @"Contents/Info.plist"];
+
+      NSDictionary * plist = [NSDictionary readPropertyList: versionPlist];
+
+      if(!plist)
+        plist =
+          @{
+            @"CFBundleShortVersionString" :
+              NSLocalizedString(@"Unknown", NULL)
+            };
+
+      NSMutableDictionary * bundle =
+        [NSMutableDictionary dictionaryWithDictionary: plist];
+      
+      [bundle setObject: path forKey: @"path"];
+      
+      [bundles setObject: bundle forKey: filename];
+      }
     }
     
+  [subProcess release];
+  
   return bundles;
   }
 

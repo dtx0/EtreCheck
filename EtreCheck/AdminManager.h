@@ -12,6 +12,12 @@
   NSWindow * myWindow;
   NSTextView * myTextView;
   NSTableView * myTableView;
+  
+  NSMutableArray * myLaunchdTasksToUnload;
+  NSMutableArray * myProcessesToKill;
+  NSMutableArray * myFilesToRemove;
+  
+  BOOL myFilesDeleted;
   }
 
 // The window itself.
@@ -22,6 +28,21 @@
 
 // The table view.
 @property (retain) IBOutlet NSTableView * tableView;
+
+// Can the manager remove any files?
+@property (readonly) BOOL canRemoveFiles;
+
+// Launchd tasks to unload.
+@property (retain) NSMutableArray * launchdTasksToUnload;
+
+// Processes to kill.
+@property (retain) NSMutableArray * processesToKill;
+
+// Files to remove.
+@property (retain) NSMutableArray * filesToRemove;
+
+// Were any files deleted?
+@property (assign) BOOL filesDeleted;
 
 // Show the window.
 - (void) show;
@@ -34,5 +55,8 @@
 
 // Tell the user that the EtreCheck version is unverified.
 - (BOOL) reportUnverifiedEtreCheckVersion;
+
+// Remove files.
+- (IBAction) removeFiles: (id) sender;
 
 @end

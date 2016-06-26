@@ -10,6 +10,7 @@
 #import "Model.h"
 #import "Utilities.h"
 #import "NSDictionary+Etresoft.h"
+#import "SubProcess.h"
 
 #define kSnapshotcount @"snapshotcount"
 #define kLastbackup @"lastbackup"
@@ -253,14 +254,14 @@
       @"-X"
     ];
   
-  NSData * result = [Utilities execute: @"/usr/bin/tmutil" arguments: args];
-
   // result = [NSData dataWithContentsOfFile: @"/tmp/etrecheck/tmutil.xml"];
   
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     NSDictionary * destinationinfo  =
-      [NSDictionary readPropertyListData: result];
+      [NSDictionary readPropertyListData: subProcess.standardOutput];
     
     NSArray * destinationList =
       [destinationinfo objectForKey: @"Destinations"];
@@ -268,6 +269,8 @@
     for(NSDictionary * destination in destinationList)
       [self consolidateDestination: destination];
     }
+    
+  [subProcess release];
   }
 
 // Collect destination snapshots.

@@ -7,6 +7,7 @@
 #import "ProcessesCollector.h"
 #import "Model.h"
 #import "Utilities.h"
+#import "SubProcess.h"
 
 // Collect information about processes.
 @implementation ProcessesCollector
@@ -16,44 +17,49 @@
   {
   NSArray * args = @[ @"-raxcww", @"-o", @"%mem, %cpu, comm" ];
   
-  NSData * result = [Utilities execute: @"/bin/ps" arguments: args];
-  
-  NSArray * lines = [Utilities formatLines: result];
-  
   NSMutableDictionary * processes = [NSMutableDictionary dictionary];
+    
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  for(NSString * line in lines)
+  if([subProcess execute: @"/bin/ps" arguments: args])
     {
-    if([line hasPrefix: @"STAT"])
-      continue;
-
-    NSNumber * mem = nil;
-    NSNumber * cpu = nil;
-    NSString * command = nil;
-
-    [self parsePs: line mem: & mem cpu: & cpu command: & command];
-
-    if(!command)
-      continue;
-      
-    if([command isEqualToString: @"EtreCheck"])
-      continue;
-      
-    double RAM = [[Model model] physicalRAM];
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
     
-    RAM = RAM * 1024 * 1024 * 1024;
-    
-    double usage = ([mem doubleValue] / 100.0) * RAM;
+    for(NSString * line in lines)
+      {
+      if([line hasPrefix: @"STAT"])
+        continue;
+
+      NSNumber * mem = nil;
+      NSNumber * cpu = nil;
+      NSString * command = nil;
+
+      [self parsePs: line mem: & mem cpu: & cpu command: & command];
+
+      if(!command)
+        continue;
+        
+      if([command isEqualToString: @"EtreCheck"])
+        continue;
+        
+      double RAM = [[Model model] physicalRAM];
       
-    [self
-      recordProcess: command
-      memory: usage
-      cpu: [cpu doubleValue]
-      in: processes];
+      RAM = RAM * 1024 * 1024 * 1024;
+      
+      double usage = ([mem doubleValue] / 100.0) * RAM;
+        
+      [self
+        recordProcess: command
+        memory: usage
+        cpu: [cpu doubleValue]
+        in: processes];
+      }
+      
+    // Don't forget the kernel.
+    [self recordKernelTaskIn: processes];
     }
     
-  // Don't forget the kernel.
-  [self recordKernelTaskIn: processes];
+  [subProcess release];
   
   return processes;
   }
@@ -126,31 +132,36 @@
   {
   NSArray * args = @[@"-c", @"/usr/bin/top -l 2 -stats pid,cpu,mem"];
   
-  NSData * result = [Utilities execute: @"/bin/sh" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * lines = [Utilities formatLines: result];
-  
-  int count = 0;
-  
-  for(NSString * line in lines)
+  if([subProcess execute: @"/bin/sh" arguments: args])
     {
-    if(![line hasPrefix: @"0 "])
-      continue;
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    int count = 0;
+    
+    for(NSString * line in lines)
+      {
+      if(![line hasPrefix: @"0 "])
+        continue;
 
-    if(count++ == 0)
-      continue;
-      
-    NSNumber * mem = nil;
-    NSNumber * cpu = nil;
+      if(count++ == 0)
+        continue;
+        
+      NSNumber * mem = nil;
+      NSNumber * cpu = nil;
 
-    [self parseTop: line mem: & mem cpu: & cpu];
+      [self parseTop: line mem: & mem cpu: & cpu];
 
-    [self
-      recordProcess: @"kernel_task"
-      memory: [mem doubleValue]
-      cpu: [cpu doubleValue]
-      in: processes];
+      [self
+        recordProcess: @"kernel_task"
+        memory: [mem doubleValue]
+        cpu: [cpu doubleValue]
+        in: processes];
+      }
     }
+    
+  [subProcess release];
   }
 
 // Parse a line from the top command.

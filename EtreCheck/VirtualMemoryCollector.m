@@ -9,6 +9,7 @@
 #import "ByteCountFormatter.h"
 #import "Model.h"
 #import "Utilities.h"
+#import "SubProcess.h"
 
 // Collect virtual memory information.
 @implementation VirtualMemoryCollector
@@ -175,11 +176,11 @@
 // Collect information from vm_stat.
 - (void) collectvm_stat: (NSMutableDictionary *) vminfo
   {
-  NSData * data = [Utilities execute: @"/usr/bin/vm_stat" arguments: nil];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(data)
+  if([subProcess execute: @"/usr/bin/vm_stat" arguments: nil])
     {
-    NSArray * lines = [Utilities formatLines: data];
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
     
     NSMutableDictionary * vm_stats = [NSMutableDictionary dictionary];
     
@@ -200,6 +201,8 @@
     // Format the values into something I can use.
     [vminfo addEntriesFromDictionary: [self formatVMStats: vm_stats]];
     }
+    
+  [subProcess release];
   }
 
 // Collect information from top.
@@ -207,14 +210,19 @@
   {
   NSArray * args = @[@"-c", @"/usr/bin/top -l 1 -stats pid,cpu,rsize"];
   
-  NSData * result = [Utilities execute: @"/bin/sh" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * lines = [Utilities formatLines: result];
-  
-  for(NSString * line in lines)
-    if([line hasPrefix: @"PhysMem: "])
-      // Format the values into something I can use.
-      [vminfo addEntriesFromDictionary: [self formatTop: line]];
+  if([subProcess execute: @"/bin/sh" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(NSString * line in lines)
+      if([line hasPrefix: @"PhysMem: "])
+        // Format the values into something I can use.
+        [vminfo addEntriesFromDictionary: [self formatTop: line]];
+    }
+    
+  [subProcess release];
   }
 
 // Collect information from sysctl.
@@ -222,14 +230,19 @@
   {
   NSArray * args = @[@"-a"];
   
-  NSData * data = [Utilities execute: @"/usr/sbin/sysctl" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * lines = [Utilities formatLines: data];
-  
-  for(NSString * line in lines)
-    if([line hasPrefix: @"vm.swapusage:"])
-      // Format the values into something I can use.
-      [vminfo addEntriesFromDictionary: [self formatSysctl: line]];
+  if([subProcess execute: @"/usr/sbin/sysctl" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+    
+    for(NSString * line in lines)
+      if([line hasPrefix: @"vm.swapusage:"])
+        // Format the values into something I can use.
+        [vminfo addEntriesFromDictionary: [self formatSysctl: line]];
+    }
+    
+  [subProcess release];
   }
 
 // Format output from vm_stats into something useable.

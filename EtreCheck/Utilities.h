@@ -21,8 +21,6 @@
 #define kExecutableMissing @"executablemissing"
 #define kSignatureSkipped @"signatureskipped"
 
-#define kExecutableTimeout @"executabletimeout"
-
 // Assorted utilities.
 @interface Utilities : NSObject
   {
@@ -77,22 +75,6 @@
 
 // Return the singeton of shared utilities.
 + (Utilities *) shared;
-
-// Execute an external program and return the results.
-+ (NSData *) execute: (NSString *) program arguments: (NSArray *) args;
-
-// Execute an external program, return the results, and collect any errors.
-+ (NSData *) execute: (NSString *) program
-  arguments: (NSArray *) args error: (NSString **) error;
-
-// Execute an external program, with options, return the results, and
-// collect any errors.
-// Supported options:
-//  kExecutableTimeout - timeout for external programs.
-+ (NSData *) execute: (NSString *) program
-  arguments: (NSArray *) args
-  options: (NSDictionary *) options
-  error: (NSString **) error;
 
 // Format text into an array of trimmed lines separated by newlines.
 + (NSArray *) formatLines: (NSData *) data;
@@ -149,13 +131,19 @@
 // Create a temporary directory.
 + (NSString *) createTemporaryDirectory;
 
+// Query the status of a launchd task.
++ (NSString *) launchdTaskStatus: (NSString *) label;
+
+// Query the status of a process.
++ (NSString *) ps: (NSNumber *) pid;
+
 // Delete an array of files.
 + (void) removeFiles: (NSArray *) paths
   completionHandler:
     (void (^)(NSDictionary * newURLs, NSError *error)) handler;
 
-// Unload a launchd file.
-+ (void) unloadLaunchdFile: (NSString *) path;
+// Unload a launchd task.
++ (void) unloadLaunchdTask: (NSDictionary *) info;
 
 // Kill a process.
 + (void) killProcess: (NSNumber *) pid;

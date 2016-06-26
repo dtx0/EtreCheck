@@ -9,6 +9,7 @@
 #import "LaunchdCollector.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
+#import "SubProcess.h"
 
 // Collect "other" files like modern login items.
 @implementation HiddenAppsCollector
@@ -57,27 +58,32 @@
 // Collect all running processes.
 - (void) collectProcesses
   {
+  NSMutableDictionary * currentProcesses = [NSMutableDictionary dictionary];
+    
   NSArray * args = @[ @"-raxww", @"-o", @"pid, comm" ];
   
-  NSData * result = [Utilities execute: @"/bin/ps" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * lines = [Utilities formatLines: result];
-  
-  NSMutableDictionary * currentProcesses = [NSMutableDictionary dictionary];
-  
-  for(NSString * line in lines)
+  if([subProcess execute: @"/bin/ps" arguments: args])
     {
-    if([line hasPrefix: @"STAT"])
-      continue;
-
-    NSNumber * pid = nil;
-    NSString * command = nil;
-
-    [self parsePs: line pid: & pid command: & command];
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
     
-    if(pid && command)
-      [currentProcesses setObject: command forKey: pid];
+    for(NSString * line in lines)
+      {
+      if([line hasPrefix: @"STAT"])
+        continue;
+
+      NSNumber * pid = nil;
+      NSString * command = nil;
+
+      [self parsePs: line pid: & pid command: & command];
+      
+      if(pid && command)
+        [currentProcesses setObject: command forKey: pid];
+      }
     }
+    
+  [subProcess release];
     
   myProcesses = [currentProcesses copy];
   }

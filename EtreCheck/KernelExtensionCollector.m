@@ -11,6 +11,7 @@
 #import "Model.h"
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
+#import "SubProcess.h"
 
 @implementation KernelExtensionCollector
 
@@ -123,14 +124,14 @@
       @"SPExtensionsDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
     dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER);
     
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if([plist count])
       {
@@ -152,6 +153,8 @@
       [self checkForUnknownExtensions: knownExtensions];
       }
     }
+    
+  [subProcess release];
   }
 
 // Check for Apple extensions.
@@ -235,9 +238,14 @@
       @"-iname",
       @"*.kext"];
   
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
-
-  return [self parseBundles: data];
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
+    return [self parseBundles: subProcess.standardOutput];
+    
+  return [NSDictionary dictionary];
   }
 
 // Collect system extensions.
@@ -249,9 +257,14 @@
       @"-iname",
       @"*.kext"];
   
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
-
-  return [self parseBundles: data];
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
+    return [self parseBundles: subProcess.standardOutput];
+    
+  return [NSDictionary dictionary];
   }
 
 // Collect application support extensions.
@@ -263,9 +276,14 @@
       @"-iname",
       @"*.kext"];
   
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
-
-  return [self parseBundles: data];
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
+    return [self parseBundles: subProcess.standardOutput];
+    
+  return [NSDictionary dictionary];
   }
 
 // Collect system application support extensions.
@@ -277,9 +295,14 @@
       @"-iname",
       @"*.kext"];
   
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
-
-  return [self parseBundles: data];
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
+    return [self parseBundles: subProcess.standardOutput];
+    
+  return [NSDictionary dictionary];
   }
 
 // Collect startup item extensions.
@@ -291,9 +314,14 @@
       @"-iname",
       @"*.kext"];
   
-  NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  return [self parseBundles: data];
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/find" arguments: args])
+    return [self parseBundles: subProcess.standardOutput];
+    
+  return [NSDictionary dictionary];
   }
 
 // Collect application extensions.
@@ -337,12 +365,15 @@
         @"-iname",
         @"*.kext"];
     
-    NSData * data = [Utilities execute: @"/usr/bin/find" arguments: args];
+    SubProcess * subProcess = [[SubProcess alloc] init];
     
-    return [self parseBundles: data];
+    [subProcess autorelease];
+    
+    if([subProcess execute: @"/usr/bin/find" arguments: args])
+      return [self parseBundles: subProcess.standardOutput];
     }
     
-  return @{};
+  return [NSDictionary dictionary];
   }
 
 // Return a dictionary of expanded bundle dictionaries found in a directory.
@@ -461,41 +492,45 @@
   {
   NSArray * args = @[ @"-l" ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/kextstat" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * lines = [Utilities formatLines: result];
-
-  self.loadedExtensions = [NSMutableDictionary dictionary];
-  self.unexpectedExtensions = [NSMutableDictionary dictionary];
-  
-  for(NSString * line in lines)
+  if([subProcess execute: @"/usr/sbin/kextstat" arguments: args])
     {
-    NSString * label = nil;
-    NSString * version = nil;
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
 
-    [self parseKext: line label: & label version: & version];
-
-    if(label && version)
+    self.loadedExtensions = [NSMutableDictionary dictionary];
+    self.unexpectedExtensions = [NSMutableDictionary dictionary];
+    
+    for(NSString * line in lines)
       {
-      NSDictionary * bundle = [self.extensions objectForKey: label];
-      
-      if(bundle)
-        [self.loadedExtensions setObject: bundle forKey: label];
-        
-      else
+      NSString * label = nil;
+      NSString * version = nil;
+
+      [self parseKext: line label: & label version: & version];
+
+      if(label && version)
         {
-        bundle =
-          [NSDictionary
-            dictionaryWithObjectsAndKeys:
-              version, @"CFBundleVersion",
-              label, @"CFBundleIdentifier",
-              nil];
+        NSDictionary * bundle = [self.extensions objectForKey: label];
+        
+        if(bundle)
+          [self.loadedExtensions setObject: bundle forKey: label];
           
-        [self.unexpectedExtensions setObject: bundle forKey: label];
+        else
+          {
+          bundle =
+            [NSDictionary
+              dictionaryWithObjectsAndKeys:
+                version, @"CFBundleVersion",
+                label, @"CFBundleIdentifier",
+                nil];
+            
+          [self.unexpectedExtensions setObject: bundle forKey: label];
+          }
         }
       }
     }
+    
+  [subProcess release];
   }
 
 // Find unloaded extensions.

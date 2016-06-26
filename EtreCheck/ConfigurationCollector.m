@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Model.h"
 #import "Utilities.h"
+#import "SubProcess.h"
 
 #define kRootlessPrefix @"System Integrity Protection status:"
 
@@ -211,14 +212,16 @@
       @"status",
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/bin/csrutil" arguments: args];
-
-  if(result)
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  [subProcess autorelease];
+  
+  if([subProcess execute: @"/usr/bin/csrutil" arguments: args])
     {
     NSString * status =
       [[NSString alloc]
-        initWithData: result encoding: NSUTF8StringEncoding];
+        initWithData: subProcess.standardOutput
+        encoding: NSUTF8StringEncoding];
     
     NSString * result = status;
     

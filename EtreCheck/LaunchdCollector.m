@@ -12,6 +12,7 @@
 #import "NSDictionary+Etresoft.h"
 #import "TTTLocalizedPluralString.h"
 #import "NSDate+Etresoft.h"
+#import "SubProcess.h"
 
 @implementation LaunchdCollector
 
@@ -505,13 +506,15 @@
   [self setDetailsURL: info];
   [self setExecutable: info];
   
+  [[[Model model] launchdFiles] setObject: info forKey: path];
+
   // For now, don't bother checking Apple files for unknown or adware
   // status.
   if([[info objectForKey: kApple] boolValue])
     return [self collectAppleLaunchdItemInfo: info];
     
   [self setUnknownForPath: path info: info];
-  [self setAdwareForPath: path info: info];
+  [[Model model] checkForAdware: path];
 
   return info;
   }
@@ -579,6 +582,12 @@
     [self.launchdStatus setObject: status forKey: label];
     [status release];
     }
+    
+  NSString * currentStatus = [status objectForKey: kStatus];
+  
+  if([currentStatus length] > 0)
+    [status
+      setObject: [NSNumber numberWithBool: YES] forKey: kStatusDuplicate];
     
   [status setObject: jobStatus forKey: kStatus];
   [status setObject: label forKey: kLabel];
@@ -807,7 +816,7 @@
 
 // Remove any files from the list of unknown files if they match certain
 // criteria.
-- (bool) isWhitelistException: (NSDictionary *) info
+- (bool) isWhitelistException: (NSMutableDictionary *) info
   path: (NSString *) path
   {
   bool whitelist = NO;
@@ -824,28 +833,9 @@
     }
     
   if(whitelist)
-    [[[Model model] unknownFiles] removeObject: path];
+    [info removeObjectForKey: kUnknown];
     
   return whitelist;
-  }
-
-// Set adware status for a file.
-- (void) setAdwareForPath: (NSString *) path
-  info: (NSMutableDictionary *) info
-  {
-  BOOL adware = [[Model model] isAdware: path];
-    
-  [info setObject: [NSNumber numberWithBool: adware] forKey: kAdware];
-  
-  if(adware)
-    {
-    [[[Model model] adwareLaunchdFiles] addObject: path];
-    
-    NSNumber * pid = [info objectForKey: @"PID"];
-    
-    if(pid)
-      [[[Model model] adwareProcesses] addObject: pid];
-    }
   }
 
 #pragma mark - Print property lists
@@ -968,17 +958,6 @@
     
   NSString * filename = [info objectForKey: kFilename];
 
-  // Save the command.
-  NSArray * command = [info objectForKey: kCommand];
-  
-  if([command count])
-    {
-    NSString * cmd = [Utilities formatExecutable: command];
-    
-    if(cmd)
-      [[[Model model] launchdCommands] setObject: cmd forKey: path];
-    }
-    
   // Format the status.
   [output appendAttributedString: [self formatPropertyListStatus: info]];
   
@@ -1202,36 +1181,40 @@
       serviceName
     ];
   
-  NSData * data =
-    [Utilities execute: @"/bin/launchctl" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  NSArray * lines = [Utilities formatLines: data];
-
-  for(NSString * line in lines)
+  if([subProcess execute: @"/bin/launchctl" arguments: args])
     {
-    NSString * trimmedLine =
-      [line
-        stringByTrimmingCharactersInSet:
-          [NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      
-    if([trimmedLine isEqualToString: @"app = 1"])
-      [info setObject: [NSNumber numberWithBool: YES] forKey: kApp];
-    else if([trimmedLine hasPrefix: @"program = "])
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+
+    for(NSString * line in lines)
       {
-      NSString * executable = [trimmedLine substringFromIndex: 10];
-      
-      [info setObject: executable forKey: kExecutable];
-      
-      [self updateModificationDate: info path: executable];
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+      if([trimmedLine isEqualToString: @"app = 1"])
+        [info setObject: [NSNumber numberWithBool: YES] forKey: kApp];
+      else if([trimmedLine hasPrefix: @"program = "])
+        {
+        NSString * executable = [trimmedLine substringFromIndex: 10];
+        
+        [info setObject: executable forKey: kExecutable];
+        
+        [self updateModificationDate: info path: executable];
+        }
+      else if([trimmedLine hasPrefix: @"parent bundle identifier = "])
+        [self
+          updateModificationDate: info
+          bundleID: [trimmedLine substringFromIndex: 27]];
+      else if([trimmedLine hasPrefix: @"pid = "])
+        [[self.launchdStatus objectForKey: label]
+          setObject: kStatusRunning forKey: label];
       }
-    else if([trimmedLine hasPrefix: @"parent bundle identifier = "])
-      [self
-        updateModificationDate: info
-        bundleID: [trimmedLine substringFromIndex: 27]];
-    else if([trimmedLine hasPrefix: @"pid = "])
-      [[self.launchdStatus objectForKey: label]
-        setObject: kStatusRunning forKey: label];
     }
+    
+  [subProcess release];
   }
 
 // Update the modification date.
@@ -1378,9 +1361,10 @@
   [output
     appendString: [NSString stringWithFormat: @"    %@    ", statusString]
     attributes:
-      [NSDictionary
-        dictionaryWithObjectsAndKeys:
-          color, NSForegroundColorAttributeName, nil]];
+      @{
+        NSForegroundColorAttributeName : color,
+        NSFontAttributeName : [[Utilities shared] boldFont]
+      }];
   
   return [output autorelease];
   }
@@ -1389,26 +1373,6 @@
 - (NSAttributedString *) formatExtraContent: (NSMutableDictionary *) info
   for: (NSString *) path
   {
-  // I need to check again for adware due to the agent/daemon/helper adware
-  // trio.
-  if([[Model model] isAdware: path])
-    {
-    [info setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
-
-    [[[Model model] adwareLaunchdFiles] addObject: path];
-    
-    NSNumber * pid = [info objectForKey: @"PID"];
-    
-    if(pid)
-      [[[Model model] adwareProcesses] addObject: pid];
-    }
-    
-  if([[info objectForKey: kApple] boolValue])
-    return [self formatApple: info for: path];
-    
-  else if([[info objectForKey: kAdware] boolValue])
-    return [self formatAdware: info for: path];
-    
   NSMutableAttributedString * extra =
     [[NSMutableAttributedString alloc] init];
 
@@ -1423,7 +1387,28 @@
       appendString:
         [NSString stringWithFormat: @" (%@)", modificationDateString]];
 
-  [extra appendAttributedString: [self formatSupportLink: info]];
+  // Check for a duplicate launchd label.
+  if([[info objectForKey: kStatusDuplicate] boolValue])
+    [extra
+      appendString: NSLocalizedString(@" - Duplicate label! ", NULL)
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+
+  // I need to check again for adware due to the agent/daemon/helper adware
+  // trio.
+  [[Model model] checkForAdware: path];
+    
+  if([[info objectForKey: kApple] boolValue])
+    [extra appendAttributedString: [self formatApple: info for: path]];
+    
+  else if([[info objectForKey: kAdware] boolValue])
+    [extra appendAttributedString: [self formatAdware: info for: path]];
+    
+  else
+    [extra appendAttributedString: [self formatSupportLink: info]];
   
   return [extra autorelease];
   }
@@ -1434,17 +1419,6 @@
   {
   NSMutableAttributedString * extra =
     [[NSMutableAttributedString alloc] init];
-
-  NSDate * modificationDate =
-    [info objectForKey: kModificationDate];
-
-  NSString * modificationDateString =
-    [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
-  
-  if(modificationDateString)
-    [extra
-      appendString:
-        [NSString stringWithFormat: @" (%@)", modificationDateString]];
 
   [extra appendString: @" "];
 
@@ -1487,17 +1461,6 @@
     {
     NSMutableAttributedString * extra =
       [[NSMutableAttributedString alloc] init];
-
-    NSDate * modificationDate =
-      [info objectForKey: kModificationDate];
-
-    NSString * modificationDateString =
-      [Utilities dateAsString: modificationDate format: @"yyyy-MM-dd"];
-    
-    if(modificationDateString)
-      [extra
-        appendString:
-          [NSString stringWithFormat: @" (%@)", modificationDateString]];
 
     NSString * message = [self formatAppleSignature: info];
       

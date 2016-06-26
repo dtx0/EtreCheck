@@ -8,6 +8,7 @@
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
 #import "NSArray+Etresoft.h"
+#import "SubProcess.h"
 
 // Collect information about Firewire devices.
 @implementation FirewireCollector
@@ -39,12 +40,12 @@
       @"SPFireWireDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if(plist && [plist count])
       {
@@ -60,6 +61,8 @@
         [self.result appendCR];
       }
     }
+    
+  [subProcess release];
     
   dispatch_semaphore_signal(self.complete);
   }

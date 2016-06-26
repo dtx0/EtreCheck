@@ -20,7 +20,6 @@
 #define kLowHardDisk @"lowharddisk"
 #define kLowRAM @"lowram"
 #define kMemoryPressure @"memorypressure"
-#define kAdware @"adware"
 #define kOutdatedOS @"outdatedos"
 #define kHighCache @"highcache"
 
@@ -41,13 +40,15 @@
   NSDictionary * myApplications;
   int myPhysicalRAM;
   NSImage * myMachineIcon;
-  NSDictionary * myProcesses;
   NSString * myModel;
   NSString * mySerialCode;
   NSMutableDictionary * myDiagnosticEvents;
+  NSMutableDictionary * myLaunchdFiles;
+  NSMutableSet * myProcesses;
+  NSString * myComputerName;
+  NSString * myHostName;
+  bool myAdwareFound;
   NSMutableDictionary * myAdwareFiles;
-  NSMutableSet * myAdwareLaunchdFiles;
-  NSMutableSet * myAdwareProcesses;
   NSMutableDictionary * myPotentialAdwareTrioFiles;
   NSArray * myAdwareExtensions;
   NSMutableSet * myWhitelistFiles;
@@ -55,16 +56,10 @@
   NSMutableSet * myBlacklistFiles;
   NSMutableSet * myBlacklistSuffixes;
   NSMutableSet * myBlacklistMatches;
-  NSString * myComputerName;
-  NSString * myHostName;
-  bool myAdwareFound;
+  bool myUnknownFilesFound;
   NSMutableArray * myTerminatedTasks;
-  NSMutableSet * myUnknownFiles;
   NSMutableSet * mySeriousProblems;
   bool myBackupExists;
-  NSMutableDictionary * myLaunchdCommands;
-  NSMutableDictionary * myLaunchdContents;
-  NSMutableDictionary * myModernLoginItems;
   
   bool myIgnoreKnownAppleFailures;
   bool myCheckAppleSignatures;
@@ -101,9 +96,6 @@
 // See if I can get the machine image.
 @property (retain) NSImage * machineIcon;
 
-// All processes.
-@property (retain) NSDictionary * processes;
-
 // The model code.
 @property (retain) NSString * model;
 
@@ -113,14 +105,26 @@
 // Diagnostic events.
 @property (retain) NSMutableDictionary * diagnosticEvents;
 
-// Adware files.
-@property (retain) NSMutableDictionary * adwareFiles;
+// All launchd files, whether loaded or not.
+@property (retain) NSMutableDictionary * launchdFiles;
 
-// Adware launchd files that need to be unloaded.
-@property (retain) NSMutableSet * adwareLaunchdFiles;
+// All processes.
+@property (retain) NSMutableSet * processes;
 
-// Adware processes that need to be killed.
-@property (retain) NSMutableSet * adwareProcesses;
+// Localized host name.
+@property (retain) NSString * computerName;
+
+// Host name.
+@property (retain) NSString * hostName;
+
+// Did I find any adware?
+@property (assign) bool adwareFound;
+
+// Adware files, whether launchd-based or not.
+@property (readonly) NSMutableDictionary * adwareFiles;
+
+// Adware launchd files.
+@property (readonly) NSDictionary * adwareLaunchdFiles;
 
 // Potential adware files.
 @property (retain) NSMutableDictionary * potentialAdwareTrioFiles;
@@ -143,35 +147,20 @@
 // Blacklist matches.
 @property (readonly) NSMutableSet * blacklistMatches;
 
-// Localized host name.
-@property (retain) NSString * computerName;
+// Did I find any unknown files?
+@property (assign) bool unknownFilesFound;
 
-// Host name.
-@property (retain) NSString * hostName;
-
-// Did I find any adware?
-@property (assign) bool adwareFound;
+// Unknown launchd files.
+@property (readonly) NSDictionary * unknownLaunchdFiles;
 
 // Which tasks had to be terminated.
 @property (retain) NSMutableArray * terminatedTasks;
-
-// Keep track of the number of files not in the whitelit.
-@property (retain) NSMutableSet * unknownFiles;
 
 // What serious problems were found?
 @property (retain) NSMutableSet * seriousProblems;
 
 // Do I have a Time Machine backup?
 @property (assign) bool backupExists;
-
-// Keep track of all launchd commands.
-@property (retain) NSMutableDictionary * launchdCommands;
-
-// Keep track of all launchd contents.
-@property (retain) NSMutableDictionary * launchdContents;
-
-// Keep track of modern login items.
-@property (retain) NSMutableDictionary * modernLoginItems;
 
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
@@ -181,9 +170,6 @@
 
 // Hide Apple tasks.
 @property (assign) bool hideAppleTasks;
-
-// Do I have unknown files?
-@property (readonly) bool haveUnknownFiles;
 
 // Is this version outdated?
 @property (assign) bool oldEtreCheckVersion;
@@ -204,7 +190,7 @@
 - (NSAttributedString *) getDetailsURLFor: (NSString *) query;
 
 // Is this file an adware file?
-- (bool) isAdware: (NSString *) path;
+- (bool) checkForAdware: (NSString *) path;
 
 // Is this file an adware extension?
 - (bool) isAdwareExtension: (NSString *) name path: (NSString *) path;

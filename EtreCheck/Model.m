@@ -8,6 +8,7 @@
 #import "DiagnosticEvent.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
+#import "LaunchdCollector.h"
 
 @implementation Model
 
@@ -21,13 +22,13 @@
 @synthesize applications = myApplications;
 @synthesize physicalRAM = myPhysicalRAM;
 @synthesize machineIcon = myMachineIcon;
-@synthesize processes = myProcesses;
 @synthesize model = myModel;
 @synthesize serialCode = mySerialCode;
 @synthesize diagnosticEvents = myDiagnosticEvents;
+@synthesize launchdFiles = myLaunchdFiles;
+@synthesize processes = myProcesses;
+@synthesize adwareFound = myAdwareFound;
 @synthesize adwareFiles = myAdwareFiles;
-@synthesize adwareLaunchdFiles = myAdwareLaunchdFiles;
-@synthesize adwareProcesses = myAdwareProcesses;
 @synthesize potentialAdwareTrioFiles = myPotentialAdwareTrioFiles;
 @synthesize adwareExtensions = myAdwareExtensions;
 @synthesize whitelistFiles = myWhitelistFiles;
@@ -37,24 +38,44 @@
 @synthesize blacklistSuffixes = myBlacklistSuffixes;
 @synthesize computerName = myComputerName;
 @synthesize hostName = myHostName;
-@synthesize adwareFound = myAdwareFound;
+@synthesize unknownFilesFound = myUnknownFilesFound;
 @synthesize terminatedTasks = myTerminatedTasks;
-@synthesize unknownFiles = myUnknownFiles;
 @synthesize seriousProblems = mySeriousProblems;
 @synthesize backupExists = myBackupExists;
-@synthesize launchdCommands = myLaunchdCommands;
-@synthesize launchdContents = myLaunchdContents;
-@synthesize modernLoginItems = myModernLoginItems;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
 @synthesize checkAppleSignatures = myCheckAppleSignatures;
 @synthesize hideAppleTasks = myHideAppleTasks;
 @synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
 @synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
-@dynamic haveUnknownFiles;
 
-- (bool) haveUnknownFiles
+- (NSDictionary *) adwareLaunchdFiles
   {
-  return self.unknownFiles.count > 0;
+  NSMutableDictionary * files = [NSMutableDictionary dictionary];
+  
+  for(NSString * path in self.launchdFiles)
+    {
+    NSDictionary * info = [self.launchdFiles objectForKey: path];
+    
+    if([[info objectForKey: kAdware] boolValue])
+      [files setObject: info forKey: path];
+    }
+    
+  return [[files copy] autorelease];
+  }
+
+- (NSDictionary *) unknownLaunchdFiles
+  {
+  NSMutableDictionary * files = [NSMutableDictionary dictionary];
+  
+  for(NSString * path in self.launchdFiles)
+    {
+    NSDictionary * info = [self.launchdFiles objectForKey: path];
+    
+    if([[info objectForKey: kUnknown] boolValue])
+      [files setObject: info forKey: path];
+    }
+    
+  return [[files copy] autorelease];
   }
 
 // Return the singeton of shared values.
@@ -80,14 +101,13 @@
   
   if(self)
     {
-    myUnknownFiles = [NSMutableSet new];
+    myLaunchdFiles = [NSMutableDictionary new];
     myVolumes = [NSMutableDictionary new];
     myCoreStorageVolumes = [NSMutableDictionary new];
     myDiskErrors = [NSMutableDictionary new];
     myDiagnosticEvents = [NSMutableDictionary new];
     myAdwareFiles = [NSMutableDictionary new];
-    myAdwareLaunchdFiles = [NSMutableSet new];
-    myAdwareProcesses = [NSMutableSet new];
+    myProcesses = [NSMutableSet new];
     myPotentialAdwareTrioFiles = [NSMutableDictionary new];
     myTerminatedTasks = [NSMutableArray new];
     mySeriousProblems = [NSMutableSet new];
@@ -99,9 +119,6 @@
     myBlacklistFiles = [NSMutableSet new];
     myBlacklistSuffixes = [NSMutableSet new];
     myBlacklistMatches = [NSMutableSet new];
-    myLaunchdCommands = [NSMutableDictionary new];
-    myLaunchdContents = [NSMutableDictionary new];
-    myModernLoginItems = [NSMutableDictionary new];
     }
     
   return self;
@@ -110,22 +127,18 @@
 // Destructor.
 - (void) dealloc
   {
-  [myModernLoginItems release];
-  [myLaunchdCommands release];
-  [myLaunchdContents release];
+  [myAdwareFiles release];
   [myBlacklistSuffixes release];
   [myBlacklistMatches release];
   [myBlacklistFiles release];
   [myWhitelistFiles release];
   [myWhitelistPrefixes release];
   
-  self.unknownFiles = nil;
   self.seriousProblems = nil;
   self.terminatedTasks = nil;
   self.potentialAdwareTrioFiles = nil;
-  self.adwareProcesses = nil;
-  self.adwareLaunchdFiles = nil;
-  self.adwareFiles = nil;
+  self.processes = nil;
+  self.launchdFiles = nil;
   self.diagnosticEvents = nil;
   self.diskErrors = nil;
   self.volumes = nil;
@@ -244,7 +257,7 @@
   }
 
 // Is this file an adware file?
-- (bool) isAdware: (NSString *) path
+- (bool) checkForAdware: (NSString *) path
   {
   if([path length] == 0)
     return NO;
@@ -261,8 +274,16 @@
     adware = YES;
     
   if(adware)
+    {
+    NSMutableDictionary * info = [self.launchdFiles objectForKey: path];
+    
+    [info setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
+    
+    [self.adwareFiles setObject: info forKey: path];
+    
     self.adwareFound = YES;
-  
+    }
+    
   return adware;
   }
 
@@ -366,7 +387,15 @@
       [self.adwareFiles
         setObject: [prefix lowercaseString] forKey: trioPath];
         
-      [self.unknownFiles removeObject: trioPath];
+      NSMutableDictionary * info =
+        [self.launchdFiles objectForKey: trioPath];
+      
+      if(info)
+        {
+        [self.adwareFiles setObject: info forKey: trioPath];
+        [info removeObjectForKey: kUnknown];
+        [info setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
+        }
       }
 
     return YES;
@@ -456,10 +485,13 @@
   if([self isWhitelistFile: name])
     return YES;
     
-  if([self isAdware: path])
+  if([self checkForAdware: path])
     return YES;
     
-  [self.unknownFiles addObject: path];
+  NSMutableDictionary * info = [self.launchdFiles objectForKey: path];
+  
+  if(info)
+    [info setObject: [NSNumber numberWithBool: YES] forKey: kUnknown];
 
   return NO;
   }

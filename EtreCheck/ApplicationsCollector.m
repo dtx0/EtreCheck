@@ -10,6 +10,7 @@
 #import "Model.h"
 #import "NSArray+Etresoft.h"
 #import "NSDictionary+Etresoft.h"
+#import "SubProcess.h"
 
 // Collect installed applications.
 @implementation ApplicationsCollector
@@ -68,12 +69,12 @@
       @"SPApplicationsDataType"
     ];
   
-  NSData * result =
-    [Utilities execute: @"/usr/sbin/system_profiler" arguments: args];
+  SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if(result)
+  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    NSArray * plist = [NSArray readPropertyListData: result];
+    NSArray * plist =
+      [NSArray readPropertyListData: subProcess.standardOutput];
   
     if([plist count])
       {
@@ -96,6 +97,8 @@
           }
       }
     }
+    
+  [subProcess release];
     
   return [appDetails autorelease];
   }

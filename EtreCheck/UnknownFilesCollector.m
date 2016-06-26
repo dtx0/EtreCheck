@@ -11,6 +11,7 @@
 #import "Utilities.h"
 #import "UnknownFilesManager.h"
 #import "TTTLocalizedPluralString.h"
+#import "LaunchdCollector.h"
 
 #define kWhitelistKey @"whitelist"
 #define kWhitelistPrefixKey @"whitelist_prefix"
@@ -46,14 +47,16 @@
 // Print any unknown files.
 - (void) printUnknownFiles
   {
-  NSUInteger unknownFileCount = [[[Model model] unknownFiles] count];
+  NSDictionary * unknownLaunchdFiles = [[Model model] unknownLaunchdFiles];
+  
+  NSUInteger unknownFileCount = [unknownLaunchdFiles count];
   
   if(unknownFileCount > 0)
     {
     [self.result appendAttributedString: [self buildTitle]];
     
     NSArray * sortedUnknownFiles =
-      [[[[Model model] unknownFiles] allObjects]
+      [[unknownLaunchdFiles allKeys]
         sortedArrayUsingSelector: @selector(compare:)];
       
     [sortedUnknownFiles
@@ -66,10 +69,9 @@
                 stringWithFormat:
                   @"    %@", [Utilities sanitizeFilename: obj]]];
 
-          NSString * cmd =
-            [obj length] > 0
-              ? [[[Model model] launchdCommands] objectForKey: obj]
-              : nil;
+          NSDictionary * info = [unknownLaunchdFiles objectForKey: obj];
+          
+          NSString * cmd = [info objectForKey: kExecutable];
           
           if([cmd length] > 0)
             {
