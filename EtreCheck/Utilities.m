@@ -711,6 +711,36 @@
   if(![path length])
     return kExecutableMissing;
     
+  if([path isEqualToString: @"/bin/sh"])
+    return kShell;
+    
+  if([path isEqualToString: @"/bin/csh"])
+    return kShell;
+
+  if([path isEqualToString: @"/bin/bash"])
+    return kShell;
+
+  if([path isEqualToString: @"/bin/zsh"])
+    return kShell;
+
+  if([path isEqualToString: @"/bin/tsh"])
+    return kShell;
+
+  if([path isEqualToString: @"/bin/ksh"])
+    return kShell;
+
+  if([path isEqualToString: @"/usr/bin/tclsh"])
+    return kShell;
+
+  if([path isEqualToString: @"/usr/bin/perl"])
+    return kShell;
+
+  if([path isEqualToString: @"/usr/bin/ruby"])
+    return kShell;
+
+  if([path hasPrefix: @"/usr/bin/python"])
+    return kShell;
+
   if(![[Model model] checkAppleSignatures])
     return kSignatureValid;
     

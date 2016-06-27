@@ -426,6 +426,15 @@
   [failures addObject: @"com.apple.MRTd.plist"];
   [failures addObject: @"com.apple.MRTa.plist"];
   [failures addObject: @"com.apple.java.InstallOnDemand.plist"];
+  [failures addObject: @"com.apple.FTCleanup.plist"];
+  [failures addObject: @"com.apple.Finder.plist"];
+  [failures addObject: @"com.apple.FollowUpUI.plist"];
+  [failures addObject: @"com.apple.ScreenReaderUIServer.plist"];
+  [failures addObject: @"com.apple.powerchime.plist"];
+  [failures addObject: @"com.apple.quicklook.32bit.plist"];
+  [failures addObject: @"com.apple.quicklook.plist"];
+  [failures addObject: @"com.apple.quicklook.ui.helper.plist"];
+  [failures addObject: @"com.apple.xpc.uscwoap.plist"];
 
   return failures;
   }
@@ -1268,6 +1277,8 @@
   
     if([signature isEqualToString: kNotSigned])
       message = NSLocalizedString(@" - No signature!", NULL);
+    else if([signature isEqualToString: kShell])
+      message = NSLocalizedString(@" - Shell script!", NULL);
     else if([signature isEqualToString: kExecutableMissing])
       {
       if([path length])

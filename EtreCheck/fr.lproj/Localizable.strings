@@ -224,6 +224,7 @@
 "[Instructions]\n" = "[Instruction]\n";
 " - Invalid signature!" = " - Signature invalide !";
 " - No signature!" = "Aucune signature !";
+" - Shell script!" = "Script du shell !";
 " - %@: Executable not found!" = " - %@ : Logiciel non-trouvé";
 " - Executable not found!" = " - Logiciel non-trouvé";
 "Help" = "Aide";

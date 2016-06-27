@@ -20,6 +20,7 @@
 #define kSignatureNotValid @"signataurenotvalid"
 #define kExecutableMissing @"executablemissing"
 #define kSignatureSkipped @"signatureskipped"
+#define kShell @"shell"
 
 // Assorted utilities.
 @interface Utilities : NSObject
