@@ -220,10 +220,4 @@
   return !self.timedout;
   }
 
-// Spawn an external program and ignore the results.
-- (void) spawn: (NSString *) program arguments: (NSArray *) args
-  {
-  [self spawn: program arguments: args options: nil];
-  }
-
 @end
