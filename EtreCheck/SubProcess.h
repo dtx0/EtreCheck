@@ -32,13 +32,4 @@
 - (BOOL) execute: (NSString *) program
   arguments: (NSArray *) args options: (NSDictionary *) options;
 
-// Execute an external program and ignore results.
-- (void) spawn: (NSString *) program arguments: (NSArray *) args;
-
-// Execute an external program with options and ignore results.
-// Supported options:
-//  kExecutableTimeout - timeout for external programs.
-- (void) spawn: (NSString *) program
-  arguments: (NSArray *) args options: (NSDictionary *) options;
-
 @end
