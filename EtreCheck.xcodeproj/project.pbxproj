@@ -21,7 +21,7 @@
 		A518C4661C4814740094D7CC /* Help in Resources */ = {isa = PBXBuildFile; fileRef = A518C4641C4814740094D7CC /* Help */; };
 		A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */; };
 		A52006A21A292A2200644C40 /* PopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A52006A11A292A2200644C40 /* PopoverManager.m */; };
-		A5221BCC1C6188E6009AF9F8 /* AdminManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5221BCA1C6188E6009AF9F8 /* AdminManager.m */; };
+		A5221BCC1C6188E6009AF9F8 /* UninstallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */; };
 		A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D2D19AB51BE003084C8 /* ProcessesCollector.m */; };
 		A5257D3119AB5251003084C8 /* CPUUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3019AB5251003084C8 /* CPUUsageCollector.m */; };
 		A5257D3419AB525D003084C8 /* MemoryUsageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3319AB525D003084C8 /* MemoryUsageCollector.m */; };
@@ -125,8 +125,8 @@
 		A51BD14C1A7D7784000AAABA /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
 		A52006A01A292A2200644C40 /* PopoverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverManager.h; sourceTree = "<group>"; };
 		A52006A11A292A2200644C40 /* PopoverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverManager.m; sourceTree = "<group>"; };
-		A5221BCA1C6188E6009AF9F8 /* AdminManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdminManager.m; sourceTree = "<group>"; };
-		A5221BCB1C6188E6009AF9F8 /* AdminManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdminManager.h; sourceTree = "<group>"; };
+		A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UninstallManager.m; sourceTree = "<group>"; };
+		A5221BCB1C6188E6009AF9F8 /* UninstallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UninstallManager.h; sourceTree = "<group>"; };
 		A5257D2C19AB51BE003084C8 /* ProcessesCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcessesCollector.h; sourceTree = "<group>"; };
 		A5257D2D19AB51BE003084C8 /* ProcessesCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProcessesCollector.m; sourceTree = "<group>"; };
 		A5257D2F19AB5251003084C8 /* CPUUsageCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUUsageCollector.h; sourceTree = "<group>"; };
@@ -319,8 +319,8 @@
 				A54B87341A1D4F1900F25213 /* HelpManager.m */,
 				A54B87361A1D4FED00F25213 /* DetailManager.h */,
 				A54B87371A1D4FED00F25213 /* DetailManager.m */,
-				A5221BCB1C6188E6009AF9F8 /* AdminManager.h */,
-				A5221BCA1C6188E6009AF9F8 /* AdminManager.m */,
+				A5221BCB1C6188E6009AF9F8 /* UninstallManager.h */,
+				A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */,
 				A5CF26E91A27FB21002386F0 /* AdwareManager.h */,
 				A5CF26EA1A27FB21002386F0 /* AdwareManager.m */,
 				A5716E131C4C5A6E00297727 /* UnknownFilesManager.h */,
@@ -656,7 +656,7 @@
 				A5FC11F419A4C00F00E81E9C /* ITunesPlugInsCollector.m in Sources */,
 				A5C292E019A02B2700464E86 /* Collector.m in Sources */,
 				A5C292EC19A039D900464E86 /* LaunchDaemonsCollector.m in Sources */,
-				A5221BCC1C6188E6009AF9F8 /* AdminManager.m in Sources */,
+				A5221BCC1C6188E6009AF9F8 /* UninstallManager.m in Sources */,
 				A50C9DBF19A36CC400BA6A25 /* GatekeeperCollector.m in Sources */,
 				A54B87351A1D4F1900F25213 /* HelpManager.m in Sources */,
 				A5FC120919A5509700E81E9C /* TimeMachineCollector.m in Sources */,

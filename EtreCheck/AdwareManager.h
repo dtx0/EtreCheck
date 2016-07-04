@@ -5,15 +5,9 @@
  **********************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "AdminManager.h"
+#import "UninstallManager.h"
 
-@interface AdwareManager : AdminManager
+@interface AdwareManager : UninstallManager
   <NSTableViewDelegate, NSTableViewDataSource>
-  {
-  NSMutableArray * myAdwareFiles;
-  }
-
-// Array of adware files.
-@property (retain) NSMutableArray * adwareFiles;
 
 @end

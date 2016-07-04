@@ -4,7 +4,7 @@
  ** Copyright (c) 2016. All rights reserved.
  **********************************************************************/
 
-#import "AdminManager.h"
+#import "UninstallManager.h"
 #import "Model.h"
 #import "NSMutableAttributedString+Etresoft.h"
 #import "Utilities.h"
@@ -12,14 +12,49 @@
 #import "LaunchdCollector.h"
 #import "SubProcess.h"
 
-@implementation AdminManager
+@implementation UninstallManager
 
 @synthesize window = myWindow;
 @synthesize textView = myTextView;
 @synthesize tableView = myTableView;
-@synthesize launchdTasksToUnload = myLaunchdTasksToUnload;
+@dynamic canRemoveFiles;
 @synthesize filesToRemove = myFilesToRemove;
-@synthesize filesDeleted = myFilesDeleted;
+@synthesize filesRemoved = myFilesRemoved;
+
+// Can I remove files?
+- (BOOL) canRemoveFiles
+  {
+  if([self.filesToRemove count] == 0)
+    return NO;
+    
+  if([[Model model] oldEtreCheckVersion])
+    return [self reportOldEtreCheckVersion];
+    
+  if(![[Model model] verifiedEtreCheckVersion])
+    return [self reportUnverifiedEtreCheckVersion];
+
+  if([[Model model] majorOSVersion] < kMountainLion)
+    return [self warnBackup];
+    
+  if(![[Model model] backupExists])
+    {
+    NSNumber * override =
+      [[NSUserDefaults standardUserDefaults]
+        objectForKey: @"timemachineoverride"];
+      
+    if([override boolValue])
+      return YES;
+      
+    [self reportNoBackup];
+    
+    return NO;
+    }
+    
+  if([self needsAdministratorAuthorization])
+    return [self requestAdministratorAuthorization];
+    
+  return YES;
+  }
 
 // Show the window.
 - (void) show
@@ -29,7 +64,6 @@
 // Show the window with content.
 - (void) show: (NSString *) content
   {
-  myLaunchdTasksToUnload = [NSMutableArray new];
   myFilesToRemove = [NSMutableArray new];
   
   [self.window makeKeyAndOrderFront: self];
@@ -61,17 +95,22 @@
 // Close the window.
 - (IBAction) close: (id) sender
   {
-  if(self.filesDeleted)
+  if(self.filesRemoved)
     [self suggestRestart];
   
   self.filesToRemove = nil;
-  self.launchdTasksToUnload = nil;
 
   [self.window close];
   }
 
-// Remove the adware.
+// Remove the files.
 - (IBAction) removeFiles: (id) sender
+  {
+  [self uninstallItems: self.filesToRemove];
+  }
+
+// Uninstall an array of items.
+- (void) uninstallItems: (NSMutableArray *) items
   {
   // Due to whatever funky is going on inside OS X and AppleScript, this
   // must be run from the main thread.
@@ -80,50 +119,31 @@
     ^{
       if(![self canRemoveFiles])
         return;
+      
+      NSMutableArray * launchdTasksToUnload = [NSMutableArray new];
+      NSMutableArray * filesToDelete = [NSMutableArray new];
+  
+      for(NSDictionary * item in items)
+        {
+        NSString * path = [item objectForKey: kPath];
         
+        NSDictionary * info = [item objectForKey: kLaunchdTask];
+        
+        if(info != nil)
+          [launchdTasksToUnload addObject: info];
+        else if(path != nil)
+          [filesToDelete addObject: path];
+        }
+      
       [self reportFiles];
-      [Utilities uninstallLaunchdTasks: self.launchdTasksToUnload];
-      [Utilities deleteFiles: self.filesToRemove];
-      [self verifyRemoveFiles];
+      [Utilities uninstallLaunchdTasks: launchdTasksToUnload];
+      [Utilities deleteFiles: filesToDelete];
+      
+      [launchdTasksToUnload release];
+      [filesToDelete release];
+      
+      [self verifyRemoveFiles: items];
     });
-  }
-
-// Can I remove files?
-- (BOOL) canRemoveFiles
-  {
-  NSUInteger count =
-    [self.filesToRemove count] + [self.launchdTasksToUnload count];
-    
-  if(count == 0)
-    return NO;
-    
-  if([[Model model] oldEtreCheckVersion])
-    return [self reportOldEtreCheckVersion];
-    
-  if(![[Model model] verifiedEtreCheckVersion])
-    return [self reportUnverifiedEtreCheckVersion];
-
-  if([[Model model] majorOSVersion] < kMountainLion)
-    return [self warnBackup];
-    
-  if(![[Model model] backupExists])
-    {
-    NSNumber * override =
-      [[NSUserDefaults standardUserDefaults]
-        objectForKey: @"timemachineoverride"];
-      
-    if([override boolValue])
-      return YES;
-      
-    [self reportNoBackup];
-    
-    return NO;
-    }
-    
-  if([self needsAdministratorAuthorization])
-    return [self requestAdministratorAuthorization];
-    
-  return YES;
   }
 
 // Tell the user that EtreCheck is too old.
@@ -228,10 +248,15 @@
 
 - (BOOL) needsAdministratorAuthorization
   {
-  for(NSString * path in self.filesToRemove)
-    if(![[NSFileManager defaultManager] isDeletableFileAtPath: path])
-      return YES;
-      
+  for(NSDictionary * info in self.filesToRemove)
+    {
+    NSString * path = [info objectForKey: kPath];
+    
+    if(path != nil)
+      if(![[NSFileManager defaultManager] isDeletableFileAtPath: path])
+        return YES;
+    }
+    
   return NO;
   }
 
@@ -260,43 +285,44 @@
   }
 
 // Verify removal of files.
-- (void) verifyRemoveFiles
+- (void) verifyRemoveFiles: (NSMutableArray *) files
   {
-  BOOL failed = NO;
-  
   NSMutableArray * filesRemoved = [NSMutableArray new];
-  
-  for(NSDictionary * info in self.launchdTasksToUnload)
+  NSMutableArray * filesRemaining = [NSMutableArray new];
+    
+  for(NSMutableDictionary * item in files)
     {
-    NSString * path = [info objectForKey: kPath];
+    NSString * path = [item objectForKey: kPath];
     
     if([path length])
       {
       BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: path];
       
       if(exists)
-        failed = YES;
+        [filesRemaining addObject: item];
+      
       else
+        {
+        [item
+          setObject: [NSNumber numberWithBool: YES] forKey: kFileDeleted];
+        
         [filesRemoved addObject: path];
+        
+        [[[Model model] launchdFiles] removeObjectForKey: path];
+        }
       }
     }
     
-  for(NSString * path in self.filesToRemove)
-    {
-    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: path];
-    
-    if(exists)
-      failed = YES;
-    else
-      [filesRemoved addObject: path];
-    }
-    
-  if(failed)
+  if([filesRemaining count] > 0)
     [self reportDeletedFilesFailed: filesRemoved];
   else
     [self reportDeletedFiles: filesRemoved];
 
   [filesRemoved release];
+  
+  [files setArray: filesRemaining];
+  
+  [filesRemaining release];
   }
 
 // Report the files.
@@ -309,33 +335,34 @@
   
   bool first = YES;
   
-  NSUInteger index = 0;
-  
-  for(; index < [self.filesToRemove count]; ++index)
+  for(NSDictionary * item in self.filesToRemove)
     {
-    NSString * path = [self.filesToRemove objectAtIndex: index];
+    NSString * path = [item objectForKey: kPath];
     
-    NSDictionary * info = [[[Model model] launchdFiles] objectForKey: path];
-    
-    NSString * command = [info objectForKey: kCommand];
+    if([path length])
+      {
+      NSDictionary * info = [item objectForKey: kLaunchdTask];
       
-    path =
-      [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+      NSString * command = [info objectForKey: kCommand];
+        
+      path =
+        [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
+        
+      NSString * name = [path lastPathComponent];
       
-    NSString * name = [path lastPathComponent];
-    
-    if(!first)
-      [json appendString: @","];
+      if(!first)
+        [json appendString: @","];
+        
+      first = NO;
       
-    first = NO;
-    
-    [json appendString: @"{"];
-    
-    [json appendFormat: @"\"name\":\"%@\",", name];
-    [json appendFormat: @"\"path\":\"%@\",", path];
-    [json appendFormat: @"\"cmd\":\"%@\"", command ? command : @""];
-    
-    [json appendString: @"}"];
+      [json appendString: @"{"];
+      
+      [json appendFormat: @"\"name\":\"%@\",", name];
+      [json appendFormat: @"\"path\":\"%@\",", path];
+      [json appendFormat: @"\"cmd\":\"%@\"", command ? command : @""];
+      
+      [json appendString: @"}"];
+      }
     }
     
   [json appendString: @"]}"];

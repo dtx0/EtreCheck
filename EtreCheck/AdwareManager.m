@@ -11,29 +11,31 @@
 #import "TTTLocalizedPluralString.h"
 #import "LaunchdCollector.h"
 
-@interface AdminManager ()
+@interface UninstallManager ()
 
 // Show the window with content.
 - (void) show: (NSString *) content;
 
 // Verify removal of files.
-- (void) verifyRemoveFiles;
+- (void) verifyRemoveFiles: (NSMutableArray *) files;
 
-// Suggest a restart.
-- (void) suggestRestart;
+// Tell the user that EtreCheck is too old.
+- (BOOL) reportOldEtreCheckVersion;
+
+// Tell the user that the EtreCheck version is unverified.
+- (BOOL) reportUnverifiedEtreCheckVersion;
 
 @end
 
 @implementation AdwareManager
 
-@synthesize adwareFiles = myAdwareFiles;
-
-// Destructor.
-- (void) dealloc
+// Can I remove files?
+// Override the base behaviour to allow the button to be enabled. Then,
+// do the super's canRemoveFiles check only if the user clicks the button.
+- (BOOL) canRemoveFiles
   {
-  [super dealloc];
-  
-  self.adwareFiles = nil;
+  return [self.filesToRemove count] > 0;
+    return NO;
   }
 
 // Show the window.
@@ -41,94 +43,119 @@
   {
   [super show: NSLocalizedString(@"adware", NULL)];
   
-  self.filesDeleted = NO;
+  self.filesRemoved = NO;
   
   [self willChangeValueForKey: @"canRemoveFiles"];
   
-  myAdwareFiles = [NSMutableArray new];
-
-  NSMutableSet * filesToRemove = [NSMutableSet new];
+  NSMutableDictionary * filesToRemove = [NSMutableDictionary new];
   
   for(NSString * path in [[Model model] adwareLaunchdFiles])
     {
     NSDictionary * info = [[[Model model] launchdFiles] objectForKey: path];
 
-    NSNumber * PID = [info objectForKey: kPID];
+    if(info != nil)
+      {
+      NSMutableDictionary * item = [NSMutableDictionary new];
       
-    if(PID)
-      [self.launchdTasksToUnload addObject: path];
-    else
-      [filesToRemove addObject: path];
+      [item setObject: path forKey: kPath];
+      [item setObject: info forKey: kLaunchdTask];
+      
+      [filesToRemove setObject: item forKey: path];
+      
+      [item release];
+      }
     }
     
   for(NSString * path in [[Model model] adwareFiles])
     {
-    // Double-check to make sure the file is still there.
-    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: path];
-    
-    if(exists)
+    if([filesToRemove objectForKey: path] == nil)
       {
-      NSString * pathToRemove = [Utilities makeURLPath: path];
+      // Double-check to make sure the file is still there.
+      BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath: path];
       
-      [filesToRemove addObject: pathToRemove];
-      [self.adwareFiles addObject: pathToRemove];
+      if(exists)
+        {
+        NSString * pathToRemove = [Utilities makeURLPath: path];
+        
+        NSMutableDictionary * item = [NSMutableDictionary new];
+        
+        [item setObject: pathToRemove forKey: kPath];
+        
+        [filesToRemove setObject: item forKey: path];
+        
+        [item release];
+        }
       }
     }
     
-  [self.filesToRemove addObjectsFromArray: [filesToRemove allObjects]];
+  NSArray * adwareFiles =
+    [[filesToRemove allKeys] sortedArrayUsingSelector: @selector(compare:)];
+  
+  for(NSString * adwareFile in adwareFiles)
+    {
+    NSMutableDictionary * item = [filesToRemove objectForKey: adwareFile];
+    
+    if(item)
+      [self.filesToRemove addObject: item];
+    }
+    
+  [filesToRemove release];
   
   [self.tableView reloadData];
   
   [self didChangeValueForKey: @"canRemoveFiles"];
   }
 
-// Close the window.
-- (IBAction) close: (id) sender
+// Remove the files.
+- (IBAction) removeFiles: (id) sender
   {
-  self.adwareFiles = nil;
-
-  [super close: sender];
-  }
-
-// Suggest a restart.
-- (void) suggestRestart
-  {
-  [super suggestRestart];
+  if([super canRemoveFiles])
+    [super removeFiles: sender];
   }
 
 // Verify removal of files.
-- (void) verifyRemoveFiles
+- (void) verifyRemoveFiles: (NSMutableArray *) files
   {
+  [super verifyRemoveFiles: files];
+
+  NSMutableArray * filesNotRemoved = [NSMutableArray new];
+  
+  for(NSDictionary * item in files)
+    if([[item objectForKey: kFileDeleted] boolValue])
+      self.filesRemoved = YES;
+    else
+      [filesNotRemoved addObject: item];
+  
   [self willChangeValueForKey: @"canRemoveFiles"];
   
-  for(NSString * path in self.filesToRemove)
-    [self.adwareFiles removeObject: path];
-
-  self.filesDeleted =
-    [self.adwareFiles count] != [self.filesToRemove count];
+  [files setArray: filesNotRemoved];
+  
+  [filesNotRemoved release];
   
   [self.tableView reloadData];
 
   [self didChangeValueForKey: @"canRemoveFiles"];
-  
-  [super verifyRemoveFiles];
-        
-  for(NSString * path in self.filesToRemove)
-    [self.filesToRemove removeObject: path];
   }
 
 #pragma mark - NSTableViewDataSource
 
 - (NSInteger) numberOfRowsInTableView: (NSTableView *) aTableView
   {
-  return self.adwareFiles.count;
+  return self.filesToRemove.count;
   }
 
 - (id) tableView: (NSTableView *) aTableView
   objectValueForTableColumn: (NSTableColumn *) aTableColumn
   row: (NSInteger) rowIndex
   {
-  return [self.adwareFiles objectAtIndex: rowIndex];
+  if(rowIndex < self.filesToRemove.count)
+    {
+    NSDictionary * item = [self.filesToRemove objectAtIndex: rowIndex];
+  
+    return [item objectForKey: kPath];
+    }
+    
+  return nil;
   }
 
 @end

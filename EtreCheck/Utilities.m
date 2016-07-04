@@ -789,11 +789,9 @@
     
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  BOOL success =
-    [subProcess
-      execute: @"/usr/bin/codesign" arguments: args options: options];
+  subProcess.timeout = 10 * 60;
   
-  if(success)
+  if([subProcess execute: @"/usr/bin/codesign" arguments: args])
     {
     //NSLog(@"/usr/bin/codesign %@\n%@", args, output);
     result =
@@ -926,36 +924,219 @@
 // Uninstall launchd tasks.
 + (void) uninstallLaunchdTasks: (NSArray *) tasks
   {
-  NSMutableArray * appleScriptStatements = [NSMutableArray new];
+  // Uninstalling is very tricky. Root does not have super-user privileges
+  // in this context. Root cannot unload a launchd task in user space.
   
-  // Build the statements I will need.
-  [appleScriptStatements
-    addObjectsFromArray: [Utilities buildUnloadStatements: tasks]];
-  [appleScriptStatements addObject: [Utilities buildKillStatement: tasks]];
-  [appleScriptStatements
-    addObjectsFromArray: [Utilities buildDeleteStatements: tasks]];
+  // First try in user space. Only attempt to delete files if the unload
+  // is successful.
+  [Utilities uninstallLaunchdTasksInUserSpace: tasks];
   
-  // Execute the statements. Go ahead and require administrator to simplify
-  // the logic.
-  [Utilities executeAppleScriptStatements: appleScriptStatements];
-  
-  [appleScriptStatements release];
+  // Now see what tasks are still running and try to unload them as root.
+  [Utilities uninstallLaunchdTasksWithAdministratorPrivileges: tasks];
   }
 
-// Delete files.
-+ (void) deleteFiles: (NSArray *) files
+// Uninstall launchd tasks in user space. Be extra pedantic about
+// everything.
++ (void) uninstallLaunchdTasksInUserSpace: (NSArray *) tasks
   {
-  NSMutableArray * appleScriptStatements = [NSMutableArray new];
+  NSArray * userTasks = [Utilities userLaunchdTasks: tasks];
   
-  // Build the statements I will need.
-  [appleScriptStatements
-    addObjectsFromArray: [Utilities buildDeleteStatements: files]];
+  if([userTasks count] > 0)
+    {
+    [Utilities unloadLaunchdTasksInUserSpace: userTasks];
+    [Utilities killLaunchdTasksInUserSpace: userTasks];
+    [Utilities deleteLaunchdTasksInUserSpace: userTasks];
+    }
+  }
+
+// Filter out any tasks that are not in the user's home directory.
++ (NSArray *) userLaunchdTasks: (NSArray *) tasks
+  {
+  NSString * homeDirectory = NSHomeDirectory();
   
-  // Execute the statements. Go ahead and require administrator to simplify
-  // the logic.
-  [Utilities executeAppleScriptStatements: appleScriptStatements];
+  NSMutableArray * userTasks = [NSMutableArray array];
   
-  [appleScriptStatements release];
+  for(NSDictionary * info in tasks)
+    {
+    // Try to unload with any other status, including failed.
+    NSString * path = [info objectForKey: kPath];
+    
+    // Make sure the path is rooted in the user's home directory.
+    // This will also guarantee its validity.
+    if([path hasPrefix: homeDirectory])
+      [userTasks addObject: info];
+    }
+    
+  return userTasks;
+  }
+
+// Unload launchd tasks in userspace.
++ (void) unloadLaunchdTasksInUserSpace: (NSArray *) tasks
+  {
+  NSArray * args = [Utilities buildUnloadArguments: tasks];
+  
+  if([args count] > 1)
+    {
+    SubProcess * unload = [[SubProcess alloc] init];
+
+    [unload execute: @"/bin/launchctl" arguments: args];
+
+    [unload release];
+    }
+  }
+
+// Build an argument list for an unload command for a list of tasks.
++ (NSArray *) buildUnloadArguments: (NSArray *) tasks
+  {
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"unload"];
+  [args addObject: @"-wF"];
+  
+  for(NSDictionary * info in tasks)
+    {
+    NSString * status = [info objectForKey: kStatus];
+
+    // If it isn't already loaded, don't try to unload.
+    if([status isEqualToString: kStatusNotLoaded])
+      continue;
+      
+    // Try to unload with any other status, including failed.
+    NSString * path = [info objectForKey: kPath];
+    
+    if([path length] > 0)
+      [args addObject: path];
+    }
+    
+  return args;
+  }
+
+// Kill launchd tasks in userspace.
++ (void) killLaunchdTasksInUserSpace: (NSArray *) tasks
+  {
+  NSArray * args = [Utilities buildKillArguments: tasks];
+  
+  if([args count] > 1)
+    {
+    SubProcess * kill = [[SubProcess alloc] init];
+
+    [kill execute: @"/bin/kill" arguments: args];
+
+    [kill release];
+    }
+  }
+
+// Build an argument list for a kill command for a list of tasks.
++ (NSArray *) buildKillArguments: (NSArray *) tasks
+  {
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"-9"];
+  
+  for(NSDictionary * info in tasks)
+    {
+    NSNumber * PID = [info objectForKey: kPID];
+    
+    // Make sure the process is valid and still running.
+    if([PID integerValue] > 0)
+      if([Utilities ps: PID] != nil)
+        [args addObject: [PID stringValue]];
+    }
+    
+  return args;
+  }
+
+// Delete launchd files in userspace.
++ (void) deleteLaunchdTasksInUserSpace: (NSArray *) tasks
+  {
+  // Now delete any files that were successfully unloaded and killed.
+  // Use the list of tasks so that this method can be re-used for the
+  // root version.
+  NSArray * tasksToBeDeleted =
+    [Utilities buildListOfTasksToBeDeleted: tasks];
+    
+  if([tasksToBeDeleted count] > 0)
+    {
+    NSMutableArray * appleScriptStatements = [NSMutableArray new];
+    
+    // Build the statements I will need.
+    [appleScriptStatements
+      addObjectsFromArray:
+        [Utilities buildDeleteStatements: tasksToBeDeleted]];
+    
+    // Execute the statements.
+    [Utilities executeAppleScriptStatements: appleScriptStatements];
+    
+    [appleScriptStatements release];
+    }
+  }
+
+// Build a list of files to be deleted.
+// Use the list of tasks so that this method can be re-used for the
+// root version.
++ (NSArray *) buildListOfTasksToBeDeleted: (NSArray *) tasks
+  {
+  NSMutableArray * tasksToBeDeleted = [NSMutableArray array];
+  
+  for(NSDictionary * info in tasks)
+    {
+    NSString * path = [info objectForKey: kPath];
+    
+    // Make sure the path is rooted in the user's home directory and that
+    // it really exists.
+    if([path length] > 0)
+      if([[NSFileManager defaultManager] fileExistsAtPath: path])
+        [tasksToBeDeleted addObject: info];
+    }
+    
+  return tasksToBeDeleted;
+  }
+
+// Uninstall launchd tasks with root power. Be extra pedantic about
+// everything.
++ (void) uninstallLaunchdTasksWithAdministratorPrivileges: (NSArray *) tasks
+  {
+  NSArray * rootTasks = [Utilities rootLaunchdTasks: tasks];
+  
+  if([rootTasks count] > 0)
+    {
+    NSMutableArray * appleScriptStatements = [NSMutableArray new];
+    
+    // Build the statements I will need.
+    [appleScriptStatements
+      addObjectsFromArray: [Utilities buildUnloadStatements: rootTasks]];
+    [appleScriptStatements
+      addObjectsFromArray: [Utilities buildKillStatement: rootTasks]];
+    
+    // Execute the statements.
+    [Utilities executeAppleScriptStatements: appleScriptStatements];
+    
+    [appleScriptStatements release];
+    
+    // The Finder can do this on its own and this seems to be required.
+    [Utilities deleteLaunchdTasksInUserSpace: rootTasks];
+    }
+  }
+
+// Filter out any tasks that are in the user's home directory.
++ (NSArray *) rootLaunchdTasks: (NSArray *) tasks
+  {
+  NSString * homeDirectory = NSHomeDirectory();
+  
+  NSMutableArray * rootTasks = [NSMutableArray array];
+  
+  for(NSDictionary * info in tasks)
+    {
+    // Try to unload with any other status, including failed.
+    NSString * path = [info objectForKey: kPath];
+    
+    // Make sure the path is rooted in the user's home directory.
+    // This will also guarantee its validity.
+    if(![path hasPrefix: homeDirectory])
+      [rootTasks addObject: info];
+    }
+    
+  return rootTasks;
   }
 
 // Build one or more AppleScript statements to unload a list of
@@ -964,56 +1145,47 @@
   {
   NSMutableArray * statements = [NSMutableArray array];
   
-  for(NSDictionary * info in tasks)
-    {
-    NSString * path = [info objectForKey: kPath];
+  NSMutableString * command =
+    [NSMutableString stringWithString: @"/bin/launchctl"];
+
+  NSArray * filesToBeUnloaded = [Utilities buildUnloadArguments: tasks];
+  
+  for(NSString * file in filesToBeUnloaded)
+    [command appendFormat: @" %@", file];
     
-    if([path length] > 0)
-      {
-      NSString * command =
-        [NSString stringWithFormat: @"/bin/launchctl unload -w %@", path];
-      
-      NSString * statement =
-        [NSString
-          stringWithFormat:
-            @"do shell script(\"%@\") with administrator privileges",
-            command];
-        
-      [statements addObject: statement];
-      }
-    }
+  [statements addObject:
+    [NSString
+      stringWithFormat:
+        @"do shell script(\"%@\") with administrator privileges",
+        command]];
     
   return statements;
   }
 
 // Build an AppleScript statement to kill a list of launchd tasks.
-+ (NSString *) buildKillStatement: (NSArray *) tasks
++ (NSArray *) buildKillStatement: (NSArray *) tasks
   {
-  NSMutableString * pids = [NSMutableString string];
+  NSMutableArray * statements = [NSMutableArray array];
   
-  for(NSDictionary * info in tasks)
-    {
-    NSNumber * pid = [info objectForKey: kPID];
+  NSMutableString * command =
+    [NSMutableString stringWithString: @"/bin/kill"];
+
+  NSArray * filesToBeUnloaded = [Utilities buildKillArguments: tasks];
+  
+  for(NSString * file in filesToBeUnloaded)
+    [command appendFormat: @" %@", file];
     
-    if([pid integerValue] > 0)
-      [pids appendFormat: @" %@", pid];
-    }
-    
-  if([pids length] == 0)
-    return @"";
-    
-  NSString * statement =
+  [statements addObject:
     [NSString
       stringWithFormat:
-        @"do shell script(\"%@%@\") with administrator privileges",
-        @"/bin/kill -9",
-        pids];
-      
-  return statement;
+        @"do shell script(\"%@\") with administrator privileges",
+        command]];
+    
+  return statements;
   }
 
 // Build an AppleScript statement to delete a list of launchd tasks.
-+ (NSArray *) buildDeleteStatements: (NSArray *) objects
++ (NSArray *) buildDeleteStatements: (NSArray *) tasks
   {
   NSMutableArray * statements = [NSMutableArray array];
   
@@ -1023,15 +1195,13 @@
   
   int i = 0;
   
-  for(id object in objects)
+  NSArray * tasksToBeDeleted =
+    [Utilities buildListOfTasksToBeDeleted: tasks];
+  
+  for(NSDictionary * info in tasksToBeDeleted)
     {
-    NSString * path = nil;
+    NSString * path = [info objectForKey: kPath];
     
-    if([object respondsToSelector: @selector(objectForKey:)])
-      path = [object objectForKey: kPath];
-    else if([object respondsToSelector: @selector(UTF8String)])
-      path = object;
-      
     if([path length] > 0)
       {
       if(i)
@@ -1069,7 +1239,7 @@
   if([statements count] == 0)
     return;
     
-  NSMutableArray * args = [NSMutableArray new];
+  NSMutableArray * args = [NSMutableArray array];
   
   for(NSString * statement in statements)
     if([statement length])
@@ -1086,6 +1256,61 @@
   [subProcess execute: @"/usr/bin/osascript" arguments: args];
 
   [subProcess release];
+  }
+
+// Delete files.
++ (void) deleteFiles: (NSArray *) files
+  {
+  NSMutableArray * appleScriptStatements = [NSMutableArray new];
+  
+  // Build the statements I will need.
+  [appleScriptStatements
+    addObjectsFromArray: [Utilities buildDeleteStatements: files]];
+  
+  // Execute the statements. Go ahead and require administrator to simplify
+  // the logic.
+  [Utilities executeAppleScriptStatements: appleScriptStatements];
+  
+  [appleScriptStatements release];
+
+  // Save deleted files.
+  NSArray * currentDeletedFiles =
+    [[NSUserDefaults standardUserDefaults] objectForKey: @"deletedFiles"];
+    
+  NSMutableArray * deletedFiles = [NSMutableArray array];
+  
+  if([currentDeletedFiles count])
+    {
+    // Remove any old files.
+    NSDate * then =
+      [[NSDate date] dateByAddingTimeInterval: -60 * 60 * 24 * 7];
+    
+    for(NSDictionary * entry in currentDeletedFiles)
+      {
+      NSDate * date = [entry objectForKey: @"date"];
+      
+      if([then compare: date] == NSOrderedDescending)
+        [deletedFiles addObject: entry];
+      }
+    }
+    
+  NSDate * now = [NSDate date];
+  
+  // Add newly deleted files.
+  for(NSString * path in files)
+    {
+    NSDictionary * entry =
+      [NSMutableDictionary
+        dictionaryWithObjectsAndKeys:
+          now, @"date",
+          path, @"file",
+          nil];
+      
+    [deletedFiles addObject: entry];
+    }
+
+  [[NSUserDefaults standardUserDefaults]
+    setObject: deletedFiles forKey: @"deletedfiles"];
   }
 
 // Restart the machine.

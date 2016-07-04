@@ -258,7 +258,7 @@
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
+  if([subProcess execute: @"/usr/bin/tmutil" arguments: args])
     {
     NSDictionary * destinationinfo  =
       [NSDictionary readPropertyListData: subProcess.standardOutput];

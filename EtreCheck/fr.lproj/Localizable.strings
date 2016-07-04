@@ -297,3 +297,5 @@
 " (cache only)" = " (seulement en cache)";
 "donateurl" = "https://etrecheck.com/donate_fr.php?invoice=%@";
 "Duplicate label!" = " - L’étiquette en double ! ";
+"Remove" = "Enlever";
+"Report" = "Envoyer";

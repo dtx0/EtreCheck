@@ -10,9 +10,23 @@
 @implementation SubProcess
 
 @synthesize timedout = myTimedout;
+@synthesize timeout = myTimeout;
 @synthesize result = myResult;
 @synthesize standardOutput = myStandardOutput;
 @synthesize standardError = myStandardError;
+
+// Constructor.
+- (instancetype) init
+  {
+  if(self = [super init])
+    {
+    myTimeout = 30;
+    
+    return self;
+    }
+    
+  return nil;
+  }
 
 // Deallocate.
 - (void) dealloc
@@ -25,17 +39,6 @@
 
 // Execute an external program and return the results.
 - (BOOL) execute: (NSString *) program arguments: (NSArray *) args
-  {
-  return [self execute: program arguments: args options: nil];
-  }
-
-// Execute an external program, with options, return the results, and
-// collect any errors.
-// Supported options:
-//  kExecutableTimeout - timeout for external programs.
-- (BOOL) execute: (NSString *) program
-  arguments: (NSArray *) args
-  options: (NSDictionary *) options
   {
   //NSLog(@"running: %@ %@", program, args);
   
@@ -55,7 +58,7 @@
   
   [task setLaunchPath: program];
 
-  if(args)
+  if([args count])
     [task setArguments: args];
   
   [task setCurrentDirectoryPath: @"/"];
@@ -149,31 +152,6 @@
       dispatch_group_leave(group);
     };
 
-  DispatchSource * timer = [[DispatchSource alloc] init];
-  
-  timer.type = DISPATCH_SOURCE_TYPE_TIMER;
-  
-  int64_t timeout = 60 * 5 * NSEC_PER_SEC;
-  
-  NSNumber * timeoutValue = [options objectForKey: kExecutableTimeout];
-  
-  if(timeoutValue)
-    timeout = [timeoutValue unsignedLongLongValue] * NSEC_PER_SEC;
-
-  timer.startTime = timeout;
-  timer.intervalTime = timeout;
-  timer.leewayTime = 1ull * NSEC_PER_SEC;
-  timer.eventHandler =
-    ^{
-      //NSLog(@"timer fired");
-      if([task isRunning])
-        {
-        [task terminate];
-        
-        self.timedout = YES;
-        }
-    };
-
   dispatch_group_enter(group);
   
   DispatchSource * proc = [[DispatchSource alloc] init];
@@ -184,18 +162,27 @@
   proc.eventHandler =
     ^{
       //NSLog(@"process ended");
-      dispatch_source_cancel(timer.source);
-      
       dispatch_group_leave(group);
     };
 
   [proc enable];
   [output enable];
   [error enable];
-  [timer enable];
 
-  dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+  int64_t timeout = self.timeout * NSEC_PER_SEC;
+
+  dispatch_time_t soon =
+    dispatch_time(DISPATCH_TIME_NOW, timeout);
+
+  long timedout = dispatch_group_wait(group, soon);
   
+  if(timedout)
+    {
+    [task terminate];
+    
+    self.timedout = YES;
+    }
+    
   dispatch_release(group);
   
   if(!self.timedout)
@@ -209,7 +196,6 @@
   [proc stop];
   [output stop];
   [error stop];
-  [timer stop];
   
   [task release];
   [errorPipe release];

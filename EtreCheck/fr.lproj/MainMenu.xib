@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
@@ -120,6 +120,7 @@
         </customObject>
         <customObject id="co3-N1-xdH" userLabel="Unknown files Manager" customClass="UnknownFilesManager">
             <connections>
+                <outlet property="removeButton" destination="928-Rk-LBh" id="xgS-mZ-4nm"/>
                 <outlet property="tableView" destination="eq8-ku-8TT" id="kDL-95-4rp"/>
                 <outlet property="textView" destination="I31-Ch-mPs" id="OaW-Ai-8p0"/>
                 <outlet property="window" destination="xrD-Uw-hrd" id="etE-80-nof"/>
@@ -1503,23 +1504,20 @@ DQ
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="remove" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="qMB-Tu-D6X">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                        <tableColumn identifier="remove" width="56" minWidth="10" maxWidth="3.4028234663852886e+38" id="qMB-Tu-D6X">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Enlever ?">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
-                                            <buttonCell key="dataCell" type="push" title="Enlever" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="Gro-zJ-MQG">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <connections>
-                                                    <action selector="remove:" target="co3-N1-xdH" id="Ota-U0-VHq"/>
-                                                </connections>
+                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" inset="2" id="myq-3h-eTw">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="whitelist" width="146" minWidth="40" maxWidth="1000" id="Ifg-0y-pp5">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Ajouter à la liste blanche ?">
+                                        <tableColumn identifier="whitelist" width="51.625" minWidth="40" maxWidth="1000" id="Ifg-0y-pp5">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Garder ?">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1530,7 +1528,7 @@ DQ
                                             </buttonCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="path" editable="NO" width="307" minWidth="40" maxWidth="1000" id="2sR-qn-hGU">
+                                        <tableColumn identifier="path" editable="NO" width="409.5" minWidth="40" maxWidth="1000" id="2sR-qn-hGU">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Le fichier inconnu">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1553,7 +1551,7 @@ DQ
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="nRr-Ea-18S">
-                            <rect key="frame" x="1" y="121" width="526" height="16"/>
+                            <rect key="frame" x="1" y="109" width="526" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="8Hj-Jw-3ti">
@@ -1566,15 +1564,15 @@ DQ
                         </tableHeaderView>
                     </scrollView>
                     <button verticalHuggingPriority="750" id="928-Rk-LBh">
-                        <rect key="frame" x="14" y="13" width="151" height="32"/>
+                        <rect key="frame" x="14" y="13" width="85" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Envoyer à Etresoft" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dtH-FC-58T">
+                        <buttonCell key="cell" type="push" title="Enlever" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dtH-FC-58T">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="report:" target="co3-N1-xdH" id="FD2-eV-L2z"/>
-                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canReport" id="hno-LK-3r9"/>
+                            <action selector="removeFiles:" target="co3-N1-xdH" id="H4l-Mh-KOJ"/>
+                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canRemoveFiles" id="I8e-oF-d3q"/>
                         </connections>
                     </button>
                 </subviews>

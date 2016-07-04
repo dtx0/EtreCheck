@@ -7,16 +7,22 @@
 #import <Foundation/Foundation.h>
 #import "PopoverManager.h"
 
-@interface AdminManager : NSObject
+#define kLaunchdTask @"launchdtask"
+#define kFileDeleted @"filedeleted"
+
+@interface UninstallManager : NSObject
   {
   NSWindow * myWindow;
   NSTextView * myTextView;
   NSTableView * myTableView;
   
-  NSMutableArray * myLaunchdTasksToUnload;
+  // This is an array of dictionaries, not files. Because this class is
+  // a manager for a user interface, use the concept being presented to
+  // the user instead of what is actually going on.
+  // Each dictionary has a path and optionally a launchd info dictionary.
   NSMutableArray * myFilesToRemove;
   
-  BOOL myFilesDeleted;
+  BOOL myFilesRemoved;
   }
 
 // The window itself.
@@ -31,26 +37,21 @@
 // Can the manager remove any files?
 @property (readonly) BOOL canRemoveFiles;
 
-// Launchd tasks to unload.
-@property (retain) NSMutableArray * launchdTasksToUnload;
-
 // Files to remove.
+// This is an array of dictionaries, not files. Because this class is
+// a manager for a user interface, use the concept being presented to
+// the user instead of what is actually going on.
+// Each dictionary has a path and optionally a launchd info dictionary.
 @property (retain) NSMutableArray * filesToRemove;
 
-// Were any files deleted?
-@property (assign) BOOL filesDeleted;
+// Were any files removed?
+@property (assign) BOOL filesRemoved;
 
 // Show the window.
 - (void) show;
 
 // Close the window.
 - (IBAction) close: (id) sender;
-
-// Tell the user that EtreCheck is too old.
-- (BOOL) reportOldEtreCheckVersion;
-
-// Tell the user that the EtreCheck version is unverified.
-- (BOOL) reportUnverifiedEtreCheckVersion;
 
 // Remove files.
 - (IBAction) removeFiles: (id) sender;

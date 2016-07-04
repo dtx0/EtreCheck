@@ -16,37 +16,56 @@
 #define kWhitelist @"whitelist"
 #define kPath @"path"
 
-@interface AdminManager ()
+#define kRemoveColumnIndex 0
+#define kWhitelistColumnIndex 1
+
+@interface UninstallManager ()
 
 // Show the window with content.
 - (void) show: (NSString *) content;
 
 // Verify removal of files.
-- (void) verifyRemoveFiles;
+- (void) verifyRemoveFiles: (NSMutableArray *) files;
 
-// Suggest a restart.
-- (void) suggestRestart;
+// Tell the user that EtreCheck is too old.
+- (BOOL) reportOldEtreCheckVersion;
+
+// Tell the user that the EtreCheck version is unverified.
+- (BOOL) reportUnverifiedEtreCheckVersion;
 
 @end
 
 @implementation UnknownFilesManager
 
-@synthesize unknownTasks = myUnknownTasks;
-@synthesize unknownFiles = myUnknownFiles;
-@synthesize removeIndicators = myRemoveIndicators;
-@synthesize whitelistIndicators = myWhitelistIndicators;
 @synthesize whitelistDescription = myWhitelistDescription;
+@synthesize removeButton = myRemoveButton;
 
-// Is the report button enabled?
-- (BOOL) canReport
+// Can I remove files?
+- (BOOL) canRemoveFiles
   {
-  BOOL canReport = NO;
-  
-  for(NSNumber * whitelistIndicator in self.whitelistIndicators)
-    if([whitelistIndicator boolValue])
-      canReport = YES;
+  int removeCount = 0;
+  int whitelistCount = 0;
+  BOOL disallow = NO;
+
+  for(NSDictionary * item in self.filesToRemove)
+    {
+    if([[item objectForKey: kRemove] boolValue])
+      ++removeCount;
+    else if([[item objectForKey: kWhitelist] boolValue])
+      ++whitelistCount;
+    else
+      disallow = YES;
+    }
     
-  return canReport;
+  if((whitelistCount > 0) && (removeCount == 0))
+    [self.removeButton setTitle: NSLocalizedString(@"Report", NULL)];
+  else
+    [self.removeButton setTitle: NSLocalizedString(@"Remove", NULL)];
+
+  if(disallow)
+    return NO;
+    
+  return (removeCount > 0) || (whitelistCount > 0);
   }
 
 // Constructor.
@@ -65,10 +84,6 @@
   {
   [super dealloc];
   
-  self.unknownTasks = nil;
-  self.unknownFiles = nil;
-  self.removeIndicators = nil;
-  self.whitelistIndicators = nil;
   self.whitelistDescription = nil;
   }
 
@@ -77,89 +92,84 @@
   {
   [super show: NSLocalizedString(@"unknownfiles", NULL)];
   
-  self.filesDeleted = NO;
+  [self willChangeValueForKey: @"canRemoveFiles"];
   
-  myUnknownTasks = [NSMutableDictionary new];
-  myUnknownFiles = [NSMutableArray new];
-  myRemoveIndicators = [NSMutableArray new];
-  myWhitelistIndicators = [NSMutableArray new];
+  self.filesRemoved = NO;
+  
+  NSMutableDictionary * filesToRemove = [NSMutableDictionary new];
   
   for(NSString * path in [[Model model] unknownLaunchdFiles])
     {
     NSDictionary * info = [[[Model model] launchdFiles] objectForKey: path];
     
-    if(info)
+    if(info != nil)
       {
-      [myUnknownTasks setObject: info forKey: path];
-      [myUnknownFiles addObject: path];
-      [myRemoveIndicators addObject: [NSNumber numberWithBool: NO]];
-      [myWhitelistIndicators addObject: [NSNumber numberWithBool: NO]];
+      NSMutableDictionary * item = [NSMutableDictionary new];
+      
+      [item setObject: path forKey: kPath];
+      [item setObject: info forKey: kLaunchdTask];
+      
+      [filesToRemove setObject: item forKey: path];
+      
+      [item release];
       }
     }
     
-  [myUnknownFiles sortUsingSelector: @selector(compare:)];
+  NSArray * adwareFiles =
+    [[filesToRemove allKeys] sortedArrayUsingSelector: @selector(compare:)];
+  
+  for(NSString * adwareFile in adwareFiles)
+    {
+    NSMutableDictionary * item = [filesToRemove objectForKey: adwareFile];
+    
+    if(item)
+      [self.filesToRemove addObject: item];
+    }
+  
+  [filesToRemove release];
   
   [self.tableView reloadData];
+
+  [self didChangeValueForKey: @"canRemoveFiles"];
   }
 
 // Close the window.
 - (IBAction) close: (id) sender
   {
-  self.unknownTasks = nil;
-  self.unknownFiles = nil;
-  self.removeIndicators = nil;
-  self.whitelistIndicators = nil;
   self.whitelistDescription = nil;
 
   [super close: sender];
   }
 
-// Suggest a restart.
-- (void) suggestRestart
+// Remove the files.
+- (IBAction) removeFiles: (id) sender
   {
-  [super suggestRestart];
-  }
-
-// Remove an unknown file.
-- (IBAction) remove: (id) sender
-  {
-  NSUInteger index = [[self tableView] clickedRow];
-  
-  NSString * path = [self.unknownFiles objectAtIndex: index];
-    
-  NSDictionary * info = [[[Model model] launchdFiles] objectForKey: path];
-  
-  NSNumber * PID = [info objectForKey: kPID];
-    
-  if(PID)
-    [self.launchdTasksToUnload addObject: info];
-  else
-    [self.filesToRemove addObject: path];
-    
-  [super removeFiles: sender];
+  if([super canRemoveFiles])
+    [super removeFiles: sender];
   }
 
 // Verify removal of files.
-- (void) verifyRemoveFiles
+- (void) verifyRemoveFiles: (NSMutableArray *) files
   {
-  for(NSString * path in self.filesToRemove)
-    {
-    NSUInteger index = [self.unknownFiles indexOfObject: path];
-    
-    [self.unknownFiles removeObjectAtIndex: index];
-    [self.removeIndicators removeObjectAtIndex: index];
-    [self.whitelistIndicators removeObjectAtIndex: index];
-    
-    [[[Model model] launchdFiles] removeObjectForKey: path];
-    
-    self.filesDeleted = YES;
-    }
-    
+  [super verifyRemoveFiles: files];
+
+  NSMutableArray * filesNotRemoved = [NSMutableArray new];
+  
+  for(NSDictionary * item in files)
+    if([[item objectForKey: kFileDeleted] boolValue])
+      self.filesRemoved = YES;
+    else
+      [filesNotRemoved addObject: item];
+  
+  [self willChangeValueForKey: @"canRemoveFiles"];
+  
+  [files setArray: filesNotRemoved];
+  
+  [filesNotRemoved release];
+  
   [self.tableView reloadData];
 
-  [super verifyRemoveFiles];
-  
-  [self.filesToRemove removeAllObjects];
+  [self didChangeValueForKey: @"canRemoveFiles"];
   }
 
 // Contact Etresoft to add to whitelist.
@@ -183,17 +193,15 @@
   [json appendString: @"\"files\":["];
   
   bool first = YES;
-  
-  NSUInteger index = 0;
-  
-  for(; index < self.whitelistIndicators.count; ++index)
+
+  for(NSDictionary * item in self.filesToRemove)
     {
-    NSString * path = [self.unknownFiles objectAtIndex: index];
+    NSString * path = [item objectForKey: kPath];
     
     if(!path)
       continue;
       
-    NSDictionary * info = [self.unknownTasks objectForKey: path];
+    NSDictionary * info = [item objectForKey: kLaunchdTask];
     
     if(!info)
       continue;
@@ -216,9 +224,7 @@
     [json appendString: @"{"];
     
     [json
-      appendFormat:
-        @"\"known\":\"%@\",",
-        [self.whitelistIndicators objectAtIndex: index]];
+      appendFormat: @"\"known\":\"%@\",", [item objectForKey: kWhitelist]];
     
     [json appendFormat: @"\"name\":\"%@\",", name];
     [json appendFormat: @"\"path\":\"%@\",", path];
@@ -313,18 +319,19 @@
     [content
       appendString: @"EtreCheck found the following unknown files:\n\n"];
 
-    NSUInteger index = 0;
-    
-    for(; index < self.whitelistIndicators.count; ++index)
+    for(NSDictionary * item in self.filesToRemove)
       {
-      [content
-        appendString:
-          [NSString
-            stringWithFormat:
-              @"%@ %@\n",
-              [[self.whitelistIndicators objectAtIndex: index] boolValue]
-                ? @"Known" : @"Unknown",
-              [self.unknownFiles objectAtIndex: index]]];
+      NSString * path = [item objectForKey: kPath];
+    
+      if([path length] > 0)
+        [content
+          appendString:
+            [NSString
+              stringWithFormat:
+                @"%@ %@\n",
+                [[item objectForKey: kWhitelist] boolValue]
+                  ? @"Known" : @"Unknown",
+                path]];
       }
       
     [content appendString: @"\n\n"];
@@ -344,18 +351,26 @@
 
 - (NSInteger) numberOfRowsInTableView: (NSTableView *) aTableView
   {
-  return self.whitelistIndicators.count;
+  return self.filesToRemove.count;
   }
 
 - (id) tableView: (NSTableView *) aTableView
   objectValueForTableColumn: (NSTableColumn *) aTableColumn
   row: (NSInteger) rowIndex
   {
-  if([[aTableColumn identifier] isEqualToString: kWhitelist])
-    return [self.whitelistIndicators objectAtIndex: rowIndex];
+  if(rowIndex >= self.filesToRemove.count)
+    return nil;
 
-  else if([[aTableColumn identifier] isEqualToString: kPath])
-    return [self.unknownFiles objectAtIndex: rowIndex];
+  NSMutableDictionary * item = [self.filesToRemove objectAtIndex: rowIndex];
+  
+  if([[aTableColumn identifier] isEqualToString: kWhitelist])
+    return [item objectForKey: kWhitelist];
+
+  if([[aTableColumn identifier] isEqualToString: kRemove])
+    return [item objectForKey: kRemove];
+
+  if([[aTableColumn identifier] isEqualToString: kPath])
+    return [item objectForKey: kPath];
     
   return nil;
   }
@@ -365,23 +380,37 @@
   forTableColumn: (NSTableColumn *) tableColumn
   row: (NSInteger) row
   {
+  if(row >= self.filesToRemove.count)
+    return;
+    
+  [self willChangeValueForKey: @"canRemoveFiles"];
+    
+  NSMutableDictionary * item = [self.filesToRemove objectAtIndex: row];
+    
   if([[tableColumn identifier] isEqualToString: kWhitelist])
     {
-    [self willChangeValueForKey: @"canReport"];
+    [item setObject: object forKey: kWhitelist];
     
-    [self.whitelistIndicators replaceObjectAtIndex: row withObject: object];
+    if([object boolValue])
+      [item setObject: [NSNumber numberWithBool: NO] forKey: kRemove];
 
     [tableView
       reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
-      columnIndexes: [NSIndexSet indexSetWithIndex: 0]];
-
-    [self didChangeValueForKey: @"canReport"];
-      
-    NSButtonCell * cell =
-      [[tableView tableColumnWithIdentifier: kRemove] dataCellForRow: row];
-      
-    [cell setEnabled: ![object boolValue]];
+      columnIndexes: [NSIndexSet indexSetWithIndex: kRemoveColumnIndex]];
     }
+  else if([[tableColumn identifier] isEqualToString: kRemove])
+    {
+    [item setObject: object forKey: kRemove];
+    
+    if([object boolValue])
+      [item setObject: [NSNumber numberWithBool: NO] forKey: kWhitelist];
+
+    [tableView
+      reloadDataForRowIndexes: [NSIndexSet indexSetWithIndex: row]
+      columnIndexes: [NSIndexSet indexSetWithIndex: kWhitelistColumnIndex]];
+    }
+
+  [self didChangeValueForKey: @"canRemoveFiles"];
   }
 
 #pragma mark - NSTableViewDelegate
