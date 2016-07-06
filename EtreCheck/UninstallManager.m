@@ -112,38 +112,32 @@
 // Uninstall an array of items.
 - (void) uninstallItems: (NSMutableArray *) items
   {
-  // Due to whatever funky is going on inside OS X and AppleScript, this
-  // must be run from the main thread.
-  dispatch_async(
-    dispatch_get_main_queue(),
-    ^{
-      if(![self canRemoveFiles])
-        return;
-      
-      NSMutableArray * launchdTasksToUnload = [NSMutableArray new];
-      NSMutableArray * filesToDelete = [NSMutableArray new];
+  if(![self canRemoveFiles])
+    return;
   
-      for(NSDictionary * item in items)
-        {
-        NSString * path = [item objectForKey: kPath];
-        
-        NSDictionary * info = [item objectForKey: kLaunchdTask];
-        
-        if(info != nil)
-          [launchdTasksToUnload addObject: info];
-        else if(path != nil)
-          [filesToDelete addObject: path];
-        }
-      
-      [self reportFiles];
-      [Utilities uninstallLaunchdTasks: launchdTasksToUnload];
-      [Utilities deleteFiles: filesToDelete];
-      
-      [launchdTasksToUnload release];
-      [filesToDelete release];
-      
-      [self verifyRemoveFiles: items];
-    });
+  NSMutableArray * launchdTasksToUnload = [NSMutableArray new];
+  NSMutableArray * filesToDelete = [NSMutableArray new];
+
+  for(NSDictionary * item in items)
+    {
+    NSString * path = [item objectForKey: kPath];
+    
+    NSDictionary * info = [item objectForKey: kLaunchdTask];
+    
+    if(info != nil)
+      [launchdTasksToUnload addObject: info];
+    else if(path != nil)
+      [filesToDelete addObject: path];
+    }
+  
+  [self reportFiles];
+  [Utilities uninstallLaunchdTasks: launchdTasksToUnload];
+  [Utilities deleteFiles: filesToDelete];
+  
+  [launchdTasksToUnload release];
+  [filesToDelete release];
+  
+  [self verifyRemoveFiles: items];
   }
 
 // Tell the user that EtreCheck is too old.

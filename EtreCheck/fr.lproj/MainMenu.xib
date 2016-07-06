@@ -121,6 +121,7 @@
         <customObject id="co3-N1-xdH" userLabel="Unknown files Manager" customClass="UnknownFilesManager">
             <connections>
                 <outlet property="removeButton" destination="928-Rk-LBh" id="xgS-mZ-4nm"/>
+                <outlet property="reportButton" destination="Bxa-zN-cv6" id="5Go-cq-myy"/>
                 <outlet property="tableView" destination="eq8-ku-8TT" id="kDL-95-4rp"/>
                 <outlet property="textView" destination="I31-Ch-mPs" id="OaW-Ai-8p0"/>
                 <outlet property="window" destination="xrD-Uw-hrd" id="etE-80-nof"/>
@@ -1573,6 +1574,18 @@ DQ
                         <connections>
                             <action selector="removeFiles:" target="co3-N1-xdH" id="H4l-Mh-KOJ"/>
                             <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canRemoveFiles" id="I8e-oF-d3q"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="Bxa-zN-cv6">
+                        <rect key="frame" x="99" y="13" width="90" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Signaler" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gFj-EY-06I">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="report:" target="co3-N1-xdH" id="czK-v6-9Z9"/>
+                            <binding destination="co3-N1-xdH" name="enabled" keyPath="self.canReportFiles" id="ADm-mW-KcS"/>
                         </connections>
                     </button>
                 </subviews>

@@ -12,12 +12,19 @@
   {
   NSAttributedString * myWhitelistDescription;
   NSButton * myRemoveButton;
+  NSButton * myReportButton;
   }
 
 // User's whitelist description.
 @property (retain) NSAttributedString * whitelistDescription;
 
-// The table view.
+// The remove button.
 @property (retain) IBOutlet NSButton * removeButton;
+
+// Can the report button be clicked?
+@property (readonly) BOOL canReportFiles;
+
+// The report button.
+@property (retain) IBOutlet NSButton * reportButton;
 
 @end

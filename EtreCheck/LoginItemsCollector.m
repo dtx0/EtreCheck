@@ -86,11 +86,14 @@
     
   if(success)
     {
+    NSMutableDictionary * loginItems = [NSMutableDictionary new];
+  
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
 
     BOOL loginItem = NO;
     BOOL backgroundItem = NO;
     NSString * path = nil;
+    NSString * resolvedPath = nil;
     NSString * name = nil;
     NSString * identifier = nil;
     
@@ -111,26 +114,24 @@
         
       if(check)
         {
-        if(loginItem && backgroundItem)
-          {
-          if([[NSFileManager defaultManager] fileExistsAtPath: path])
-            if([self SMLoginItemActive: identifier])
-              {
-              NSDictionary * item =
-                [NSDictionary dictionaryWithObjectsAndKeys:
-                  name, @"name",
-                  path, @"path",
-                  @"SMLoginItem", @"kind",
-                  @"Hidden", @"hidden",
-                  nil];
-                
-              [self.loginItems addObject: item];
-              }
-          }
+        if(path && resolvedPath && loginItem && backgroundItem)
+          if([self SMLoginItemActive: identifier])
+            {
+            NSDictionary * item =
+              [NSDictionary dictionaryWithObjectsAndKeys:
+                name, @"name",
+                path, @"path",
+                @"SMLoginItem", @"kind",
+                @"Hidden", @"hidden",
+                nil];
+              
+            [loginItems setObject: item forKey: path];
+            }
 
         loginItem = NO;
         backgroundItem = NO;
         path = nil;
+        resolvedPath = nil;
         name = nil;
         }
       else if([trimmedLine hasPrefix: @"path:"])
@@ -146,7 +147,8 @@
           [path rangeOfString: @"/Contents/Library/LoginItems/"];
           
         if(range.location != NSNotFound)
-          loginItem = YES;
+          if([[NSFileManager defaultManager] fileExistsAtPath: path])
+            loginItem = YES;
         }
       else if([trimmedLine hasPrefix: @"name:"])
         {
@@ -169,7 +171,13 @@
         NSRange range = [value rangeOfString: @" ("];
         
         if(range.location != NSNotFound)
+          {
           identifier = [value substringToIndex: range.location];
+          
+          resolvedPath =
+            [[NSWorkspace sharedWorkspace]
+              absolutePathForAppBundleWithIdentifier: identifier];
+          }
         }
       else if([trimmedLine hasPrefix: @"flags:"])
         {
@@ -184,6 +192,10 @@
           backgroundItem = YES;
         }
       }
+
+    [self.loginItems addObjectsFromArray: [loginItems allValues]];
+    
+    [loginItems release];
     }
     
   [subProcess release];

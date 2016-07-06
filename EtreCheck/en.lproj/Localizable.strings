@@ -28,7 +28,7 @@
 "%d error (plural rule: one)" = "one error";
 "%d error (plural rule: other)" = "%d errors\n";
 "adware" = "EtreCheck has detected that your Macintosh is infected with adware as defined by Etresoft’s own research and the contributions of other EtreCheck users. Click the “Remove” button to remove the adware. Files you remove will be automatically reported to Etresoft for verification.";
-"unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. Identify any files that are valid and describe why. Then, click the “Send to Etresoft” button to report these files to Etresoft for possible addition to the whitelist of legitimate software.\n\nIf any unknown files are adware or malware, just click the “Remove” button to remove them.";
+"unknownfiles" = "EtreCheck has detected software that is not on its whitelist. It may be adware, malware, or just something new that needs to be added to the whitelist. Identify the files you would like to remove and the ones you would like to keep. Click the desired button to delete files marked for deletion or report legitimate files to Etresoft. If you are keeping any files, please describe why they should be added to the whitelist. When in doubt, keep the files and report them to Etresoft for investigation.\n\nEtreCheck will not delete any files with a valid digital signature from Apple.";
 "%d adware file (plural rule: zero)" = "";
 "%d adware file (plural rule: one)" = "One adware file found.";
 "%d adware file (plural rule: other)" = "%d adware files found.";

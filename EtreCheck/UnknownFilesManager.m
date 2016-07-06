@@ -24,6 +24,9 @@
 // Show the window with content.
 - (void) show: (NSString *) content;
 
+// Uninstall an array of items.
+- (void) uninstallItems: (NSMutableArray *) items;
+
 // Verify removal of files.
 - (void) verifyRemoveFiles: (NSMutableArray *) files;
 
@@ -39,6 +42,8 @@
 
 @synthesize whitelistDescription = myWhitelistDescription;
 @synthesize removeButton = myRemoveButton;
+@dynamic canReportFiles;
+@synthesize reportButton = myReportButton;
 
 // Can I remove files?
 - (BOOL) canRemoveFiles
@@ -57,15 +62,33 @@
       disallow = YES;
     }
     
-  if((whitelistCount > 0) && (removeCount == 0))
-    [self.removeButton setTitle: NSLocalizedString(@"Report", NULL)];
-  else
-    [self.removeButton setTitle: NSLocalizedString(@"Remove", NULL)];
-
   if(disallow)
     return NO;
     
-  return (removeCount > 0) || (whitelistCount > 0);
+  return removeCount > 0;
+  }
+
+// Can I report files?
+- (BOOL) canReportFiles
+  {
+  int removeCount = 0;
+  int whitelistCount = 0;
+  BOOL disallow = NO;
+
+  for(NSDictionary * item in self.filesToRemove)
+    {
+    if([[item objectForKey: kRemove] boolValue])
+      ++removeCount;
+    else if([[item objectForKey: kWhitelist] boolValue])
+      ++whitelistCount;
+    else
+      disallow = YES;
+    }
+    
+  if(disallow)
+    return NO;
+    
+  return whitelistCount > 0;
   }
 
 // Constructor.
@@ -93,6 +116,7 @@
   [super show: NSLocalizedString(@"unknownfiles", NULL)];
   
   [self willChangeValueForKey: @"canRemoveFiles"];
+  [self willChangeValueForKey: @"canReportFiles"];
   
   self.filesRemoved = NO;
   
@@ -130,6 +154,7 @@
   
   [self.tableView reloadData];
 
+  [self didChangeValueForKey: @"canReportFiles"];
   [self didChangeValueForKey: @"canRemoveFiles"];
   }
 
@@ -145,7 +170,24 @@
 - (IBAction) removeFiles: (id) sender
   {
   if([super canRemoveFiles])
-    [super removeFiles: sender];
+    {
+    NSMutableArray * filesToRemove = [NSMutableArray new];
+    NSMutableArray * filesToKeep = [NSMutableArray new];
+    
+    for(NSMutableDictionary * item in self.filesToRemove)
+      if([[item objectForKey: kRemove] boolValue])
+        [filesToRemove addObject: item];
+      else
+        [filesToKeep addObject: item];
+      
+    [super uninstallItems: filesToRemove];
+    
+    [self.filesToRemove removeAllObjects];
+    [self.filesToRemove addObjectsFromArray: filesToKeep];
+    
+    [filesToKeep release];
+    [filesToRemove release];
+    }
   }
 
 // Verify removal of files.
@@ -175,18 +217,6 @@
 // Contact Etresoft to add to whitelist.
 - (IBAction) report: (id) sender
   {
-  if([[Model model] oldEtreCheckVersion])
-    {
-    [self reportOldEtreCheckVersion];
-    return;
-    }
-    
-  if(![[Model model] verifiedEtreCheckVersion])
-    {
-    [self reportUnverifiedEtreCheckVersion];
-    return;
-    }
-    
   NSMutableString * json = [NSMutableString string];
   
   [json appendString: @"{\"action\":\"report\","];
@@ -384,6 +414,7 @@
     return;
     
   [self willChangeValueForKey: @"canRemoveFiles"];
+  [self willChangeValueForKey: @"canReportFiles"];
     
   NSMutableDictionary * item = [self.filesToRemove objectAtIndex: row];
     
@@ -410,6 +441,7 @@
       columnIndexes: [NSIndexSet indexSetWithIndex: kWhitelistColumnIndex]];
     }
 
+  [self didChangeValueForKey: @"canReportFiles"];
   [self didChangeValueForKey: @"canRemoveFiles"];
   }
 

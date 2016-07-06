@@ -121,6 +121,7 @@
         <customObject id="iUq-Rw-Zgh" userLabel="Unknown files Manager" customClass="UnknownFilesManager">
             <connections>
                 <outlet property="removeButton" destination="Tnm-72-P6l" id="6GU-e9-4RN"/>
+                <outlet property="reportButton" destination="zTe-eC-fao" id="8PS-sq-VlY"/>
                 <outlet property="tableView" destination="TNz-uC-Z0v" id="nar-o9-9DH"/>
                 <outlet property="textView" destination="5D9-us-RSB" id="hLj-FU-R2e"/>
                 <outlet property="window" destination="F5c-hN-DcS" id="crJ-Et-Ssa"/>
@@ -1595,6 +1596,18 @@ Gw
                         <connections>
                             <action selector="removeFiles:" target="iUq-Rw-Zgh" id="Cbj-30-9la"/>
                             <binding destination="iUq-Rw-Zgh" name="enabled" keyPath="self.canRemoveFiles" id="Of6-HD-6zt"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" id="zTe-eC-fao">
+                        <rect key="frame" x="103" y="13" width="81" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Report" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FcB-Q8-uP3">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="report:" target="iUq-Rw-Zgh" id="XYX-0i-1Og"/>
+                            <binding destination="iUq-Rw-Zgh" name="enabled" keyPath="self.canReportFiles" id="xfN-1w-GYq"/>
                         </connections>
                     </button>
                 </subviews>
