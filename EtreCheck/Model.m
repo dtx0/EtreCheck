@@ -43,10 +43,11 @@
 @synthesize seriousProblems = mySeriousProblems;
 @synthesize backupExists = myBackupExists;
 @synthesize ignoreKnownAppleFailures = myIgnoreKnownAppleFailures;
-@synthesize checkAppleSignatures = myCheckAppleSignatures;
+@synthesize showSignatureFailures = myShowSignatureFailures;
 @synthesize hideAppleTasks = myHideAppleTasks;
 @synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
 @synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
+@synthesize appleSignatures = myAppleSignatures;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -112,7 +113,7 @@
     myTerminatedTasks = [NSMutableArray new];
     mySeriousProblems = [NSMutableSet new];
     myIgnoreKnownAppleFailures = YES;
-    myCheckAppleSignatures = YES;
+    myShowSignatureFailures = NO;
     myHideAppleTasks = YES;
     myWhitelistFiles = [NSMutableSet new];
     myWhitelistPrefixes = [NSMutableSet new];
@@ -262,6 +263,9 @@
   if([path length] == 0)
     return NO;
     
+  if([self isWhitelistFile: [path lastPathComponent]])
+    return NO;
+
   bool adware = NO;
   
   if([self.adwareFiles objectForKey: path])
@@ -532,6 +536,25 @@
     }
     
   [self.terminatedTasks addObject: command];
+  }
+
+// Get the expected Apple signature for an executable.
+- (NSString *) expectedAppleSignature: (NSString *) path
+  {
+  return [[self appleSignatures] objectForKey: path];
+  }
+
+// Is this a known Apple executable?
+- (BOOL) isKnownAppleExecutable: (NSString *) path
+  {
+  if([path length])
+    {
+    path = [Utilities resolveBundlePath: path];
+  
+    return [[self appleSignatures] objectForKey: path] != nil;
+    }
+    
+  return NO;
   }
 
 @end

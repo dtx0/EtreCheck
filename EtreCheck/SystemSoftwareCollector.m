@@ -63,10 +63,62 @@
         }
       }
     }
-    
+  
+  // Now that I know what OS version I have, load the signatures.
+  [self loadAppleSignatures];
+  
   [subProcess release];
     
   dispatch_semaphore_signal(self.complete);
+  }
+
+// Load Apple signatures.
+- (void) loadAppleSignatures
+  {
+  NSString * signaturePath =
+    [[NSBundle mainBundle]
+      pathForResource: @"appleSoftware" ofType: @"plist"];
+    
+  NSData * plistData = [NSData dataWithContentsOfFile: signaturePath];
+  
+  if(plistData)
+    {
+    NSDictionary * plist = [Utilities readPropertyListData: plistData];
+  
+    if(plist)
+      {
+      int version = [[Model model] majorOSVersion];
+      
+      switch(version)
+        {
+        case kSnowLeopard:
+          [self loadAppleSignatures: [plist objectForKey: @"10.6"]];
+          break;
+        case kLion:
+          [self loadAppleSignatures: [plist objectForKey: @"10.7"]];
+          break;
+        case kMountainLion:
+          [self loadAppleSignatures: [plist objectForKey: @"10.8"]];
+          break;
+        case kMavericks:
+          [self loadAppleSignatures: [plist objectForKey: @"10.9"]];
+          break;
+        case kYosemite:
+          [self loadAppleSignatures: [plist objectForKey: @"10.10"]];
+          break;
+        case kElCapitan:
+          [self loadAppleSignatures: [plist objectForKey: @"10.11"]];
+          break;
+        }
+      }
+    }
+  }
+
+// Load apple signatures for a specific OS version.
+- (void) loadAppleSignatures: (NSDictionary *) signatures
+  {
+  if(signatures)
+    [[Model model] setAppleSignatures: signatures];
   }
 
 // Print a system software item.

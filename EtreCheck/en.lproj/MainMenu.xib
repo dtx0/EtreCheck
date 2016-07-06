@@ -733,7 +733,7 @@ DQ
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="0gp-Te-bVv">
                             <font key="font" metaFont="system"/>
-                            <string key="title">The EtreCheck report is most useful when run with all options enabled. These options can be changed, but will make the EtreCheck report longer and harder to read.</string>
+                            <string key="title">The EtreCheck report is most useful when run with default settings. These options can be changed, but will make the EtreCheck report longer and harder to read.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -743,7 +743,7 @@ DQ
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="gif-fp-lXo">
                             <font key="font" metaFont="smallSystem"/>
-                            <string key="title">This will ensure that your operating system has not been altered. It will also ensure that any tasks that claim to be from Apple really are from Apple. This option may take several additional minutes to run. </string>
+                            <string key="title">Digital signatures are designed to verify that your software is legitimate and has not been tampered with, but signatures are often missing or invalid.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -751,7 +751,7 @@ DQ
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="pHg-lA-eh1">
                         <rect key="frame" x="36" y="78" width="483" height="28"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Some Apple tasks are known to report harmless failures. This option will hide those failures." id="fU5-i8-ujm">
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Some Apple tasks are known to report failures. This option will hide those failures." id="fU5-i8-ujm">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -792,12 +792,12 @@ DQ
                     <button id="WKn-nL-k95">
                         <rect key="frame" x="18" y="189" width="311" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Check the digital signatures of Apple tasks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="v1v-j7-mER">
+                        <buttonCell key="cell" type="check" title="Show digital signature failures" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="v1v-j7-mER">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.checkAppleSignatures" id="pju-qp-fse"/>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.showSignatureFailures" id="BCg-oE-owL"/>
                         </connections>
                     </button>
                 </subviews>

@@ -53,6 +53,7 @@
 		A5716E151C4C5A6E00297727 /* UnknownFilesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */; };
 		A5716E161C4C5A6E00297727 /* UnknownFilesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E141C4C5A6E00297727 /* UnknownFilesManager.m */; };
 		A57516AF1A14D9E700F374FB /* DiagnosticsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */; };
+		A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */ = {isa = PBXBuildFile; fileRef = A59429411D2AD97B003E594D /* appleSoftware.plist */; };
 		A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */; };
 		A5A9B80A1C4FFD9A00D0EA71 /* donate.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5A9B8081C4FFD9A00D0EA71 /* donate.rtf */; };
 		A5B659231A16D57800476A76 /* DiagnosticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = A5B659221A16D57800476A76 /* DiagnosticEvent.m */; };
@@ -196,6 +197,7 @@
 		A5716E141C4C5A6E00297727 /* UnknownFilesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnknownFilesManager.m; sourceTree = "<group>"; };
 		A57516AD1A14D9E700F374FB /* DiagnosticsCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsCollector.h; sourceTree = "<group>"; };
 		A57516AE1A14D9E700F374FB /* DiagnosticsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsCollector.m; sourceTree = "<group>"; };
+		A59429411D2AD97B003E594D /* appleSoftware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleSoftware.plist; sourceTree = "<group>"; };
 		A59B506B15C45EC000250772 /* NSMutableAttributedString+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Etresoft.h"; sourceTree = "<group>"; };
 		A59B506C15C45EC000250772 /* NSMutableAttributedString+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Etresoft.m"; sourceTree = "<group>"; };
 		A5A9B8091C4FFD9A00D0EA71 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/donate.rtf; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 				A5B6BD5A19D7AAF900C48C37 /* Media.xcassets */,
 				A55BC17515BF987D00D42EF1 /* EtreCheck-Info.plist */,
 				A54DA5711A3117E100F09B19 /* adware.plist */,
+				A59429411D2AD97B003E594D /* appleSoftware.plist */,
 				A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */,
 				A5E9E2C91A2669A600309185 /* Collectors.strings */,
 				A5E9E2C21A2522A600309185 /* Help.strings */,
@@ -611,6 +614,7 @@
 				A5E9E2C01A2522A600309185 /* Help.strings in Resources */,
 				A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */,
 				A5A9B80A1C4FFD9A00D0EA71 /* donate.rtf in Resources */,
+				A59429421D2AD97B003E594D /* appleSoftware.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

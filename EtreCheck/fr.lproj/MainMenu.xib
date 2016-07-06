@@ -1162,7 +1162,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="oYQ-5Z-hz6">
                             <font key="font" metaFont="smallSystem"/>
-                            <string key="title">Cela permettra d’assurer que votre système d’exploitation n’a pas été modifié. Il veillera également à ce que les tâches qui prétendent être d’Apple soient vraiment d’Apple. Cette option peut prendre plusieurs minutes supplémentaires pour l’exécuter.</string>
+                            <string key="title">Les signatures numériques permettront d’assurer que votre logiciel est légitime et n’a pas été modifié. Malheursement, les signatures numériques ne sont toujours présentes et sont parfois en panne.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -1211,12 +1211,12 @@ Gw
                     <button id="m5c-jh-0ed">
                         <rect key="frame" x="11" y="200" width="375" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Vérifiez les signatures numériques des tâches d’Apple" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ZIY-Xx-GEK">
+                        <buttonCell key="cell" type="check" title="Afficher les échecs de signatures numériques" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ZIY-Xx-GEK">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.checkAppleSignatures" id="bvg-Ff-bUc"/>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.showSignatureFailures" id="dW0-Nf-Wfc"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Cuc-cN-65S">
@@ -1224,7 +1224,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="EMl-lh-eeL">
                             <font key="font" metaFont="system"/>
-                            <string key="title">Le rapport EtreCheck est plus utile lorsqu'il est démarré avec toutes les options activées. Ces options peuvent être modifiées, mais ils feront le rapport EtreCheck plus long et plus difficile à lire.</string>
+                            <string key="title">Le rapport EtreCheck est plus utile lorsqu'il est démarré avec les options engagées par défaut. Ces options peuvent être modifiées, mais ils feront le rapport EtreCheck plus long et plus difficile à lire.</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>

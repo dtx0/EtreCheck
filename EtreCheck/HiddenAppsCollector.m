@@ -11,6 +11,18 @@
 #import "Model.h"
 #import "SubProcess.h"
 
+@interface LaunchdCollector ()
+
+// Include any extra content that may be useful.
+- (NSAttributedString *) formatExtraContent: (NSMutableDictionary *) info
+  for: (NSString *) path;
+
+// Format adware.
+- (NSAttributedString *) formatAdware: (NSDictionary *) info
+  for: (NSString *) path;
+
+@end
+
 // Collect "other" files like modern login items.
 @implementation HiddenAppsCollector
 
@@ -142,11 +154,6 @@
     if([[status objectForKey: kIgnored] boolValue])
       continue;
       
-    [self updateDynamicStatus: status];
-    
-    if([[status objectForKey: kIgnored] boolValue])
-      continue;
-      
     if(!titlePrinted)
       {
       [self.result appendAttributedString: [self buildTitle]];
@@ -158,6 +165,10 @@
     
     [self.result appendString: bundleID];
     
+    // Add any extra content.
+    [self.result
+      appendAttributedString: [self formatExtraContent: status for: nil]];
+      
     [self.result appendString: @"\n"];
   
     unprintedItems = YES;
@@ -179,8 +190,7 @@
 // Get a status and expand with all the information I can find.
 - (void) updateDynamicStatus: (NSMutableDictionary *) status
   {
-  [self updateDynamicTask: status domain: @"user"];
-  [self updateDynamicTask: status domain: @"gui"];
+  [self updateDynamicTask: status];
   
   // I'm only guaranteed of having a Label here, not necessarily a
   // bundle ID.
@@ -189,19 +199,13 @@
   NSNumber * ignore =
     [NSNumber numberWithBool: [[Model model] hideAppleTasks]];
   
-  bool isApple = [self isAppleFile: label];
-  
-  [status setObject: [NSNumber numberWithBool: isApple] forKey: kApple];
-
-  if(isApple && ([[Model model] majorOSVersion] < kYosemite))
-    {
-    [status setObject: ignore forKey: kIgnored];
-    return;
-    }
-    
   NSString * executable =
     [self getExecutableForBundle: label status: status];
     
+  bool isApple = [self isAppleFile: executable];
+  
+  [status setObject: [NSNumber numberWithBool: isApple] forKey: kApple];
+
   if(isApple)
     {
     // Sometimes these don't have executables.
@@ -222,6 +226,15 @@
     // Should I ignore this failure?
     if([self ignoreInvalidSignatures: label])
       [status setObject: ignore forKey: kIgnored];
+    }
+  else
+    {
+    [status
+      setObject: [Utilities checkExecutable: executable]
+      forKey: kSignature];
+      
+    if([self ignoreTask: label])
+      [status setObject: [NSNumber numberWithBool: YES] forKey: kIgnored];
     }
   }
 
@@ -268,6 +281,65 @@
     }
     
   return executable;
+  }
+
+// Include any extra content that may be useful.
+- (NSAttributedString *) formatExtraContent: (NSMutableDictionary *) info
+  for: (NSString *) path
+  {
+  NSMutableAttributedString * extra =
+    [[NSMutableAttributedString alloc] init];
+
+  [extra autorelease];
+  
+  if([path length])
+    {
+    // I need to check again for adware due to the agent/daemon/helper
+    // adware trio.
+    [[Model model] checkForAdware: path];
+    
+    if([[info objectForKey: kAdware] boolValue])
+      {
+      [extra appendAttributedString: [self formatAdware: info for: path]];
+      
+      return extra;
+      }
+    }
+    
+  [extra appendAttributedString: [self formatSignature: info]];
+  [extra appendAttributedString: [self formatSupportLink: info]];
+    
+  return extra;
+  }
+
+// This area needs more relaxed rules because Apple hides this information.
+- (bool) ignoreTask: (NSString *) label
+  {
+  if([label hasPrefix: @"com.apple."])
+    return YES;
+    
+  if([[Model model] majorOSVersion] < kYosemite)
+    {
+    if([label hasPrefix: @"0x"])
+      {
+      if([label rangeOfString: @".anonymous."].location != NSNotFound)
+        return YES;
+      }
+    else if([label hasPrefix: @"[0x"])
+      {
+      if([label rangeOfString: @".com.apple."].location != NSNotFound)
+        return YES;
+      }
+    }
+    
+  if([[Model model] majorOSVersion] < kLion)
+    {
+    if([label hasPrefix: @"0x"])
+      if([label rangeOfString: @".mach_init."].location != NSNotFound)
+        return YES;
+    }
+
+  return NO;
   }
 
 @end

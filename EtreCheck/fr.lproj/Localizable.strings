@@ -227,6 +227,7 @@
 " - Shell script!" = "Script du shell !";
 " - %@: Executable not found!" = " - %@ : Logiciel non-trouvé";
 " - Executable not found!" = " - Logiciel non-trouvé";
+" - codesign failed!" = " - Échec de codesign !";
 "Help" = "Aide";
 "Print Report" = "Imprimer le rapport";
 "Share Report" = "Partager le rapport";

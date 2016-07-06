@@ -15,12 +15,14 @@
 #define kCollectionStatus @"collectionstatus"
 #define kShowDemonAgent @"showdemonagent"
 
-#define kNotSigned @"notsigned"
+#define kNotSigned @"signaturemissing"
+#define kSignatureApple @"signatureapple"
 #define kSignatureValid @"signaturevalid"
-#define kSignatureNotValid @"signataurenotvalid"
+#define kSignatureNotValid @"signaturenotvalid"
 #define kExecutableMissing @"executablemissing"
 #define kSignatureSkipped @"signatureskipped"
-#define kShell @"shell"
+#define kShell @"signatureshell"
+#define kCodesignFailed @"codesignfailed"
 
 // Assorted utilities.
 @interface Utilities : NSObject
@@ -126,8 +128,8 @@
 // Check the signature of an Apple executable.
 + (NSString *) checkAppleExecutable: (NSString *) path;
 
-// Force verification of an Apple executable.
-+ (NSString *) forceCheckAppleExecutable: (NSString *) path;
+// Check the signature of an executable.
++ (NSString *) checkExecutable: (NSString *) path;
 
 // Create a temporary directory.
 + (NSString *) createTemporaryDirectory;
@@ -146,6 +148,9 @@
 
 // Restart the machine.
 + (BOOL) restart;
+
+// Resolve a deep app path to the wrapper path.
++ (NSString *) resolveBundlePath: (NSString *) path;
 
 // Make a path that is suitable for a URL by appending a / for a directory.
 + (NSString *) makeURLPath: (NSString *) path;

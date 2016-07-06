@@ -43,7 +43,6 @@
 #import "LogCollector.h"
 #import "AdwareCollector.h"
 #import "UnknownFilesCollector.h"
-#import "HiddenAppsCollector.h"
 
 // Perform the check.
 @implementation Checker
@@ -329,7 +328,6 @@
   [collectors addObject: [[LaunchDaemonsCollector new] autorelease]];
   [collectors addObject: [[UserLaunchAgentsCollector new] autorelease]];
   [collectors addObject: [[LoginItemsCollector new] autorelease]];
-  [collectors addObject: [[HiddenAppsCollector new] autorelease]];
   [collectors addObject: [[InternetPlugInsCollector new] autorelease]];
   [collectors addObject: [[UserInternetPlugInsCollector new] autorelease]];
   [collectors addObject: [[AudioPlugInsCollector new] autorelease]];
@@ -420,7 +418,6 @@
   [result appendAttributedString: [self getResult: @"launchdaemons"]];
   [result appendAttributedString: [self getResult: @"userlaunchagents"]];
   [result appendAttributedString: [self getResult: @"loginitems"]];
-  [result appendAttributedString: [self getResult: @"hiddenapps"]];
   [result appendAttributedString: [self getResult: @"internetplugins"]];
   [result appendAttributedString: [self getResult: @"userinternetplugins"]];
   [result appendAttributedString: [self getResult: @"safariextensions"]];

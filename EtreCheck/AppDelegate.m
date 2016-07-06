@@ -116,7 +116,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 @synthesize donationLookupEmail = myDonationLookupEmail;
 
 @dynamic ignoreKnownAppleFailures;
-@dynamic checkAppleSignatures;
+@dynamic showSignatureFailures;
 @dynamic hideAppleTasks;
 @dynamic canSubmitDonationLookup;
 
@@ -147,14 +147,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   [[Model model] setIgnoreKnownAppleFailures: ignoreKnownAppleFailures];
   }
 
-- (bool) checkAppleSignatures
+- (bool) showSignatureFailures
   {
-  return [[Model model] checkAppleSignatures];
+  return [[Model model] showSignatureFailures];
   }
 
-- (void) setCheckAppleSignatures: (bool) checkAppleSignatures
+- (void) setShowSignatureFailures: (bool) showSignatureFailures
   {
-  [[Model model] setCheckAppleSignatures: checkAppleSignatures];
+  [[Model model] setShowSignatureFailures: showSignatureFailures];
   }
 
 - (bool) hideAppleTasks
@@ -1276,6 +1276,20 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
   {
   bool options = NO;
   
+  if([[Model model] showSignatureFailures])
+    {
+    [self.log
+      appendString:
+        NSLocalizedString(
+          @"Show signature failures: Enabled\n", NULL)
+      attributes:
+        @{
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+      
+    options = YES;
+    }
+
   if(![[Model model] ignoreKnownAppleFailures])
     {
     [self.log

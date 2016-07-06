@@ -389,17 +389,6 @@
   else if([name hasPrefix: @"com.adobe.ARM."])
     prettyFile = @"com.adobe.ARM.[...].plist";
 
-  // I don't want to see it.
-  else if([prettyFile length] > 76)
-    {
-    NSString * extension = [prettyFile pathExtension];
-    
-    prettyFile =
-      [NSString
-        stringWithFormat:
-          @"%@...%@", [prettyFile substringToIndex: 40], extension];
-    }
-    
   return prettyFile;
   }
 
@@ -711,45 +700,92 @@
   if(![path length])
     return kExecutableMissing;
     
-  if([path isEqualToString: @"/bin/sh"])
-    return kShell;
+  BOOL shell = NO;
+  
+  if([path hasPrefix: @"/usr/bin/"])
+    {
+    if([path isEqualToString: @"/usr/bin/tclsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/usr/bin/perl"])
+      shell = YES;
+
+    if([path isEqualToString: @"/usr/bin/ruby"])
+      shell = YES;
+
+    if([path hasPrefix: @"/usr/bin/python"])
+      shell = YES;
+    }
+  else if([path hasPrefix: @"/bin/"])
+    {
+    if([path isEqualToString: @"/bin/sh"])
+      shell = YES;
+      
+    if([path isEqualToString: @"/bin/csh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/bash"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/zsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/tsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/ksh"])
+      shell = YES;
+    }
     
-  if([path isEqualToString: @"/bin/csh"])
-    return kShell;
+  // Get the app path.
+  path = [Utilities resolveBundlePath: path];
+  
+  // A valid Apple signature should be returned as "Apple".
+  NSString * signature = [Utilities checkAppleExecutable: path force: YES];
+  
+  // Should be...
+  if(![signature isEqualToString: kSignatureApple])
+    {
+    // I will accept a "Success" too as that still comes from Apple.
+    NSString * expectedSignature =
+      [[Model model] expectedAppleSignature: path];
 
-  if([path isEqualToString: @"/bin/bash"])
-    return kShell;
-
-  if([path isEqualToString: @"/bin/zsh"])
-    return kShell;
-
-  if([path isEqualToString: @"/bin/tsh"])
-    return kShell;
-
-  if([path isEqualToString: @"/bin/ksh"])
-    return kShell;
-
-  if([path isEqualToString: @"/usr/bin/tclsh"])
-    return kShell;
-
-  if([path isEqualToString: @"/usr/bin/perl"])
-    return kShell;
-
-  if([path isEqualToString: @"/usr/bin/ruby"])
-    return kShell;
-
-  if([path hasPrefix: @"/usr/bin/python"])
-    return kShell;
-
-  if(![[Model model] checkAppleSignatures])
-    return kSignatureValid;
+    if(signature && expectedSignature)
+      {
+      // If this is the signature I expect and it is valid, the return it
+      // as Apple.
+      if([signature isEqualToString: expectedSignature])
+        {
+        if([signature isEqualToString: kSignatureValid])
+          signature = kSignatureValid;
+        
+        // Otherwise, it is a failure. Should I ignore that anyway?
+        if([[Model model] ignoreKnownAppleFailures])
+          signature = kSignatureValid;
+        }
+      }
+      
+    if(shell && [signature isEqualToString: kSignatureValid])
+      return kShell;
+      
+    return signature;
+    }
     
-  return [Utilities forceCheckAppleExecutable: path];
+  if(shell && [signature isEqualToString: kSignatureApple])
+    return kShell;
+
+  return kSignatureValid;
   }
 
-// Force verification of the signature of an Apple executable.
-+ (NSString *) forceCheckAppleExecutable: (NSString *) path
+// Force verification of an Apple executable.
++ (NSString *) checkAppleExecutable: (NSString *) path force: (BOOL) force
   {
+  if(!force)
+    return kSignatureValid;
+   
+  if([path length] == 0)
+    return kExecutableMissing;
+    
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
   
@@ -758,7 +794,7 @@
     
   // If I am hiding Apple tasks, then skip Xcode.
   if([[Model model] hideAppleTasks])
-    if([[path lastPathComponent] isEqualToString: @"Xcode"])
+    if([[path lastPathComponent] isEqualToString: @"Xcode.app"])
       return kSignatureSkipped;
 
   NSMutableArray * args = [NSMutableArray array];
@@ -777,27 +813,77 @@
       break;
     }
     
-  NSMutableDictionary * options = [NSMutableDictionary dictionary];
-  
   [args addObject: path];
 
-  // Give Xcode a 10-minute timeout.
-  if([[path lastPathComponent] isEqualToString: @"Xcode"])
-    [options
-      setObject: [NSNumber numberWithInt: 60 * 10]
-      forKey: kExecutableTimeout];
-    
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  subProcess.timeout = 10 * 60;
+  subProcess.timeout = 60;
   
+  // Give Xcode a 10-minute timeout.
+  if([[path lastPathComponent] isEqualToString: @"Xcode.app"])
+    subProcess.timeout = 10 * 60;
+    
   if([subProcess execute: @"/usr/bin/codesign" arguments: args])
     {
-    //NSLog(@"/usr/bin/codesign %@\n%@", args, output);
     result =
       [Utilities parseSignature: subProcess.standardError forPath: path];
         
     [[[Utilities shared] signatureCache] setObject: result forKey: path];
+    }
+    
+  [subProcess release];
+  
+  if([result isEqualToString: kSignatureValid])
+    return kSignatureApple;
+    
+  return result;
+  }
+
+// Check the signature of an executable.
++ (NSString *) checkExecutable: (NSString *) path;
+  {
+  if([path length] == 0)
+    return kExecutableMissing;
+    
+  NSString * result =
+    [[[Utilities shared] signatureCache] objectForKey: path];
+  
+  if(result)
+    return result;
+    
+  NSMutableArray * args = [NSMutableArray array];
+  
+  [args addObject: @"-vv"];
+  [args addObject: @"-R=anchor apple generic"];
+  
+  switch([[Model model] majorOSVersion])
+    {
+    // What a mess.
+    case kMavericks:
+      if([[Model model] minorOSVersion] < 5)
+        break;
+    case kYosemite:
+      [args addObject: @"--no-strict"];
+      break;
+    }
+    
+  [args addObject: [Utilities resolveBundlePath: path]];
+
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  subProcess.timeout = 60;
+  
+  if([subProcess execute: @"/usr/bin/codesign" arguments: args])
+    {
+    result =
+      [Utilities parseSignature: subProcess.standardError forPath: path];
+        
+    [[[Utilities shared] signatureCache] setObject: result forKey: path];
+    }
+  else
+    {
+    NSLog(@"Returning false from /usr/bin/codesign %@", args);
+    result = kCodesignFailed;
     }
     
   [subProcess release];
@@ -1379,6 +1465,17 @@
   
   if(exists && isDirectory && ![path hasSuffix: @"/"])
     return [path stringByAppendingString: @"/"];
+    
+  return path;
+  }
+
+// Resolve a deep app path to the wrapper path.
++ (NSString *) resolveBundlePath: (NSString *) path
+  {
+  NSRange range = [path rangeOfString: @"/Contents/MacOS/"];
+  
+  if(range.location != NSNotFound)
+    return [path substringToIndex: range.location];
     
   return path;
   }

@@ -168,8 +168,8 @@
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
 
-// Check Apple signatures.
-@property (assign) bool checkAppleSignatures;
+// Show signature failures.
+@property (assign) bool showSignatureFailures;
 
 // Hide Apple tasks.
 @property (assign) bool hideAppleTasks;

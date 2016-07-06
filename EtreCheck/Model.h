@@ -62,10 +62,11 @@
   bool myBackupExists;
   
   bool myIgnoreKnownAppleFailures;
-  bool myCheckAppleSignatures;
+  bool myShowSignatureFailures;
   bool myHideAppleTasks;
   bool myOldEtreCheckVersion;
   bool myVerifiedEtreCheckVersion;
+  NSDictionary * myAppleSignatures;
   }
 
 // Keep track of the OS version.
@@ -165,8 +166,8 @@
 // Ignore known Apple failures.
 @property (assign) bool ignoreKnownAppleFailures;
 
-// Check Apple signatures.
-@property (assign) bool checkAppleSignatures;
+// Show signature failures.
+@property (assign) bool showSignatureFailures;
 
 // Hide Apple tasks.
 @property (assign) bool hideAppleTasks;
@@ -176,6 +177,9 @@
 
 // Do I have a verified EtreCheck version?
 @property (assign) bool verifiedEtreCheckVersion;
+
+// Apple signatures.
+@property (retain) NSDictionary * appleSignatures;
 
 // Return the singeton of shared values.
 + (Model *) model;
@@ -221,5 +225,11 @@
 
 // Handle a task that takes too long to complete.
 - (void) taskTerminated: (NSString *) program arguments: (NSArray *) args;
+
+// Get the expected Apple signature for an executable.
+- (NSString *) expectedAppleSignature: (NSString *) path;
+
+// Is this a known Apple executable?
+- (BOOL) isKnownAppleExecutable: (NSString *) path;
 
 @end

@@ -84,8 +84,7 @@
 - (NSString *) collectLaunchdItemExecutable: (NSArray *) command;
 
 // Update a funky new dynamic task.
-- (void) updateDynamicTask: (NSMutableDictionary *) info
-  domain: (NSString *) domain;
+- (void) updateDynamicTask: (NSMutableDictionary *) info;
 
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) path;
@@ -104,7 +103,7 @@
 - (bool) formatAppleCounts: (NSMutableAttributedString *) output;
 
 // Format a codesign response.
-- (NSString *) formatAppleSignature: (NSDictionary *) info;
+- (NSAttributedString *) formatSignature: (NSDictionary *) info;
 
 // Create a support link for a plist dictionary.
 - (NSAttributedString *) formatSupportLink: (NSDictionary *) info;

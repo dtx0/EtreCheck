@@ -12,6 +12,8 @@
 // Collect login items.
 @implementation LoginItemsCollector
 
+@synthesize loginItems = myLoginItems;
+
 // Constructor.
 - (id) init
   {
@@ -21,9 +23,18 @@
     {
     self.name = @"loginitems";
     self.title = NSLocalizedStringFromTable(self.name, @"Collectors", NULL);
+    myLoginItems = [NSMutableArray new];
     }
     
   return self;
+  }
+
+// Destructor.
+- (void) dealloc
+  {
+  [myLoginItems release];
+  
+  [super dealloc];
   }
 
 // Perform the collection.
@@ -31,6 +42,23 @@
   {
   [self updateStatus: NSLocalizedString(@"Checking login items", NULL)];
 
+  [self collectOldLoginItems];
+  [self collectModernLoginItems];
+  
+  NSUInteger count = 0;
+  
+  for(NSDictionary * loginItem in self.loginItems)
+    if([self printLoginItem: loginItem count: count])
+      ++count;
+    
+  [self.result appendCR];
+
+  dispatch_semaphore_signal(self.complete);
+  }
+
+// Collect old login items.
+- (void) collectOldLoginItems
+  {
   NSArray * args =
     @[
       @"-e",
@@ -40,29 +68,173 @@
   SubProcess * subProcess = [[SubProcess alloc] init];
   
   if([subProcess execute: @"/usr/bin/osascript" arguments: args])
+    [self collectASLoginItems: subProcess.standardOutput];
+    
+  [subProcess release];
+  }
+
+// Collect modern login items.
+- (void) collectModernLoginItems
+  {
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  BOOL success =
+    [subProcess
+      execute:
+        @"/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"
+      arguments: @[ @"-dump"]];
+    
+  if(success)
     {
-    NSArray * loginItems =
-      [self formatLoginItems: subProcess.standardOutput];
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+
+    BOOL loginItem = NO;
+    BOOL backgroundItem = NO;
+    NSString * path = nil;
+    NSString * name = nil;
+    NSString * identifier = nil;
     
-    NSUInteger count = 0;
+    for(NSString * line in lines)
+      {
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+      if([trimmedLine isEqualToString: @""])
+        continue;
+
+      BOOL check =
+        [trimmedLine
+          isEqualToString:
+            @"--------------------------------------------------------------------------------"];
+        
+      if(check)
+        {
+        if(loginItem && backgroundItem)
+          {
+          if([[NSFileManager defaultManager] fileExistsAtPath: path])
+            if([self SMLoginItemActive: identifier])
+              {
+              NSDictionary * item =
+                [NSDictionary dictionaryWithObjectsAndKeys:
+                  name, @"name",
+                  path, @"path",
+                  @"SMLoginItem", @"kind",
+                  @"Hidden", @"hidden",
+                  nil];
+                
+              [self.loginItems addObject: item];
+              }
+          }
+
+        loginItem = NO;
+        backgroundItem = NO;
+        path = nil;
+        name = nil;
+        }
+      else if([trimmedLine hasPrefix: @"path:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 5];
+        
+        path =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+          
+        NSRange range =
+          [path rangeOfString: @"/Contents/Library/LoginItems/"];
+          
+        if(range.location != NSNotFound)
+          loginItem = YES;
+        }
+      else if([trimmedLine hasPrefix: @"name:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 5];
+        
+        name =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        }
+      else if([trimmedLine hasPrefix: @"identifier:"])
+        {
+        NSString * value = [trimmedLine substringFromIndex: 11];
+        
+        value =
+          [value
+            stringByTrimmingCharactersInSet:
+              [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+ 
+        NSRange range = [value rangeOfString: @" ("];
+        
+        if(range.location != NSNotFound)
+          identifier = [value substringToIndex: range.location];
+        }
+      else if([trimmedLine hasPrefix: @"flags:"])
+        {
+        NSRange range = [trimmedLine rangeOfString: @"bg-only"];
+        
+        if(range.location != NSNotFound)
+          backgroundItem = YES;
+          
+        range = [trimmedLine rangeOfString: @"ui-element"];
+        
+        if(range.location != NSNotFound)
+          backgroundItem = YES;
+        }
+      }
+    }
     
-    for(NSDictionary * loginItem in loginItems)
-      if([self printLoginItem: loginItem count: count])
-        ++count;
-      
-    [self.result appendCR];
+  [subProcess release];
+  }
+
+// Is an SMLoginItem active?
+- (BOOL) SMLoginItemActive: (NSString *) identifier
+  {
+  BOOL active = NO;
+  
+  NSArray * args =
+    @[
+      @"list",
+      identifier
+    ];
+  
+  SubProcess * subProcess = [[SubProcess alloc] init];
+  
+  if([subProcess execute: @"/bin/launchctl" arguments: args])
+    {
+    NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
+
+    for(NSString * line in lines)
+      {
+      NSString * trimmedLine =
+        [line
+          stringByTrimmingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+      if([trimmedLine hasPrefix: @"\"Label\" = \""])
+        {
+        NSString * label =
+          [trimmedLine
+            substringWithRange: NSMakeRange(11, [trimmedLine length] - 13)];
+          
+        if([label isEqualToString: identifier])
+          active = YES;
+        }
+      }
     }
     
   [subProcess release];
   
-  dispatch_semaphore_signal(self.complete);
+  return active;
   }
-
+  
 // Format the comma-delimited list of login items.
-- (NSArray *) formatLoginItems: (NSData *) data
+- (void) collectASLoginItems: (NSData *) data
   {
   if(!data)
-    return nil;
+    return;
   
   NSString * string =
     [[NSString alloc]
@@ -71,10 +243,8 @@
       encoding: NSUTF8StringEncoding];
   
   if(!string)
-    return nil;
-    
-  NSMutableArray * loginItems = [NSMutableArray array];
-  
+    return;
+
   NSArray * parts = [string componentsSeparatedByString: @","];
   
   [string release];
@@ -90,16 +260,14 @@
     NSString * value = [keyValue objectAtIndex: 1];
     
     if([key isEqualToString: @"name"])
-      [loginItems addObject: [NSMutableDictionary dictionary]];
+      [self.loginItems addObject: [NSMutableDictionary dictionary]];
     else if([key isEqualToString: @"path"])
       value = [Utilities cleanPath: value];
     
-    NSMutableDictionary * loginItem = [loginItems lastObject];
+    NSMutableDictionary * loginItem = [self.loginItems lastObject];
     
     [loginItem setObject: value forKey: key];
     }
-    
-  return loginItems;
   }
 
 // Print a login item.

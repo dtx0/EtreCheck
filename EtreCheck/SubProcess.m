@@ -68,6 +68,11 @@
   // Run the task.
   [task launch];
     
+  int taskStdOut =
+    [[[task standardOutput] fileHandleForReading] fileDescriptor];
+  int taskStdErr =
+    [[[task standardError] fileHandleForReading] fileDescriptor];
+  
   dispatch_group_enter(group);
 
   fcntl(
@@ -78,11 +83,9 @@
   DispatchSource * output = [[DispatchSource alloc] init];
   
   output.type = DISPATCH_SOURCE_TYPE_READ;
-  output.handle =
-    [[[task standardOutput] fileHandleForReading] fileDescriptor];
+  output.handle = taskStdOut;
   output.eventHandler =
     ^{
-      int fd = (int)dispatch_source_get_handle(output.source);
       size_t estimated = dispatch_source_get_data(output.source) + 1;
       
       // Read the data into a text buffer.
@@ -90,7 +93,7 @@
       
       if(buffer)
         {
-        ssize_t actual = read(fd, buffer, (estimated));
+        ssize_t actual = read(taskStdOut, buffer, (estimated));
         
         //NSLog(@"read %zd bytes on stdout", actual);
         
@@ -105,7 +108,7 @@
     };
   output.cancelHandler =
     ^{
-      close((int)dispatch_source_get_handle(output.source));
+      close(taskStdOut);
       
       dispatch_group_leave(group);
     };
@@ -120,11 +123,9 @@
   DispatchSource * error = [[DispatchSource alloc] init];
   
   error.type = DISPATCH_SOURCE_TYPE_READ;
-  error.handle =
-    [[[task standardError] fileHandleForReading] fileDescriptor];
+  error.handle = taskStdErr;
   error.eventHandler =
     ^{
-      int fd = (int)dispatch_source_get_handle(error.source);
       size_t estimated = dispatch_source_get_data(error.source) + 1;
       
       // Read the data into a text buffer.
@@ -132,7 +133,7 @@
       
       if(buffer)
         {
-        ssize_t actual = read(fd, buffer, (estimated));
+        ssize_t actual = read(taskStdErr, buffer, (estimated));
         
         //NSLog(@"read %zd bytes on stderr", actual);
         
@@ -147,7 +148,7 @@
     };
   error.cancelHandler =
     ^{
-      close((int)dispatch_source_get_handle(error.source));
+      close(taskStdErr);
 
       dispatch_group_leave(group);
     };

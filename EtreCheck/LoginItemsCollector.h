@@ -8,5 +8,10 @@
 
 // Collect login items.
 @interface LoginItemsCollector : Collector
+  {
+  NSMutableArray * myLoginItems;
+  }
+
+@property (readonly) NSMutableArray * loginItems;
 
 @end

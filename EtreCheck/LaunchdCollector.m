@@ -499,15 +499,7 @@
   [info setObject: path forKey: kPath];
   
   [info
-    setObject: [NSNumber numberWithBool: [self isAppleFile: path]]
-    forKey: kApple];
-  
-  [info
     setObject: [Utilities sanitizeFilename: filename] forKey: kFilename];
-  
-  [info
-    setObject: [self getSupportURL: nil bundleID: path]
-    forKey: kSupportURL];
   
   if([filename hasPrefix: @"."])
     [info setObject: [NSNumber numberWithBool: YES] forKey: kHidden];
@@ -515,15 +507,19 @@
   [self setDetailsURL: info];
   [self setExecutable: info];
   
+  [info
+    setObject: [self getSupportURLFor: info name: nil bundleID: path]
+    forKey: kSupportURL];
+  
   [[[Model model] launchdFiles] setObject: info forKey: path];
 
-  // For now, don't bother checking Apple files for unknown or adware
-  // status.
   if([[info objectForKey: kApple] boolValue])
-    return [self collectAppleLaunchdItemInfo: info];
+    return [self checkAppleSignature: info];
+  else
+    [self checkSignature: info];
     
-  [self setUnknownForPath: path info: info];
-  [[Model model] checkForAdware: path];
+  // See if this is a file I know about, either good or bad.
+  [self checkForKnownFile: path info: info];
 
   return info;
   }
@@ -607,36 +603,7 @@
 // Is this an Apple file that I expect to see?
 - (bool) isAppleFile: (NSString *) path
   {
-  NSString * bundleID = [path lastPathComponent];
-  
-  if([bundleID hasPrefix: @"com.apple."])
-    return YES;
-    
-  if([self.appleLaunchd containsObject: bundleID])
-    return YES;
-    
-  if([[Model model] majorOSVersion] < kYosemite)
-    {
-    if([bundleID hasPrefix: @"0x"])
-      {
-      if([bundleID rangeOfString: @".anonymous."].location != NSNotFound)
-        return YES;
-      }
-    else if([bundleID hasPrefix: @"[0x"])
-      {
-      if([bundleID rangeOfString: @".com.apple."].location != NSNotFound)
-        return YES;
-      }
-    }
-    
-  if([[Model model] majorOSVersion] < kLion)
-    {
-    if([bundleID hasPrefix: @"0x"])
-      if([bundleID rangeOfString: @".mach_init."].location != NSNotFound)
-        return YES;
-    }
-
-  return NO;
+  return [[Model model] isKnownAppleExecutable: path];
   }
 
 // Should I hide Apple tasks?
@@ -646,12 +613,13 @@
   }
 
 // Try to construct a support URL.
-- (NSString *) getSupportURL: (NSString *) name bundleID: (NSString *) path
+- (NSString *) getSupportURLFor: (NSDictionary *) info
+  name: (NSString *) name bundleID: (NSString *) path
   {
   NSString * bundleID = [path lastPathComponent];
   
   // If the file is from Apple, the user is already on ASC.
-  if([self isAppleFile: bundleID])
+  if([[info objectForKey: kApple] boolValue])
     return @"";
     
   // See if I can construct a real web host.
@@ -712,8 +680,15 @@
     // Get the executable.
     NSString * executable = [self collectLaunchdItemExecutable: command];
   
-    [info setObject: command forKey: kCommand];
-    [info setObject: executable forKey: kExecutable];
+    if([executable length])
+      {
+      [info setObject: command forKey: kCommand];
+      [info setObject: executable forKey: kExecutable];
+
+      [info
+        setObject: [NSNumber numberWithBool: [self isAppleFile: executable]]
+        forKey: kApple];
+      }
     }
   }
 
@@ -787,24 +762,38 @@
   return executable;
   }
 
-// Collect the status of an Apple launchd item.
-- (NSMutableDictionary *) collectAppleLaunchdItemInfo:
-  (NSMutableDictionary *) info
+// Collect the signagure of an Apple launchd item.
+- (NSMutableDictionary *) checkAppleSignature: (NSMutableDictionary *) info
   {
   if(![info objectForKey: kSignature])
     {
     NSString * executable = [info objectForKey: kExecutable];
 
-    [info
-      setObject: [Utilities checkAppleExecutable: executable]
-      forKey: kSignature];
+    if([executable length] > 0)
+      [info
+        setObject: [Utilities checkAppleExecutable: executable]
+        forKey: kSignature];
     }
     
   return info;
   }
 
-// Set the unknown flag for a file.
-- (void) setUnknownForPath: (NSString *) path
+// Collect the signagure of a launchd item.
+- (void) checkSignature: (NSMutableDictionary *) info
+  {
+  if(![info objectForKey: kSignature])
+    {
+    NSString * executable = [info objectForKey: kExecutable];
+
+    if([executable length] > 0)
+      [info
+        setObject: [Utilities checkExecutable: executable]
+        forKey: kSignature];
+    }
+  }
+
+// See if this is a file I know about, either good or bad.
+- (void) checkForKnownFile: (NSString *) path
   info: (NSMutableDictionary *) info
   {
   // I need this.
@@ -1172,22 +1161,13 @@
 
 // Update a funky new dynamic task.
 - (void) updateDynamicTask: (NSMutableDictionary *) info
-  domain: (NSString *) domain
   {
-  if([[Model model] majorOSVersion] < kYosemite)
-    return;
-    
   NSString * label = [info objectForKey: kLabel];
-  
-  unsigned int UID = getuid();
-
-  NSString * serviceName =
-    [NSString stringWithFormat: @"%@/%d/%@", domain, UID, label];
   
   NSArray * args =
     @[
-      @"print",
-      serviceName
+      @"list",
+      label
     ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
@@ -1203,21 +1183,28 @@
           stringByTrimmingCharactersInSet:
             [NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
-      if([trimmedLine isEqualToString: @"app = 1"])
-        [info setObject: [NSNumber numberWithBool: YES] forKey: kApp];
-      else if([trimmedLine hasPrefix: @"program = "])
+      if([trimmedLine hasPrefix: @"\"Program\" = \""])
         {
-        NSString * executable = [trimmedLine substringFromIndex: 10];
+        NSString * executable =
+          [trimmedLine
+            substringWithRange: NSMakeRange(13, [trimmedLine length] - 15)];
         
+        // This might be a bundle ID.
+        if(![[NSFileManager defaultManager] fileExistsAtPath: executable])
+          {
+          executable =
+            [[NSWorkspace sharedWorkspace]
+              absolutePathForAppBundleWithIdentifier: executable];
+          }
+          
+        // TODO: What if this is adware?
         [info setObject: executable forKey: kExecutable];
         
         [self updateModificationDate: info path: executable];
         }
-      else if([trimmedLine hasPrefix: @"parent bundle identifier = "])
-        [self
-          updateModificationDate: info
-          bundleID: [trimmedLine substringFromIndex: 27]];
-      else if([trimmedLine hasPrefix: @"pid = "])
+      else if([trimmedLine hasPrefix: @"\"PID\" = "])
+      
+        // TODO: What if this is adware? I could use the PID to kill it.
         [[self.launchdStatus objectForKey: label]
           setObject: kStatusRunning forKey: label];
       }
@@ -1260,42 +1247,6 @@
     path = [path substringToIndex: appRange.location + 4];
 
   return [Utilities modificationDate: path];
-  }
-
-// Format a codesign response.
-- (NSString *) formatAppleSignature: (NSDictionary *) info
-  {
-  NSString * message = @"";
-  
-  NSString * signature = [info objectForKey: kSignature];
-  
-  NSString * path = [info objectForKey: kExecutable];
-  
-  if(![signature isEqualToString: kSignatureValid])
-    {
-    message = NSLocalizedString(@" - Invalid signature!", NULL);
-  
-    if([signature isEqualToString: kNotSigned])
-      message = NSLocalizedString(@" - No signature!", NULL);
-    else if([signature isEqualToString: kShell])
-      message = NSLocalizedString(@" - Shell script!", NULL);
-    else if([signature isEqualToString: kExecutableMissing])
-      {
-      if([path length])
-        message =
-          [NSString
-            stringWithFormat:
-              NSLocalizedString(@" - %@: Executable not found!", NULL),
-              [Utilities sanitizeFilename: path]];
-      else
-        message =
-          [NSString
-            stringWithFormat:
-              NSLocalizedString(@" - Executable not found!", NULL)];
-      }
-    }
-    
-  return message;
   }
 
 // Is the executable valid?
@@ -1408,20 +1359,25 @@
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
 
-  // I need to check again for adware due to the agent/daemon/helper adware
-  // trio.
-  [[Model model] checkForAdware: path];
-    
-  if([[info objectForKey: kApple] boolValue])
-    [extra appendAttributedString: [self formatApple: info for: path]];
-    
-  else if([[info objectForKey: kAdware] boolValue])
-    [extra appendAttributedString: [self formatAdware: info for: path]];
-    
-  else
-    [extra appendAttributedString: [self formatSupportLink: info]];
+  [extra autorelease];
   
-  return [extra autorelease];
+  if([path length])
+    {
+    // I need to check again for adware due to the agent/daemon/helper
+    // adware trio.
+    [[Model model] checkForAdware: path];
+    
+    if([[info objectForKey: kAdware] boolValue])
+      {
+      [extra appendAttributedString: [self formatAdware: info for: path]];
+      
+      return extra;
+      }
+    }
+    
+  [extra appendAttributedString: [self formatSignature: info]];
+    
+  return extra;
   }
 
 // Format adware.
@@ -1462,26 +1418,54 @@
   return [extra autorelease];
   }
 
-// Format Apple software.
-- (NSAttributedString *) formatApple: (NSDictionary *) info
-  for: (NSString *) path
+// Format a signature result.
+- (NSAttributedString *) formatSignature: (NSDictionary *) info
   {
-  NSString * signatureStatus = [info objectForKey: kSignature];
+  NSString * signature = [info objectForKey: kSignature];
   
-  if(![signatureStatus isEqualToString: kSignatureValid])
+  if(![signature isEqualToString: kSignatureValid])
     {
     NSMutableAttributedString * extra =
       [[NSMutableAttributedString alloc] init];
 
-    NSString * message = [self formatAppleSignature: info];
-      
-    [extra
-      appendString: message
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
+    NSString * path = [info objectForKey: kExecutable];
+    
+    NSString * message = nil;
+    
+    if([signature isEqualToString: kExecutableMissing])
+      {
+      if([path length])
+        message =
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(@" - %@: Executable not found!", NULL),
+              [Utilities sanitizeFilename: path]];
+      else
+        message =
+          [NSString
+            stringWithFormat:
+              NSLocalizedString(@" - Executable not found!", NULL)];
+      }
+    else if([[Model model] showSignatureFailures])
+      {
+      if([signature isEqualToString: kNotSigned])
+        message = NSLocalizedString(@" - No signature!", NULL);
+      else if([signature isEqualToString: kShell])
+        message = NSLocalizedString(@" - Shell script!", NULL);
+      else if([signature isEqualToString: kCodesignFailed])
+        message = NSLocalizedString(@" - codesign failed!", NULL);
+      else
+        message = NSLocalizedString(@" - Invalid signature!", NULL);
+      }
+     
+    if([message length])
+      [extra
+        appendString: message
+        attributes:
+          @{
+            NSForegroundColorAttributeName : [[Utilities shared] red],
+            NSFontAttributeName : [[Utilities shared] boldFont]
+          }];
     
     return [extra autorelease];
     }
