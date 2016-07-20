@@ -180,11 +180,17 @@
       else
         [filesToKeep addObject: item];
       
+    [self willChangeValueForKey: @"canRemoveFiles"];
+  
     [super uninstallItems: filesToRemove];
     
     [self.filesToRemove removeAllObjects];
     [self.filesToRemove addObjectsFromArray: filesToKeep];
     
+    [self didChangeValueForKey: @"canRemoveFiles"];
+
+    [self.tableView reloadData];
+
     [filesToKeep release];
     [filesToRemove release];
     }
@@ -203,15 +209,9 @@
     else
       [filesNotRemoved addObject: item];
   
-  [self willChangeValueForKey: @"canRemoveFiles"];
-  
   [files setArray: filesNotRemoved];
   
   [filesNotRemoved release];
-  
-  [self.tableView reloadData];
-
-  [self didChangeValueForKey: @"canRemoveFiles"];
   }
 
 // Contact Etresoft to add to whitelist.

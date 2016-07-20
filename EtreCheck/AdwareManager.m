@@ -110,7 +110,15 @@
 - (IBAction) removeFiles: (id) sender
   {
   if([super canRemoveFiles])
+    {
+    [self willChangeValueForKey: @"canRemoveFiles"];
+  
     [super removeFiles: sender];
+    
+    [self.tableView reloadData];
+
+    [self didChangeValueForKey: @"canRemoveFiles"];
+    }
   }
 
 // Verify removal of files.
@@ -126,15 +134,9 @@
     else
       [filesNotRemoved addObject: item];
   
-  [self willChangeValueForKey: @"canRemoveFiles"];
-  
   [files setArray: filesNotRemoved];
   
   [filesNotRemoved release];
-  
-  [self.tableView reloadData];
-
-  [self didChangeValueForKey: @"canRemoveFiles"];
   }
 
 #pragma mark - NSTableViewDataSource
