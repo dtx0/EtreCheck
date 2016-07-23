@@ -137,15 +137,15 @@
   {
   myGreen =
     [NSColor
-      colorWithCalibratedRed: 0.2f green: 0.5f blue: 0.2f alpha: 0.0f];
+      colorWithCalibratedRed: 0.2f green: 0.5f blue: 0.2f alpha: 1.0f];
     
   myBlue =
     [NSColor
-      colorWithCalibratedRed: 0.0f green: 0.0f blue: 0.6f alpha: 0.0f];
+      colorWithCalibratedRed: 0.0f green: 0.0f blue: 0.6f alpha: 1.0f];
 
   myGray =
     [NSColor
-      colorWithCalibratedRed: 0.4f green: 0.4f blue: 0.4f alpha: 0.0f];
+      colorWithCalibratedRed: 0.4f green: 0.4f blue: 0.4f alpha: 1.0f];
 
   myRed = [NSColor redColor];
   
