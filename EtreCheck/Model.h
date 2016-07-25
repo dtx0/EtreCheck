@@ -66,7 +66,10 @@
   bool myHideAppleTasks;
   bool myOldEtreCheckVersion;
   bool myVerifiedEtreCheckVersion;
-  NSDictionary * myAppleSignatures;
+  NSDictionary * myAppleSoftware;
+  NSDictionary * myAppleLaunchd;
+  NSDictionary * myAppleLaunchdByLabel;
+  bool mySIP;
   }
 
 // Keep track of the OS version.
@@ -178,8 +181,17 @@
 // Do I have a verified EtreCheck version?
 @property (assign) bool verifiedEtreCheckVersion;
 
-// Apple signatures.
-@property (retain) NSDictionary * appleSignatures;
+// Apple software.
+@property (retain) NSDictionary * appleSoftware;
+
+// Apple launchd files.
+@property (retain) NSDictionary * appleLaunchd;
+
+// Apple launchd files by label.
+@property (retain) NSDictionary * appleLaunchdByLabel;
+
+// SIP enabled?
+@property (assign, setter=setSIP:) bool sip;
 
 // Return the singeton of shared values.
 + (Model *) model;
@@ -231,5 +243,8 @@
 
 // Is this a known Apple executable?
 - (BOOL) isKnownAppleExecutable: (NSString *) path;
+
+// Is this a known Apple executable but not a shell script?
+- (BOOL) isKnownAppleNonShellExecutable: (NSString *) path;
 
 @end

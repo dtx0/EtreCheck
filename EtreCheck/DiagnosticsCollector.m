@@ -231,24 +231,30 @@
       [@"*." stringByAppendingString: type]
     ];
   
-  NSString * error = nil;
-  
   SubProcess * subProcess = [[SubProcess alloc] init];
   
   [subProcess autorelease];
   
   if([subProcess execute: @"/usr/bin/find" arguments: args])
     {
-    if(![subProcess.standardOutput length] && [error length])
-      {
-      NSString * permissionsError =
-        @"find: /Library/Logs/DiagnosticReports: Permission denied";
+    if(![subProcess.standardOutput length])
+      if([subProcess.standardError length])
+        {
+        NSString * error =
+          [[NSString alloc]
+            initWithData:
+              subProcess.standardError encoding: NSUTF8StringEncoding];
+          
+        NSString * permissionsError =
+          @"find: /Library/Logs/DiagnosticReports: Permission denied";
 
-      if([error hasPrefix: permissionsError])
-        insufficientPermissions = YES;
+        if([error hasPrefix: permissionsError])
+          insufficientPermissions = YES;
+          
+        [error release];
         
-      return;
-      }
+        return;
+        }
       
     // Parse diagnostic reports.
     NSArray * files = [Utilities formatLines: subProcess.standardOutput];

@@ -11,6 +11,7 @@
 #import "TTTLocalizedPluralString.h"
 #import "NSArray+Etresoft.h"
 #import "SubProcess.h"
+#import "LaunchdCollector.h"
 
 // Collect system software information.
 @implementation SystemSoftwareCollector
@@ -64,22 +65,24 @@
       }
     }
   
-  // Now that I know what OS version I have, load the signatures.
-  [self loadAppleSignatures];
+  // Now that I know what OS version I have, load the software signatures
+  // and expected launchd files.
+  [self loadAppleSoftware];
+  [self loadAppleLaunchd];
   
   [subProcess release];
     
   dispatch_semaphore_signal(self.complete);
   }
 
-// Load Apple signatures.
-- (void) loadAppleSignatures
+// Load Apple software.
+- (void) loadAppleSoftware
   {
-  NSString * signaturePath =
+  NSString * softwarePath =
     [[NSBundle mainBundle]
       pathForResource: @"appleSoftware" ofType: @"plist"];
     
-  NSData * plistData = [NSData dataWithContentsOfFile: signaturePath];
+  NSData * plistData = [NSData dataWithContentsOfFile: softwarePath];
   
   if(plistData)
     {
@@ -92,33 +95,100 @@
       switch(version)
         {
         case kSnowLeopard:
-          [self loadAppleSignatures: [plist objectForKey: @"10.6"]];
+          [self loadAppleSoftware: [plist objectForKey: @"10.6"]];
           break;
         case kLion:
-          [self loadAppleSignatures: [plist objectForKey: @"10.7"]];
+          [self loadAppleSoftware: [plist objectForKey: @"10.7"]];
           break;
         case kMountainLion:
-          [self loadAppleSignatures: [plist objectForKey: @"10.8"]];
+          [self loadAppleSoftware: [plist objectForKey: @"10.8"]];
           break;
         case kMavericks:
-          [self loadAppleSignatures: [plist objectForKey: @"10.9"]];
+          [self loadAppleSoftware: [plist objectForKey: @"10.9"]];
           break;
         case kYosemite:
-          [self loadAppleSignatures: [plist objectForKey: @"10.10"]];
+          [self loadAppleSoftware: [plist objectForKey: @"10.10"]];
           break;
         case kElCapitan:
-          [self loadAppleSignatures: [plist objectForKey: @"10.11"]];
+          [self loadAppleSoftware: [plist objectForKey: @"10.11"]];
           break;
         }
       }
     }
   }
 
-// Load apple signatures for a specific OS version.
-- (void) loadAppleSignatures: (NSDictionary *) signatures
+// Load apple software for a specific OS version.
+- (void) loadAppleSoftware: (NSDictionary *) software
   {
-  if(signatures)
-    [[Model model] setAppleSignatures: signatures];
+  if(software)
+    [[Model model] setAppleSoftware: software];
+  }
+
+// Load Apple launchd files.
+- (void) loadAppleLaunchd
+  {
+  NSString * launchdPath =
+    [[NSBundle mainBundle]
+      pathForResource: @"appleLaunchd" ofType: @"plist"];
+    
+  NSData * plistData = [NSData dataWithContentsOfFile: launchdPath];
+  
+  if(plistData)
+    {
+    NSDictionary * plist = [Utilities readPropertyListData: plistData];
+  
+    if(plist)
+      {
+      int version = [[Model model] majorOSVersion];
+      
+      switch(version)
+        {
+        case kSnowLeopard:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.6"]];
+          break;
+        case kLion:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.7"]];
+          break;
+        case kMountainLion:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.8"]];
+          break;
+        case kMavericks:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.9"]];
+          break;
+        case kYosemite:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.10"]];
+          break;
+        case kElCapitan:
+          [self loadAppleLaunchd: [plist objectForKey: @"10.11"]];
+          break;
+        }
+      }
+    }
+  }
+
+// Load apple launchd files for a specific OS version.
+- (void) loadAppleLaunchd: (NSDictionary *) launchdFiles
+  {
+  if(launchdFiles)
+    {
+    [[Model model] setAppleLaunchd: launchdFiles];
+    
+    NSMutableDictionary * appleLaunchdByLabel = [NSMutableDictionary new];
+    
+    for(NSString * path in launchdFiles)
+      {
+      NSDictionary * info = [launchdFiles objectForKey: path];
+      
+      NSString * label = [info objectForKey: kLabel];
+      
+      if([label length] > 0)
+        [appleLaunchdByLabel setObject: info forKey: label];
+      }
+      
+    [[Model model] setAppleLaunchdByLabel: appleLaunchdByLabel];
+    
+    [appleLaunchdByLabel release];
+    }
   }
 
 // Print a system software item.

@@ -47,7 +47,10 @@
 @synthesize hideAppleTasks = myHideAppleTasks;
 @synthesize oldEtreCheckVersion = myOldEtreCheckVersion;
 @synthesize verifiedEtreCheckVersion = myVerifiedEtreCheckVersion;
-@synthesize appleSignatures = myAppleSignatures;
+@synthesize appleSoftware = myAppleSoftware;
+@synthesize appleLaunchd = myAppleLaunchd;
+@synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
+@synthesize sip = mySIP;
 
 - (NSDictionary *) adwareLaunchdFiles
   {
@@ -135,6 +138,7 @@
   [myWhitelistFiles release];
   [myWhitelistPrefixes release];
   
+  self.appleLaunchdByLabel = nil;
   self.seriousProblems = nil;
   self.terminatedTasks = nil;
   self.potentialAdwareTrioFiles = nil;
@@ -541,17 +545,34 @@
 // Get the expected Apple signature for an executable.
 - (NSString *) expectedAppleSignature: (NSString *) path
   {
-  return [[self appleSignatures] objectForKey: path];
+  return [[self appleSoftware] objectForKey: path];
   }
 
-// Is this a known Apple executable?
+// Is this a known Apple executable
 - (BOOL) isKnownAppleExecutable: (NSString *) path
   {
   if([path length])
     {
     path = [Utilities resolveBundlePath: path];
   
-    return [[self appleSignatures] objectForKey: path] != nil;
+    return [[self appleSoftware] objectForKey: path] != nil;
+    }
+    
+  return NO;
+  }
+
+// Is this a known Apple executable but not a shell script?
+- (BOOL) isKnownAppleNonShellExecutable: (NSString *) path
+  {
+  if([path length])
+    {
+    NSString * signature = [Utilities checkAppleExecutable: path];
+    
+    if([signature isEqualToString: kSignatureApple])
+      return YES;
+      
+    if([signature isEqualToString: kSignatureValid])
+      return YES;      
     }
     
   return NO;

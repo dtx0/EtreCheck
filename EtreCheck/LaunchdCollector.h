@@ -59,7 +59,6 @@
 @property (assign) NSUInteger AppleRunningCount;
 @property (assign) NSUInteger AppleKilledCount;
 @property (retain) NSMutableSet * knownAppleFailures;
-@property (retain) NSMutableSet * knownAppleSignatureFailures;
 
 // Collect property list files.
 // Returns an array of plists for printing.
@@ -92,8 +91,9 @@
 // Should I hide Apple tasks?
 - (bool) hideAppleTasks;
 
-// Should I ignore these invalid signatures?
-- (bool) ignoreInvalidSignatures: (NSString *) file;
+// Does this file have the expected signature?
+- (bool) hasExpectedSignature: (NSString *) file
+  signature: (NSString *) signature;
 
 // Handle whitelist exceptions.
 - (void) updateAppleCounts: (NSDictionary *) info;
