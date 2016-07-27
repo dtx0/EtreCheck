@@ -700,91 +700,8 @@
   if(![path length])
     return kExecutableMissing;
     
-  BOOL shell = NO;
-  
-  if([path hasPrefix: @"/usr/bin/"])
-    {
-    if([path isEqualToString: @"/usr/bin/tclsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/usr/bin/perl"])
-      shell = YES;
-
-    if([path isEqualToString: @"/usr/bin/ruby"])
-      shell = YES;
-
-    if([path hasPrefix: @"/usr/bin/python"])
-      shell = YES;
-    }
-  else if([path hasPrefix: @"/bin/"])
-    {
-    if([path isEqualToString: @"/bin/sh"])
-      shell = YES;
-      
-    if([path isEqualToString: @"/bin/csh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/bash"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/zsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/tsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/ksh"])
-      shell = YES;
-    }
-    
   // Get the app path.
   path = [Utilities resolveBundlePath: path];
-  
-  // A valid Apple signature should be returned as "Apple".
-  NSString * signature = [Utilities checkAppleExecutable: path force: YES];
-  
-  // Should be...
-  if(![signature isEqualToString: kSignatureApple])
-    {
-    // I will accept a "Success" too as that still comes from Apple.
-    NSString * expectedSignature =
-      [[Model model] expectedAppleSignature: path];
-
-    if(signature && expectedSignature)
-      {
-      // If this is the signature I expect and it is valid, the return it
-      // as Apple.
-      if([signature isEqualToString: expectedSignature])
-        {
-        if([signature isEqualToString: kSignatureValid])
-          signature = kSignatureValid;
-        
-        // Otherwise, it is a failure. Should I ignore that anyway?
-        if([[Model model] ignoreKnownAppleFailures])
-          signature = kSignatureValid;
-        }
-      }
-      
-    if(shell && [signature isEqualToString: kSignatureValid])
-      return kShell;
-      
-    return signature;
-    }
-    
-  if(shell && [signature isEqualToString: kSignatureApple])
-    return kShell;
-
-  return kSignatureValid;
-  }
-
-// Force verification of an Apple executable.
-+ (NSString *) checkAppleExecutable: (NSString *) path force: (BOOL) force
-  {
-  if(!force)
-    return kSignatureValid;
-   
-  if([path length] == 0)
-    return kExecutableMissing;
     
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
@@ -828,14 +745,14 @@
     result =
       [Utilities parseSignature: subProcess.standardError forPath: path];
         
+    if([result isEqualToString: kSignatureValid])
+      result = kSignatureApple;
+    
     [[[Utilities shared] signatureCache] setObject: result forKey: path];
     }
     
   [subProcess release];
   
-  if([result isEqualToString: kSignatureValid])
-    return kSignatureApple;
-    
   return result;
   }
 

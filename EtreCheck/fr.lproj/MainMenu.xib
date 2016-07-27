@@ -1185,6 +1185,7 @@ Gw
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.hideAppleTasks" id="wTb-8f-NWl"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="self.ignoreKnownAppleFailures" id="exL-dG-EUr"/>
                         </connections>
                     </button>
@@ -1206,7 +1207,7 @@ Gw
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="hJp-fm-4tp"/>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="YUN-qi-qvp"/>
                         </connections>
                     </button>
                     <button id="m5c-jh-0ed">

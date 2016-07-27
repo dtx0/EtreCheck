@@ -144,7 +144,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
 - (void) setIgnoreKnownAppleFailures: (bool) ignoreKnownAppleFailures
   {
-  [[Model model] setIgnoreKnownAppleFailures: ignoreKnownAppleFailures];
+  if(ignoreKnownAppleFailures != [[Model model] ignoreKnownAppleFailures])
+    {
+    [self willChangeValueForKey: @"ignoreKnownAppleFailures"];
+    
+    [[Model model] setIgnoreKnownAppleFailures: ignoreKnownAppleFailures];
+    
+    [self didChangeValueForKey: @"ignoreKnownAppleFailures"];
+    }
   }
 
 - (bool) showSignatureFailures
@@ -154,7 +161,14 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
 - (void) setShowSignatureFailures: (bool) showSignatureFailures
   {
-  [[Model model] setShowSignatureFailures: showSignatureFailures];
+  if(showSignatureFailures != [[Model model] showSignatureFailures])
+    {
+    [self willChangeValueForKey: @"showSignatureFailures"];
+    
+    [[Model model] setShowSignatureFailures: showSignatureFailures];
+    
+    [self didChangeValueForKey: @"showSignatureFailures"];
+    }
   }
 
 - (bool) hideAppleTasks
@@ -164,7 +178,16 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
 - (void) setHideAppleTasks: (bool) hideAppleTasks
   {
-  [[Model model] setHideAppleTasks: hideAppleTasks];
+  if(hideAppleTasks != [[Model model] hideAppleTasks])
+    {
+    self.ignoreKnownAppleFailures = hideAppleTasks;
+    
+    [self willChangeValueForKey: @"hideAppleTasks"];
+    
+    [[Model model] setHideAppleTasks: hideAppleTasks];
+  
+    [self didChangeValueForKey: @"hideAppleTasks"];
+    }
   }
 
 - (NSUInteger) textSize

@@ -49,7 +49,6 @@
 		A55BC17E15BF987D00D42EF1 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A55BC17C15BF987D00D42EF1 /* Credits.rtf */; };
 		A55BC18115BF987D00D42EF1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A55BC18015BF987D00D42EF1 /* AppDelegate.m */; };
 		A55BC18415BF987D00D42EF1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A55BC18215BF987D00D42EF1 /* MainMenu.xib */; };
-		A5713AB71D432C6400EA6372 /* SystemLaunchdCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5713AB61D432C6400EA6372 /* SystemLaunchdCollector.m */; };
 		A5713AB91D45D5C300EA6372 /* appleLaunchd.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */; };
 		A5716E0F1C4C41BB00297727 /* unknownhelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A5716E0D1C4C41BB00297727 /* unknownhelp.rtf */; };
 		A5716E151C4C5A6E00297727 /* UnknownFilesCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */; };
@@ -191,8 +190,6 @@
 		A55BC1C815C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A55BC1C915C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A55BC1CA15C0F4FA00D42EF1 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
-		A5713AB51D432C6400EA6372 /* SystemLaunchdCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemLaunchdCollector.h; sourceTree = "<group>"; };
-		A5713AB61D432C6400EA6372 /* SystemLaunchdCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemLaunchdCollector.m; sourceTree = "<group>"; };
 		A5713AB81D45D5C300EA6372 /* appleLaunchd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appleLaunchd.plist; sourceTree = "<group>"; };
 		A5716E0E1C4C41BB00297727 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/unknownhelp.rtf; sourceTree = "<group>"; };
 		A5716E101C4C41C700297727 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/unknownhelp.rtf; sourceTree = "<group>"; };
@@ -369,8 +366,6 @@
 				A50C9DAC19A2ACB600BA6A25 /* StartupItemsCollector.m */,
 				A5C292DB19A02A8800464E86 /* LaunchdCollector.h */,
 				A5C292DC19A02A8800464E86 /* LaunchdCollector.m */,
-				A5713AB51D432C6400EA6372 /* SystemLaunchdCollector.h */,
-				A5713AB61D432C6400EA6372 /* SystemLaunchdCollector.m */,
 				A5C292E119A039AB00464E86 /* SystemLaunchAgentsCollector.h */,
 				A5C292E219A039AB00464E86 /* SystemLaunchAgentsCollector.m */,
 				A5C292E419A039BD00464E86 /* SystemLaunchDaemonsCollector.h */,
@@ -675,7 +670,6 @@
 				A5FC120919A5509700E81E9C /* TimeMachineCollector.m in Sources */,
 				A50C9DC219A36F3D00BA6A25 /* KernelExtensionCollector.m in Sources */,
 				A550C54F1BBC39E000CA75EA /* EtreCheckToolbarItem.m in Sources */,
-				A5713AB71D432C6400EA6372 /* SystemLaunchdCollector.m in Sources */,
 				A5C292DD19A02A8800464E86 /* LaunchdCollector.m in Sources */,
 				A5C1492519B88192002890F1 /* SlideshowView.m in Sources */,
 				A57516AF1A14D9E700F374FB /* DiagnosticsCollector.m in Sources */,

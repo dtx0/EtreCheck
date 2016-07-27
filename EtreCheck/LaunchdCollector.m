@@ -266,11 +266,6 @@
     [NSMutableDictionary
       dictionaryWithDictionary: [self collectJobStatus: path]];
     
-  // See if the executable is valid.
-  // Don't bother with this.
-  //if(![self isValidExecutable: executable])
-  //  jobStatus = kStatusInvalid;
-    
   // Set attributes.
   [info setObject: path forKey: kPath];
   
@@ -283,20 +278,26 @@
   [self setDetailsURL: info];
   [self setExecutable: info];
   
-  [info
-    setObject: [self getSupportURLFor: info name: nil bundleID: path]
-    forKey: kSupportURL];
-  
   [[[Model model] launchdFiles] setObject: info forKey: path];
 
-  if([[info objectForKey: kApple] boolValue])
+  if([[[Model model] appleLaunchd] objectForKey: path])
+    {
+    [info setObject: [NSNumber numberWithBool: YES] forKey: kApple];
+    
     [self checkAppleSignature: info];
+    }
   else
+    {
+    [info
+      setObject: [self getSupportURLFor: info name: nil bundleID: path]
+      forKey: kSupportURL];
+    
     [self checkSignature: info];
     
-  // See if this is a file I know about, either good or bad.
-  [self checkForKnownFile: path info: info];
-
+    // See if this is a file I know about, either good or bad.
+    [self checkForKnownFile: path info: info];
+    }
+    
   return info;
   }
 
@@ -394,10 +395,6 @@
   {
   NSString * bundleID = [path lastPathComponent];
   
-  // If the file is from Apple, the user is already on ASC.
-  if([[info objectForKey: kApple] boolValue])
-    return @"";
-    
   // See if I can construct a real web host.
   NSString * host = [self convertBundleIdToHost: bundleID];
   
@@ -570,10 +567,6 @@
 - (void) checkForKnownFile: (NSString *) path
   info: (NSMutableDictionary *) info
   {
-  // Apparently Apple files get special handling.
-  if([self isKnownAppleFile: path info: info])
-    return;
-    
   // I need this.
   NSString * filename = [path lastPathComponent];
   
@@ -588,30 +581,6 @@
     
   [info
     setObject: [NSNumber numberWithBool: !knownFile] forKey: kUnknown];
-  }
-
-// Is this a known Apple file?
-- (bool) isKnownAppleFile: (NSString *) path
-  info: (NSMutableDictionary *) info
-  {
-  // Why is this Apple?
-  if([path hasSuffix: @"unknown3.plist"])
-    {
-    NSLog(@"stop");
-    }
-    
-  // First see if this file is claiming Apple status. If so, check to see
-  // if I agree. If so, this is a known file.
-  if([[info objectForKey: kApple] boolValue])
-    {
-    NSString * executable = [info objectForKey: kExecutable];
-
-    if([executable length] > 0)
-      if([[Model model] isKnownAppleNonShellExecutable: executable])
-        return YES;
-    }
-    
-  return NO;
   }
 
 // Remove any files from the list of unknown files if they match certain
@@ -818,7 +787,7 @@
     }
     
   // Does the file have an expected signature
-  else if([self hasExpectedSignature: file signature: signature])
+  else if([self hasExpectedSignature: path signature: signature])
     {
     [status setObject: ignore forKey: kIgnored];
 
@@ -1123,16 +1092,6 @@
     [extra
       appendString:
         [NSString stringWithFormat: @" (%@)", modificationDateString]];
-
-  // Check for a duplicate launchd label.
-  if([[info objectForKey: kStatusDuplicate] boolValue])
-    [extra
-      appendString: NSLocalizedString(@" - Duplicate label! ", NULL)
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
 
   [extra autorelease];
   

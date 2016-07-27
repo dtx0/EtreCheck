@@ -4,8 +4,8 @@
  ** Copyright (c) 2014. All rights reserved.
  **********************************************************************/
 
-#import "SystemLaunchdCollector.h"
+#import "LaunchdCollector.h"
 
-@interface SystemLaunchAgentsCollector : SystemLaunchdCollector
+@interface SystemLaunchAgentsCollector : LaunchdCollector
 
 @end

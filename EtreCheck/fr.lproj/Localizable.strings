@@ -297,6 +297,5 @@
 "unverifiedetrecheckversion" = "Impossible de vérifier votre version d’EtreCheck. Cette opération nécessite une version actuelle d’EtreCheck. Si vous utilisez un pare-feu, s’il vous plaît, permettez l’accès à des serveurs EtreCheck.";
 " (cache only)" = " (seulement en cache)";
 "donateurl" = "https://etrecheck.com/donate_fr.php?invoice=%@";
-"Duplicate label!" = " - L’étiquette en double ! ";
 "Remove" = "Enlever";
 "Report" = "Envoyer";

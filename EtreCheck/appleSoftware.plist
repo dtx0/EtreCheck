@@ -19383,8 +19383,6 @@
     <string>signatureapple</string>
     <key>/Applications/Photo Booth.app</key>
     <string>signatureapple</string>
-    <key>/Applications/Photo Transfer App.app</key>
-    <string>signaturevalid</string>
     <key>/Applications/Photos.app</key>
     <string>signatureapple</string>
     <key>/Applications/Preview.app</key>
@@ -19392,8 +19390,6 @@
     <key>/Applications/QuickTime Player.app</key>
     <string>signatureapple</string>
     <key>/Applications/Reminders.app</key>
-    <string>signaturenotvalid</string>
-    <key>/Applications/Remote Desktop Connection.app</key>
     <string>signaturenotvalid</string>
     <key>/Applications/Remote Desktop.app</key>
     <string>signaturevalid</string>
