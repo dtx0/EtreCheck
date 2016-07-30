@@ -762,6 +762,46 @@
   if([path length] == 0)
     return kExecutableMissing;
     
+  BOOL shell = NO;
+  
+  if([path hasPrefix: @"/usr/bin/"])
+    {
+    if([path isEqualToString: @"/usr/bin/tclsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/usr/bin/perl"])
+      shell = YES;
+
+    if([path isEqualToString: @"/usr/bin/ruby"])
+      shell = YES;
+
+    if([path hasPrefix: @"/usr/bin/python"])
+      shell = YES;
+    }
+  else if([path hasPrefix: @"/bin/"])
+    {
+    if([path isEqualToString: @"/bin/sh"])
+      shell = YES;
+      
+    if([path isEqualToString: @"/bin/csh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/bash"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/zsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/tsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/ksh"])
+      shell = YES;
+    }
+
+  if(shell)
+    return kShell;
+
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
   
@@ -1071,6 +1111,8 @@
     [Utilities executeAppleScriptStatements: appleScriptStatements];
     
     [appleScriptStatements release];
+
+    [Utilities saveDeletedTasks: tasks];
     }
   }
 
@@ -1275,10 +1317,16 @@
   [Utilities executeAppleScriptStatements: appleScriptStatements];
   
   [appleScriptStatements release];
+  
+  [Utilities saveDeletedFiles: files];
+  }
 
+// Save deleted files in preferences.
++ (void) saveDeletedFiles: (NSArray *) files
+  {
   // Save deleted files.
   NSArray * currentDeletedFiles =
-    [[NSUserDefaults standardUserDefaults] objectForKey: @"deletedFiles"];
+    [[NSUserDefaults standardUserDefaults] objectForKey: @"deletedfiles"];
     
   NSMutableArray * deletedFiles = [NSMutableArray array];
   
@@ -1290,6 +1338,8 @@
     
     for(NSDictionary * entry in currentDeletedFiles)
       {
+      NSLog(@"Found deleted file %@ %@", [entry objectForKey: @"date"], [entry objectForKey: @"file"]);
+      
       NSDate * date = [entry objectForKey: @"date"];
       
       if([then compare: date] == NSOrderedDescending)
@@ -1303,7 +1353,7 @@
   for(NSString * path in files)
     {
     NSDictionary * entry =
-      [NSMutableDictionary
+      [NSDictionary
         dictionaryWithObjectsAndKeys:
           now, @"date",
           path, @"file",
@@ -1312,8 +1362,33 @@
     [deletedFiles addObject: entry];
     }
 
-  [[NSUserDefaults standardUserDefaults]
-    setObject: deletedFiles forKey: @"deletedfiles"];
+  dispatch_async(
+    dispatch_get_main_queue(),
+    ^{
+     for(NSDictionary * entry in deletedFiles)
+       NSLog(@"Saving deleted file %@ %@", [entry objectForKey: @"date"], [entry objectForKey: @"file"]);
+      
+     [[NSUserDefaults standardUserDefaults]
+        setObject: deletedFiles forKey: @"deletedfiles"];
+    
+     [[NSUserDefaults standardUserDefaults] synchronize];
+    });
+  }
+
+// Save deleted launchd tasks in preferences.
++ (void) saveDeletedTasks: (NSArray *) tasks
+  {
+  NSMutableArray * files = [NSMutableArray array];
+  
+  for(NSDictionary * info in tasks)
+    {
+    NSString * path = [info objectForKey: kPath];
+    
+    if([path length])
+      [files addObject: path];
+    }
+  
+  [Utilities saveDeletedFiles: files];
   }
 
 // Restart the machine.

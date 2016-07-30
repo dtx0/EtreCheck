@@ -43,6 +43,7 @@
 #import "LogCollector.h"
 #import "AdwareCollector.h"
 #import "UnknownFilesCollector.h"
+#import "EtreCheckCollector.h"
 
 // Perform the check.
 @implementation Checker
@@ -337,6 +338,7 @@
 
   [collectors addObject: adwareCollector];
   [collectors addObject: [[UnknownFilesCollector new] autorelease]];
+  [collectors addObject: [[EtreCheckCollector new] autorelease]];
 
   // Start the agents and daemons animation.
   dispatch_semaphore_t semaphore = [self runAgentsAndDaemonsAnimation];
@@ -432,6 +434,8 @@
   [result appendAttributedString: [self getResult: @"memory"]];
   [result appendAttributedString: [self getResult: @"vm"]];
   [result appendAttributedString: [self getResult: @"diagnostics"]];
+  [result
+    appendAttributedString: [self getResult: @"etrecheckdeletedfiles"]];
   
   return [result autorelease];
   }

@@ -71,15 +71,13 @@
 
           NSDictionary * info = [unknownLaunchdFiles objectForKey: obj];
           
-          NSString * cmd = [info objectForKey: kExecutable];
-          
-          if([cmd length] > 0)
-            {
-            [self.result appendString: @"\n        "];
-            [self.result appendString: [Utilities sanitizeFilename: cmd]];
-            }
-
-          [self.result appendString: @"\n"];
+          [self.result
+            appendString:
+              [NSString
+                stringWithFormat:
+                  @"\n        %@\n",
+                  [Utilities
+                    formatExecutable: [info objectForKey: kCommand]]]];
           }];
       
     NSString * message =
@@ -95,7 +93,8 @@
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
     
-    NSAttributedString * checkLink = [self generateCheckFilesLink: @"files"];
+    NSAttributedString * checkLink =
+      [self generateCheckFilesLink: @"files"];
 
     if(checkLink)
       {

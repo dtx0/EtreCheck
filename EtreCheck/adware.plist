@@ -2162,7 +2162,7 @@
 		<string>com.SimpleTech.ButtonPoller.plist</string>
 		<string>com.siteview.NETGEARGenie.plist</string>
 		<string>com.skype.c2c_service.plist</string>
-		<string>com.NOskype.skypeinstaller.plist</string>
+		<string>com.skype.skypeinstaller.plist</string>
 		<string>com.slimdevices.updatecheck.plist</string>
 		<string>com.slinkware.slinkDaemon.plist</string>
 		<string>com.smalltree.SmallTreei8259xdaemon.plist</string>

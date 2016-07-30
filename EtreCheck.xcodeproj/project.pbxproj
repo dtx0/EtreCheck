@@ -19,6 +19,7 @@
 		A50C9DC819A4063E00BA6A25 /* PlugInsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DC719A4063E00BA6A25 /* PlugInsCollector.m */; };
 		A50C9DCB19A4065B00BA6A25 /* InternetPlugInsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A50C9DCA19A4065B00BA6A25 /* InternetPlugInsCollector.m */; };
 		A518C4661C4814740094D7CC /* Help in Resources */ = {isa = PBXBuildFile; fileRef = A518C4641C4814740094D7CC /* Help */; };
+		A519067B1D49B092009AA835 /* EtreCheckCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A519067A1D49B092009AA835 /* EtreCheckCollector.m */; };
 		A51BD1491A7D7782000AAABA /* adwarehelp.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A51BD14B1A7D7782000AAABA /* adwarehelp.rtf */; };
 		A52006A21A292A2200644C40 /* PopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A52006A11A292A2200644C40 /* PopoverManager.m */; };
 		A5221BCC1C6188E6009AF9F8 /* UninstallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5221BCA1C6188E6009AF9F8 /* UninstallManager.m */; };
@@ -123,6 +124,8 @@
 		A50C9DCA19A4065B00BA6A25 /* InternetPlugInsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternetPlugInsCollector.m; sourceTree = "<group>"; };
 		A518C4651C4814740094D7CC /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = en.lproj/Help; sourceTree = "<group>"; };
 		A518C4671C4814870094D7CC /* fr */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fr; path = fr.lproj/Help; sourceTree = "<group>"; };
+		A51906791D49B092009AA835 /* EtreCheckCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EtreCheckCollector.h; sourceTree = "<group>"; };
+		A519067A1D49B092009AA835 /* EtreCheckCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EtreCheckCollector.m; sourceTree = "<group>"; };
 		A51BD14A1A7D7782000AAABA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
 		A51BD14C1A7D7784000AAABA /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/adwarehelp.rtf; sourceTree = "<group>"; };
 		A52006A01A292A2200644C40 /* PopoverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverManager.h; sourceTree = "<group>"; };
@@ -420,6 +423,8 @@
 				A5CF26E71A279DAD002386F0 /* AdwareCollector.m */,
 				A5716E111C4C5A6E00297727 /* UnknownFilesCollector.h */,
 				A5716E121C4C5A6E00297727 /* UnknownFilesCollector.m */,
+				A51906791D49B092009AA835 /* EtreCheckCollector.h */,
+				A519067A1D49B092009AA835 /* EtreCheckCollector.m */,
 			);
 			name = Collectors;
 			sourceTree = "<group>";
@@ -698,6 +703,7 @@
 				A5C292E319A039AB00464E86 /* SystemLaunchAgentsCollector.m in Sources */,
 				A5D0877C19ECAD4E004F52C2 /* NSDictionary+Etresoft.m in Sources */,
 				A5C00A2819BFF2D500140404 /* NSAttributedString+Etresoft.m in Sources */,
+				A519067B1D49B092009AA835 /* EtreCheckCollector.m in Sources */,
 				A5D25B2D19C4D11F006728B8 /* TTTLocalizedPluralString.m in Sources */,
 				A5E765E91A03A9BD00BC994C /* CoreStorageCollector.m in Sources */,
 				A50C9DCB19A4065B00BA6A25 /* InternetPlugInsCollector.m in Sources */,

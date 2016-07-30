@@ -484,7 +484,7 @@
         {
         NSString * argument = [arguments objectAtIndex: 0];
         
-        if(![argument isEqualToString: [program lastPathComponent]])
+        if([command count] == 0)
           [command addObject: argument];
           
         for(int i = 1; i < arguments.count; ++i)
