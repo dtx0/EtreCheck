@@ -109,7 +109,7 @@
         case kYosemite:
           [self loadAppleSoftware: [plist objectForKey: @"10.10"]];
           break;
-        case kElCapitan:
+        default:
           [self loadAppleSoftware: [plist objectForKey: @"10.11"]];
           break;
         }
@@ -158,7 +158,7 @@
         case kYosemite:
           [self loadAppleLaunchd: [plist objectForKey: @"10.10"]];
           break;
-        case kElCapitan:
+        default:
           [self loadAppleLaunchd: [plist objectForKey: @"10.11"]];
           break;
         }
