@@ -1326,7 +1326,8 @@
   {
   // Save deleted files.
   NSArray * currentDeletedFiles =
-    [[NSUserDefaults standardUserDefaults] objectForKey: @"deletedfiles"];
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"deletedfiles"];
     
   NSMutableArray * deletedFiles = [NSMutableArray array];
   
@@ -1342,7 +1343,7 @@
       
       NSDate * date = [entry objectForKey: @"date"];
       
-      if([then compare: date] == NSOrderedDescending)
+      if([then compare: date] == NSOrderedAscending)
         [deletedFiles addObject: entry];
       }
     }
@@ -1362,17 +1363,11 @@
     [deletedFiles addObject: entry];
     }
 
-  dispatch_async(
-    dispatch_get_main_queue(),
-    ^{
-     for(NSDictionary * entry in deletedFiles)
-       NSLog(@"Saving deleted file %@ %@", [entry objectForKey: @"date"], [entry objectForKey: @"file"]);
-      
-     [[NSUserDefaults standardUserDefaults]
-        setObject: deletedFiles forKey: @"deletedfiles"];
+  for(NSDictionary * entry in deletedFiles)
+    NSLog(@"Saving deleted file %@ %@", [entry objectForKey: @"date"], [entry objectForKey: @"file"]);
     
-     [[NSUserDefaults standardUserDefaults] synchronize];
-    });
+  [[NSUserDefaults standardUserDefaults]
+    setObject: deletedFiles forKey: @"deletedfiles"];
   }
 
 // Save deleted launchd tasks in preferences.

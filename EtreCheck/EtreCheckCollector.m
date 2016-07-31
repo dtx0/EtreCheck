@@ -91,12 +91,10 @@
               @"    %@ - %@\n",
               [Utilities
                 dateAsString: date format: @"MMM d, yyyy, hh:mm:ss a"],
-              [deletedFile objectForKey: @"name"]]];
+              [deletedFile objectForKey: @"file"]]];
       }
     }
     
-  [deletedFiles release];
-  
   [self.result appendCR];
   }
 
