@@ -140,12 +140,23 @@
       }
     }
     
-  NSArray * adwareFiles =
+  for(NSString * path in [[Model model] unknownFiles])
+    {
+    NSMutableDictionary * item = [NSMutableDictionary new];
+    
+    [item setObject: path forKey: kPath];
+    
+    [filesToRemove setObject: item forKey: path];
+    
+    [item release];
+    }
+
+  NSArray * unknownFiles =
     [[filesToRemove allKeys] sortedArrayUsingSelector: @selector(compare:)];
   
-  for(NSString * adwareFile in adwareFiles)
+  for(NSString * unknownFile in unknownFiles)
     {
-    NSMutableDictionary * item = [filesToRemove objectForKey: adwareFile];
+    NSMutableDictionary * item = [filesToRemove objectForKey: unknownFile];
     
     if(item)
       [self.filesToRemove addObject: item];
@@ -234,14 +245,14 @@
       
     NSDictionary * info = [item objectForKey: kLaunchdTask];
     
-    if(!info)
-      continue;
-      
     NSString * cmd =
       [path length] > 0
         ? [info objectForKey: path]
         : @"";
     
+    if(!cmd)
+      cmd = @"";
+      
     path =
       [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
       

@@ -69,6 +69,7 @@
   NSDictionary * myAppleSoftware;
   NSDictionary * myAppleLaunchd;
   NSDictionary * myAppleLaunchdByLabel;
+  NSMutableArray * myUnknownFiles;
   bool mySIP;
   }
 
@@ -156,6 +157,9 @@
 
 // Unknown launchd files.
 @property (readonly) NSDictionary * unknownLaunchdFiles;
+
+// Unknown files.
+@property (readonly) NSMutableArray * unknownFiles;
 
 // Which tasks had to be terminated.
 @property (retain) NSMutableArray * terminatedTasks;

@@ -206,6 +206,9 @@
 
   if([website length] > 0)
     [extension setObject: website forKey: kWebsite];
+  
+  if(([author length] == 0) && ([website length] == 0))
+    [[[Model model] unknownFiles] addObject: path];
 
   return extension;
   }

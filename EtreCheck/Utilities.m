@@ -1105,7 +1105,7 @@
     // Build the statements I will need.
     [appleScriptStatements
       addObjectsFromArray:
-        [Utilities buildDeleteStatements: tasksToBeDeleted]];
+        [Utilities buildDeleteStatementsForTasks: tasksToBeDeleted]];
     
     // Execute the statements.
     [Utilities executeAppleScriptStatements: appleScriptStatements];
@@ -1230,15 +1230,9 @@
   }
 
 // Build an AppleScript statement to delete a list of launchd tasks.
-+ (NSArray *) buildDeleteStatements: (NSArray *) tasks
++ (NSArray *) buildDeleteStatementsForTasks: (NSArray *) tasks
   {
-  NSMutableArray * statements = [NSMutableArray array];
-  
-  NSMutableString * source = [NSMutableString string];
-  
-  [source appendString: @"set posixFiles to {"];
-  
-  int i = 0;
+  NSMutableArray * files = [NSMutableArray array];
   
   NSArray * tasksToBeDeleted =
     [Utilities buildListOfTasksToBeDeleted: tasks];
@@ -1248,14 +1242,31 @@
     NSString * path = [info objectForKey: kPath];
     
     if([path length] > 0)
-      {
-      if(i)
-        [source appendString: @","];
-        
-      [source appendFormat: @"POSIX file \"%@\"", path];
+      [files addObject: path];
+    }
+    
+  return [Utilities buildDeleteStatements: files];
+  }
+
+// Build an AppleScript statement to delete a list of launchd tasks.
++ (NSArray *) buildDeleteStatements: (NSArray *) paths
+  {
+  NSMutableArray * statements = [NSMutableArray array];
+  
+  NSMutableString * source = [NSMutableString string];
+  
+  [source appendString: @"set posixFiles to {"];
+  
+  int i = 0;
+  
+  for(NSString * path in paths)
+    {
+    if(i)
+      [source appendString: @","];
       
-      ++i;
-      }
+    [source appendFormat: @"POSIX file \"%@\"", path];
+    
+    ++i;
     }
 
   [source appendString: @"}"];
@@ -1339,8 +1350,6 @@
     
     for(NSDictionary * entry in currentDeletedFiles)
       {
-      NSLog(@"Found deleted file %@ %@", [entry objectForKey: @"date"], [entry objectForKey: @"file"]);
-      
       NSDate * date = [entry objectForKey: @"date"];
       
       if([then compare: date] == NSOrderedAscending)
@@ -1363,9 +1372,6 @@
     [deletedFiles addObject: entry];
     }
 
-  for(NSDictionary * entry in deletedFiles)
-    NSLog(@"Saving deleted file %@ %@", [entry objectForKey: @"date"], [entry objectForKey: @"file"]);
-    
   [[NSUserDefaults standardUserDefaults]
     setObject: deletedFiles forKey: @"deletedfiles"];
   }
