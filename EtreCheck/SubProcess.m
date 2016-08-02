@@ -198,6 +198,10 @@
   [output stop];
   [error stop];
   
+  [proc release];
+  [output release];
+  [error release];
+  
   [task release];
   [errorPipe release];
   [outputPipe release];

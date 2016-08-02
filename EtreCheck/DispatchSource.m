@@ -114,7 +114,7 @@
     {
     [self willChangeValueForKey: @"eventHandler"];
     
-    myEventHandler = newHandler;
+    myEventHandler = [newHandler copy];
 
     [self didChangeValueForKey: @"eventHandler"];
     }
@@ -132,7 +132,7 @@
     {
     [self willChangeValueForKey: @"cancelHandler"];
     
-    myCancelHandler = newHandler;
+    myCancelHandler = [newHandler copy];
 
     [self didChangeValueForKey: @"cancelHandler"];
     }
@@ -182,7 +182,11 @@
 
     self.enabled = NO;
     dispatch_release(self.source);
+    dispatch_release(self.queue);
     self.source = nil;
+    myQueue = nil;
+    self.eventHandler = nil;
+    self.cancelHandler = nil;
     }
   }
 
