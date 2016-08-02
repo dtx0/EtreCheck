@@ -26752,6 +26752,19 @@
         <key>signature</key>
         <string>signatureapple</string>
       </dict>
+      <key>/System/Library/LaunchDaemons/com.apple.installer.osmessagetracing.plist</key>
+      <dict>
+        <key>label</key>
+        <string>com.apple.installer.osmessagetracing</string>
+        <key>program</key>
+        <string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
+        <key>programArguments</key>
+        <array>
+          <string>/System/Library/PrivateFrameworks/OSInstaller.framework/Resources/OSMessageTracer</string>
+        </array>
+        <key>signature</key>
+        <string>signatureapple</string>
+      </dict>
       <key>/System/Library/LaunchDaemons/com.apple.InstallerDiagnostics.installerdiagd.plist</key>
       <dict>
         <key>label</key>
