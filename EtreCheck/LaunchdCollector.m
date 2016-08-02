@@ -500,11 +500,11 @@
   {
   NSString * executable = [command firstObject];
   
+  if(![executable hasPrefix: @"/"])
+    executable = [self resolveRelativeExecutable: executable];
+    
   BOOL sandboxExec = NO;
   
-  if([executable isEqualToString: @"sandbox-exec"])
-    sandboxExec = YES;
-
   if([executable isEqualToString: @"/usr/bin/sandbox-exec"])
     sandboxExec = YES;
     
@@ -535,6 +535,35 @@
   return executable;
   }
 
+// Resolve a relative executable as per launchd.plist man page.
+- (NSString *) resolveRelativeExecutable: (NSString *) executable
+  {
+  NSString * absoluteExecutable =
+    [@"/usr/bin" stringByAppendingPathComponent: executable];
+    
+  if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
+    return absoluteExecutable;
+    
+  absoluteExecutable = [@"/bin" stringByAppendingPathComponent: executable];
+    
+  if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
+    return absoluteExecutable;
+
+  absoluteExecutable =
+    [@"/usr/sbin" stringByAppendingPathComponent: executable];
+    
+  if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
+    return absoluteExecutable;
+    
+  absoluteExecutable =
+    [@"/sbin" stringByAppendingPathComponent: executable];
+    
+  if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
+    return absoluteExecutable;
+    
+  return executable;
+  }
+  
 // Collect the signagure of an Apple launchd item.
 - (void) checkAppleSignature: (NSMutableDictionary *) info
   {
