@@ -81,7 +81,6 @@
 		A5D0877C19ECAD4E004F52C2 /* NSDictionary+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A5D0877B19ECAD4E004F52C2 /* NSDictionary+Etresoft.m */; };
 		A5D25B2D19C4D11F006728B8 /* TTTLocalizedPluralString.m in Sources */ = {isa = PBXBuildFile; fileRef = A5D25B2C19C4D11F006728B8 /* TTTLocalizedPluralString.m */; };
 		A5D69B271C6139AC007F6894 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5CC608C19B4BF52006D7E94 /* Carbon.framework */; };
-		A5D8ACBB1D1F40E1009BB49A /* DispatchSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A5D8ACBA1D1F40E1009BB49A /* DispatchSource.m */; };
 		A5DA68951D1E3C3A00F3B3DE /* SubProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */; };
 		A5E33C3F184CEBDF00ED59A0 /* ByteCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E33C3E184CEBDF00ED59A0 /* ByteCountFormatter.m */; };
 		A5E765E91A03A9BD00BC994C /* CoreStorageCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A5E765E81A03A9BD00BC994C /* CoreStorageCollector.m */; };
@@ -248,8 +247,6 @@
 		A5D0877B19ECAD4E004F52C2 /* NSDictionary+Etresoft.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Etresoft.m"; sourceTree = "<group>"; };
 		A5D25B2B19C4D11F006728B8 /* TTTLocalizedPluralString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTLocalizedPluralString.h; path = EtreCheck/TTTLocalizedPluralString.h; sourceTree = "<group>"; };
 		A5D25B2C19C4D11F006728B8 /* TTTLocalizedPluralString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTLocalizedPluralString.m; path = EtreCheck/TTTLocalizedPluralString.m; sourceTree = "<group>"; };
-		A5D8ACB91D1F40E1009BB49A /* DispatchSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchSource.h; sourceTree = "<group>"; };
-		A5D8ACBA1D1F40E1009BB49A /* DispatchSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchSource.m; sourceTree = "<group>"; };
 		A5DA68931D1E3C3A00F3B3DE /* SubProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubProcess.h; sourceTree = "<group>"; };
 		A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubProcess.m; sourceTree = "<group>"; };
 		A5E33C3D184CEBDF00ED59A0 /* ByteCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteCountFormatter.h; sourceTree = "<group>"; };
@@ -486,8 +483,6 @@
 				A5B659221A16D57800476A76 /* DiagnosticEvent.m */,
 				A5257D3519AB53FF003084C8 /* Model.h */,
 				A5257D3619AB53FF003084C8 /* Model.m */,
-				A5D8ACB91D1F40E1009BB49A /* DispatchSource.h */,
-				A5D8ACBA1D1F40E1009BB49A /* DispatchSource.m */,
 				A5DA68931D1E3C3A00F3B3DE /* SubProcess.h */,
 				A5DA68941D1E3C3A00F3B3DE /* SubProcess.m */,
 				A5257D3B19AC0AA3003084C8 /* Utilities.h */,
@@ -690,7 +685,6 @@
 				A50C9DB619A2E69B00BA6A25 /* FirewireCollector.m in Sources */,
 				A5257D4019AC10E3003084C8 /* Checker.m in Sources */,
 				A54B87381A1D4FED00F25213 /* DetailManager.m in Sources */,
-				A5D8ACBB1D1F40E1009BB49A /* DispatchSource.m in Sources */,
 				A59B506D15C45EC000250772 /* NSMutableAttributedString+Etresoft.m in Sources */,
 				A5257D3119AB5251003084C8 /* CPUUsageCollector.m in Sources */,
 				A5257D2E19AB51BE003084C8 /* ProcessesCollector.m in Sources */,

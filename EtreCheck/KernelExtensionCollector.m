@@ -358,10 +358,15 @@
     // The obtained_from indicator isn't quite good enough.
     if([bundleID hasPrefix: @"com.apple."])
       return @{};
-        
+      
+    NSString * path = [application objectForKey: @"path"];
+    
+    if(![path length])
+      return @{};
+      
     NSArray * args =
       @[
-        [application objectForKey: @"path"],
+        path,
         @"-iname",
         @"*.kext"];
     
