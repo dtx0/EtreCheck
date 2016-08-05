@@ -1054,6 +1054,7 @@ DQ
                         </buttonCell>
                         <connections>
                             <action selector="automaticDonationLookup:" target="Voe-Tx-rLC" id="avM-mh-7Vf"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.canSubmitDonationLookup" id="Z48-LT-4QK"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="piw-BJ-3po">
@@ -1082,6 +1083,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="manualDonationLookup:" target="Voe-Tx-rLC" id="mcr-zK-m3w"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.canSubmitDonationLookup" id="kQx-YC-Hdx"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="3a8-cO-raY">

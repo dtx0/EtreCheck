@@ -127,9 +127,7 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 
 + (NSSet *) keyPathsForValuesAffectingCanSubmitDonationLookup
   {
-  return
-    [NSSet
-      setWithObjects: @"donationLookupName", @"donationLookupEmail", nil];
+  return [NSSet setWithObjects: @"donationLookupEmail", nil];
   }
 
 - (bool) problemSelected
