@@ -29,4 +29,5 @@
 "adware" = "Le logiciel adware comme identifié par Apple (voir https://support.apple.com/HT203987), les recherches propres d’Etresoft, et les contributions des autres utilisateurs EtreCheck.";
 "unknownfiles" = "Ce sont des fichiers qui ne se trouvent pas dans le whitelist d’EtreCheck du logiciel bien connu et sûr. C’est possible qu’ils soient adware ou malware. Mais aussi, c’est possible qu’ils soient simplement quelque chose de nouveau qui a besoin d’être ajouté au whitelist d’EtreCheck.";
 "hiddenapps" = "Les autres logiciels qui sont en marche, parfois cachés.";
-"etrecheckdeletedfiles" = "Ce sont les fichiers que EtreCheck a indiqués récemment comme logiciel inconnu et qui ont été retirés par l’utilisateur."
+"etrecheckdeletedfiles" = "Ce sont les fichiers que EtreCheck a indiqués récemment comme logiciel inconnu et qui ont été retirés par l’utilisateur.";
+
