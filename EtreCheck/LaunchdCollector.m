@@ -288,6 +288,23 @@
     }
   else
     {
+    // Check for a new Apple file.
+    NSString * label = [info objectForKey: kLabel];
+    
+    if([label hasPrefix: @"com.apple."])
+      {
+      [self checkAppleSignature: info];
+      
+      NSString * signature = [info objectForKey: kSignature];
+      
+      if([signature isEqualToString: kSignatureApple])
+        {
+        [info setObject: [NSNumber numberWithBool: YES] forKey: kApple];
+        
+        return info;
+        }
+      }
+      
     [info
       setObject: [self getSupportURLFor: info name: nil bundleID: path]
       forKey: kSupportURL];
