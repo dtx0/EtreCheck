@@ -358,6 +358,7 @@
 		<string>com.babylon.activation.plist</string>
 		<string>com.backblaze.bzbmenu.plist</string>
 		<string>com.backblaze.bzserv.plist</string>
+		<string>com.baculasystems.bacula-fd.plist</string>
 		<string>com.baidu.netdiskmac.BDYunFinderInstaller.plist</string>
 		<string>com.bamboo.SkypeExtender.Launch.plist</string>
 		<string>com.bamboo.SkypeExtenderMenu.Launch.plist</string>
@@ -2895,6 +2896,7 @@
 		<string>me.rodionovd.RDInjectionWizard.injector.plist</string>
 		<string>midimux.plist</string>
 		<string>miredo.plist</string>
+		<string>MLaRandeau.Count-It-TraceHelper.plist</string>
 		<string>MWExpertSystem.plist</string>
 		<string>MWSupportAssistantLaunch.plist</string>
 		<string>MXOAgent.plist</string>
@@ -3002,6 +3004,7 @@
 		<string>net.tunnelblick.tunnelblick.tunnelblickd.plist</string>
 		<string>net.videosurgeon.Video-Snooper.plist</string>
 		<string>net.waterroof.rules.plist</string>
+		<string>net.whatroute.chronyhelper.plist</string>
 		<string>net.whatroute.cpusetter.plist</string>
 		<string>net.whatroute.helper.plist</string>
 		<string>net.whatroute.whatroute2helper.plist</string>
@@ -3185,6 +3188,8 @@
 		<string>org.thebends.iphonedisk.mobile_fs_util.plist</string>
 		<string>org.tigris.scplugin.launch.plist</string>
 		<string>org.TraktForVLC.plist</string>
+		<string>org.tuxfamily.chronyc.plist</string>
+    <string>org.tuxfamily.chronyd.plist</string>
 		<string>org.VBX6.Reminder.plist</string>
 		<string>org.VBX6.Spoof.plist</string>
 		<string>org.virtualbox.startup.plist</string>
@@ -3275,6 +3280,9 @@
 		<string>UEMusicLibrary.plist</string>
 		<string>uk.co.canimaansoftware.clamxav.clamscan.plist</string>
 		<string>uk.co.canimaansoftware.clamxav.freshclam.plist</string>
+		<string>uk.co.canimaansoftware.clamxav.UninstallWatcher.plist</string>
+    <string>uk.co.canimaansoftware.ClamXavHelper.plist</string>
+    <string>uk.co.canimaansoftware.ClamXavHelperUpdater.plist</string>
 		<string>uk.co.dssw.pmd.plist</string>
 		<string>uk.co.dssw.pmnotify.login.plist</string>
 		<string>uk.co.dssw.pmnotify.plist</string>
