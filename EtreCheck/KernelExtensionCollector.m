@@ -82,15 +82,7 @@
 // Collect all extensions on the system.
 - (void) collectAllExtensions
   {
-  dispatch_semaphore_t signal = dispatch_semaphore_create(0);
-  dispatch_semaphore_t done = dispatch_semaphore_create(0);
-  
-  dispatch_async(
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-    ^{
-      [self collectKnownExtensions: signal];
-      dispatch_semaphore_signal(done);
-    });
+  [self collectKnownExtensions];
   
   NSMutableDictionary * allExtensions = [NSMutableDictionary dictionary];
   
@@ -107,16 +99,10 @@
     addEntriesFromDictionary: [self collectApplicationExtensions]];
   
   self.extensions = allExtensions;
-  
-  dispatch_semaphore_signal(signal);
-  dispatch_semaphore_wait(done, DISPATCH_TIME_FOREVER);
-  
-  dispatch_release(signal);
-  dispatch_release(done);
   }
 
 // Collect known extensions.
-- (void) collectKnownExtensions: (dispatch_semaphore_t) signal
+- (void) collectKnownExtensions
   {
   NSArray * args =
     @[
@@ -128,8 +114,6 @@
   
   if([subProcess execute: @"/usr/sbin/system_profiler" arguments: args])
     {
-    dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER);
-    
     NSArray * plist =
       [NSArray readPropertyListData: subProcess.standardOutput];
   
