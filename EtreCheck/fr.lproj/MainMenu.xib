@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
@@ -1054,6 +1054,7 @@ DQ
                         </buttonCell>
                         <connections>
                             <action selector="automaticDonationLookup:" target="Voe-Tx-rLC" id="avM-mh-7Vf"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.canSubmitDonationLookup" id="Z48-LT-4QK"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" id="piw-BJ-3po">
@@ -1082,6 +1083,7 @@ Gw
                         </buttonCell>
                         <connections>
                             <action selector="manualDonationLookup:" target="Voe-Tx-rLC" id="mcr-zK-m3w"/>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.canSubmitDonationLookup" id="kQx-YC-Hdx"/>
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="3a8-cO-raY">
@@ -1185,6 +1187,7 @@ Gw
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.hideAppleTasks" id="wTb-8f-NWl"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="self.ignoreKnownAppleFailures" id="exL-dG-EUr"/>
                         </connections>
                     </button>
@@ -1206,7 +1209,7 @@ Gw
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="hJp-fm-4tp"/>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="self.hideAppleTasks" id="YUN-qi-qvp"/>
                         </connections>
                     </button>
                     <button id="m5c-jh-0ed">
@@ -1484,7 +1487,7 @@ DQ
                     </scrollView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ZUN-tR-hGR">
                         <rect key="frame" x="18" y="124" width="532" height="17"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Pourquoi est-ce que ces fichiers doivent être ajoutés à la liste blanche ?" id="ntI-kb-Okc">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1515,7 +1518,6 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
-                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
                                         <tableColumn identifier="whitelist" width="51.625" minWidth="40" maxWidth="1000" id="Ifg-0y-pp5">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Garder ?">
@@ -1527,9 +1529,19 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
-                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
-                                        <tableColumn identifier="path" editable="NO" width="409.5" minWidth="40" maxWidth="1000" id="2sR-qn-hGU">
+                                        <tableColumn identifier="signed" editable="NO" width="49.49609375" minWidth="10" maxWidth="3.4028234663852886e+38" id="Mn5-cn-dt1">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Vérifié ?">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <buttonCell key="dataCell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" enabled="NO" inset="2" id="sbU-iL-dHD">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                        </tableColumn>
+                                        <tableColumn identifier="path" editable="NO" width="356.88671875" minWidth="40" maxWidth="1000" id="2sR-qn-hGU">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Le fichier inconnu">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1540,7 +1552,7 @@ DQ
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
-                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
@@ -1560,7 +1572,7 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <tableHeaderView key="headerView" id="qrf-DP-hp6">
-                            <rect key="frame" x="0.0" y="0.0" width="526" height="23"/>
+                            <rect key="frame" x="0.0" y="0.0" width="528" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>

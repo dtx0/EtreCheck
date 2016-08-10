@@ -81,7 +81,7 @@ foreach my $app (sort keys %apps)
       }
     }
     
-  printf("    <key>$app</key>\n    <string>$result</string>\n");
+  printf("      <key>$app</key>\n    <string>$result</string>\n");
   }
     
 sub verify

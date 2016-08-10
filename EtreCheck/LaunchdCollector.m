@@ -26,7 +26,6 @@
 @synthesize AppleRunningCount = myAppleRunningCount;
 @synthesize AppleKilledCount = myAppleKilledCount;
 @dynamic knownAppleFailures;
-@dynamic knownAppleSignatureFailures;
 
 #pragma mark - Properties
 
@@ -44,11 +43,6 @@
 - (NSMutableSet *) knownAppleFailures
   {
   return [LaunchdCollector knownAppleFailures];
-  }
-
-- (NSMutableSet *) knownAppleSignatureFailures
-  {
-  return [LaunchdCollector knownAppleSignatureFailures];
   }
 
 // Singleton accessor for launchd status.
@@ -196,56 +190,7 @@
 // Setup launchd items that are expected because they ship with the OS.
 - (void) setupExpectedItems
   {
-  [self setupOtherAppleFiles];
   [self setupKnownAppleFailures];
-  [self setupKnownAppleSignatureFailures];
-  }
-
-// Setup Apple files files with 3rd party labels.
-- (void) setupOtherAppleFiles
-  {
-  [self.appleLaunchd addObject: @"org.openbsd.ssh-agent.plist"];
-  [self.appleLaunchd addObject: @"bootps.plist"];
-  [self.appleLaunchd addObject: @"com.danga.memcached.plist"];
-  [self.appleLaunchd addObject: @"com.vix.cron.plist"];
-  [self.appleLaunchd addObject: @"exec.plist"];
-  [self.appleLaunchd addObject: @"finger.plist"];
-  [self.appleLaunchd addObject: @"ftp.plist"];
-  [self.appleLaunchd addObject: @"ftp-proxy.plist"];
-  [self.appleLaunchd addObject: @"login.plist"];
-  [self.appleLaunchd addObject: @"ntalk.plist"];
-  [self.appleLaunchd addObject: @"org.apache.httpd.plist"];
-  [self.appleLaunchd addObject: @"org.cups.cups-lpd.plist"];
-  [self.appleLaunchd addObject: @"org.cups.cupsd.plist"];
-  [self.appleLaunchd addObject: @"org.freeradius.radiusd.plist"];
-  [self.appleLaunchd addObject: @"org.isc.named.plist"];
-  [self.appleLaunchd addObject: @"org.net-snmp.snmpd.plist"];
-  [self.appleLaunchd addObject: @"org.ntp.ntpd.plist"];
-  [self.appleLaunchd addObject: @"org.openldap.slapd.plist"];
-  [self.appleLaunchd addObject: @"org.postfix.master.plist"];
-  [self.appleLaunchd addObject: @"org.postfix.newaliases.plist"];
-  [self.appleLaunchd addObject: @"org.postgresql.postgres_alt.plist"];
-  [self.appleLaunchd addObject: @"shell.plist"];
-  [self.appleLaunchd addObject: @"ssh.plist"];
-  [self.appleLaunchd addObject: @"telnet.plist"];
-  [self.appleLaunchd addObject: @"tftp.plist"];
-  [self.appleLaunchd addObject: @"com.apple.appleseed.feedbackhelper"];
-
-  // Snow Leopard.
-  [self.appleLaunchd addObject: @"comsat.plist"];
-  [self.appleLaunchd addObject: @"distccd.plist"];
-  [self.appleLaunchd addObject: @"edu.mit.Kerberos.kadmind.plist"];
-  [self.appleLaunchd addObject: @"edu.mit.Kerberos.krb5kdc.plist"];
-  [self.appleLaunchd addObject: @"nmbd.plist"];
-  [self.appleLaunchd addObject: @"org.amavis.amavisd.plist"];
-  [self.appleLaunchd addObject: @"org.amavis.amavisd_cleanup.plist"];
-  [self.appleLaunchd addObject: @"org.apache.httpd.plist"];
-  [self.appleLaunchd addObject: @"org.x.privileged_startx.plist"];
-  [self.appleLaunchd addObject: @"smbd.plist"];
-  [self.appleLaunchd addObject: @"edu.mit.Kerberos.CCacheServer.plist"];
-  [self.appleLaunchd addObject: @"edu.mit.Kerberos.KerberosAgent.plist"];
-  [self.appleLaunchd addObject: @"org.x.startx.plist"];
-  [self.appleLaunchd addObject: @"org.samba.winbindd.plist"];
   }
 
 // Setup known Apple failures.
@@ -268,175 +213,6 @@
   [self.knownAppleFailures addObject: @"com.apple.suhelperd.plist"];
   [self.knownAppleFailures addObject: @"com.apple.Kerberos.renew.plist"];
   [self.knownAppleFailures addObject: @"org.samba.winbindd.plist"];
-  }
-
-// Setup known Apple signature failures.
-- (void) setupKnownAppleSignatureFailures
-  {
-  // Common to all OS versions.
-  [self.knownAppleSignatureFailures
-    addObject: @"com.apple.configureLocalKDC.plist"];
-  [self.knownAppleSignatureFailures addObject: @"com.apple.efax.plist"];
-  [self.knownAppleSignatureFailures
-    addObject: @"com.apple.FileSyncAgent.sshd.plist"];
-  [self.knownAppleSignatureFailures addObject: @"com.apple.locate.plist"];
-  [self.knownAppleSignatureFailures addObject: @"org.cups.cupsd.plist"];
-  [self.knownAppleSignatureFailures addObject: @"org.ntp.ntpd.plist"];
-  [self.knownAppleSignatureFailures addObject: @"ssh.plist"];
-    
-  switch([[Model model] majorOSVersion])
-    {
-    case kSnowLeopard:
-      [self.knownAppleSignatureFailures
-        addObjectsFromArray: [self knownAppleSignatureFailures1006]];
-      break;
-    case kLion:
-      [self.knownAppleSignatureFailures
-        addObjectsFromArray: [self knownAppleSignatureFailures1007]];
-      break;
-    case kMountainLion:
-      [self.knownAppleSignatureFailures
-        addObjectsFromArray: [self knownAppleSignatureFailures1008]];
-      break;
-    case kMavericks:
-      [self.knownAppleSignatureFailures
-        addObjectsFromArray: [self knownAppleSignatureFailures1009]];
-      break;
-    case kYosemite:
-      [self.knownAppleSignatureFailures
-        addObjectsFromArray: [self knownAppleSignatureFailures1010]];
-      break;
-    case kElCapitan:
-      [self.knownAppleSignatureFailures
-        addObjectsFromArray: [self knownAppleSignatureFailures1011]];
-      break;
-    }
-  }
-
-// Setup known Apple signature failures.
-- (NSArray *) knownAppleSignatureFailures1006
-  {
-  NSMutableArray * failures = [NSMutableArray array];
-
-  [failures addObject: @"com.apple.pcastuploader.plist"];
-  [failures addObject: @"com.apple.RemoteDesktop.plist"];
-  [failures addObject: @"org.x.startx.plist"];
-  [failures addObject: @"com.apple.AppleFileServer.plist"];
-  [failures addObject: @"com.apple.NotificationServer.plist"];
-  [failures addObject: @"com.apple.periodic-daily.plist"];
-  [failures addObject: @"com.apple.periodic-monthly.plist"];
-  [failures addObject: @"com.apple.periodic-weekly.plist"];
-  [failures addObject: @"com.apple.smb.sharepoints.plist"];
-  [failures addObject: @"com.apple.systemkeychain.plist"];
-  [failures addObject: @"org.amavis.amavisd.plist"];
-  [failures addObject: @"org.amavis.amavisd_cleanup.plist"];
-  [failures addObject: @"org.samba.winbindd.plist"];
-
-  return failures;
-  }
-
-// Setup known Apple signature failures.
-- (NSArray *) knownAppleSignatureFailures1007
-  {
-  NSMutableArray * failures = [NSMutableArray array];
-
-  [failures addObject: @"com.apple.AirPortBaseStationAgent.plist"];
-  [failures addObject: @"com.apple.pcastuploader.plist"];
-  [failures addObject: @"com.apple.screensharing.MessagesAgent.plist"];
-  [failures addObject: @"com.apple.xgridd.keepalive.plist"];
-  [failures addObject: @"org.x.startx.plist"];
-  [failures addObject: @"com.apple.AppleFileServer.plist"];
-  [failures addObject: @"com.apple.collabd.podcast-cache-updater.plist"];
-  [failures addObject: @"com.apple.efilogin-helper.plist"];
-  [failures addObject: @"com.apple.emlog.plist"];
-  [failures addObject: @"com.apple.NotificationServer.plist"];
-  [failures addObject: @"com.apple.pcastlibraryd.plist"];
-  [failures addObject: @"com.apple.periodic-daily.plist"];
-  [failures addObject: @"com.apple.periodic-monthly.plist"];
-  [failures addObject: @"com.apple.periodic-weekly.plist"];
-  [failures addObject: @"org.amavis.amavisd.plist"];
-  [failures addObject: @"org.amavis.amavisd_cleanup.plist"];
-  [failures addObject: @"com.apple.SafariNotificationAgent.plist"];
-
-  return failures;
-  }
-
-// Setup known Apple signature failures.
-- (NSArray *) knownAppleSignatureFailures1008
-  {
-  NSMutableArray * failures = [NSMutableArray array];
-
-  [failures addObject: @"com.apple.AirPortBaseStationAgent.plist"];
-  [failures addObject: @"com.apple.emlog.plist"];
-  [failures addObject: @"com.apple.gkreport.plist"];
-  [failures addObject: @"com.apple.periodic-daily.plist"];
-  [failures addObject: @"com.apple.periodic-monthly.plist"];
-  [failures addObject: @"com.apple.periodic-weekly.plist"];
-  [failures addObject: @"org.postgresql.postgres_alt.plist"];
-
-  return failures;
-  }
-
-// Setup known Apple signature failures.
-- (NSArray *) knownAppleSignatureFailures1009
-  {
-  NSMutableArray * failures = [NSMutableArray array];
-
-  [failures addObject: @"com.apple.emlog.plist"];
-  [failures addObject: @"com.apple.gkreport.plist"];
-  [failures addObject: @"com.apple.postgres.plist"];
-  [failures addObject: @"org.apache.httpd.plist"];
-  [failures addObject: @"org.net-snmp.snmpd.plist"];
-
-  return failures;
-  }
-
-// Setup known Apple signature failures.
-- (NSArray *) knownAppleSignatureFailures1010
-  {
-  NSMutableArray * failures = [NSMutableArray array];
-
-  [failures addObject: @"com.apple.Dock.plist"];
-  [failures addObject: @"com.apple.Spotlight.plist"];
-  [failures addObject: @"com.apple.systemprofiler.plist"];
-  [failures addObject: @"com.apple.emlog.plist"];
-  [failures addObject: @"com.apple.gkreport.plist"];
-  [failures addObject: @"com.apple.ManagedClient.enroll.plist"];
-  [failures addObject: @"com.apple.ManagedClient.plist"];
-  [failures addObject: @"com.apple.ManagedClient.startup.plist"];
-  [failures addObject: @"com.apple.postgres.plist"];
-  [failures addObject: @"org.apache.httpd.plist"];
-  [failures addObject: @"org.net-snmp.snmpd.plist"];
-
-  return failures;
-  }
-
-// Setup known Apple signature failures.
-- (NSArray *) knownAppleSignatureFailures1011
-  {
-  NSMutableArray * failures = [NSMutableArray array];
- 
-  [failures addObject: @"com.apple.emlog.plist"];
-  [failures addObject: @"com.apple.gkreport.plist"];
-  [failures addObject: @"org.apache.httpd.plist"];
-  [failures addObject: @"org.net-snmp.snmpd.plist"];
-  [failures addObject: @"org.postfix.newaliases.plist"];
-  [failures addObject: @"com.apple.airplaydiagnostics.server.mac.plist"];
-  [failures addObject: @"com.apple.photostream-agent"];
-  [failures addObject: @"com.apple.MRTd.plist"];
-  [failures addObject: @"com.apple.MRTa.plist"];
-  [failures addObject: @"com.apple.java.InstallOnDemand.plist"];
-  [failures addObject: @"com.apple.FTCleanup.plist"];
-  [failures addObject: @"com.apple.Finder.plist"];
-  [failures addObject: @"com.apple.FollowUpUI.plist"];
-  [failures addObject: @"com.apple.ScreenReaderUIServer.plist"];
-  [failures addObject: @"com.apple.powerchime.plist"];
-  [failures addObject: @"com.apple.quicklook.32bit.plist"];
-  [failures addObject: @"com.apple.quicklook.plist"];
-  [failures addObject: @"com.apple.quicklook.ui.helper.plist"];
-  [failures addObject: @"com.apple.xpc.uscwoap.plist"];
-
-  return failures;
   }
 
 #pragma mark - Collection
@@ -490,11 +266,6 @@
     [NSMutableDictionary
       dictionaryWithDictionary: [self collectJobStatus: path]];
     
-  // See if the executable is valid.
-  // Don't bother with this.
-  //if(![self isValidExecutable: executable])
-  //  jobStatus = kStatusInvalid;
-    
   // Set attributes.
   [info setObject: path forKey: kPath];
   
@@ -507,20 +278,43 @@
   [self setDetailsURL: info];
   [self setExecutable: info];
   
-  [info
-    setObject: [self getSupportURLFor: info name: nil bundleID: path]
-    forKey: kSupportURL];
-  
   [[[Model model] launchdFiles] setObject: info forKey: path];
 
-  if([[info objectForKey: kApple] boolValue])
-    return [self checkAppleSignature: info];
+  if([[[Model model] appleLaunchd] objectForKey: path])
+    {
+    [info setObject: [NSNumber numberWithBool: YES] forKey: kApple];
+    
+    [self checkAppleSignature: info];
+    }
   else
+    {
+    // Check for a new Apple file.
+    NSString * label = [info objectForKey: kLabel];
+    
+    if([label hasPrefix: @"com.apple."])
+      {
+      [self checkAppleSignature: info];
+      
+      NSString * signature = [info objectForKey: kSignature];
+      
+      if([signature isEqualToString: kSignatureApple])
+        {
+        [info setObject: [NSNumber numberWithBool: YES] forKey: kApple];
+        
+        return info;
+        }
+      }
+      
+    [info
+      setObject: [self getSupportURLFor: info name: nil bundleID: path]
+      forKey: kSupportURL];
+    
     [self checkSignature: info];
     
-  // See if this is a file I know about, either good or bad.
-  [self checkForKnownFile: path info: info];
-
+    // See if this is a file I know about, either good or bad.
+    [self checkForKnownFile: path info: info];
+    }
+    
   return info;
   }
 
@@ -618,10 +412,6 @@
   {
   NSString * bundleID = [path lastPathComponent];
   
-  // If the file is from Apple, the user is already on ASC.
-  if([[info objectForKey: kApple] boolValue])
-    return @"";
-    
   // See if I can construct a real web host.
   NSString * host = [self convertBundleIdToHost: bundleID];
   
@@ -711,7 +501,7 @@
         {
         NSString * argument = [arguments objectAtIndex: 0];
         
-        if(![argument isEqualToString: [program lastPathComponent]])
+        if([command count] == 0)
           [command addObject: argument];
           
         for(int i = 1; i < arguments.count; ++i)
@@ -727,11 +517,11 @@
   {
   NSString * executable = [command firstObject];
   
+  if(![executable hasPrefix: @"/"])
+    executable = [self resolveRelativeExecutable: executable];
+    
   BOOL sandboxExec = NO;
   
-  if([executable isEqualToString: @"sandbox-exec"])
-    sandboxExec = YES;
-
   if([executable isEqualToString: @"/usr/bin/sandbox-exec"])
     sandboxExec = YES;
     
@@ -762,8 +552,37 @@
   return executable;
   }
 
+// Resolve a relative executable as per launchd.plist man page.
+- (NSString *) resolveRelativeExecutable: (NSString *) executable
+  {
+  NSString * absoluteExecutable =
+    [@"/usr/bin" stringByAppendingPathComponent: executable];
+    
+  if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
+    return absoluteExecutable;
+    
+  absoluteExecutable = [@"/bin" stringByAppendingPathComponent: executable];
+    
+  if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
+    return absoluteExecutable;
+
+  absoluteExecutable =
+    [@"/usr/sbin" stringByAppendingPathComponent: executable];
+    
+  if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
+    return absoluteExecutable;
+    
+  absoluteExecutable =
+    [@"/sbin" stringByAppendingPathComponent: executable];
+    
+  if([[NSFileManager defaultManager] fileExistsAtPath: absoluteExecutable])
+    return absoluteExecutable;
+    
+  return executable;
+  }
+  
 // Collect the signagure of an Apple launchd item.
-- (NSMutableDictionary *) checkAppleSignature: (NSMutableDictionary *) info
+- (void) checkAppleSignature: (NSMutableDictionary *) info
   {
   if(![info objectForKey: kSignature])
     {
@@ -774,8 +593,6 @@
         setObject: [Utilities checkAppleExecutable: executable]
         forKey: kSignature];
     }
-    
-  return info;
   }
 
 // Collect the signagure of a launchd item.
@@ -988,7 +805,7 @@
 
   [self updateAppleCounts: info];
   
-  NSString * signatureStatus = [info objectForKey: kSignature];
+  NSString * signature = [info objectForKey: kSignature];
   NSNumber * ignore = [NSNumber numberWithBool: hideAppleTasks];
     
   NSString * label = [info objectForKey: kLabel];
@@ -1015,16 +832,8 @@
       return NO;
     }
     
-  else if([signatureStatus isEqualToString: kSignatureValid])
-    {
-    [status setObject: ignore forKey: kIgnored];
-    
-    if(hideAppleTasks)
-      return NO;
-    }
-    
-  // Should I ignore this failure?
-  else if([self ignoreInvalidSignatures: file])
+  // Does the file have an expected signature
+  else if([self hasExpectedSignature: path signature: signature])
     {
     [status setObject: ignore forKey: kIgnored];
 
@@ -1120,43 +929,24 @@
   return [self.knownAppleFailures containsObject: file];
   }
 
-// Should I ignore these invalid signatures?
-- (bool) ignoreInvalidSignatures: (NSString *) file
+// Does this file have the expected signature?
+- (bool) hasExpectedSignature: (NSString *) file
+  signature: (NSString *) signature
   {
-  if(![[Model model] ignoreKnownAppleFailures])
-    return NO;
+  if(![[Model model] showSignatureFailures])
+    return YES;
     
-  switch([[Model model] majorOSVersion])
+  NSDictionary * info = [[[Model model] appleLaunchd] objectForKey: file];
+  
+  if(info)
     {
-    case kSnowLeopard:
-      break;
-    case kLion:
-      break;
-    case kMountainLion:
-      break;
-    case kMavericks:
-      break;
-    case kYosemite:
-      if([file hasPrefix: @"com.apple.mail"])
-        return YES;
-      else if([file hasPrefix: @"com.apple.Safari"])
-        return YES;
-      else if([file hasPrefix: @"com.apple.ActivityMonitor"])
-        return YES;
-      break;
-    case kElCapitan:
-      break;
+    NSString * expectedSignature = [info objectForKey: kSignature];
+    
+    if([expectedSignature length] > 0)
+      return [signature isEqualToString: expectedSignature];
     }
     
-  // Xcode is too big to even check unless you have an SSD.
-  if([file hasPrefix: @"com.apple.dt.Xcode"])
-    return YES;
-    
-  // No point in checking what always fails.
-  if([file hasPrefix: @"com.apple.photostream-agent"])
-    return YES;
-
-  return [self.knownAppleSignatureFailures containsObject: file];
+  return NO;
   }
 
 // Update a funky new dynamic task.
@@ -1348,16 +1138,6 @@
     [extra
       appendString:
         [NSString stringWithFormat: @" (%@)", modificationDateString]];
-
-  // Check for a duplicate launchd label.
-  if([[info objectForKey: kStatusDuplicate] boolValue])
-    [extra
-      appendString: NSLocalizedString(@" - Duplicate label! ", NULL)
-      attributes:
-        @{
-          NSForegroundColorAttributeName : [[Utilities shared] red],
-          NSFontAttributeName : [[Utilities shared] boldFont]
-        }];
 
   [extra autorelease];
   

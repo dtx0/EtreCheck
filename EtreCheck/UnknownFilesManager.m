@@ -14,6 +14,7 @@
 
 #define kRemove @"remove"
 #define kWhitelist @"whitelist"
+#define kSigned @"signed"
 #define kPath @"path"
 
 #define kRemoveColumnIndex 0
@@ -139,12 +140,23 @@
       }
     }
     
-  NSArray * adwareFiles =
+  for(NSString * path in [[Model model] unknownFiles])
+    {
+    NSMutableDictionary * item = [NSMutableDictionary new];
+    
+    [item setObject: path forKey: kPath];
+    
+    [filesToRemove setObject: item forKey: path];
+    
+    [item release];
+    }
+
+  NSArray * unknownFiles =
     [[filesToRemove allKeys] sortedArrayUsingSelector: @selector(compare:)];
   
-  for(NSString * adwareFile in adwareFiles)
+  for(NSString * unknownFile in unknownFiles)
     {
-    NSMutableDictionary * item = [filesToRemove objectForKey: adwareFile];
+    NSMutableDictionary * item = [filesToRemove objectForKey: unknownFile];
     
     if(item)
       [self.filesToRemove addObject: item];
@@ -180,11 +192,17 @@
       else
         [filesToKeep addObject: item];
       
+    [self willChangeValueForKey: @"canRemoveFiles"];
+  
     [super uninstallItems: filesToRemove];
     
     [self.filesToRemove removeAllObjects];
     [self.filesToRemove addObjectsFromArray: filesToKeep];
     
+    [self didChangeValueForKey: @"canRemoveFiles"];
+
+    [self.tableView reloadData];
+
     [filesToKeep release];
     [filesToRemove release];
     }
@@ -203,15 +221,9 @@
     else
       [filesNotRemoved addObject: item];
   
-  [self willChangeValueForKey: @"canRemoveFiles"];
-  
   [files setArray: filesNotRemoved];
   
   [filesNotRemoved release];
-  
-  [self.tableView reloadData];
-
-  [self didChangeValueForKey: @"canRemoveFiles"];
   }
 
 // Contact Etresoft to add to whitelist.
@@ -233,14 +245,14 @@
       
     NSDictionary * info = [item objectForKey: kLaunchdTask];
     
-    if(!info)
-      continue;
-      
     NSString * cmd =
       [path length] > 0
         ? [info objectForKey: path]
         : @"";
     
+    if(!cmd)
+      cmd = @"";
+      
     path =
       [path stringByReplacingOccurrencesOfString: @"\"" withString: @"'"];
       
@@ -256,6 +268,10 @@
     [json
       appendFormat: @"\"known\":\"%@\",", [item objectForKey: kWhitelist]];
     
+    [json
+      appendFormat:
+        @"\"signature\":\"%@\",", [item objectForKey: kSignature]];
+
     [json appendFormat: @"\"name\":\"%@\",", name];
     [json appendFormat: @"\"path\":\"%@\",", path];
     [json appendFormat: @"\"cmd\":\"%@\"", cmd];
@@ -384,22 +400,54 @@
   return self.filesToRemove.count;
   }
 
-- (id) tableView: (NSTableView *) aTableView
-  objectValueForTableColumn: (NSTableColumn *) aTableColumn
-  row: (NSInteger) rowIndex
+- (id) tableView: (NSTableView *) tableView
+  objectValueForTableColumn: (NSTableColumn *) tableColumn
+  row: (NSInteger) row
   {
-  if(rowIndex >= self.filesToRemove.count)
+  if(row >= self.filesToRemove.count)
     return nil;
 
-  NSMutableDictionary * item = [self.filesToRemove objectAtIndex: rowIndex];
+  NSMutableDictionary * item = [self.filesToRemove objectAtIndex: row];
   
-  if([[aTableColumn identifier] isEqualToString: kWhitelist])
+  NSDictionary * info = [item objectForKey: kLaunchdTask];
+    
+  NSString * signature = [info objectForKey: kSignature];
+
+  BOOL isSigned = NO;
+  
+  if([signature isEqualToString: kSignatureApple])
+    isSigned = YES;
+  else if([signature isEqualToString: kSignatureValid])
+    isSigned = YES;
+
+  if([[tableColumn identifier] isEqualToString: kWhitelist])
+    {
+    NSButtonCell * cell = [tableColumn dataCellForRow: row];
+    
+    [cell setEnabled: !isSigned];
+
+    if(isSigned)
+      [item setObject: [NSNumber numberWithBool: YES] forKey: kWhitelist];
+      
     return [item objectForKey: kWhitelist];
-
-  if([[aTableColumn identifier] isEqualToString: kRemove])
+    }
+    
+  if([[tableColumn identifier] isEqualToString: kRemove])
+    {
+    NSButtonCell * cell = [tableColumn dataCellForRow: row];
+    
+    [cell setEnabled: !isSigned];
+      
+    if(isSigned)
+      [item setObject: [NSNumber numberWithBool: NO] forKey: kRemove];
+      
     return [item objectForKey: kRemove];
-
-  if([[aTableColumn identifier] isEqualToString: kPath])
+    }
+    
+  if([[tableColumn identifier] isEqualToString: kSigned])
+    return [NSNumber numberWithBool: isSigned];
+    
+  if([[tableColumn identifier] isEqualToString: kPath])
     return [item objectForKey: kPath];
     
   return nil;

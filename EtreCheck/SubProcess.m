@@ -5,7 +5,8 @@
  **********************************************************************/
 
 #import "SubProcess.h"
-#import "DispatchSource.h"
+#import <unistd.h>
+#include <sys/select.h>
 
 @implementation SubProcess
 
@@ -22,6 +23,9 @@
     {
     myTimeout = 30;
     
+    myStandardOutput = [NSMutableData new];
+    myStandardError = [NSMutableData new];
+  
     return self;
     }
     
@@ -40,170 +44,159 @@
 // Execute an external program and return the results.
 - (BOOL) execute: (NSString *) program arguments: (NSArray *) args
   {
-  //NSLog(@"running: %@ %@", program, args);
+  const char * path = [program fileSystemRepresentation];
   
-  myStandardOutput = [[NSMutableData alloc] init];
-  myStandardError = [[NSMutableData alloc] init];
+  NSRange range = NSMakeRange(0, [args count]);
   
-  // Create pipes for handling communication.
-  NSPipe * outputPipe = [NSPipe new];
-  NSPipe * errorPipe = [NSPipe new];
-  
-  // Create the task itself.
-  NSTask * task = [NSTask new];
-  
-  // Send all task output to the pipe.
-  [task setStandardOutput: outputPipe];
-  [task setStandardError: errorPipe];
-  
-  [task setLaunchPath: program];
-
-  if([args count])
-    [task setArguments: args];
-  
-  [task setCurrentDirectoryPath: @"/"];
-    
-  dispatch_group_t group = dispatch_group_create();
-
-  // Run the task.
-  [task launch];
-    
-  int taskStdOut =
-    [[[task standardOutput] fileHandleForReading] fileDescriptor];
-  int taskStdErr =
-    [[[task standardError] fileHandleForReading] fileDescriptor];
-  
-  dispatch_group_enter(group);
-
-  fcntl(
-    [[[task standardOutput] fileHandleForReading] fileDescriptor],
-    F_SETFL,
-    O_NONBLOCK);
-  
-  DispatchSource * output = [[DispatchSource alloc] init];
-  
-  output.type = DISPATCH_SOURCE_TYPE_READ;
-  output.handle = taskStdOut;
-  output.eventHandler =
-    ^{
-      size_t estimated = dispatch_source_get_data(output.source) + 1;
-      
-      // Read the data into a text buffer.
-      char * buffer = (char *)malloc(estimated);
-      
-      if(buffer)
-        {
-        ssize_t actual = read(taskStdOut, buffer, (estimated));
-        
-        //NSLog(@"read %zd bytes on stdout", actual);
-        
-        if(!actual)
-          dispatch_source_cancel(output.source);
-        else
-          [self.standardOutput appendBytes: buffer length: actual];
+  const char ** argv = malloc(sizeof(char *) * (range.length + 2));
  
-        // Release the buffer when done.
-        free(buffer);
-        }
-    };
-  output.cancelHandler =
-    ^{
-      close(taskStdOut);
-      
-      dispatch_group_leave(group);
-    };
-
-  dispatch_group_enter(group);
-
-  fcntl(
-    [[[task standardError] fileHandleForReading] fileDescriptor],
-    F_SETFL,
-    O_NONBLOCK);
-
-  DispatchSource * error = [[DispatchSource alloc] init];
+  NSUInteger i = 0;
   
-  error.type = DISPATCH_SOURCE_TYPE_READ;
-  error.handle = taskStdErr;
-  error.eventHandler =
-    ^{
-      size_t estimated = dispatch_source_get_data(error.source) + 1;
-      
-      // Read the data into a text buffer.
-      char * buffer = (char *)malloc(estimated);
-      
-      if(buffer)
-        {
-        ssize_t actual = read(taskStdErr, buffer, (estimated));
-        
-        //NSLog(@"read %zd bytes on stderr", actual);
-        
-        if(!actual)
-          dispatch_source_cancel(error.source);
-        else
-          [self.standardError appendBytes: buffer length: actual];
- 
-        // Release the buffer when done.
-        free(buffer);
-        }
-    };
-  error.cancelHandler =
-    ^{
-      close(taskStdErr);
-
-      dispatch_group_leave(group);
-    };
-
-  dispatch_group_enter(group);
+  argv[i++] = path;
   
-  DispatchSource * proc = [[DispatchSource alloc] init];
+  for(NSString * arg in args)
+    argv[i++] = [arg UTF8String];
+    
+  argv[i] = 0;
   
-  proc.type = DISPATCH_SOURCE_TYPE_PROC;
-  proc.mask = DISPATCH_PROC_EXIT;
-  proc.handle = [task processIdentifier];
-  proc.eventHandler =
-    ^{
-      //NSLog(@"process ended");
-      dispatch_group_leave(group);
-    };
-
-  [proc enable];
-  [output enable];
-  [error enable];
-
-  int64_t timeout = self.timeout * NSEC_PER_SEC;
-
-  dispatch_time_t soon =
-    dispatch_time(DISPATCH_TIME_NOW, timeout);
-
-  long timedout = dispatch_group_wait(group, soon);
+  int outputPipe[2];
+  int errorPipe[2];
   
-  if(timedout)
+  if(pipe(outputPipe) == -1)
+    return NO;
+
+  if(pipe(errorPipe) == -1)
     {
-    [task terminate];
-    
-    self.timedout = YES;
+    close(outputPipe[0]);
+    close(outputPipe[1]);
+
+    return NO;
     }
     
-  dispatch_release(group);
+  pid_t pid = fork();
   
-  if(!self.timedout)
+  if(pid == -1)
     {
-    if([task isRunning])
-      myResult = 0;
+    close(outputPipe[0]);
+    close(outputPipe[1]);
+
+    close(errorPipe[0]);
+    close(errorPipe[1]);
+
+    free(argv);
+  
+    return NO;
+    }
+  
+  // Child.
+  if(pid == 0)
+    {
+    close(outputPipe[0]);
+    close(errorPipe[0]);
+
+    // They say that dup2 could be interrupted by a signal, so this must
+    // be done in a loop.
+    while((dup2(outputPipe[1], STDOUT_FILENO) == -1) && (errno == EINTR))
+      {
+      }
+      
+    while((dup2(errorPipe[1], STDERR_FILENO) == -1) && (errno == EINTR))
+      {
+      }
+
+    close(outputPipe[1]);
+    close(errorPipe[1]);
+
+    execv(path, (char * const *)argv);
+    
+    exit(1);
+    }
+    
+  free(argv);
+  
+  close(outputPipe[1]);
+  close(errorPipe[1]);
+
+  fcntl(outputPipe[0], F_SETFL, O_NONBLOCK);
+  fcntl(errorPipe[0], F_SETFL, O_NONBLOCK);
+
+  fd_set fds;
+  int nfds;
+    
+  size_t bufferSize = 65536;
+  char * buffer = (char *)malloc(bufferSize);
+  
+  bool stdoutOpen = YES;
+  bool stderrOpen = YES;
+  
+  while(stdoutOpen || stderrOpen)
+    {
+    FD_ZERO(& fds);
+    
+    if(stdoutOpen)
+      {
+      FD_SET(outputPipe[0], & fds);
+      
+      nfds = outputPipe[0] + 1;
+      }
+      
+    if(stderrOpen)
+      {
+      FD_SET(errorPipe[0], & fds);
+      
+      if(stdoutOpen && (outputPipe[0] > errorPipe[0]))
+        nfds = outputPipe[0] + 1;
+      else
+        nfds = errorPipe[0] + 1;
+      }
+    
+    struct timeval tv;
+
+    tv.tv_sec = myTimeout;
+    tv.tv_usec = 0;
+
+    int result = select(nfds, & fds, NULL, NULL, & tv);
+
+    if(result == -1)
+      break;
+      
+    else if(result == 0)
+      {
+      myTimedout = YES;
+      break;
+      }
+      
     else
-      myResult = [task terminationStatus];
+      {
+      if(FD_ISSET(outputPipe[0], & fds))
+        {
+        ssize_t amount = read(outputPipe[0], buffer, bufferSize);
+        
+        if(amount < 1)
+          stdoutOpen = NO;
+        else
+          [myStandardOutput appendBytes: buffer length: amount];
+        }
+        
+      if(FD_ISSET(errorPipe[0], & fds))
+        {
+        ssize_t amount = read(errorPipe[0], buffer, bufferSize);
+        
+        if(amount < 1)
+          stderrOpen = NO;
+        else
+          [myStandardError appendBytes: buffer length: amount];
+        }
+      }
     }
     
-  [proc stop];
-  [output stop];
-  [error stop];
-  
-  [task release];
-  [errorPipe release];
-  [outputPipe release];
+  close(outputPipe[0]);
+  close(errorPipe[0]);
 
-  //NSLog(@"done running: %@ %@", program, args);
+  free(buffer);
   
+  waitpid(pid, & myResult, 0);
+    
   return !self.timedout;
   }
 

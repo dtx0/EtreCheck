@@ -48,18 +48,20 @@
 - (void) printUnknownFiles
   {
   NSDictionary * unknownLaunchdFiles = [[Model model] unknownLaunchdFiles];
+  NSArray * unknownFiles = [[Model model] unknownFiles];
   
-  NSUInteger unknownFileCount = [unknownLaunchdFiles count];
+  NSUInteger unknownFileCount =
+    [unknownLaunchdFiles count] + [unknownFiles count];
   
   if(unknownFileCount > 0)
     {
     [self.result appendAttributedString: [self buildTitle]];
     
-    NSArray * sortedUnknownFiles =
+    NSArray * sortedUnknownLaunchdFiles =
       [[unknownLaunchdFiles allKeys]
         sortedArrayUsingSelector: @selector(compare:)];
       
-    [sortedUnknownFiles
+    [sortedUnknownLaunchdFiles
       enumerateObjectsUsingBlock:
         ^(id obj, NSUInteger idx, BOOL * stop)
           {
@@ -71,17 +73,29 @@
 
           NSDictionary * info = [unknownLaunchdFiles objectForKey: obj];
           
-          NSString * cmd = [info objectForKey: kExecutable];
-          
-          if([cmd length] > 0)
-            {
-            [self.result appendString: @"\n        "];
-            [self.result appendString: [Utilities sanitizeFilename: cmd]];
-            }
-
-          [self.result appendString: @"\n"];
+          [self.result
+            appendString:
+              [NSString
+                stringWithFormat:
+                  @"\n        %@\n",
+                  [Utilities
+                    formatExecutable: [info objectForKey: kCommand]]]];
           }];
       
+    NSArray * sortedUnknownFiles =
+      [unknownFiles sortedArrayUsingSelector: @selector(compare:)];
+      
+    [sortedUnknownFiles
+      enumerateObjectsUsingBlock:
+        ^(id obj, NSUInteger idx, BOOL * stop)
+          {
+          [self.result
+            appendString:
+              [NSString
+                stringWithFormat:
+                  @"    %@\n", [Utilities sanitizeFilename: obj]]];
+          }];
+
     NSString * message =
       TTTLocalizedPluralString(unknownFileCount, @"unknown file", NULL);
 
@@ -95,7 +109,8 @@
           NSFontAttributeName : [[Utilities shared] boldFont]
         }];
     
-    NSAttributedString * checkLink = [self generateCheckFilesLink: @"files"];
+    NSAttributedString * checkLink =
+      [self generateCheckFilesLink: @"files"];
 
     if(checkLink)
       {

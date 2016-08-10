@@ -177,7 +177,9 @@
     {
     NSString * status = [self checkRootlessStatus];
   
-    if(![status isEqualToString: @"enabled"])
+    if([status isEqualToString: @"enabled"])
+      [[Model model] setSIP: YES];
+    else
       [otherModificiations
         addObject:
           [[[NSMutableAttributedString alloc]

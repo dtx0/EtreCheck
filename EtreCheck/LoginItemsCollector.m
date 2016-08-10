@@ -51,7 +51,8 @@
     if([self printLoginItem: loginItem count: count])
       ++count;
     
-  [self.result appendCR];
+  if(count > 0)
+    [self.result appendCR];
 
   dispatch_semaphore_signal(self.complete);
   }

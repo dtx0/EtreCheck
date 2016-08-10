@@ -216,15 +216,12 @@
       return;
       }
       
-    [status
-      setObject: [Utilities checkAppleExecutable: executable]
-      forKey: kSignature];
+    NSString * signature = [Utilities checkAppleExecutable: executable];
     
-    if([[status objectForKey: kSignature] isEqualToString: kSignatureValid])
-      [status setObject: ignore forKey: kIgnored];
-      
+    [status setObject: signature forKey: kSignature];
+    
     // Should I ignore this failure?
-    if([self ignoreInvalidSignatures: label])
+    if([self hasExpectedSignature: label signature: signature])
       [status setObject: ignore forKey: kIgnored];
     }
   else
@@ -315,8 +312,11 @@
 // This area needs more relaxed rules because Apple hides this information.
 - (bool) ignoreTask: (NSString *) label
   {
-  if([label hasPrefix: @"com.apple."])
+  if([[[Model model] appleLaunchdByLabel] objectForKey: label] != nil)
     return YES;
+    
+  //if([label hasPrefix: @"com.apple."])
+  //  return YES;
     
   if([[Model model] majorOSVersion] < kYosemite)
     {
@@ -339,6 +339,22 @@
         return YES;
     }
 
+  return NO;
+  }
+
+// Does this file have the expected signature?
+- (bool) hasExpectedSignature: (NSString *) label
+  signature: (NSString *) signature
+  {
+  if(![[Model model] showSignatureFailures])
+    return YES;
+    
+  NSString * expectedSignature =
+    [[[Model model] appleSoftware] objectForKey: label];
+  
+  if([expectedSignature length] > 0)
+    return [signature isEqualToString: expectedSignature];
+    
   return NO;
   }
 

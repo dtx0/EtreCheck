@@ -137,15 +137,15 @@
   {
   myGreen =
     [NSColor
-      colorWithCalibratedRed: 0.2f green: 0.5f blue: 0.2f alpha: 0.0f];
+      colorWithCalibratedRed: 0.2f green: 0.5f blue: 0.2f alpha: 1.0f];
     
   myBlue =
     [NSColor
-      colorWithCalibratedRed: 0.0f green: 0.0f blue: 0.6f alpha: 0.0f];
+      colorWithCalibratedRed: 0.0f green: 0.0f blue: 0.6f alpha: 1.0f];
 
   myGray =
     [NSColor
-      colorWithCalibratedRed: 0.4f green: 0.4f blue: 0.4f alpha: 0.0f];
+      colorWithCalibratedRed: 0.4f green: 0.4f blue: 0.4f alpha: 1.0f];
 
   myRed = [NSColor redColor];
   
@@ -700,91 +700,8 @@
   if(![path length])
     return kExecutableMissing;
     
-  BOOL shell = NO;
-  
-  if([path hasPrefix: @"/usr/bin/"])
-    {
-    if([path isEqualToString: @"/usr/bin/tclsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/usr/bin/perl"])
-      shell = YES;
-
-    if([path isEqualToString: @"/usr/bin/ruby"])
-      shell = YES;
-
-    if([path hasPrefix: @"/usr/bin/python"])
-      shell = YES;
-    }
-  else if([path hasPrefix: @"/bin/"])
-    {
-    if([path isEqualToString: @"/bin/sh"])
-      shell = YES;
-      
-    if([path isEqualToString: @"/bin/csh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/bash"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/zsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/tsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/ksh"])
-      shell = YES;
-    }
-    
   // Get the app path.
   path = [Utilities resolveBundlePath: path];
-  
-  // A valid Apple signature should be returned as "Apple".
-  NSString * signature = [Utilities checkAppleExecutable: path force: YES];
-  
-  // Should be...
-  if(![signature isEqualToString: kSignatureApple])
-    {
-    // I will accept a "Success" too as that still comes from Apple.
-    NSString * expectedSignature =
-      [[Model model] expectedAppleSignature: path];
-
-    if(signature && expectedSignature)
-      {
-      // If this is the signature I expect and it is valid, the return it
-      // as Apple.
-      if([signature isEqualToString: expectedSignature])
-        {
-        if([signature isEqualToString: kSignatureValid])
-          signature = kSignatureValid;
-        
-        // Otherwise, it is a failure. Should I ignore that anyway?
-        if([[Model model] ignoreKnownAppleFailures])
-          signature = kSignatureValid;
-        }
-      }
-      
-    if(shell && [signature isEqualToString: kSignatureValid])
-      return kShell;
-      
-    return signature;
-    }
-    
-  if(shell && [signature isEqualToString: kSignatureApple])
-    return kShell;
-
-  return kSignatureValid;
-  }
-
-// Force verification of an Apple executable.
-+ (NSString *) checkAppleExecutable: (NSString *) path force: (BOOL) force
-  {
-  if(!force)
-    return kSignatureValid;
-   
-  if([path length] == 0)
-    return kExecutableMissing;
     
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
@@ -828,14 +745,14 @@
     result =
       [Utilities parseSignature: subProcess.standardError forPath: path];
         
+    if([result isEqualToString: kSignatureValid])
+      result = kSignatureApple;
+    
     [[[Utilities shared] signatureCache] setObject: result forKey: path];
     }
     
   [subProcess release];
   
-  if([result isEqualToString: kSignatureValid])
-    return kSignatureApple;
-    
   return result;
   }
 
@@ -845,6 +762,46 @@
   if([path length] == 0)
     return kExecutableMissing;
     
+  BOOL shell = NO;
+  
+  if([path hasPrefix: @"/usr/bin/"])
+    {
+    if([path isEqualToString: @"/usr/bin/tclsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/usr/bin/perl"])
+      shell = YES;
+
+    if([path isEqualToString: @"/usr/bin/ruby"])
+      shell = YES;
+
+    if([path hasPrefix: @"/usr/bin/python"])
+      shell = YES;
+    }
+  else if([path hasPrefix: @"/bin/"])
+    {
+    if([path isEqualToString: @"/bin/sh"])
+      shell = YES;
+      
+    if([path isEqualToString: @"/bin/csh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/bash"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/zsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/tsh"])
+      shell = YES;
+
+    if([path isEqualToString: @"/bin/ksh"])
+      shell = YES;
+    }
+
+  if(shell)
+    return kShell;
+
   NSString * result =
     [[[Utilities shared] signatureCache] objectForKey: path];
   
@@ -1148,12 +1105,14 @@
     // Build the statements I will need.
     [appleScriptStatements
       addObjectsFromArray:
-        [Utilities buildDeleteStatements: tasksToBeDeleted]];
+        [Utilities buildDeleteStatementsForTasks: tasksToBeDeleted]];
     
     // Execute the statements.
     [Utilities executeAppleScriptStatements: appleScriptStatements];
     
     [appleScriptStatements release];
+
+    [Utilities saveDeletedTasks: tasks];
     }
   }
 
@@ -1271,15 +1230,9 @@
   }
 
 // Build an AppleScript statement to delete a list of launchd tasks.
-+ (NSArray *) buildDeleteStatements: (NSArray *) tasks
++ (NSArray *) buildDeleteStatementsForTasks: (NSArray *) tasks
   {
-  NSMutableArray * statements = [NSMutableArray array];
-  
-  NSMutableString * source = [NSMutableString string];
-  
-  [source appendString: @"set posixFiles to {"];
-  
-  int i = 0;
+  NSMutableArray * files = [NSMutableArray array];
   
   NSArray * tasksToBeDeleted =
     [Utilities buildListOfTasksToBeDeleted: tasks];
@@ -1289,14 +1242,31 @@
     NSString * path = [info objectForKey: kPath];
     
     if([path length] > 0)
-      {
-      if(i)
-        [source appendString: @","];
-        
-      [source appendFormat: @"POSIX file \"%@\"", path];
+      [files addObject: path];
+    }
+    
+  return [Utilities buildDeleteStatements: files];
+  }
+
+// Build an AppleScript statement to delete a list of launchd tasks.
++ (NSArray *) buildDeleteStatements: (NSArray *) paths
+  {
+  NSMutableArray * statements = [NSMutableArray array];
+  
+  NSMutableString * source = [NSMutableString string];
+  
+  [source appendString: @"set posixFiles to {"];
+  
+  int i = 0;
+  
+  for(NSString * path in paths)
+    {
+    if(i)
+      [source appendString: @","];
       
-      ++i;
-      }
+    [source appendFormat: @"POSIX file \"%@\"", path];
+    
+    ++i;
     }
 
   [source appendString: @"}"];
@@ -1358,10 +1328,17 @@
   [Utilities executeAppleScriptStatements: appleScriptStatements];
   
   [appleScriptStatements release];
+  
+  [Utilities saveDeletedFiles: files];
+  }
 
+// Save deleted files in preferences.
++ (void) saveDeletedFiles: (NSArray *) files
+  {
   // Save deleted files.
   NSArray * currentDeletedFiles =
-    [[NSUserDefaults standardUserDefaults] objectForKey: @"deletedFiles"];
+    [[NSUserDefaults standardUserDefaults]
+      objectForKey: @"deletedfiles"];
     
   NSMutableArray * deletedFiles = [NSMutableArray array];
   
@@ -1375,7 +1352,7 @@
       {
       NSDate * date = [entry objectForKey: @"date"];
       
-      if([then compare: date] == NSOrderedDescending)
+      if([then compare: date] == NSOrderedAscending)
         [deletedFiles addObject: entry];
       }
     }
@@ -1386,7 +1363,7 @@
   for(NSString * path in files)
     {
     NSDictionary * entry =
-      [NSMutableDictionary
+      [NSDictionary
         dictionaryWithObjectsAndKeys:
           now, @"date",
           path, @"file",
@@ -1397,6 +1374,22 @@
 
   [[NSUserDefaults standardUserDefaults]
     setObject: deletedFiles forKey: @"deletedfiles"];
+  }
+
+// Save deleted launchd tasks in preferences.
++ (void) saveDeletedTasks: (NSArray *) tasks
+  {
+  NSMutableArray * files = [NSMutableArray array];
+  
+  for(NSDictionary * info in tasks)
+    {
+    NSString * path = [info objectForKey: kPath];
+    
+    if([path length])
+      [files addObject: path];
+    }
+  
+  [Utilities saveDeletedFiles: files];
   }
 
 // Restart the machine.
