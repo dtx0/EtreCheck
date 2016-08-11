@@ -129,8 +129,9 @@
         {
         NSString * path = [foundExtension objectForKey: @"spext_path"];
         
-        if(path)
-          [knownExtensions setObject: foundExtension forKey: path];
+        if([path length] > 0)
+          if([[NSFileManager defaultManager] fileExistsAtPath: path])
+            [knownExtensions setObject: foundExtension forKey: path];
         }
       
       [self checkForAppleExtensions: knownExtensions];
