@@ -1228,7 +1228,9 @@
       }
     else if([[Model model] showSignatureFailures])
       {
-      if([signature isEqualToString: kNotSigned])
+      if([signature isEqualToString: kSignatureApple])
+        message = @"";
+      else if([signature isEqualToString: kNotSigned])
         message = NSLocalizedString(@" - No signature!", NULL);
       else if([signature isEqualToString: kShell])
         message = NSLocalizedString(@" - Shell script!", NULL);
