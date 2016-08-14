@@ -85,6 +85,7 @@
     <string>cn.com.zte.4G.zRestoreFiles.plist</string>
     <string>cn.com.zte.DelMonitor.plist</string>
     <string>cn.com.zte.MessageCenter.plist</string>
+    <string>cn.com.zte.mobile.usbswapper.plist</string>
     <string>cn.com.zte.PPPMonitor.plist</string>
     <string>cn.com.zte.usbfilter.plist</string>
     <string>cn.com.zte.usbswapper.plist</string>
@@ -2008,6 +2009,7 @@
     <string>com.pretz.yarg.plist</string>
     <string>com.prey.agent.plist</string>
     <string>com.prey.trigger.plist</string>
+    <string>com.primera.lx900launch.plist</string>
     <string>com.pritunl.client.plist</string>
     <string>com.pritunl.service.plist</string>
     <string>com.privax.hmaprovpn.helper.plist</string>
