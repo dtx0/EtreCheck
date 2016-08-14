@@ -84,14 +84,21 @@
         hasOutput = YES;
         }
         
-      [self.result
-        appendString:
-          [NSString
-            stringWithFormat:
-              @"    %@ - %@\n",
-              [Utilities
-                dateAsString: date format: @"MMM d, yyyy, hh:mm:ss a"],
-              [deletedFile objectForKey: @"file"]]];
+      NSString * path = [deletedFile objectForKey: @"file"];
+      
+      if([path length] > 0)
+        {
+        NSString * safePath = [Utilities sanitizeFilename: path];
+        
+        [self.result
+          appendString:
+            [NSString
+              stringWithFormat:
+                @"    %@ - %@\n",
+                [Utilities
+                  dateAsString: date format: @"MMM d, yyyy, hh:mm:ss a"],
+                safePath]];
+        }
       }
     }
     
