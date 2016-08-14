@@ -10,26 +10,6 @@
 
 @end
 
-// Invalid element name.
-@interface InvalidElementName : XMLException
-
-@end
-
-// Invalid attribute name.
-@interface InvalidAttributeName : XMLException
-
-@end
-
-// Invalid attribute value.
-@interface InvalidAttributeValue : XMLException
-
-@end
-
-// Attempting to close the wrong element.
-@interface AttemptToCloseWrongElement : NSException
-
-@end
-
 // Encapsulate each element.
 @interface XMLElement : NSObject
   {

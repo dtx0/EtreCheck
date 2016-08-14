@@ -5,6 +5,32 @@
 
 #import "XMLBuilder.h"
 
+// Invalid element name.
+@interface InvalidElementName : XMLException
+
+@end
+
+// Invalid attribute name.
+@interface InvalidAttributeName : XMLException
+
+@end
+
+// Invalid attribute value.
+@interface InvalidAttributeValue : XMLException
+
+@end
+
+// Attempting to close the wrong element.
+@interface AttemptToCloseWrongElement : NSException
+
+@end
+
+InvalidElementName * InvalidElementNameException(NSString * name);
+InvalidAttributeName * InvalidAttributeNameException(NSString * name);
+InvalidAttributeValue * InvalidAttributeValueException(NSString * name);
+AttemptToCloseWrongElement *
+  AttemptToCloseWrongElementException(NSString * name);
+
 // Encapsulate each element.
 @implementation XMLElement
 
@@ -65,101 +91,99 @@
   return self.document;
   }
   
-  // Start a new element.
-  func startElement(name : String) throws
-    {
-    if !validName(name)
-      {
-      throw Exception.InvalidElementName(name: name)
-      }
-      
-    // If I already have an element, I can go ahead and emit it now.
-    if let topElement = elements.last
-      {
-      document += emitStartTag(topElement)
-      
-      // Emit any contents that I have.
-      document += emitContents(topElement)
-      
-      if !topElement.parent
-        {
-        document += "\n"
-        }
-        
-      // I know the top element has child elements now.
-      topElement.parent = true
-      topElement.empty = false
-      
-      // Reset contents in case there are more after this node.
-      topElement.contents = ""
-      }
-
-    elements.append(Element(name, indent: indent))
-    indent += 1
-    }
-  
-  // Add an attribute to the current element.
-  func addAttribute<T>(name: String, value: T?) throws
-    {
-    if let attributeValue = value
-      {
-      if !validName(name)
-        {
-        throw Exception.InvalidAttributeName(name: name)
-        }
-
-      let attributeStringValue = "\(attributeValue)"
-      
-      if !validAttributeValue(attributeStringValue)
-        {
-        throw Exception.InvalidAttributeValue(value: attributeStringValue)
-        }
-
-      if let topElement = elements.last
-        {
-        topElement.attributes[name] = attributeStringValue
-        }
-      }
-    }
-  
-  // Add a string to the current element's contents.
-  func addString(string: String)
-    {
-    var text = ""
+// Start a new element.
+- (void) startElement: (NSString *) name
+  {
+  if(![self validName: name])
+    @throw InvalidElementNameException(name);
     
-    if let topElement = elements.last
-      {
-      for ch in string.characters
-        {
-        switch(ch)
-          {
-          case "<":
-            text += "&lt;"
-            topElement.empty = false
-            break
-          case ">":
-            text += "&gt;"
-            topElement.empty = false
-            break
-          case "&":
-            text += "&amp;"
-            topElement.empty = false
-            break
-          case "\n":
-            fallthrough
-          case "\r":
-            topElement.singleLine = false
-            fallthrough
-          default:
-            text.append(ch)
-            topElement.empty = false
-            break
-          }
-        }
+  // If I already have an element, I can go ahead and emit it now.
+  XMLElement * topElement = [self.elements lastObject];
+  
+  if(topElement != nil)
+    {
+    [self.document appendString: [self emitStartTag: topElement]];
+    
+    // Emit any contents that I have.
+    [self.document appendString: [self emitContents: topElement]];
+    
+    if(!topElement.parent)
+      [self.document appendString: @"\n"];
       
-      topElement.contents += text
-      }
+    // I know the top element has child elements now.
+    topElement.parent = YES;
+    topElement.empty = NO;
+    
+    // Reset contents in case there are more after this node.
+    [topElement.contents setString: @""];
     }
+
+  [self.elements
+    addObject: [[XMLElement alloc] initWithName: name indent: self.indent]];
+    
+  self.indent = self.indent + 1;
+  }
+  
+// Add an attribute to the current element.
+- (void) addAttribute: (NSString *) name value: (NSObject *) value
+  {
+  if(value == nil)
+    return;
+    
+  if(![self validName: name])
+    @throw InvalidAttributeNameException(name);
+
+  NSString * attributeStringValue = [value stringValue];
+  
+  if(![self validAttributeValue: attributeStringValue])
+    @throw InvalidAttributeValueException(attributeStringValue);
+
+  XMLElement * topElement = [self.elements lastObject];
+  
+  if(topElement != nil)
+    topElement.attributes[name] = attributeStringValue;
+  }
+  
+// Add a string to the current element's contents.
+- (void) addString: (NSString *) string
+  {
+  NSString * text = @"";
+  
+  XMLElement * topElement = [self.elements lastObject];
+  
+  if(topElement != nil)
+    {
+    for ch in string.characters
+      {
+      switch(ch)
+        {
+        case "<":
+          text += "&lt;"
+          topElement.empty = false
+          break
+        case ">":
+          text += "&gt;"
+          topElement.empty = false
+          break
+        case "&":
+          text += "&amp;"
+          topElement.empty = false
+          break
+        case "\n":
+          fallthrough
+        case "\r":
+          topElement.singleLine = false
+          fallthrough
+        default:
+          text.append(ch)
+          topElement.empty = false
+          break
+        }
+      }
+    
+    topElement.contents += text
+    }
+  }
   
   // Add a CDATA string.
   func addCDATA(cdata: String)
@@ -405,3 +429,24 @@
   }
 
 @end
+
+InvalidElementName * InvalidElementNameException(NSString * name)
+  {
+  return nil;
+  }
+
+InvalidAttributeName * InvalidAttributeNameException(NSString * name)
+  {
+  return nil;
+  }
+
+InvalidAttributeValue * InvalidAttributeValueException(NSString * name)
+  {
+  return nil;
+  }
+
+AttemptToCloseWrongElement *
+  AttemptToCloseWrongElementException(NSString * name)
+  {
+  return nil;
+  }
