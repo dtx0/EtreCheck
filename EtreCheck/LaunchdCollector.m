@@ -769,8 +769,12 @@
   // Apples file get special treatment.
   if([[info objectForKey: kApple] boolValue])
     if(![self formatApplePropertyListFile: path info: info])
+      {
+      [self updateAppleCounts: info];
+  
       return NO;
-    
+      }
+      
   NSString * filename = [info objectForKey: kFilename];
 
   // Format the status.
@@ -801,10 +805,10 @@
   {
   NSString * file = [path lastPathComponent];
 
+  // Does the user want to hide Apple tasks? 3rd party and user domains
+  // always return NO.
   bool hideAppleTasks = [self hideAppleTasks];
 
-  [self updateAppleCounts: info];
-  
   NSString * signature = [info objectForKey: kSignature];
   NSNumber * ignore = [NSNumber numberWithBool: hideAppleTasks];
     
@@ -824,6 +828,7 @@
       }
     }
     
+  // These will be rolled up normally.
   else if([[info objectForKey: kStatus] isEqualToString: kStatusKilled])
     {
     [status setObject: ignore forKey: kIgnored];
@@ -1155,7 +1160,8 @@
       }
     }
     
-  [extra appendAttributedString: [self formatSignature: info]];
+  [extra
+    appendAttributedString: [self formatSignature: info forPath: path]];
     
   return extra;
   }
@@ -1200,59 +1206,88 @@
 
 // Format a signature result.
 - (NSAttributedString *) formatSignature: (NSDictionary *) info
+  forPath: (NSString *) path
   {
+  NSMutableAttributedString * extra =
+    [[NSMutableAttributedString alloc] init];
+
+  [extra autorelease];
+  
+  // If it isn't Apple append a useless support link.
+  if(![[info objectForKey: kApple] boolValue])
+    [extra appendAttributedString: [self formatSupportLink: info]];
+
   NSString * signature = [info objectForKey: kSignature];
   
-  if(![signature isEqualToString: kSignatureValid])
+  // These are good.
+  if([signature isEqualToString: kSignatureApple])
+    return extra;
+    
+  else if([signature isEqualToString: kSignatureValid])
+    return extra;
+    
+  // The signature failure message.
+  NSString * message = nil;
+    
+  // The executable is missing.
+  if([signature isEqualToString: kExecutableMissing])
     {
-    NSMutableAttributedString * extra =
-      [[NSMutableAttributedString alloc] init];
-
-    NSString * path = [info objectForKey: kExecutable];
+    NSString * executable = [info objectForKey: kExecutable];
+  
+    if([path length])
+      message =
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@" - %@: Executable not found!", NULL),
+            [Utilities sanitizeFilename: executable]];
+    else
+      message =
+        [NSString
+          stringWithFormat:
+            NSLocalizedString(@" - Executable not found!", NULL)];
+    }
+  else if([signature isEqualToString: kNotSigned])
+    message = NSLocalizedString(@" - No signature!", NULL);
+  else if([signature isEqualToString: kShell])
+    message = NSLocalizedString(@" - Shell script!", NULL);
+  else if([signature isEqualToString: kCodesignFailed])
+    message = NSLocalizedString(@" - codesign failed!", NULL);
+  else
+    message = NSLocalizedString(@" - Invalid signature!", NULL);
     
-    NSString * message = nil;
-    
-    if([signature isEqualToString: kExecutableMissing])
+  // If this is an Apple file things are complicated.
+  if([[info objectForKey: kApple] boolValue])
+    {
+    // If I am ignoring known Apple failures,
+    if([[Model model] ignoreKnownAppleFailures])
       {
-      if([path length])
-        message =
-          [NSString
-            stringWithFormat:
-              NSLocalizedString(@" - %@: Executable not found!", NULL),
-              [Utilities sanitizeFilename: path]];
-      else
-        message =
-          [NSString
-            stringWithFormat:
-              NSLocalizedString(@" - Executable not found!", NULL)];
+      // And if this is one of those known Apple failures (or no failure),
+      // then clear the failure, if any.
+      if([self hasExpectedSignature: path signature: signature])
+        message = nil;
       }
-    else if([[Model model] showSignatureFailures])
-      {
-      if([signature isEqualToString: kSignatureApple])
-        message = @"";
-      else if([signature isEqualToString: kNotSigned])
-        message = NSLocalizedString(@" - No signature!", NULL);
-      else if([signature isEqualToString: kShell])
-        message = NSLocalizedString(@" - Shell script!", NULL);
-      else if([signature isEqualToString: kCodesignFailed])
-        message = NSLocalizedString(@" - codesign failed!", NULL);
-      else
-        message = NSLocalizedString(@" - Invalid signature!", NULL);
-      }
-     
-    if([message length])
-      [extra
-        appendString: message
-        attributes:
-          @{
-            NSForegroundColorAttributeName : [[Utilities shared] red],
-            NSFontAttributeName : [[Utilities shared] boldFont]
-          }];
-    
-    return [extra autorelease];
+      
+    // Else if I am not ignoring known Apple failures, then if I'm not
+    // showing signature failures, clear the failure, if any.
+    else if(![[Model model] showSignatureFailures])
+      message = nil;
     }
     
-  return [self formatSupportLink: info];
+  // Else if this is not an Apple file things aren't so complicated.
+  // If I'm not showing signature failures, then clear the failure, if any.
+  else if(![[Model model] showSignatureFailures])
+    message = nil;
+    
+  if([message length])
+    [extra
+      appendString: message
+      attributes:
+        @{
+          NSForegroundColorAttributeName : [[Utilities shared] red],
+          NSFontAttributeName : [[Utilities shared] boldFont]
+        }];
+    
+  return extra;
   }
 
 // Create a support link for a plist dictionary.

@@ -11,8 +11,7 @@ my $expectedTemplate =
   . "%s: satisfies its Designated Requirement\n"
   . "%s: explicit requirement satisfied\n";
 
-my $notSignedTemplate = 
-  "%s: code object is not signed at all\nIn architecture: x86_64\n";
+my $notSignedTemplate = "%s: code object is not signed at all\n";
 
 my @launchd = getLaunchdFiles();
 
@@ -55,6 +54,9 @@ sub verify
   my $anchor = shift;
   my $expectedResult = shift;
   
+  return "executablemissing"
+    if not -e $bundle;
+    
   my ($data, $exit) = 
     capture_merged 
       {
@@ -71,7 +73,7 @@ sub verify
     if $data eq sprintf($expectedTemplate, $bundle, $bundle, $bundle);
     
   return "signaturemissing"
-    if $data eq sprintf($notSignedTemplate, $ bundle);
+    if $data eq sprintf($notSignedTemplate, $bundle);
     
   return "signaturenotvalid";
   }
@@ -80,29 +82,86 @@ sub checkSignature
   {
   my $bundle = shift;
   
-  my $shell = $bundle =~ /\.(pl|cgi|d|py|rb|sh)$/;
-  
-  my $result = 'signaturenotvalid';
-  
-  if($shell)
+  return 'signatureshell'
+    if isShellExecutable($bundle);
+
+  my $result = verify($bundle, 'apple', 'signatureapple');
+
+  if($result eq 'signatureapple')
     {
-    $result = 'signatureshell';
+    $result = 'signatureapple';
     }
   else
     {  
-    $result = verify($bundle, 'apple', 'signatureapple');
-  
-    if($result eq 'signatureapple')
-      {
-      $result = 'signatureapple';
-      }
-    else
-      {  
-      $result = verify($bundle, 'apple generic', 'signaturevalid');
-      }
+    $result = verify($bundle, 'apple generic', 'signaturevalid');
     }
 
+  if($result == 'signaturemissing')
+    {
+    return 'signatureshell'
+      if isShellScript($bundle);
+    }
+    
   return $result;
+  }
+  
+sub isShellExecutable
+  {
+  my $path = shift;
+  
+  my $name = basename($path);
+  
+  return 1
+    if $path eq "tclsh";
+  
+  return 1
+    if $path eq "perl";
+  
+  return 1
+    if $path eq "ruby";
+  
+  return 1
+    if $path eq "python";
+  
+  return 1
+    if $path eq "sh";
+  
+  return 1
+    if $path eq "csh";
+  
+  return 1
+    if $path eq "bash";
+  
+  return 1
+    if $path eq "zsh";
+  
+  return 1
+    if $path eq "tsh";
+  
+  return 1
+    if $path eq "ksh";
+  
+  return 0;  
+  }
+  
+sub isShellScript
+  {
+  my $path = shift;
+  
+  my $shell = $path =~ /\.(sh|csh|pl|py|rb|cgi|php)$/;
+  
+  if(!$shell)
+    {
+    open(IN, $path);
+    
+    my $line = <IN>;
+    
+    $shell = $line =~ /^#!/;
+    
+    close(IN);
+    }
+    
+  return $shell;
   }
   
 sub getOSVersion
@@ -204,7 +263,7 @@ sub getLaunchdFiles
       
     my $parent = dirname($program);
     
-    if($parent =~ m|(.+)/Contents/MacOS|)
+    if($parent =~ m~(.+\.app)/Contents/(?:MacOS|Resources)~)
       {
       $bundle = $1;
       }

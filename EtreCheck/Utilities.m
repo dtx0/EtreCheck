@@ -750,9 +750,18 @@
     
     [[[Utilities shared] signatureCache] setObject: result forKey: path];
     }
+  else
+    {
+    NSLog(@"Returning false from /usr/bin/codesign %@", args);
+    result = kCodesignFailed;
+    }
     
   [subProcess release];
   
+  if([result isEqualToString: kNotSigned])
+    if([Utilities isShellScript: path])
+      result = kShell;
+
   return result;
   }
 
@@ -762,44 +771,7 @@
   if([path length] == 0)
     return kExecutableMissing;
     
-  BOOL shell = NO;
-  
-  if([path hasPrefix: @"/usr/bin/"])
-    {
-    if([path isEqualToString: @"/usr/bin/tclsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/usr/bin/perl"])
-      shell = YES;
-
-    if([path isEqualToString: @"/usr/bin/ruby"])
-      shell = YES;
-
-    if([path hasPrefix: @"/usr/bin/python"])
-      shell = YES;
-    }
-  else if([path hasPrefix: @"/bin/"])
-    {
-    if([path isEqualToString: @"/bin/sh"])
-      shell = YES;
-      
-    if([path isEqualToString: @"/bin/csh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/bash"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/zsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/tsh"])
-      shell = YES;
-
-    if([path isEqualToString: @"/bin/ksh"])
-      shell = YES;
-    }
-
-  if(shell)
+  if([Utilities isShellExecutable: path])
     return kShell;
 
   NSString * result =
@@ -845,7 +817,99 @@
     
   [subProcess release];
   
+  if([result isEqualToString: kNotSigned])
+    if([Utilities isShellScript: path])
+      result = kShell;
+    
   return result;
+  }
+
+// Is this a shell executable?
++ (bool) isShellExecutable: (NSString *) path
+  {
+  BOOL shell = NO;
+  
+  NSString * name = [path lastPathComponent];
+  
+  if([name isEqualToString: @"tclsh"])
+    shell = YES;
+
+  else if([name isEqualToString: @"perl"])
+    shell = YES;
+
+  else if([name isEqualToString: @"ruby"])
+    shell = YES;
+
+  else if([name hasPrefix: @"python"])
+    shell = YES;
+
+  else if([name isEqualToString: @"sh"])
+    shell = YES;
+    
+  else if([name isEqualToString: @"csh"])
+    shell = YES;
+
+  else if([name isEqualToString: @"bash"])
+    shell = YES;
+
+  else if([name isEqualToString: @"zsh"])
+    shell = YES;
+
+  else if([name isEqualToString: @"tsh"])
+    shell = YES;
+
+  else if([name isEqualToString: @"ksh"])
+    shell = YES;
+    
+  else if([name isEqualToString: @"php"])
+    shell = YES;
+
+  return shell;
+  }
+
+// Is this a shell script?
++ (bool) isShellScript: (NSString *) path
+  {
+  BOOL shell = NO;
+  
+  if([path hasSuffix: @".sh"])
+    shell = YES;
+  
+  else if([path hasSuffix: @".csh"])
+    shell = YES;
+  
+  else if([path hasSuffix: @".pl"])
+    shell = YES;
+  
+  else if([path hasSuffix: @".py"])
+    shell = YES;
+  
+  else if([path hasSuffix: @".rb"])
+    shell = YES;
+  
+  else if([path hasSuffix: @".cgi"])
+    shell = YES;
+
+  else if([path hasSuffix: @".php"])
+    shell = YES;
+
+  // Check for shebang.
+  else
+    {
+    char buffer[2];
+    
+    int fd = open([path fileSystemRepresentation], O_RDONLY);
+    
+    ssize_t size = read(fd, buffer, 2);
+    
+    if(size == 2)
+      if((buffer[0] == '#') && (buffer[1] == '!'))
+        shell = YES;
+    
+    close(fd);
+    }
+  
+  return shell;
   }
 
 // Parse a signature.
@@ -1465,10 +1529,13 @@
 // Resolve a deep app path to the wrapper path.
 + (NSString *) resolveBundlePath: (NSString *) path
   {
-  NSRange range = [path rangeOfString: @"/Contents/MacOS/"];
+  NSRange range = [path rangeOfString: @".app/Contents/MacOS/"];
   
+  if(range.location == NSNotFound)
+    range = [path rangeOfString: @".app/Contents/Resources/"];
+
   if(range.location != NSNotFound)
-    return [path substringToIndex: range.location];
+    return [path substringToIndex: range.location + 4];
     
   return path;
   }
