@@ -840,6 +840,20 @@
   // Does the file have an expected signature
   else if([self hasExpectedSignature: path signature: signature])
     {
+    // If the user has turned off ignore known failures, maybe an expected
+    // signature isn't good enough.
+    if(![[Model model] ignoreKnownAppleFailures])
+      {
+      if([signature isEqualToString: kSignatureApple])
+        {
+        }
+      else if([signature isEqualToString: kSignatureValid])
+        {
+        }
+      else
+        return YES;
+      }
+      
     [status setObject: ignore forKey: kIgnored];
 
     if(hideAppleTasks)
