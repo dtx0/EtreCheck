@@ -275,31 +275,49 @@
 
   bool adware = NO;
   
-  if([self.adwareFiles objectForKey: path])
+  NSMutableDictionary * info = [self.adwareFiles objectForKey: path];
+  
+  if(info)
     adware = YES;
-  else if([self isAdwareSuffix: path])
+    
+  if(!info)
+    info = [NSMutableDictionary new];
+    
+  if([self isAdwareSuffix: path info: info])
     adware = YES;
-  else if([self isAdwareMatch: path])
+  else if([self isAdwareMatch: path info: info])
     adware = YES;
-  else if([self isAdwareTrio: path])
+  else if([self isAdwareTrio: path info: info])
     adware = YES;
     
   if(adware)
     {
-    NSMutableDictionary * info = [self.launchdFiles objectForKey: path];
+    if([self.adwareFiles objectForKey: path] == nil)
+      [self.adwareFiles setObject: info forKey: path];
+      
+    NSMutableDictionary * launchdInfo =
+      [self.launchdFiles objectForKey: path];
     
-    [info setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
+    if(launchdInfo)
+      {
+      [launchdInfo removeObjectForKey: kUnknown];
+      [launchdInfo
+        setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
     
-    [self.adwareFiles setObject: info forKey: path];
+      [info setObject: launchdInfo forKey: kAdwareLaunchdInfo];
+      }
     
     self.adwareFound = YES;
     }
     
+  [info release];
+  
   return adware;
   }
 
 // Is this an adware suffix file?
 - (bool) isAdwareSuffix: (NSString *) path
+  info: (NSMutableDictionary *) info
   {
   for(NSString * suffix in self.blacklistSuffixes)
     if([path hasSuffix: suffix])
@@ -309,7 +327,7 @@
       NSString * tag =
         [name substringToIndex: [name length] - [suffix length]];
       
-      [self.adwareFiles setObject: [tag lowercaseString] forKey: path];
+      [info setObject: [tag lowercaseString] forKey: kAdwareType];
       
       return YES;
       }
@@ -319,6 +337,7 @@
 
 // Is this an adware match file?
 - (bool) isAdwareMatch: (NSString *) path
+  info: (NSMutableDictionary *) info
   {
   NSString * name = [path lastPathComponent];
   
@@ -326,7 +345,7 @@
     {
     if([name isEqualToString: match])
       {
-      [self.adwareFiles setObject: name forKey: path];
+      [info setObject: name forKey: kAdwareType];
       
       return YES;
       }
@@ -340,7 +359,7 @@
       {
       NSString * tag = [name substringWithRange: range];
       
-      [self.adwareFiles setObject: [tag lowercaseString] forKey: path];
+      [info setObject: [tag lowercaseString] forKey: kAdwareType];
       
       return YES;
       }
@@ -351,6 +370,7 @@
 
 // Is this an adware trio of daemon/agent/helper?
 - (bool) isAdwareTrio: (NSString *) path
+  info: (NSMutableDictionary *) info
   {
   NSString * name = [path lastPathComponent];
   
@@ -395,17 +415,16 @@
       {
       NSString * trioPath = [trioFiles objectForKey: type];
       
-      [self.adwareFiles
-        setObject: [prefix lowercaseString] forKey: trioPath];
-        
-      NSMutableDictionary * info =
+      [info setObject: [prefix lowercaseString] forKey: kAdwareType];
+
+      NSMutableDictionary * launchdInfo =
         [self.launchdFiles objectForKey: trioPath];
       
-      if(info)
+      if(launchdInfo)
         {
-        [self.adwareFiles setObject: info forKey: trioPath];
-        [info removeObjectForKey: kUnknown];
-        [info setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
+        [launchdInfo removeObjectForKey: kUnknown];
+        [launchdInfo
+          setObject: [NSNumber numberWithBool: YES] forKey: kAdware];
         }
       }
 

@@ -393,7 +393,7 @@
           <string>/usr/libexec/configureLocalKDC</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.CoreRAID.plist</key>
       <dict>
@@ -634,7 +634,7 @@
           <string>answer</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.eppc.plist</key>
       <dict>
@@ -910,7 +910,7 @@
           <string>/usr/libexec/locate.updatedb</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
       <dict>
@@ -1110,7 +1110,7 @@
           <string>/usr/share/NotificationServer/notification_app.py</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.notifyd.plist</key>
       <dict>
@@ -1191,7 +1191,7 @@
           <string>/var/spool/pcastuploader/control</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.PCIELaneConfigTool.plist</key>
       <dict>
@@ -1218,7 +1218,7 @@
           <string>daily</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.periodic-monthly.plist</key>
       <dict>
@@ -1232,7 +1232,7 @@
           <string>monthly</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.periodic-weekly.plist</key>
       <dict>
@@ -1246,7 +1246,7 @@
           <string>weekly</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.platform.ptmd.plist</key>
       <dict>
@@ -1505,7 +1505,7 @@
           <string>/usr/libexec/samba/smb-sharepoints</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.smbfs_load_kext.plist</key>
       <dict>
@@ -1623,7 +1623,7 @@
           <string>/usr/libexec/security-checksystem</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.systempreferences.installer.plist</key>
       <dict>
@@ -2027,7 +2027,7 @@
           <string>foreground</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.amavis.amavisd_cleanup.plist</key>
       <dict>
@@ -2040,7 +2040,7 @@
           <string>amavisd_cleanup</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.apache.httpd.plist</key>
       <dict>
@@ -2125,7 +2125,7 @@
           <string>/usr/libexec/ntpd-wrapper</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.postfix.master.plist</key>
       <dict>
@@ -2210,7 +2210,7 @@
           <string>-i</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/telnet.plist</key>
       <dict>
@@ -2799,7 +2799,7 @@
           <string>~/Library/Application Support/pcastuploader/control</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchAgents/com.apple.PCIESlotCheck.plist</key>
       <dict>
@@ -3225,7 +3225,7 @@
           <string>/usr/X11/bin/startx</string>
         </array>
         <key>signature</key>
-        <string>signaturenotvalid</string>
+        <string>signatureshell</string>
       </dict>
     </dict>
     <key>10.7</key>
@@ -3721,7 +3721,7 @@
           <string>/usr/libexec/configureLocalKDC</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.CoreRAID.plist</key>
       <dict>
@@ -3996,7 +3996,7 @@
           <string>answer</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
       <dict>
@@ -4404,7 +4404,7 @@
           <string>/usr/libexec/locate.updatedb</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
       <dict>
@@ -4887,7 +4887,7 @@
           <string>/usr/share/NotificationServer/notification_app.py</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.notifyd.plist</key>
       <dict>
@@ -4998,7 +4998,7 @@
           <string>0</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.pcastuploader.plist</key>
       <dict>
@@ -5014,7 +5014,7 @@
           <string>/var/spool/pcastuploader/control</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.PCIELaneConfigTool.plist</key>
       <dict>
@@ -5041,7 +5041,7 @@
           <string>daily</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.periodic-monthly.plist</key>
       <dict>
@@ -5055,7 +5055,7 @@
           <string>monthly</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.periodic-weekly.plist</key>
       <dict>
@@ -5069,7 +5069,7 @@
           <string>weekly</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.pfctl.plist</key>
       <dict>
@@ -6125,7 +6125,7 @@
           <string>foreground</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.amavis.amavisd_cleanup.plist</key>
       <dict>
@@ -6223,7 +6223,7 @@
           <string>/usr/libexec/ntpd-wrapper</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.postfix.master.plist</key>
       <dict>
@@ -6280,7 +6280,7 @@
           <string>-i</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/telnet.plist</key>
       <dict>
@@ -7391,7 +7391,7 @@
           <string>~/Library/Application Support/pcastuploader/control</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchAgents/com.apple.PCIESlotCheck.plist</key>
       <dict>
@@ -8130,7 +8130,7 @@
           <string>/usr/X11/bin/startx</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/Library/LaunchDaemons/com.apple.remotepairtool.plist</key>
       <dict>
@@ -8641,7 +8641,7 @@
           <string>/usr/libexec/configureLocalKDC</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.CoreRAID.plist</key>
       <dict>
@@ -8931,7 +8931,7 @@
           <string>answer</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
       <dict>
@@ -9191,7 +9191,7 @@
           <string>/usr/libexec/gkreport</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.gssd.plist</key>
       <dict>
@@ -9439,7 +9439,7 @@
           <string>/usr/libexec/locate.updatedb</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
       <dict>
@@ -10075,7 +10075,7 @@
           <string>daily</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.periodic-monthly.plist</key>
       <dict>
@@ -10089,7 +10089,7 @@
           <string>monthly</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.periodic-weekly.plist</key>
       <dict>
@@ -10103,7 +10103,7 @@
           <string>weekly</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.pfctl.plist</key>
       <dict>
@@ -11227,7 +11227,7 @@
           <string>/usr/libexec/ntpd-wrapper</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
       <dict>
@@ -11323,7 +11323,7 @@
           <string>-i</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/telnet.plist</key>
       <dict>
@@ -13737,7 +13737,7 @@
           <string>/usr/libexec/configureLocalKDC</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.CoreRAID.plist</key>
       <dict>
@@ -14057,7 +14057,7 @@
           <string>answer</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
       <dict>
@@ -14302,7 +14302,7 @@
           <string>/usr/libexec/gkreport</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.gssd.plist</key>
       <dict>
@@ -14588,7 +14588,7 @@
           <string>/usr/libexec/locate.updatedb</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
       <dict>
@@ -16529,7 +16529,7 @@
           <string>-f</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.ntp.ntpd.plist</key>
       <dict>
@@ -16542,7 +16542,7 @@
           <string>/usr/libexec/ntpd-wrapper</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
       <dict>
@@ -16601,7 +16601,7 @@
           <string>-i</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/telnet.plist</key>
       <dict>
@@ -19539,7 +19539,7 @@
           <string>/usr/libexec/configureLocalKDC</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.coreduetd.osx.plist</key>
       <dict>
@@ -19906,7 +19906,7 @@
           <string>answer</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
       <dict>
@@ -20164,7 +20164,7 @@
           <string>/usr/libexec/gkreport</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.GSSCred.plist</key>
       <dict>
@@ -20489,7 +20489,7 @@
           <string>/usr/libexec/locate.updatedb</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
       <dict>
@@ -22422,7 +22422,7 @@
           <string>FOREGROUND</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.cups.cups-lpd.plist</key>
       <dict>
@@ -22465,7 +22465,7 @@
           <string>-f</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.ntp.ntpd.plist</key>
       <dict>
@@ -22478,7 +22478,7 @@
           <string>/usr/libexec/ntpd-wrapper</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
       <dict>
@@ -22537,7 +22537,7 @@
           <string>-i</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/telnet.plist</key>
       <dict>
@@ -25904,7 +25904,7 @@
           <string>/usr/libexec/configureLocalKDC</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.corecaptured.plist</key>
       <dict>
@@ -26337,7 +26337,7 @@
           <string>answer</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.efilogin-helper.plist</key>
       <dict>
@@ -26595,7 +26595,7 @@
           <string>/usr/libexec/gkreport</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.GSSCred.plist</key>
       <dict>
@@ -26960,7 +26960,7 @@
           <string>/usr/libexec/locate.updatedb</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/com.apple.locationd.plist</key>
       <dict>
@@ -29079,7 +29079,7 @@
           <string>FOREGROUND</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.cups.cups-lpd.plist</key>
       <dict>
@@ -29122,7 +29122,7 @@
           <string>-f</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.ntp.ntpd.plist</key>
       <dict>
@@ -29135,7 +29135,7 @@
           <string>/usr/libexec/ntpd-wrapper</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/org.openldap.slapd.plist</key>
       <dict>
@@ -29207,7 +29207,7 @@
           <string>-i</string>
         </array>
         <key>signature</key>
-        <string>signaturemissing</string>
+        <string>signatureshell</string>
       </dict>
       <key>/System/Library/LaunchDaemons/telnet.plist</key>
       <dict>

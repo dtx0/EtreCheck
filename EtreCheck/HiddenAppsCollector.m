@@ -303,7 +303,8 @@
       }
     }
     
-  [extra appendAttributedString: [self formatSignature: info]];
+  [extra
+    appendAttributedString: [self formatSignature: info forPath: path]];
   [extra appendAttributedString: [self formatSupportLink: info]];
     
   return extra;

@@ -13,7 +13,6 @@
 #define kPrinted @"printed"
 #define kIgnored @"ignored"
 #define kUnknown @"unknown"
-#define kAdware @"adware"
 #define kModernLoginItem @"modernloginitem"
 #define kSignature @"signature"
 #define kApple @"apple"
@@ -103,7 +102,8 @@
 - (bool) formatAppleCounts: (NSMutableAttributedString *) output;
 
 // Format a codesign response.
-- (NSAttributedString *) formatSignature: (NSDictionary *) info;
+- (NSAttributedString *) formatSignature: (NSDictionary *) info
+  forPath: (NSString *) path;
 
 // Create a support link for a plist dictionary.
 - (NSAttributedString *) formatSupportLink: (NSDictionary *) info;
