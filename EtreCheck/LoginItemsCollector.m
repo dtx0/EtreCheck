@@ -305,6 +305,14 @@
     if([path isEqualToString: @"missing value"])
       return NO;
     
+  if([path length] == 0)
+    return NO;
+    
+  NSString * safePath = [Utilities sanitizeFilename: path];
+  
+  if([safePath length] == 0)
+    return NO;
+    
   bool isHidden = [hidden isEqualToString: @"true"];
   
   NSString * modificationDateString = @"";
@@ -327,7 +335,7 @@
             name,
             kind,
             isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
-            path,
+            safePath,
             modificationDateString]
       attributes:
         [NSDictionary
@@ -342,7 +350,7 @@
             name,
             kind,
             isHidden ? NSLocalizedString(@"Hidden", NULL) : @"",
-            path,
+            safePath,
             modificationDateString]];
     
   return YES;

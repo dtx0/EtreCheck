@@ -14,6 +14,11 @@
 #define kYosemite     14
 #define kElCapitan    15
 
+// Adware
+#define kAdware @"adware"
+#define kAdwareType @"adwaretype"
+#define kAdwareLaunchdInfo @"adwarelaunchdinfo"
+
 // Critical errors
 #define kHardDiskFailure @"harddiskfailure"
 #define kNoBackups @"nobackup"

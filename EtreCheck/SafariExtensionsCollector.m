@@ -259,14 +259,20 @@
       
       // Add this adware extension under the "extension" category so only it
       // will be printed.
+      NSMutableDictionary * info = [NSMutableDictionary new];
+      
+      [info setObject: @"extension" forKey: kAdwareType];
+      
       if(archivePath)
         [[[Model model] adwareFiles]
-          setObject: @"extension" forKey: archivePath];
+          setObject: info forKey: archivePath];
       
       if(cachePath)
         [[[Model model] adwareFiles]
-          setObject: @"extension" forKey: cachePath];
+          setObject: info forKey: cachePath];
 
+      [info release];
+      
       [[Model model] setAdwareFound: YES];
 
       [self.result
