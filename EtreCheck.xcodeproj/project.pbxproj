@@ -32,7 +32,6 @@
 		A5257D4019AC10E3003084C8 /* Checker.m in Sources */ = {isa = PBXBuildFile; fileRef = A5257D3F19AC10E3003084C8 /* Checker.m */; };
 		A52986A81BB89C160040C63D /* HiddenAppsCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = A52986A71BB89C160040C63D /* HiddenAppsCollector.m */; };
 		A52C62BE1BCAD4D100B8C364 /* machineIcons.strings in Resources */ = {isa = PBXBuildFile; fileRef = A52C62BC1BCAD4D100B8C364 /* machineIcons.strings */; };
-		A538223A1D5FF27200484388 /* XMLBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A53822391D5FF27200484388 /* XMLBuilder.m */; };
 		A53EA3721C6E86B600F270B0 /* UpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A53EA3711C6E86B600F270B0 /* UpdateManager.m */; };
 		A53EA3771C6FCF0200F270B0 /* NSDate+Etresoft.m in Sources */ = {isa = PBXBuildFile; fileRef = A53EA3761C6FCF0200F270B0 /* NSDate+Etresoft.m */; };
 		A5409E9B186F271500B1727E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5409E9A186F271500B1727E /* SystemConfiguration.framework */; };
@@ -677,7 +676,6 @@
 				A550C54F1BBC39E000CA75EA /* EtreCheckToolbarItem.m in Sources */,
 				A5C292DD19A02A8800464E86 /* LaunchdCollector.m in Sources */,
 				A5C1492519B88192002890F1 /* SlideshowView.m in Sources */,
-				A538223A1D5FF27200484388 /* XMLBuilder.m in Sources */,
 				A57516AF1A14D9E700F374FB /* DiagnosticsCollector.m in Sources */,
 				A5FC120319A5431D00E81E9C /* FontsCollector.m in Sources */,
 				A5FC11F719A4C02300E81E9C /* UserITunesPlugInsCollector.m in Sources */,
@@ -913,8 +911,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = U87NE528LC;
 				INFOPLIST_FILE = "EtreCheck/EtreCheck-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -927,8 +926,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = U87NE528LC;
 				INFOPLIST_FILE = "EtreCheck/EtreCheck-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

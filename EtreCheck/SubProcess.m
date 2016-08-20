@@ -6,7 +6,10 @@
 
 #import "SubProcess.h"
 #import <unistd.h>
-#include <sys/select.h>
+#import <spawn.h>
+#import <sys/select.h>
+
+extern char **environ;
 
 @implementation SubProcess
 
@@ -73,9 +76,40 @@
     return NO;
     }
     
-  pid_t pid = fork();
+  pid_t pid;
   
-  if(pid == -1)
+  posix_spawn_file_actions_t child_fd_actions;
+  
+  int error = error = posix_spawn_file_actions_init(& child_fd_actions);
+  
+  if(!error)
+    error =
+      posix_spawn_file_actions_addclose(& child_fd_actions, outputPipe[0]);
+  
+  if(!error)
+    error =
+      posix_spawn_file_actions_addclose(& child_fd_actions, errorPipe[0]);
+
+  if(!error)
+    error =
+      posix_spawn_file_actions_adddup2(
+        & child_fd_actions, outputPipe[1], STDOUT_FILENO);
+  
+  if(!error)
+    error =
+      posix_spawn_file_actions_adddup2(
+        & child_fd_actions, errorPipe[1], STDERR_FILENO);
+  
+  if(!error)
+    error =
+      posix_spawn(
+        & pid,
+        path,
+        & child_fd_actions,
+        NULL,
+        (char * const *)argv, environ);
+  
+  if(error)
     {
     close(outputPipe[0]);
     close(outputPipe[1]);
@@ -88,30 +122,6 @@
     return NO;
     }
   
-  // Child.
-  if(pid == 0)
-    {
-    close(outputPipe[0]);
-    close(errorPipe[0]);
-
-    // They say that dup2 could be interrupted by a signal, so this must
-    // be done in a loop.
-    while((dup2(outputPipe[1], STDOUT_FILENO) == -1) && (errno == EINTR))
-      {
-      }
-      
-    while((dup2(errorPipe[1], STDERR_FILENO) == -1) && (errno == EINTR))
-      {
-      }
-
-    close(outputPipe[1]);
-    close(errorPipe[1]);
-
-    execv(path, (char * const *)argv);
-    
-    exit(1);
-    }
-    
   free(argv);
   
   close(outputPipe[1]);
