@@ -18,6 +18,7 @@ extern char **environ;
 @synthesize result = myResult;
 @synthesize standardOutput = myStandardOutput;
 @synthesize standardError = myStandardError;
+@synthesize usePseudoTerminal = myUsePseudoTerminal;
 
 // Constructor.
 - (instancetype) init
@@ -46,6 +47,188 @@ extern char **environ;
 
 // Execute an external program and return the results.
 - (BOOL) execute: (NSString *) program arguments: (NSArray *) args
+  {
+  if(self.usePseudoTerminal)
+    return [self forkpty: program arguments: args];
+
+  return [self fork: program arguments: args];
+  }
+
+// Execute an external program, use a pseudo-terminal, and return the
+// results.
+- (BOOL) forkpty: (NSString *) program arguments: (NSArray *) args
+  {
+  const char * path = [program fileSystemRepresentation];
+  
+  NSRange range = NSMakeRange(0, [args count]);
+  
+  const char ** argv = malloc(sizeof(char *) * (range.length + 2));
+ 
+  NSUInteger i = 0;
+  
+  argv[i++] = path;
+  
+  for(NSString * arg in args)
+    argv[i++] = [arg UTF8String];
+    
+  argv[i] = 0;
+  
+  // Open the master side of the pseudo-terminal.
+  int master = posix_openpt(O_RDWR);
+  
+  if(master < 0)
+    return NO;
+
+  int rc = grantpt(master);
+  
+  if(rc != 0)
+    {
+    close(master);
+    return NO;
+    }
+    
+  rc = unlockpt(master);
+  
+  if(rc != 0)
+    {
+    close(master);
+    return NO;
+    }
+
+  // Open the slave side ot the pseudo-terminal
+  char * device = ptsname(master);
+  
+  if(device == NULL)
+    {
+    close(master);
+    return NO;
+    }
+    
+  int slave = open(device, O_RDWR);
+  
+  if(slave == -1)
+    {
+    close(master);
+    return NO;
+    }
+    
+  pid_t pid;
+  
+  posix_spawn_file_actions_t child_fd_actions;
+  
+  int error = posix_spawn_file_actions_init(& child_fd_actions);
+  
+  if(error)
+    {
+    close(master);
+    return NO;
+    }
+
+  error =
+    posix_spawn_file_actions_addclose(& child_fd_actions, master);
+
+  if(error)
+    {
+    close(master);
+    return NO;
+    }
+
+  error =
+    posix_spawn_file_actions_adddup2(
+      & child_fd_actions, slave, STDOUT_FILENO);
+  
+  if(error)
+    {
+    close(master);
+    return NO;
+    }
+
+  error =
+    posix_spawn(
+      & pid,
+      path,
+      & child_fd_actions,
+      NULL,
+      (char * const *)argv, environ);
+  
+  if(error)
+    {
+    close(master);
+    close(slave);
+
+    free(argv);
+  
+    return NO;
+    }
+  
+  free(argv);
+  
+  close(slave);
+
+  fcntl(master, F_SETFL, O_NONBLOCK);
+
+  fd_set fds;
+  int nfds;
+    
+  size_t bufferSize = 65536;
+  char * buffer = (char *)malloc(bufferSize);
+  
+  bool stdoutOpen = YES;
+  
+  while(stdoutOpen)
+    {
+    FD_ZERO(& fds);
+    
+    if(stdoutOpen)
+      {
+      FD_SET(master, & fds);
+      
+      nfds = master + 1;
+      }
+      
+    struct timeval tv;
+
+    tv.tv_sec = myTimeout;
+    tv.tv_usec = 0;
+
+    int result = select(nfds, & fds, NULL, NULL, & tv);
+
+    if(result == -1)
+      break;
+      
+    else if(result == 0)
+      {
+      myTimedout = YES;
+      break;
+      }
+      
+    else
+      {
+      if(FD_ISSET(master, & fds))
+        {
+        ssize_t amount = read(master, buffer, bufferSize);
+        
+        if(amount < 1)
+          stdoutOpen = NO;
+        else
+          [myStandardOutput appendBytes: buffer length: amount];
+        }
+      }
+    }
+    
+  close(master);
+
+  free(buffer);
+  
+  waitpid(pid, & myResult, 0);
+    
+  posix_spawn_file_actions_destroy(& child_fd_actions);
+
+  return !self.timedout;
+  }
+
+// Execute an external program and return the results.
+- (BOOL) fork: (NSString *) program arguments: (NSArray *) args
   {
   const char * path = [program fileSystemRepresentation];
   

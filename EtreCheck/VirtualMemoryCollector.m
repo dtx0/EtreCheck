@@ -208,11 +208,13 @@
 // Collect information from top.
 - (void) collecttop: (NSMutableDictionary *) vminfo
   {
-  NSArray * args = @[@"-c", @"/usr/bin/top -l 1 -stats pid,cpu,rsize"];
+  NSArray * args = @[@"-l", @"1", @"-stats", @"pid,cpu,rsize"];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if([subProcess execute: @"/bin/sh" arguments: args])
+  subProcess.usePseudoTerminal = YES;
+  
+  if([subProcess execute: @"/usr/bin/top" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
     
