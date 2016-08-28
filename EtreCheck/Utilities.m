@@ -830,29 +830,20 @@
   BOOL shell = NO;
   
   NSString * name = [path lastPathComponent];
-  
-  if([name isEqualToString: @"tclsh"])
-    shell = YES;
 
-  else if([name isEqualToString: @"perl"])
-    shell = YES;
-
-  else if([name isEqualToString: @"ruby"])
-    shell = YES;
-
-  else if([name hasPrefix: @"python"])
-    shell = YES;
-
-  else if([name isEqualToString: @"sh"])
-    shell = YES;
-    
-  else if([name isEqualToString: @"csh"])
+  if ([name isEqualToString: @"tclsh"])
     shell = YES;
 
   else if([name isEqualToString: @"bash"])
     shell = YES;
 
-  else if([name isEqualToString: @"zsh"])
+  else if([name isEqualToString: @"sh"])
+    shell = YES;
+  
+  else if([name isEqualToString: @"csh"])
+    shell = YES;
+
+  else if([name isEqualToString: @"tcsh"])
     shell = YES;
 
   else if([name isEqualToString: @"tsh"])
@@ -860,8 +851,23 @@
 
   else if([name isEqualToString: @"ksh"])
     shell = YES;
-    
+
+  else if([name isEqualToString: @"zsh"])
+    shell = YES;
+
+  else if([name isEqualToString: @"fish"])
+    shell = YES;
+  
+  else if([name isEqualToString: @"perl"])
+    shell = YES;
+
   else if([name isEqualToString: @"php"])
+    shell = YES;
+  
+  else if([name hasPrefix: @"python"])
+    shell = YES;
+
+  else if([name isEqualToString: @"ruby"])
     shell = YES;
 
   return shell;
