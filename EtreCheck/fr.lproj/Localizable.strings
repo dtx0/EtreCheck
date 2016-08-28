@@ -48,13 +48,7 @@
 "<not mounted>" = "<non monté>";
 "Low!" = "Faible !";
 "    None\n" = "    Aucun\n";
-"Free RAM" = "RAM Disponible";
-"Used RAM" = "RAM Utilisée";
-"Swap Used" = "Fichier d’échange utilisé";
 "(%@ free)" = "(%@ libre)";
-"Wired RAM" = "RAM Résidente";
-"%@ Wired" = "%@ Résidente";
-"%@ Cached" = "%@ En Cache";
 "Time Machine:" = "Time Machine :";
 "timemachineneedsmountainlion" = "    Les informations Time Machine requièrent OS X 10.8 «Mountain Lion» ou ultérieur.\n\n";
 "timemachineinformationnotavailable" = "    Informations Time Machine non disponibles\n\n";
@@ -299,3 +293,7 @@
 "donateurl" = "https://etrecheck.com/donate_fr.php?invoice=%@";
 "Remove" = "Enlever";
 "Report" = "Envoyer";
+"freeram" = "RAM disponible";
+"usedram" = "RAM utilisée";
+"swapused" = "Fichier d’échange utilisé";
+"filecache" = "%@ en cache";

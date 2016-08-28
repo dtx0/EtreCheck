@@ -76,6 +76,7 @@
   NSDictionary * myAppleLaunchdByLabel;
   NSMutableArray * myUnknownFiles;
   bool mySIP;
+  bool mySandboxed;
   }
 
 // Keep track of the OS version.
@@ -201,6 +202,9 @@
 
 // SIP enabled?
 @property (assign, setter=setSIP:) bool sip;
+
+// Am I running in the sandbox?
+@property (assign) bool sandboxed;
 
 // Return the singeton of shared values.
 + (Model *) model;

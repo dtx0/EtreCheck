@@ -480,6 +480,7 @@
 // Find loaded extensions.
 - (void) findLoadedExtensions
   {
+  // TODO: Sandbox does not work.
   NSArray * args = @[ @"-l" ];
   
   SubProcess * subProcess = [[SubProcess alloc] init];

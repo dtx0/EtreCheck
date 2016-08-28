@@ -81,6 +81,7 @@
 // Collect extension archives.
 - (void) collectArchives
   {
+  // TODO: Does not work in sandbox.
   NSString * userSafariExtensionsDir =
     [NSHomeDirectory()
       stringByAppendingPathComponent: @"Library/Safari/Extensions"];
@@ -116,6 +117,7 @@
 // Collect extension caches.
 - (void) collectCaches
   {
+  // TODO: Does not work in sandbox.
   NSString * userSafariExtensionsDir =
     [NSHomeDirectory()
       stringByAppendingPathComponent:
@@ -360,6 +362,7 @@
 // Read the extension plist dictionary.
 - (NSDictionary *) extensionInfoPList: (NSString *) extensionName
   {
+  // TODO:  Does not work in sandbox?
   NSString * userSafariExtensionsDir =
     [NSHomeDirectory()
       stringByAppendingPathComponent: @"Library/Safari/Extensions"];

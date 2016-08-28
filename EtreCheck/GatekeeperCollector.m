@@ -78,6 +78,7 @@ GatekeeperSetting;
 // Collect the Gatekeeper setting.
 - (GatekeeperSetting) collectGatekeeperSetting
   {
+  // TODO: Sandbox: works but does not support verbose mode.
   NSArray * args =
     @[
       @"--status",

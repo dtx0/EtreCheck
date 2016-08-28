@@ -70,6 +70,7 @@
 // Collect all running processes.
 - (void) collectProcesses
   {
+  // TODO: Does not work in sandbox.
   NSMutableDictionary * currentProcesses = [NSMutableDictionary dictionary];
     
   NSArray * args = @[ @"-raxww", @"-o", @"pid, comm" ];

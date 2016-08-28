@@ -229,6 +229,8 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
 // Start the application.
 - (void) applicationDidFinishLaunching: (NSNotification *) aNotification
   {
+  [self checkSandboxing];
+  
   [self checkForUpdates];
   
   [self setupStartMessage];
@@ -541,6 +543,24 @@ NSComparisonResult compareViews(id view1, id view2, void * context);
       [self.adwareManager show];
     else if([manager isEqualToString: @"unknownfiles"])
       [self.unknownFilesManager show];
+    }
+  }
+
+// Check for sandboxing.
+- (void) checkSandboxing
+  {
+  // TODO: Check this.
+  NSArray * URLs =
+    [[NSFileManager defaultManager]
+      URLsForDirectory: NSApplicationSupportDirectory
+      inDomains: NSUserDomainMask];
+    
+  for(NSURL * url in URLs)
+    {
+    NSRange range = [[url path] rangeOfString: @"/Containers/"];
+    
+    if(range.location != NSNotFound)
+      [[Model model] setSandboxed: true];
     }
   }
 

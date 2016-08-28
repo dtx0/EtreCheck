@@ -287,6 +287,7 @@
 // Parse user plugins
 - (void) parseUserPlugins: (NSString *) type path: (NSString *) path
   {
+  // TODO: Does not work in sandbox.
   [self
     parsePlugins: [NSHomeDirectory() stringByAppendingPathComponent: path]];
   }

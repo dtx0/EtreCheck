@@ -52,6 +52,7 @@
 @synthesize appleLaunchdByLabel = myAppleLaunchdByLabel;
 @synthesize unknownFiles = myUnknownFiles;
 @synthesize sip = mySIP;
+@synthesize sandboxed = mySandboxed;
 
 - (NSDictionary *) adwareLaunchdFiles
   {

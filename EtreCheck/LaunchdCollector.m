@@ -309,7 +309,9 @@
       setObject: [self getSupportURLFor: info name: nil bundleID: path]
       forKey: kSupportURL];
     
-    [self checkSignature: info];
+    // TODO: Check this.
+    if(![[Model model] sandboxed])
+      [self checkSignature: info];
     
     // See if this is a file I know about, either good or bad.
     [self checkForKnownFile: path info: info];
@@ -971,6 +973,7 @@
 // Update a funky new dynamic task.
 - (void) updateDynamicTask: (NSMutableDictionary *) info
   {
+  // TODO: Does not work in sandbox.
   NSString * label = [info objectForKey: kLabel];
   
   NSArray * args =

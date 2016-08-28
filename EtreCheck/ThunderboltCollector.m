@@ -30,6 +30,7 @@
 // Perform the collection.
 - (void) collect
   {
+  // TODO: Sandbox does this work?
   [self
     updateStatus:
       NSLocalizedString(@"Checking Thunderbolt information", NULL)];

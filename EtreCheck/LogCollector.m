@@ -80,6 +80,8 @@
 // Collect results from a log entry.
 - (void) collectLogResults: (NSDictionary *) result
   {
+  // TODO: Sandbox - works, but does not return information for for kernel I/O
+  // errors or diagnostic reports.
   // Currently the only thing I am looking for are I/O errors like this:
   // kernel_log_description / contents
   // 17 Nov 2014 15:39:31 kernel[0]: disk0s2: I/O error.

@@ -205,6 +205,7 @@
 // Is an SMLoginItem active?
 - (BOOL) SMLoginItemActive: (NSString *) identifier
   {
+  // TODO: Does not work in sandbox.
   BOOL active = NO;
   
   NSArray * args =

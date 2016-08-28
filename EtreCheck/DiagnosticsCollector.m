@@ -159,6 +159,7 @@
 // Collect files in /Library/Logs/CrashReporter.
 - (void) collectCrashReporter
   {
+  // TODO: Does not work from sandbox.
   [self
     collectDiagnosticDataFrom: @"/Library/Logs/CrashReporter"
     type: @"crash"];
@@ -167,6 +168,7 @@
 // Collect files in /Library/Logs/DiagnosticReports.
 - (void) collectDiagnosticReportCrashes
   {
+  // TODO: Does not work from sandbox.
   [self
     collectDiagnosticDataFrom: @"/Library/Logs/DiagnosticReports"
     type: @"crash"];
@@ -175,6 +177,7 @@
 // Collect files in ~/Library/Logs/DiagnosticReports.
 - (void) collectUserDiagnosticReportCrashes
   {
+  // TODO: Does not work from sandbox.
   NSString * diagnosticReportsDir =
     [NSHomeDirectory()
       stringByAppendingPathComponent: @"Library/Logs/DiagnosticReports"];
@@ -195,6 +198,7 @@
 // Collect hang files in ~/Library/Logs/DiagnosticReports.
 - (void) collectUserDiagnosticReportHangs
   {
+  // TODO: Does not work in sandbox.
   NSString * diagnosticReportsDir =
     [NSHomeDirectory()
       stringByAppendingPathComponent: @"Library/Logs/DiagnosticReports"];

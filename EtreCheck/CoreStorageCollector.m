@@ -45,6 +45,7 @@
 // Perform the collection.
 - (void) collect
   {
+  // TODO: Sandbox: works, but returns empty items list.
   NSArray * args =
     @[
       @"-xml",

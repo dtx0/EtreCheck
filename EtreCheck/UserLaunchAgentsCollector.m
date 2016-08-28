@@ -27,6 +27,7 @@
 // Collect user launch agents.
 - (void) collect
   {
+  // TODO: Sandbox does this work or not?
   [self
     updateStatus: NSLocalizedString(@"Checking user launch agents", NULL)];
 

@@ -740,6 +740,7 @@
   if([[path lastPathComponent] isEqualToString: @"Xcode.app"])
     subProcess.timeout = 10 * 60;
     
+  // TODO: Sandbox - works for /System but not for /usr/libexec.
   if([subProcess execute: @"/usr/bin/codesign" arguments: args])
     {
     result =
@@ -987,6 +988,7 @@
 // Query the status of a launchd task.
 + (NSString *) launchdTaskStatus: (NSString *) label
   {
+  // TODO: Does not work in sandbox.
   SubProcess * subProcess = [[SubProcess alloc] init];
   
   NSArray * args =
@@ -1017,6 +1019,7 @@
   
   [subProcess autorelease];
 
+  // TODO: Does not work in sandbox.
   if([subProcess execute: @"/bin/ps" arguments: @[ [pid stringValue] ]])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
@@ -1059,6 +1062,7 @@
 // Filter out any tasks that are not in the user's home directory.
 + (NSArray *) userLaunchdTasks: (NSArray *) tasks
   {
+  // TODO: Sandbox does this work?
   NSString * homeDirectory = NSHomeDirectory();
   
   NSMutableArray * userTasks = [NSMutableArray array];
@@ -1230,6 +1234,7 @@
 // Filter out any tasks that are in the user's home directory.
 + (NSArray *) rootLaunchdTasks: (NSArray *) tasks
   {
+  // TODO: Sandbox does this work?
   NSString * homeDirectory = NSHomeDirectory();
   
   NSMutableArray * rootTasks = [NSMutableArray array];
