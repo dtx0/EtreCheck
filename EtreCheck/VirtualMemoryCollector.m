@@ -57,11 +57,12 @@
     
   [self.result appendAttributedString: [self buildTitle]];
 
-  [self printFreeVM: vminfo];
-  [self printUsedVM: vminfo];
-  [self printSwapVM: vminfo];
-  
+  [self printVM: vminfo forKey: kFreeRAM];
+  [self printVM: vminfo forKey: kUsedRAM];
+  [self printVM: vminfo forKey: kFileCache];
+
   [self.result appendCR];
+  NSLog(@"RAM sampled");
 
   dispatch_semaphore_signal(self.complete);
   }
@@ -74,11 +75,11 @@
   [self collectvm_stat: vminfo];
   [self collectsysctl: vminfo];
   
-  NSInteger totalRAM = [[vminfo objectForKey: kTotalRAM] integerValue];
-  NSInteger freeRAM = [[vminfo objectForKey: kFreeRAM] integerValue];
+  double totalRAM = [[vminfo objectForKey: kTotalRAM] doubleValue];
+  double freeRAM = [[vminfo objectForKey: kFreeRAM] doubleValue];
 
   [vminfo
-    setObject: [NSNumber numberWithInteger: totalRAM - freeRAM]
+    setObject: [NSNumber numberWithDouble: totalRAM - freeRAM]
     forKey: kUsedRAM];
   
   return vminfo;
@@ -130,28 +131,15 @@
     for(NSString * line in lines)
       if([line hasPrefix: @"vm.swapusage:"])
         // Format the values into something I can use.
-        [vminfo addEntriesFromDictionary: [self formatSysctl: line]];
+        [vminfo
+          addEntriesFromDictionary: [self formatSysctlSwapUsage: line]];
       
       else if([line hasPrefix: @"hw.memsize:"])
         // Format the values into something I can use.
-        [vminfo addEntriesFromDictionary: [self formatSysctl: line]];
+        [vminfo addEntriesFromDictionary: [self formatSysctlMemSize: line]];
     }
     
   [subProcess release];
-  }
-
-// Print the free VM value.
-- (void) printFreeVM: (NSDictionary *) vminfo
-  {
-  [self printVM: vminfo forKey: kFreeRAM indent: @"    "];
-  }
-
-// Print the used VM value.
-- (void) printUsedVM: (NSDictionary *) vminfo
-  {
-  NSString * extra = [self formatUsedVM: vminfo];
-  
-  [self printVM: vminfo forKey: kUsedRAM indent: @"    " extra: extra];
   }
 
 // Print the swap VM value.
@@ -166,24 +154,13 @@
       attributes:
         @{
           NSForegroundColorAttributeName : [[Utilities shared] red]
-        }
-      indent: @"    "];
+        }];
   else
-    [self printVM: vminfo forKey: kSwapUsed indent: @"    "];
+    [self printVM: vminfo forKey: kSwapUsed];
   }
 
 // Print a VM value.
-- (void) printVM: (NSDictionary *) vminfo
-  forKey: (NSString *) key indent: (NSString *) indent
-  {
-  [self printVM: vminfo forKey: key indent: indent extra: @""];
-  }
-
-// Print a VM value.
-- (void) printVM: (NSDictionary *) vminfo
-  forKey: (NSString *) key
-  indent: (NSString *) indent
-  extra: (NSString *) extra
+- (void) printVM: (NSDictionary *) vminfo forKey: (NSString *) key
   {
   double value = [[vminfo objectForKey: key] doubleValue];
   
@@ -191,18 +168,15 @@
     appendString:
       [NSString
         stringWithFormat:
-          @"%@%@    %@ %@\n",
-          indent,
+          @"    %@\t%@\n",
           [formatter stringFromByteCount: (unsigned long long)value],
-          NSLocalizedString(key, NULL),
-          extra]];
+          NSLocalizedString(key, NULL)]];
   }
 
 // Print a VM value.
 - (void) printVM: (NSDictionary *) vminfo
   forKey: (NSString *) key
   attributes: (NSDictionary *) attributes
-  indent: (NSString *) indent
   {
   double value = [[vminfo objectForKey: key] doubleValue];
   
@@ -210,15 +184,14 @@
     appendString:
       [NSString
         stringWithFormat:
-          @"%@%@    %@\n",
-          indent,
+          @"    %@\t%@\n",
           [formatter stringFromByteCount: (unsigned long long)value],
           NSLocalizedString(key, NULL)]
     attributes: attributes];
   }
 
-// Format used memory.
-- (NSString *) formatUsedVM: (NSDictionary *) vminfo
+// Format cached files.
+- (NSString *) formatCachedFiles: (NSDictionary *) vminfo
   {
   double cached = [[vminfo objectForKey: kFileCache] doubleValue];
  
@@ -249,16 +222,19 @@
     [vm_stats objectForKey: @"Pages free"];
   NSString * speculativeValue =
     [vm_stats objectForKey: @"Pages speculative"];
+  NSString * purgeableValue =
+    [vm_stats objectForKey: @"Pages purgeable"];
 
   double pageSize = [self parsePageSize: statisticsValue];
   
   double cached = [cachedValue doubleValue] * pageSize;
   double free = [freeValue doubleValue] * pageSize;
   double speculative = [speculativeValue doubleValue] * pageSize;
+  double purgeable = [purgeableValue doubleValue] * pageSize;
   
   return
     @{
-      kFileCache : [NSNumber numberWithDouble: cached],
+      kFileCache : [NSNumber numberWithDouble: cached + purgeable],
       kFreeRAM : [NSNumber numberWithDouble: free + speculative]
     };
   }
@@ -277,7 +253,7 @@
   }
 
 // Format output from sysctl into something useable.
-- (NSDictionary *) formatSysctl: (NSString *) line
+- (NSDictionary *) formatSysctlSwapUsage: (NSString *) line
   {
   NSScanner * scanner = [NSScanner scannerWithString: line];
   
@@ -291,15 +267,24 @@
 
   double used = [Utilities scanTopMemory: scanner];
   
-  NSInteger total = 0;
-  
-  if([scanner scanUpToString: @"hw.memsize:" intoString: NULL])
-    if([scanner scanString: @"hw.memsize:" intoString: NULL])
-      [scanner scanInteger: & total];
-    
   return
     @{
       kSwapUsed : [NSNumber numberWithDouble: used],
+    };
+  }
+
+// Format output from sysctl into something useable.
+- (NSDictionary *) formatSysctlMemSize: (NSString *) line
+  {
+  NSScanner * scanner = [NSScanner scannerWithString: line];
+  
+  NSInteger total = 0;
+  
+  if([scanner scanString: @"hw.memsize:" intoString: NULL])
+    [scanner scanInteger: & total];
+    
+  return
+    @{
       kTotalRAM : [NSNumber numberWithDouble: (double)total]
     };
   }

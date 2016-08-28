@@ -296,4 +296,4 @@
 "freeram" = "RAM disponible";
 "usedram" = "RAM utilisée";
 "swapused" = "Fichier d’échange utilisé";
-"filecache" = "%@ en cache";
+"filecache" = "Fichiers en cache";

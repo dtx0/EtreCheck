@@ -131,12 +131,13 @@
 // Record process information.
 - (void) recordKernelTaskIn: (NSMutableDictionary *) processes
   {
-  // TODO: Does not work in sandbox.
-  NSArray * args = @[@"-c", @"/usr/bin/top -l 2 -stats pid,cpu,mem"];
+  NSArray * args = @[@"-l", @"2", @"-stats", @"pid,cpu,mem"];
   
   SubProcess * subProcess = [[SubProcess alloc] init];
   
-  if([subProcess execute: @"/bin/sh" arguments: args])
+  subProcess.usePseudoTerminal = YES;
+
+  if([subProcess execute: @"/usr/bin/top" arguments: args])
     {
     NSArray * lines = [Utilities formatLines: subProcess.standardOutput];
     

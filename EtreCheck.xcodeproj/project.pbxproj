@@ -150,6 +150,8 @@
 		A52986A71BB89C160040C63D /* HiddenAppsCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HiddenAppsCollector.m; sourceTree = "<group>"; };
 		A52C62BD1BCAD4D100B8C364 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/machineIcons.strings; sourceTree = "<group>"; };
 		A52C62BF1BCAD4D900B8C364 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/machineIcons.strings; sourceTree = "<group>"; };
+		A53822381D5FF27200484388 /* XMLBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLBuilder.h; sourceTree = "<group>"; };
+		A53822391D5FF27200484388 /* XMLBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMLBuilder.m; sourceTree = "<group>"; };
 		A53EA3701C6E86B600F270B0 /* UpdateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateManager.h; sourceTree = "<group>"; };
 		A53EA3711C6E86B600F270B0 /* UpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateManager.m; sourceTree = "<group>"; };
 		A53EA3751C6FCF0200F270B0 /* NSDate+Etresoft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Etresoft.h"; sourceTree = "<group>"; };
@@ -493,6 +495,8 @@
 				A550C54E1BBC39E000CA75EA /* EtreCheckToolbarItem.m */,
 				A550C5581BBC75FD00CA75EA /* EtreCheckToolbar.h */,
 				A550C5591BBC75FD00CA75EA /* EtreCheckToolbar.m */,
+				A53822381D5FF27200484388 /* XMLBuilder.h */,
+				A53822391D5FF27200484388 /* XMLBuilder.m */,
 				A5257D4119AC10FB003084C8 /* Collectors */,
 				A5257D3E19AC10E3003084C8 /* Checker.h */,
 				A5257D3F19AC10E3003084C8 /* Checker.m */,
@@ -912,6 +916,7 @@
 				CODE_SIGN_ENTITLEMENTS = EtreCheck/EtreCheck.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = U87NE528LC;
 				INFOPLIST_FILE = "EtreCheck/EtreCheck-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -927,6 +932,7 @@
 				CODE_SIGN_ENTITLEMENTS = EtreCheck/EtreCheck.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = U87NE528LC;
 				INFOPLIST_FILE = "EtreCheck/EtreCheck-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
